@@ -1,0 +1,63 @@
+.financial-shell { min-height: 100vh; background: #f4f5f7; color: #191919; font-family: Inter, Arial, sans-serif; }
+.financial-sidebar { position: fixed; inset: 0 auto 0 0; width: 280px; min-height: 720px; background: #191919; color: #b3b3b3; padding: 48px 28px 0; z-index: 2; }
+.bank-wordmark, .nav-icon, .logout-icon, .profile-avatar, .notification-icon, .search-icon, .provider-logo { background-image: url('./assets/bills/reference.png'); background-size: 1440px 1024px; background-repeat: no-repeat; display: inline-block; flex-shrink: 0; }
+.bank-wordmark { width: 166px; height: 32px; background-position: -57px -48px; margin-left: 29px; }
+.financial-sidebar nav { margin-top: 40px; display: grid; gap: 16px; }
+.financial-nav { height: 48px; width: 224px; border-radius: 4px; display: flex; align-items: center; gap: 16px; padding: 0 16px; font-size: 16px; text-align: left; color: #b3b3b3; }
+.financial-nav.active { background: #299d91; color: white; font-weight: 600; }
+.financial-nav:disabled { cursor: default; }
+.nav-icon { width: 20px; height: 24px; }
+.nav-icon-0 { background-position: -46px -132px; }
+.nav-icon-1 { background-position: -46px -196px; }
+.nav-icon-2 { background-position: -46px -260px; }
+.nav-icon-3 { background-position: -46px -324px; }
+.nav-icon-4 { background-position: -46px -388px; }
+.nav-icon-5 { background-position: -46px -452px; }
+.nav-icon-6 { background-position: -46px -516px; }
+.sidebar-bottom { position: absolute; bottom: 80px; left: 28px; right: 28px; }
+.logout-button { width: 224px; height: 48px; display: flex; align-items: center; gap: 16px; background: #262626; border-radius: 4px; padding: 0 16px; font-weight: 600; }
+.logout-icon { width: 20px; height: 24px; background-position: -46px -792px; }
+.sidebar-profile { border-top: 1px solid #2d2d2d; margin-top: 44px; padding-top: 32px; display: flex; align-items: center; gap: 16px; font-size: 14px; }
+.profile-avatar { width: 32px; height: 32px; border-radius: 50%; background-position: -28px -908px; }
+.sidebar-profile strong { display: block; font-size: 16px; font-weight: 600; color: white; }
+.sidebar-profile span { font-size: 12px; }
+.sidebar-profile button { margin-left: auto; font-size: 24px; color: white; }
+.financial-workspace { margin-left: 280px; }
+.financial-header { height: 88px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px 0 24px; border-bottom: 1px solid #e6e7e9; }
+.header-date { color: #9f9f9f; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.header-date > span { font-size: 28px; line-height: 1; }
+.header-tools { display: flex; align-items: center; gap: 40px; }
+.notification-icon { width: 24px; height: 32px; background-position: -992px -28px; }
+.visual-search { width: 352px; height: 48px; background: white; border-radius: 12px; padding: 0 32px; color: #9f9f9f; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 20px 32px #19191905; }
+.search-icon { width: 24px; height: 24px; background-position: -1360px -32px; }
+.financial-main { padding: 16px 40px 40px 24px; }
+.page-title { color: #878787; font-size: 22px; line-height: 32px; font-weight: 400; margin-bottom: 16px; }
+.bills-card { background: white; border-radius: 16px; box-shadow: 0 24px 32px #161e2910; padding: 0 24px 24px; min-height: 420px; }
+.bill-grid { display: grid; grid-template-columns: 72px 144px minmax(200px,1fr) 196px 108px; column-gap: 40px; align-items: center; }
+.bill-head { height: 72px; border-bottom: 1px solid #f0f0f0; font-weight: 700; font-size: 16px; }
+.bill-head > :nth-child(4), .bill-head > :last-child { text-align: center; }
+.bill-row { min-height: 162px; border-bottom: 1px solid #f0f0f0; }
+.bill-row:last-child { border-bottom: 0; }
+.due-tile { width: 72px; height: 82px; border-radius: 8px; background: #f4f4f4; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #525256; }
+.due-tile span { color: #878787; font-size: 16px; font-weight: 600; }
+.due-tile strong { font-size: 22px; }
+.provider-logo { width: 128px; height: 48px; vertical-align: middle; }
+.provider-figma { background-position: -440px -282px; }
+.provider-adobe { background-position: -440px -442px; }
+.provider-image { max-width: 128px; max-height: 48px; object-fit: contain; }
+.provider-fallback { border-radius: 8px; background: #f4f5f7; padding: 12px; color: #525256; }
+.bill-description strong { font-size: 18px; line-height: 28px; font-weight: 700; }
+.bill-description p { margin: 6px 0 0; color: #9f9f9f; font-size: 14px; line-height: 22px; white-space: pre-line; overflow-wrap: anywhere; }
+.last-charge { color: #9f9f9f; text-align: center; font-size: 16px; }
+.bill-amount { text-align: center; position: relative; }
+.bill-amount > strong { height: 48px; width: 108px; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.bill-amount button { position: absolute; top: 54px; left: 18px; color: white; background: #299d91; border-radius: 4px; font-size: 11px; padding: 2px 12px; cursor: not-allowed; }
+.bills-state { min-height: 396px; display: flex; flex-direction: column; gap: 24px; align-items: center; justify-content: center; padding: 24px; color: #525256; }
+.bills-action { background: #299d91; color: white; padding: 10px 20px; border-radius: 6px; font-weight: 600; }
+.bill-skeleton { background: #f4f5f7; width: 100%; height: 120px; border-radius: 8px; animation: bill-pulse 1s alternate infinite; }
+@keyframes bill-pulse { to { opacity: .5; } }
+.financial-shell a:focus-visible, .financial-shell button:focus-visible { outline: 3px solid #64c8bf; outline-offset: 4px; }
+@media (max-width: 1250px) { .bill-grid { column-gap: 20px; grid-template-columns: 64px 112px minmax(180px, 1fr) 140px 90px; } .bill-amount > strong { width: 90px; } .bill-amount button { left: 8px; } .provider-logo { width: 120px; } }
+@media (max-width: 1050px) { .financial-sidebar { width: 216px; padding-left: 16px; padding-right: 16px; } .financial-nav, .logout-button { width: 184px; } .bank-wordmark { margin-left: 0; } .financial-workspace { margin-left: 216px; } .sidebar-bottom { left: 16px; right: 16px; } .financial-main { padding-right: 24px; } .bills-card { overflow-x: auto; } .bills-table { min-width: 744px; } .visual-search { width: 220px; } .header-tools { gap: 20px; } }
+@media (max-width: 700px) { .financial-sidebar { position: relative; width: 100%; min-height: auto; padding: 16px; } .bank-wordmark { display: block; } .financial-sidebar nav { margin-top: 16px; display: flex; overflow-x: auto; gap: 8px; } .financial-nav { width: auto; flex-shrink: 0; padding: 0 12px; } .financial-nav:disabled { display: none; } .sidebar-bottom { position: static; margin-top: 12px; } .sidebar-profile { display: none; } .logout-button { height: 36px; width: 120px; font-size: 14px; } .financial-workspace { margin-left: 0; } .financial-header { height: 72px; padding: 0 16px; } .visual-search { width: 160px; padding: 0 12px; font-size: 14px; } .notification-icon { display: none; } .financial-main { padding: 16px; } .page-title { font-size: 22px; } .bills-card { padding: 0 16px 16px; } }
+@media (prefers-reduced-motion: reduce) { .bill-skeleton { animation: none; } }

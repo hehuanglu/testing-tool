@@ -1,0 +1,17 @@
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+!**/.env.example
+**/.local-tls/
+
+# Dependencies and generated output
+**/node_modules/
+**/dist/
+**/coverage/
+
+# OS/editor noise
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/

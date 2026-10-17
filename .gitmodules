@@ -1,0 +1,3 @@
+[submodule "mcp-zap-server"]
+	path = mcp-zap-server
+	url = https://github.com/dtkmn/mcp-zap-server.git

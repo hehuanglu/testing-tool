@@ -1,0 +1,617 @@
+rules:
+  - id: config-docker-latest-tag
+    message: Docker image uses the mutable latest tag. Pin an immutable version or digest.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/Dockerfile", "**/*.yaml", "**/*.yml"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [docker]
+    pattern-regex: '(?mi)^\s*(?:FROM|image:)\s+[^\s#]+:latest(?:\s|$)'
+
+  - id: config-docker-root-user
+    message: Dockerfile explicitly selects the root user.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/Dockerfile"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [docker]
+    pattern-regex: '(?mi)^\s*USER\s+(?:root|0)(?:\s|$)'
+
+  - id: config-docker-remote-shell-install-v2
+    message: Container build pipes a remote download into a shell. This installation observation is outside the default-permissions criterion.
+    severity: ERROR
+    languages: [generic]
+    paths:
+      include: ["**/Dockerfile"]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [docker]
+    pattern-regex: '(?mi)(?:curl|wget)[^\n|]*\|\s*(?:sh|bash)'
+
+  - id: config-docker-world-writable-permissions-v2
+    message: Container build explicitly sets world-writable permissions. Review the affected resource and resulting access configuration; default permissions are not established by syntax alone.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/Dockerfile"]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [docker]
+    pattern-regex: '(?mi)\bchmod\s+(?:-R\s+)?777\b'
+
+  - id: config-compose-privileged
+    message: Compose enables privileged container execution.
+    severity: ERROR
+    languages: [generic]
+    paths:
+      include: ["**/compose.yaml", "**/compose.yml", "**/docker-compose.yaml", "**/docker-compose.yml"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [docker-compose]
+    pattern-regex: '(?mi)^\s*privileged:\s*true\s*(?:#.*)?$'
+
+  - id: config-compose-host-network
+    message: Compose enables host networking.
+    severity: ERROR
+    languages: [generic]
+    paths:
+      include: ["**/compose.yaml", "**/compose.yml", "**/docker-compose.yaml", "**/docker-compose.yml"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [docker-compose]
+    pattern-regex: '(?mi)^\s*network_mode:\s*["'']?host["'']?\s*(?:#.*)?$'
+
+  - id: config-compose-docker-socket
+    message: Compose service bind-mounts a conventional Docker socket path. If the daemon is reachable and
+      permissions allow API access, container code may control that daemon; :ro alone does not make the socket
+      API read-only.
+    severity: WARNING
+    languages:
+      - yaml
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - docker-compose
+      p2_semantics: p2-manual-ce-2026-10-23
+    paths:
+      include:
+        - '**/compose.yaml'
+        - '**/compose.yml'
+        - '**/docker-compose.yaml'
+        - '**/docker-compose.yml'
+    pattern-either:
+      - patterns:
+          - pattern: '{services: {..., $SERVICE: {..., volumes: [..., $ITEM, ...], ...}, ...}, ...}'
+          - metavariable-regex:
+              metavariable: $ITEM
+              regex: ^["\x27]?(?:/var/run|/run)/docker\.sock:[^\s"\x27]+["\x27]?$
+      - pattern: '{services: {..., $SERVICE: {..., volumes: [..., {type: bind, source: /var/run/docker.sock, ...},
+          ...], ...}, ...}, ...}'
+      - pattern: '{services: {..., $SERVICE: {..., volumes: [..., {type: bind, source: /run/docker.sock, ...}, ...],
+          ...}, ...}, ...}'
+
+  - id: config-nginx-server-tokens-on
+    message: nginx exposes version tokens.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/*.conf"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [nginx]
+    pattern-regex: '(?mi)^\s*server_tokens\s+on\s*;'
+
+  - id: config-nginx-directory-listing-enabled-v2
+    message: nginx explicitly enables directory listing. Review the applicable location and sensitive-directory access restrictions.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/*.conf"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [nginx]
+    pattern-regex: '(?mi)^\s*autoindex\s+on\s*;'
+
+  - id: config-nginx-missing-content-security-policy
+    message: An nginx server block does not visibly set a Content-Security-Policy header. Add a reviewed CSP appropriate for the frontend asset and API origins.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/*.conf"]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [nginx, browser]
+    patterns:
+      - pattern: |
+          server {
+            ...
+          }
+      - pattern-not: |
+          server {
+            ...
+            add_header Content-Security-Policy ...;
+            ...
+          }
+
+  - id: config-vite-production-sourcemap
+    message: Vite build enables production source maps. Confirm source disclosure is intended.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/vite.config.ts", "**/vite.config.js"]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [vite]
+    pattern-regex: '(?m)\bsourcemap\s*:\s*true\b'
+
+  - id: config-package-unpinned-wildcard-dependency
+    message: Dependency field uses a wildcard version. Review reproducible resolution and the lockfile; other package metadata is outside this detector.
+    severity: WARNING
+    languages:
+      - json
+    paths:
+      include: ["**/package.json"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [npm]
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern-either:
+          - pattern: '{"dependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+          - pattern: '{"devDependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+          - pattern: '{"optionalDependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+          - pattern: '{"peerDependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+      - metavariable-regex:
+          metavariable: $VERSION
+          regex: ^["\x27]?\*["\x27]?$
+  - id: config-package-remote-code-dependency
+    message: Dependency field references a remote Git/HTTP source. Review immutable pinning and install behavior; metadata URLs are outside this detector.
+    severity: WARNING
+    languages:
+      - json
+    paths:
+      include: ["**/package.json"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [npm]
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern-either:
+          - pattern: '{"dependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+          - pattern: '{"devDependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+          - pattern: '{"optionalDependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+          - pattern: '{"peerDependencies": {..., $PACKAGE: $VERSION, ...}, ...}'
+      - metavariable-regex:
+          metavariable: $VERSION
+          regex: ^["\x27]?(?:git\+|git://|https?://)
+  - id: config-package-install-lifecycle-script
+    message: package manifest defines an install-time lifecycle script. Review it as supply-chain execution.
+    severity: WARNING
+    languages: [generic]
+    paths:
+      include: ["**/package.json"]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [npm]
+    pattern-regex: '"(?:preinstall|install|postinstall)"\s*:'
+
+  - id: config-node-tls-verification-disabled
+    message: Node TLS verification is explicitly disabled in a recognized API/configuration shape. Review the
+      effective consumer, endpoint and environment; this is a static configuration observation.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - nodejs
+        - nestjs
+        - typeorm
+      p2_semantics: p2-manual-ce-2026-10-23
+    pattern-either:
+      - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+      - pattern: process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0"
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"https\";\n..."
+          - pattern: 'new $TLS.Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"https\";\n..."
+          - pattern: '$TLS.request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"https\";\n..."
+          - pattern: '$TLS.request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"https\";\n..."
+          - pattern: '$TLS.get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"https\";\n..."
+          - pattern: 'new $TLS.Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import $TLS from \"https\";\n..."
+          - pattern: '$TLS.request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"https\";\n..."
+          - pattern: '$TLS.request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"https\";\n..."
+          - pattern: '$TLS.get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"https\");\n..."
+          - pattern: 'new $TLS.Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"https\");\n..."
+          - pattern: '$TLS.request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"https\");\n..."
+          - pattern: '$TLS.request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"https\");\n..."
+          - pattern: '$TLS.get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { Agent as $AGENT } from \"https\";\n..."
+          - pattern: 'new $AGENT({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import { Agent } from \"https\";\n..."
+          - pattern: 'new Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"node:https\";\n..."
+          - pattern: 'new $TLS.Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"node:https\";\n..."
+          - pattern: 'new $TLS.Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"node:https\");\n..."
+          - pattern: 'new $TLS.Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"node:https\");\n..."
+          - pattern: '$TLS.request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"node:https\");\n..."
+          - pattern: '$TLS.request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"node:https\");\n..."
+          - pattern: '$TLS.get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { Agent as $AGENT } from \"node:https\";\n..."
+          - pattern: 'new $AGENT({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import { Agent } from \"node:https\";\n..."
+          - pattern: 'new Agent({..., rejectUnauthorized: false, ...})'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"tls\";\n..."
+          - pattern: '$TLS.connect({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"tls\";\n..."
+          - pattern: '$TLS.connect({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"tls\");\n..."
+          - pattern: '$TLS.connect({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"node:tls\";\n..."
+          - pattern: '$TLS.connect({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"node:tls\";\n..."
+          - pattern: '$TLS.connect({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"node:tls\");\n..."
+          - pattern: '$TLS.connect({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { Agent } from \"undici\";\n..."
+          - pattern: 'new Agent({..., connect: {..., rejectUnauthorized: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "import { Agent as $TLS } from \"undici\";\n..."
+          - pattern: 'new $TLS({..., connect: {..., rejectUnauthorized: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "import { Pool } from \"undici\";\n..."
+          - pattern: 'new Pool($URL, {..., connect: {..., rejectUnauthorized: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "import { Pool as $TLS } from \"undici\";\n..."
+          - pattern: 'new $TLS($URL, {..., connect: {..., rejectUnauthorized: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "import { Client } from \"undici\";\n..."
+          - pattern: 'new Client($URL, {..., connect: {..., rejectUnauthorized: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "import { Client as $TLS } from \"undici\";\n..."
+          - pattern: 'new $TLS($URL, {..., connect: {..., rejectUnauthorized: false, ...}, ...})'
+      - pattern: 'TypeOrmModule.forRoot({..., ssl: {..., rejectUnauthorized: false, ...}, ...})'
+      - pattern: 'new DataSource({..., ssl: {..., rejectUnauthorized: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"https\";\n..."
+          - pattern: '$TLS.get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"https\";\n..."
+          - pattern: '$TLS.get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"https\");\n..."
+          - pattern: '$TLS.get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get as $CALL } from \"https\";\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get } from \"https\";\n..."
+          - pattern: 'get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get: $CALL } = require(\"https\");\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get } = require(\"https\");\n..."
+          - pattern: 'get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get as $CALL } from \"https\";\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get } from \"https\";\n..."
+          - pattern: 'get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get: $CALL } = require(\"https\");\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get } = require(\"https\");\n..."
+          - pattern: 'get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request as $CALL } from \"https\";\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request } from \"https\";\n..."
+          - pattern: 'request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request: $CALL } = require(\"https\");\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request } = require(\"https\");\n..."
+          - pattern: 'request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request as $CALL } from \"https\";\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request } from \"https\";\n..."
+          - pattern: 'request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request: $CALL } = require(\"https\");\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request } = require(\"https\");\n..."
+          - pattern: 'request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import * as $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import $TLS from \"node:https\";\n..."
+          - pattern: '$TLS.get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const $TLS = require(\"node:https\");\n..."
+          - pattern: '$TLS.get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get as $CALL } from \"node:https\";\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get } from \"node:https\";\n..."
+          - pattern: 'get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get: $CALL } = require(\"node:https\");\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get } = require(\"node:https\");\n..."
+          - pattern: 'get($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get as $CALL } from \"node:https\";\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { get } from \"node:https\";\n..."
+          - pattern: 'get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get: $CALL } = require(\"node:https\");\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { get } = require(\"node:https\");\n..."
+          - pattern: 'get({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request as $CALL } from \"node:https\";\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request } from \"node:https\";\n..."
+          - pattern: 'request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request: $CALL } = require(\"node:https\");\n..."
+          - pattern: '$CALL($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request } = require(\"node:https\");\n..."
+          - pattern: 'request($URL, {..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request as $CALL } from \"node:https\";\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "import { request } from \"node:https\";\n..."
+          - pattern: 'request({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request: $CALL } = require(\"node:https\");\n..."
+          - pattern: '$CALL({..., rejectUnauthorized: false, ...}, ...)'
+      - patterns:
+          - pattern-inside: "const { request } = require(\"node:https\");\n..."
+          - pattern: 'request({..., rejectUnauthorized: false, ...}, ...)'
+
+  - id: config-cookie-secure-disabled
+    message: Cookie secure explicitly uses a permissive value in cookie/session options. Review
+      sensitive-cookie purpose, HTTPS/cross-site requirements and effective overrides; no conclusion follows
+      from an omitted flag.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - express
+        - nestjs
+      p2_semantics: p2-manual-ce-2026-10-23
+    pattern-either:
+      - patterns:
+          - pattern: '$RES.cookie($NAME, $VALUE, {..., secure: false, ...})'
+          - metavariable-regex:
+              metavariable: $RES
+              regex: ^(?:res|response|reply)$
+      - patterns:
+          - pattern-inside: "import $SESSION from \"express-session\";\n..."
+          - pattern: '$SESSION({..., cookie: {..., secure: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "const $SESSION = require(\"express-session\");\n..."
+          - pattern: '$SESSION({..., cookie: {..., secure: false, ...}, ...})'
+
+  - id: config-cookie-httponly-disabled
+    message: Cookie httpOnly explicitly uses a permissive value in cookie/session options. Review
+      sensitive-cookie purpose, HTTPS/cross-site requirements and effective overrides; no conclusion follows
+      from an omitted flag.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - express
+        - nestjs
+      p2_semantics: p2-manual-ce-2026-10-23
+    pattern-either:
+      - patterns:
+          - pattern: '$RES.cookie($NAME, $VALUE, {..., httpOnly: false, ...})'
+          - metavariable-regex:
+              metavariable: $RES
+              regex: ^(?:res|response|reply)$
+      - patterns:
+          - pattern-inside: "import $SESSION from \"express-session\";\n..."
+          - pattern: '$SESSION({..., cookie: {..., httpOnly: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "const $SESSION = require(\"express-session\");\n..."
+          - pattern: '$SESSION({..., cookie: {..., httpOnly: false, ...}, ...})'
+
+  - id: config-cookie-samesite-disabled
+    message: Cookie sameSite explicitly uses a permissive value in cookie/session options. Review
+      sensitive-cookie purpose, HTTPS/cross-site requirements and effective overrides; no conclusion follows
+      from an omitted flag.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - express
+        - nestjs
+      p2_semantics: p2-manual-ce-2026-10-23
+    pattern-either:
+      - patterns:
+          - pattern: '$RES.cookie($NAME, $VALUE, {..., sameSite: false, ...})'
+          - metavariable-regex:
+              metavariable: $RES
+              regex: ^(?:res|response|reply)$
+      - patterns:
+          - pattern-inside: "import $SESSION from \"express-session\";\n..."
+          - pattern: '$SESSION({..., cookie: {..., sameSite: false, ...}, ...})'
+      - patterns:
+          - pattern-inside: "const $SESSION = require(\"express-session\");\n..."
+          - pattern: '$SESSION({..., cookie: {..., sameSite: false, ...}, ...})'
+      - patterns:
+          - pattern: '$RES.cookie($NAME, $VALUE, {..., sameSite: "none", ...})'
+          - metavariable-regex:
+              metavariable: $RES
+              regex: ^(?:res|response|reply)$
+      - patterns:
+          - pattern-inside: "import $SESSION from \"express-session\";\n..."
+          - pattern: '$SESSION({..., cookie: {..., sameSite: "none", ...}, ...})'
+      - patterns:
+          - pattern-inside: "const $SESSION = require(\"express-session\");\n..."
+          - pattern: '$SESSION({..., cookie: {..., sameSite: "none", ...}, ...})'
+
+  - id: config-compose-added-capability-review
+    message: Compose adds a powerful capability. Review effective cap_drop, user namespace/rootless policy,
+      seccomp and service need; added capability alone does not establish host compromise.
+    severity: WARNING
+    languages:
+      - yaml
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - docker-compose
+      p2_semantics: p2-manual-ce-2026-10-23
+    paths:
+      include:
+        - '**/compose.yaml'
+        - '**/compose.yml'
+        - '**/docker-compose.yaml'
+        - '**/docker-compose.yml'
+    pattern-either:
+      - patterns:
+          - pattern: '{services: {..., $SERVICE: {..., cap_add: [..., $ITEM, ...], ...}, ...}, ...}'
+          - metavariable-regex:
+              metavariable: $ITEM
+              regex: ^["\x27]?(?:ALL|SYS_ADMIN|SYS_PTRACE|NET_ADMIN|DAC_READ_SEARCH|DAC_OVERRIDE)["\x27]?$
+
+  - id: config-compose-sensitive-host-bind-review
+    message: Compose bind-mounts host root or an /etc, /proc, /sys or /dev path. Depending on permissions and
+      read/write access this may expose host data/devices or permit modification; inspect effective isolation
+      and mount mode.
+    severity: WARNING
+    languages:
+      - yaml
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - docker-compose
+      p2_semantics: p2-manual-ce-2026-10-23
+    paths:
+      include:
+        - '**/compose.yaml'
+        - '**/compose.yml'
+        - '**/docker-compose.yaml'
+        - '**/docker-compose.yml'
+    pattern-either:
+      - patterns:
+          - pattern: '{services: {..., $SERVICE: {..., volumes: [..., $ITEM, ...], ...}, ...}, ...}'
+          - metavariable-regex:
+              metavariable: $ITEM
+              regex: ^["\x27]?(?:/|/(?:etc|proc|sys|dev)(?:/[^:\s"\x27]*)?):[^\s"\x27]+["\x27]?$
+      - patterns:
+          - pattern: '{services: {..., $SERVICE: {..., volumes: [..., {type: bind, source: $SOURCE, ...}, ...],
+              ...}, ...}, ...}'
+          - metavariable-regex:
+              metavariable: $SOURCE
+              regex: ^["\x27]?(?:/|/(?:etc|proc|sys|dev)(?:/[^\s"\x27]*)?)["\x27]?$

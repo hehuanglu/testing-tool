@@ -1,0 +1,6 @@
+rules:
+  - id: offline-source-mutation-option
+    languages: [generic]
+    severity: ERROR
+    message: Read-only scanner manifests must not contain autofix directives.
+    pattern-regex: '(?m)^\s*(?:fix|fix-regex)\s*:'

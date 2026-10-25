@@ -1,0 +1,459 @@
+rules:
+  - id: nestjs-auth-hardcoded-jwt-secret
+    message: secret/secretOrKey configuration contains a literal or literal fallback. Confirm JWT use and effective external configuration; review reachable fallback paths.
+    severity: ERROR
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [nestjs, jwt]
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern: '({..., $KEY: $VALUE, ...})'
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: ^(?:secret|secretOrKey)$
+      - metavariable-pattern:
+          metavariable: $VALUE
+          pattern-either:
+            - pattern: '"..."'
+            - pattern: $CONFIG || "..."
+            - pattern: $CONFIG ?? "..."
+  - id: nestjs-auth-jwt-expiration-disabled
+    message: JWT expiration validation is disabled.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [nestjs, passport-jwt]
+    pattern: 'super({..., ignoreExpiration: true, ...})'
+
+  - id: nestjs-auth-jwt-from-query-v2
+    message: JWT extraction uses a URL query parameter. Review sensitive query transport; this is a partial CWE-598 signal.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [nestjs, passport-jwt]
+    pattern: ExtractJwt.fromUrlQueryParameter(...)
+
+  - id: nestjs-auth-jwt-from-body-v2
+    message: JWT extraction uses a request body. Review the session contract; this observation does not establish sensitive query-string transport.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [nestjs, passport-jwt]
+    pattern: ExtractJwt.fromBodyField(...)
+
+  - id: nestjs-auth-weak-bcrypt-cost
+    message: A literal bcrypt cost is below the historical bundled heuristic of 10. Compare with the researcher's applicable workload policy before any criterion judgment.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [nestjs, bcrypt]
+      workload_policy: references/workload-observation-policy.json
+    patterns:
+      - pattern: bcrypt.hash($PASSWORD, $COST)
+      - metavariable-comparison:
+          metavariable: $COST
+          comparison: $COST < 10
+
+  - id: nestjs-auth-plaintext-password-comparison
+    message: Credential-named property participates in equality. Review authentication use, value representation and confirmation comparisons before concluding plaintext verification.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: LOW
+      technology: [nestjs]
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern-either:
+          - pattern: $LEFT.$CREDENTIAL === $RIGHT
+          - pattern: $LEFT === $RIGHT.$CREDENTIAL
+          - pattern: $LEFT.$CREDENTIAL == $RIGHT
+          - pattern: $LEFT == $RIGHT.$CREDENTIAL
+      - metavariable-regex:
+          metavariable: $CREDENTIAL
+          regex: '(?i)^(?:password|passphrase)$'
+
+  - id: nestjs-auth-plaintext-password-persistence
+    message: Credential-named field is supplied to create/save. Review the value provenance and hashing; field names do not establish plaintext and create alone does not write the database.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: LOW
+      technology: [nestjs, typeorm]
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern-either:
+          - pattern: '$REPO.create({..., $CREDENTIAL: $VALUE, ...})'
+          - pattern: '$REPO.save({..., $CREDENTIAL: $VALUE, ...})'
+      - metavariable-regex:
+          metavariable: $CREDENTIAL
+          regex: '(?i)^(?:password|passphrase)$'
+
+  - id: nestjs-auth-sensitive-logging
+    message: Sensitive-named expression is passed to console. This is a usage signal; inspect actual value, redaction and enabled logging before concluding disclosure.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: LOW
+      technology: [nestjs, nodejs]
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern-either:
+          - pattern: console.log(..., $VALUE, ...)
+          - pattern: console.error(..., $VALUE, ...)
+          - pattern: console.warn(..., $VALUE, ...)
+          - pattern: console.debug(..., $VALUE, ...)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (?i).*?(password|secret|token|authorization|cookie|credential).*?
+
+  - id: nestjs-auth-client-controlled-jwt-subject
+    message: sign/signAsync subject uses a request-body property or dto/body/input-named value. Review authenticated provenance; a local variable name does not establish client control.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: LOW
+      technology: [nestjs, jwt]
+      p1_semantics: p1-manual-ce-2026-10-23
+    pattern-either:
+      - pattern: 'this.$JWT.sign({..., sub: dto.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.sign({..., sub: body.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.sign({..., sub: input.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.sign({..., sub: $REQUEST.body.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.signAsync({..., sub: dto.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.signAsync({..., sub: body.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.signAsync({..., sub: input.$FIELD, ...}, ...)'
+      - pattern: 'this.$JWT.signAsync({..., sub: $REQUEST.body.$FIELD, ...}, ...)'
+  - id: nestjs-auth-password-field-in-response
+    message: Returned object contains a credential-named field. This may be an internal return; trace callers and effective HTTP serialization before concluding disclosure.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: LOW
+      technology: [nestjs]
+      p1_semantics: p1-manual-ce-2026-10-23
+    paths:
+      include:
+        - "**/*.ts"
+    patterns:
+      - pattern: 'return {..., $CREDENTIAL: $VALUE, ...}'
+      - metavariable-regex:
+          metavariable: $CREDENTIAL
+          regex: '(?i)^(?:password|passphrase)(?:_?hash)?$'
+
+  - id: nestjs-auth-jwt-verification-without-algorithm-allowlist
+    message: Passport JWT strategy does not visibly restrict accepted algorithms. Configure an explicit algorithm allowlist.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [nestjs, passport-jwt]
+    patterns:
+      - pattern: 'super({..., secretOrKey: $SECRET, ...})'
+      - pattern-not: 'super({..., algorithms: $ALGORITHMS, ...})'
+
+  - id: nestjs-auth-password-min-length-under-eight
+    message: Explicit MinLength(0..7) is below the historical bundled eight-character heuristic. This is not a researcher-approved password policy; inspect the effective validators and applicable policy.
+    severity: WARNING
+    languages: [generic]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [nestjs, class-validator]
+      p1_semantics: p1-manual-ce-2026-10-23
+    paths:
+      include:
+        - "**/*.ts"
+    pattern-regex: '(?ms)@MinLength\(\s*[0-7]\s*\)(?:(?!;).){0,200}\b(?:password|passphrase)\s*[?!]?\s*:'
+
+  - id: nestjs-auth-unsigned-jwt-algorithm
+    message: JWT configuration explicitly allows the unsigned none algorithm. Require a reviewed signing and verification algorithm.
+    severity: ERROR
+    languages: [generic]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [nestjs, jwt]
+    paths:
+      include:
+        - "**/*.ts"
+    pattern-regex: '(?i)\b(?:algorithm|algorithms)\s*:\s*(?:\[\s*)?["'']none["'']'
+  - id: nestjs-auth-request-credential-to-persistence-local
+    message: Request credential-derived data reaches persistence in the local function. Review transformations
+      and hashing before asserting plaintext storage.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - nestjs
+        - typeorm
+      p1_semantics: p1-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - exact: true
+        patterns:
+          - pattern: $REQ.body.$CREDENTIAL
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: ^(?:req|request|context\.request|ctx\.request)$
+          - metavariable-regex:
+              metavariable: $CREDENTIAL
+              regex: (?i)^(?:password|passphrase)$
+      - exact: true
+        patterns:
+          - pattern-inside: "import { Body as $DECORATOR } from \"@nestjs/common\";\n..."
+          - pattern-inside: '$METHOD(..., @$DECORATOR() $INPUT: $TYPE, ...) { ... }'
+          - pattern: $INPUT.$FIELD
+          - metavariable-regex:
+              metavariable: $FIELD
+              regex: (?i)^(?:password|passphrase)$
+      - exact: true
+        patterns:
+          - pattern-inside: "import { Body as $DECORATOR } from \"@nestjs/common\";\n..."
+          - pattern: '$METHOD(..., @$DECORATOR($FIELD, ...) $INPUT: $TYPE, ...) { ... }'
+          - metavariable-regex:
+              metavariable: $FIELD
+              regex: (?i)^['"](?:password|passphrase)['"]$
+          - focus-metavariable: $INPUT
+      - exact: true
+        patterns:
+          - pattern-inside: "import { Body } from \"@nestjs/common\";\n..."
+          - pattern-inside: '$METHOD(..., @Body() $INPUT: $TYPE, ...) { ... }'
+          - pattern: $INPUT.$FIELD
+          - metavariable-regex:
+              metavariable: $FIELD
+              regex: (?i)^(?:password|passphrase)$
+      - exact: true
+        patterns:
+          - pattern-inside: "import { Body } from \"@nestjs/common\";\n..."
+          - pattern: '$METHOD(..., @Body($FIELD, ...) $INPUT: $TYPE, ...) { ... }'
+          - metavariable-regex:
+              metavariable: $FIELD
+              regex: (?i)^['"](?:password|passphrase)['"]$
+          - focus-metavariable: $INPUT
+    pattern-sanitizers:
+      - exact: true
+        patterns:
+          - pattern-inside: "import * as $API from \"bcrypt\";\n..."
+          - pattern: $API.hash($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import $API from \"bcrypt\";\n..."
+          - pattern: $API.hash($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "const $API = require(\"bcrypt\");\n..."
+          - pattern: $API.hash($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hash as $CALL } from \"bcrypt\";\n..."
+          - pattern: $CALL($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hash } from \"bcrypt\";\n..."
+          - pattern: hash($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hash: $CALL } = require(\"bcrypt\");\n..."
+          - pattern: $CALL($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hash } = require(\"bcrypt\");\n..."
+          - pattern: hash($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import * as $API from \"bcrypt\";\n..."
+          - pattern: $API.hashSync($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import $API from \"bcrypt\";\n..."
+          - pattern: $API.hashSync($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "const $API = require(\"bcrypt\");\n..."
+          - pattern: $API.hashSync($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hashSync as $CALL } from \"bcrypt\";\n..."
+          - pattern: $CALL($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hashSync } from \"bcrypt\";\n..."
+          - pattern: hashSync($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hashSync: $CALL } = require(\"bcrypt\");\n..."
+          - pattern: $CALL($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hashSync } = require(\"bcrypt\");\n..."
+          - pattern: hashSync($PASSWORD, $COST)
+      - exact: true
+        patterns:
+          - pattern-inside: "import * as $API from \"argon2\";\n..."
+          - pattern: $API.hash($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "import * as $API from \"argon2\";\n..."
+          - pattern: $API.hash($PASSWORD, $OPTIONS)
+      - exact: true
+        patterns:
+          - pattern-inside: "import $API from \"argon2\";\n..."
+          - pattern: $API.hash($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "import $API from \"argon2\";\n..."
+          - pattern: $API.hash($PASSWORD, $OPTIONS)
+      - exact: true
+        patterns:
+          - pattern-inside: "const $API = require(\"argon2\");\n..."
+          - pattern: $API.hash($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "const $API = require(\"argon2\");\n..."
+          - pattern: $API.hash($PASSWORD, $OPTIONS)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hash as $CALL } from \"argon2\";\n..."
+          - pattern: $CALL($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hash as $CALL } from \"argon2\";\n..."
+          - pattern: $CALL($PASSWORD, $OPTIONS)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hash } from \"argon2\";\n..."
+          - pattern: hash($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "import { hash } from \"argon2\";\n..."
+          - pattern: hash($PASSWORD, $OPTIONS)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hash: $CALL } = require(\"argon2\");\n..."
+          - pattern: $CALL($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hash: $CALL } = require(\"argon2\");\n..."
+          - pattern: $CALL($PASSWORD, $OPTIONS)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hash } = require(\"argon2\");\n..."
+          - pattern: hash($PASSWORD)
+      - exact: true
+        patterns:
+          - pattern-inside: "const { hash } = require(\"argon2\");\n..."
+          - pattern: hash($PASSWORD, $OPTIONS)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $R.save($DATA)
+              - pattern: $R.insert($DATA)
+              - pattern: $R.update($ID, $DATA)
+          - focus-metavariable: $DATA
+
+  - id: nestjs-auth-decoded-jwt-identity-local
+    message: Decoded JWT output reaches an identity sink in the local function. This detector does not establish verification of the same token; inspect guards and verify/verifyAsync before trusting identity.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - nestjs
+        - jwt
+      p1_semantics: p1-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $JWT.decode($TOKEN, ...)
+          - metavariable-regex:
+              metavariable: $JWT
+              regex: (?i)^(?:(?:this\.)?(?:jwt|jwtService|jsonwebtoken))$
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $REQ.user = $IDENTITY
+              - pattern: 'return {..., userId: $IDENTITY, ...}'
+              - pattern: 'return {..., sub: $IDENTITY, ...}'
+          - focus-metavariable: $IDENTITY
+      - patterns:
+          - pattern-either:
+              - pattern: '$R.findOneBy({..., id: $IDENTITY, ...})'
+              - pattern: '$R.findOne({..., where: {..., id: $IDENTITY, ...}, ...})'
+              - pattern: '$JWT.sign({..., sub: $IDENTITY, ...}, ...)'
+              - pattern: '$JWT.signAsync({..., sub: $IDENTITY, ...}, ...)'
+          - focus-metavariable: $IDENTITY
+  - id: nestjs-auth-sensitive-field-to-http-local
+    message: Credential/account-number-named property reaches json/send locally. Review the response API, value representation and effective serializer before concluding HTTP disclosure.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - nestjs
+        - express
+        - typeorm
+      p1_semantics: p1-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $ENTITY.$FIELD
+          - metavariable-regex:
+              metavariable: $FIELD
+              regex: (?i)^(?:(?:password|passphrase)(?:_?hash)?|account_?number)$
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $RES.json($DATA)
+              - pattern: $RES.send($DATA)
+          - metavariable-regex:
+              metavariable: $RES
+              regex: ^(?:res|response|reply)$
+          - focus-metavariable: $DATA
+  - id: nestjs-auth-sensitive-entity-response-review
+    message: An entity selected with a sensitive-named field or assigned such a field is returned/sent locally. Trace actual HTTP serialization; an internal return is a review candidate.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - nestjs
+        - express
+        - typeorm
+      p1_semantics: p1-manual-ce-2026-10-23
+    patterns:
+      - pattern-either:
+          - pattern-inside: '$ENTITY = await $R.findOne({..., select: {..., $FIELD: true, ...}, ...}); ...'
+          - pattern-inside: $ENTITY.$FIELD = $VALUE; ...
+      - metavariable-regex:
+          metavariable: $FIELD
+          regex: (?i)^(?:(?:password|passphrase)(?:_?hash)?|account_?number)$
+      - pattern-either:
+          - pattern: return $ENTITY
+          - pattern: $RES.json($ENTITY)
+          - pattern: $RES.send($ENTITY)

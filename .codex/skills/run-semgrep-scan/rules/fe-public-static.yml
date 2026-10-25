@@ -1,0 +1,432 @@
+rules:
+  - id: react-public-dangerously-set-inner-html
+    message: React renders HTML through dangerouslySetInnerHTML. Sanitize trusted HTML and justify this boundary.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [react]
+    pattern: '<$TAG ... dangerouslySetInnerHTML={{__html: $HTML}} ... />'
+
+  - id: react-public-direct-dom-html-write
+    message: Client code writes HTML directly to the DOM. Prefer React text rendering or a reviewed sanitizer.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [react, browser]
+    pattern-either:
+      - pattern: $ELEMENT.innerHTML = $VALUE
+      - pattern: $ELEMENT.outerHTML = $VALUE
+      - pattern: $ELEMENT.insertAdjacentHTML(...)
+
+  - id: react-public-dynamic-code-execution
+    message: Client code executes dynamic JavaScript. Remove eval-like execution.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [react, browser]
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+
+  - id: react-public-document-write
+    message: document.write can create an unsafe HTML injection boundary.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [browser]
+    pattern: document.write(...)
+
+  - id: react-public-query-to-location-v2
+    message: Browser query/hash input reaches a location or locally bound React Router navigation target.
+      Review exact destination mapping; local matching does not prove an unsafe redirect.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - react
+        - browser
+        - react-router
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - pattern: window.location.search
+      - pattern: window.location.hash
+      - pattern: location.search
+      - pattern: location.hash
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(window.location.search);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(location.search);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(window.location.hash);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(location.hash);\n..."
+          - pattern: $PARAMS.get(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: window.location.href = $URL
+              - pattern: location.href = $URL
+              - pattern: window.location = $URL
+              - pattern: location = $URL
+              - pattern: window.location.assign($URL)
+              - pattern: location.assign($URL)
+              - pattern: window.location.replace($URL)
+              - pattern: location.replace($URL)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate } from \"react-router-dom\";\n..."
+          - pattern-inside: "$NAV = useNavigate();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate as $HOOK } from \"react-router-dom\";\n..."
+          - pattern-inside: "$NAV = $HOOK();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate } from \"react-router\";\n..."
+          - pattern-inside: "$NAV = useNavigate();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate as $HOOK } from \"react-router\";\n..."
+          - pattern-inside: "$NAV = $HOOK();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+
+  - id: react-public-query-to-window-open-v2
+    message: Browser query/hash input reaches the window.open destination locally. Review destination policy;
+      this does not establish opener access.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - browser
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - pattern: window.location.search
+      - pattern: window.location.hash
+      - pattern: location.search
+      - pattern: location.hash
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(window.location.search);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(location.search);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(window.location.hash);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(location.hash);\n..."
+          - pattern: $PARAMS.get(...)
+    pattern-sinks:
+      - patterns:
+          - pattern: window.open($URL, ...)
+          - focus-metavariable: $URL
+
+  - id: react-public-window-open-opener-review-v2
+    message: window.open has no visible noopener/noreferrer feature and does not explicitly target the current context. Review external target and any subsequent opener clearing before interpreting CWE-1022.
+    severity: WARNING
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [browser]
+    pattern-either:
+      - pattern: window.open($URL)
+      - patterns:
+          - pattern: window.open($URL, $TARGET)
+          - metavariable-regex:
+              metavariable: $TARGET
+              regex: '(?i)^(?!["\x27]_(?:self|top|parent)["\x27]$).*$'
+      - patterns:
+          - pattern: window.open($URL, $TARGET, $FEATURES)
+          - metavariable-regex:
+              metavariable: $TARGET
+              regex: '(?i)^(?!["\x27]_(?:self|top|parent)["\x27]$).*$'
+          - metavariable-regex:
+              metavariable: $FEATURES
+              regex: '(?i)^(?!.*(?:noopener|noreferrer)).*$'
+
+  - id: react-public-client-secret-environment-name
+    message: A Vite-exposed environment variable name looks secret-bearing. VITE variables are shipped to the browser.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology: [vite]
+    patterns:
+      - pattern: import.meta.env.$NAME
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: (?i).*?(secret|private|password|passwd|token|api[_-]?key).*?
+
+  - id: react-public-auth-session-browser-storage
+    message: Auth/session-named key is written through a locally tracked Web Storage receiver. Review content
+      and same-origin script exposure; names and storage usage alone do not prove a vulnerability.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - react
+        - browser
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - pattern: localStorage
+      - pattern: sessionStorage
+      - pattern: window.localStorage
+      - pattern: window.sessionStorage
+    pattern-sinks:
+      - patterns:
+          - pattern: $STORAGE.setItem($KEY, $VALUE)
+          - metavariable-regex:
+              metavariable: $KEY
+              regex: (?i).*(?:auth|login|session|token|credential).*
+          - focus-metavariable: $STORAGE
+
+  - id: react-public-auth-object-browser-storage
+    message: Auth/session-named object is written through a locally tracked Web Storage receiver. Review
+      content and same-origin script exposure; names and storage usage alone do not prove a vulnerability.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - react
+        - browser
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - pattern: localStorage
+      - pattern: sessionStorage
+      - pattern: window.localStorage
+      - pattern: window.sessionStorage
+    pattern-sinks:
+      - patterns:
+          - pattern: $STORAGE.setItem($KEY, JSON.stringify($VALUE))
+          - metavariable-regex:
+              metavariable: $VALUE
+              regex: (?i).*(?:auth|login|session|token|credential).*
+          - focus-metavariable: $STORAGE
+
+  - id: react-public-untrusted-message-to-dom
+    message: A server response message is assigned to an HTML sink. Render it as React text instead.
+    severity: ERROR
+    languages: [typescript]
+    metadata:
+      category: security
+      confidence: HIGH
+      technology: [react, axios]
+    pattern-either:
+      - pattern: $ELEMENT.innerHTML = $RESPONSE.data.message
+      - pattern: $ELEMENT.outerHTML = $RESPONSE.data.message
+
+  - id: react-public-url-to-html-local
+    message: Browser query/hash input reaches an HTML sink locally. Review context-specific encoding and the
+      actual sanitizer; parsing a URL does not sanitize HTML.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - react
+        - browser
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - pattern: window.location.search
+      - pattern: window.location.hash
+      - pattern: location.search
+      - pattern: location.hash
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(window.location.search);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(location.search);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(window.location.hash);\n..."
+          - pattern: $PARAMS.get(...)
+      - patterns:
+          - pattern-inside: "$PARAMS = new URLSearchParams(location.hash);\n..."
+          - pattern: $PARAMS.get(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $EL.innerHTML = $DATA
+              - pattern: $EL.outerHTML = $DATA
+              - pattern: $EL.insertAdjacentHTML($POSITION, $DATA)
+              - pattern: document.write($DATA)
+              - pattern: document.writeln($DATA)
+              - pattern: '<$TAG ... dangerouslySetInnerHTML={{__html: $DATA}} ... />'
+          - focus-metavariable: $DATA
+
+  - id: react-public-message-to-sensitive-sink-local
+    message: MessageEvent data reaches an HTML/code sink in an inline handler locally. Review exact
+      origin/source checks and payload validation; the rule does not prove they are absent.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - browser
+        - react
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: window.addEventListener("message", ($EVENT) => { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: window.addEventListener("message", function ($EVENT) { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: window.onmessage = ($EVENT) => { ... };
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: globalThis.addEventListener("message", ($EVENT) => { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: globalThis.addEventListener("message", function ($EVENT) { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: globalThis.onmessage = ($EVENT) => { ... };
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: addEventListener("message", ($EVENT) => { ... }, ...);
+          - pattern: $EVENT.data
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $EL.innerHTML = $DATA
+              - pattern: $EL.outerHTML = $DATA
+              - pattern: $EL.insertAdjacentHTML($POSITION, $DATA)
+              - pattern: document.write($DATA)
+              - pattern: document.writeln($DATA)
+              - pattern: '<$TAG ... dangerouslySetInnerHTML={{__html: $DATA}} ... />'
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern-either:
+              - pattern: eval($DATA)
+              - pattern: new Function($DATA)
+          - focus-metavariable: $DATA
+
+  - id: react-public-message-to-navigation-local
+    message: MessageEvent data reaches a navigation/open destination locally. Check sender origin/source and
+      destination policy; absence of a check across the application is not established.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - browser
+        - react
+      p2_semantics: p2-manual-ce-2026-10-23
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-inside: window.addEventListener("message", ($EVENT) => { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: window.addEventListener("message", function ($EVENT) { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: window.onmessage = ($EVENT) => { ... };
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: globalThis.addEventListener("message", ($EVENT) => { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: globalThis.addEventListener("message", function ($EVENT) { ... }, ...);
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: globalThis.onmessage = ($EVENT) => { ... };
+          - pattern: $EVENT.data
+      - patterns:
+          - pattern-inside: addEventListener("message", ($EVENT) => { ... }, ...);
+          - pattern: $EVENT.data
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: window.location.href = $URL
+              - pattern: location.href = $URL
+              - pattern: window.location = $URL
+              - pattern: location = $URL
+              - pattern: window.location.assign($URL)
+              - pattern: location.assign($URL)
+              - pattern: window.location.replace($URL)
+              - pattern: location.replace($URL)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate } from \"react-router-dom\";\n..."
+          - pattern-inside: "$NAV = useNavigate();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate as $HOOK } from \"react-router-dom\";\n..."
+          - pattern-inside: "$NAV = $HOOK();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate } from \"react-router\";\n..."
+          - pattern-inside: "$NAV = useNavigate();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern-inside: "import { useNavigate as $HOOK } from \"react-router\";\n..."
+          - pattern-inside: "$NAV = $HOOK();\n..."
+          - pattern: $NAV($URL, ...)
+          - focus-metavariable: $URL
+      - patterns:
+          - pattern: window.open($URL, ...)
+          - focus-metavariable: $URL
+
+  - id: react-public-postmessage-wildcard-target
+    message: postMessage explicitly uses wildcard targetOrigin. If this is a Window message carrying sensitive
+      data, review recipient origin pinning; public broadcast data or Worker APIs need different
+      interpretation.
+    severity: WARNING
+    languages:
+      - typescript
+    metadata:
+      category: security
+      confidence: MEDIUM
+      technology:
+        - browser
+      p2_semantics: p2-manual-ce-2026-10-23
+    pattern-either:
+      - pattern: $TARGET.postMessage($DATA, "*", ...)
+      - pattern: '$TARGET.postMessage($DATA, {..., targetOrigin: "*", ...})'

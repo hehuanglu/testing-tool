@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.3"
+    },
+    "adapter": {
+      "const": "finalsource-account-read-v1"
+    },
+    "productId": {
+      "const": "finalsource-synthetic"
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "synthetic"
+        },
+        "identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "evidenceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "kind",
+        "identity",
+        "evidenceRef"
+      ]
+    },
+    "origin": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "targetBuildRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "binding": {
+      "type": "null"
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accountId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ownerId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nonOwnerId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "provenanceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "accountId",
+        "ownerId",
+        "nonOwnerId",
+        "provenanceRef"
+      ]
+    },
+    "credentials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tokenEnv": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+            }
+          },
+          "required": [
+            "tokenEnv"
+          ]
+        },
+        "B": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tokenEnv": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+            }
+          },
+          "required": [
+            "tokenEnv"
+          ]
+        }
+      },
+      "required": [
+        "A",
+        "B"
+      ]
+    },
+    "anonymous": {
+      "const": true
+    },
+    "requestTimeoutSeconds": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 5
+    },
+    "totalTimeoutSeconds": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 900
+    },
+    "maxRate": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 2
+    },
+    "retentionDays": {
+      "const": 14
+    },
+    "logicalBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "const": "owner-a"
+            },
+            "userId": {
+              "const": "synthetic-user-a"
+            },
+            "credentialRef": {
+              "const": "run-secret://actor-a"
+            }
+          },
+          "required": [
+            "label",
+            "userId",
+            "credentialRef"
+          ]
+        },
+        "B": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "const": "nonowner-b"
+            },
+            "userId": {
+              "const": "synthetic-user-b"
+            },
+            "credentialRef": {
+              "const": "run-secret://actor-b"
+            }
+          },
+          "required": [
+            "label",
+            "userId",
+            "credentialRef"
+          ]
+        },
+        "accountId": {
+          "const": "synthetic-account-a-001"
+        }
+      },
+      "required": [
+        "A",
+        "B",
+        "accountId"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "adapter",
+    "productId",
+    "environment",
+    "origin",
+    "targetBuildRef",
+    "binding",
+    "fixture",
+    "credentials",
+    "anonymous",
+    "requestTimeoutSeconds",
+    "totalTimeoutSeconds",
+    "maxRate",
+    "retentionDays",
+    "logicalBindings"
+  ]
+}

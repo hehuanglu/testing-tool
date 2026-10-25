@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.3",
+  "productId": "finalsource-synthetic",
+  "environmentClass": "synthetic",
+  "environmentIdentity": "isolated-bola-account-fixture",
+  "owner": "synthetic-test-owner",
+  "issuer": "synthetic-fixture-harness",
+  "reviewer": "pending-human-review",
+  "approvalRef": "this-user-message-synthetic-only",
+  "variant": "fixed",
+  "logicalBindings": {
+    "A": {
+      "label": "owner-a",
+      "userId": "synthetic-user-a",
+      "credentialRef": "run-secret://actor-a"
+    },
+    "B": {
+      "label": "nonowner-b",
+      "userId": "synthetic-user-b",
+      "credentialRef": "run-secret://actor-b"
+    },
+    "accountId": "synthetic-account-a-001"
+  },
+  "wireIds": {
+    "A": 11,
+    "B": 22,
+    "account": 101
+  },
+  "maxRuntimeSeconds": 900,
+  "maxRate": 2,
+  "retentionDays": 14
+}

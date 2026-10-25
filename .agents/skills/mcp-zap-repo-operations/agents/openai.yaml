@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCP ZAP Repo Operations"
+  short_description: "Tester ZAP: BE/FE/BOLA, đủ scope và kết quả trung thực"
+  default_prompt: "Dùng $mcp-zap-repo-operations theo nghiệp vụ tester: xác định track/scope, discovery và câu hỏi kiểm thử rồi chọn operations gốc cùng runner phù hợp; BE cần ZAP DAST thật, FE cần UI thật và kiểm bảo mật toàn API/input gắn FE theo kỹ thuật áp dụng, BOLA đủ role/ownership. Lưu token cần thiết local private chỉ thông báo. Giữ inventory độc lập với workload; khắc phục, thực hiện và đọc kết quả phần còn thiếu, không dừng ở decision/next step; bàn giao ALERTS.json và RUN.json trung thực."

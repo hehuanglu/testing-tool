@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "recordId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+    },
+    "productId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+    },
+    "environmentIdentity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "approvalRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validUntil": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "attackOrigins": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "maxLength": 256
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "resolvedAddresses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "health",
+          "seed",
+          "crawl",
+          "import",
+          "active"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "destructiveLevel": {
+      "enum": [
+        "read-only",
+        "synthetic-mutations"
+      ]
+    },
+    "maxRuntimeSeconds": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1800
+    },
+    "maxRate": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2
+    },
+    "maxConcurrency": {
+      "const": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recordId",
+    "productId",
+    "environmentIdentity",
+    "owner",
+    "issuer",
+    "approvalRef",
+    "validFrom",
+    "validUntil",
+    "attackOrigins",
+    "resolvedAddresses",
+    "operations",
+    "destructiveLevel",
+    "maxRuntimeSeconds",
+    "maxRate",
+    "maxConcurrency"
+  ]
+}

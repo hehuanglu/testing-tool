@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "manifestSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "decision": {
+      "enum": [
+        "approved",
+        "rejected"
+      ]
+    },
+    "reviewRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "reviewedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "manifestSha256",
+    "reviewer",
+    "decision",
+    "reviewRef",
+    "reviewedAt"
+  ]
+}

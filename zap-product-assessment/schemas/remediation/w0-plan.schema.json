@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zap-assessment:remediation:w0-plan:2.0",
+  "title": "Offline remediation development plan; not an executable assessment authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "assessmentId", "planKind", "releaseScope", "executionPolicy", "sourcePlan", "actorRefs", "operations", "operationActorDenominator", "tracks", "caseIds", "bindings", "oracleContract", "thresholds", "modes", "statusModel", "phaseReuse"],
+  "properties": {
+    "schemaVersion": {"const": "2.0"},
+    "assessmentId": {"type": "string", "minLength": 1},
+    "planKind": {"const": "offline-remediation-development"},
+    "releaseScope": {"const": "R2-full-required-browser"},
+    "executionPolicy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["liveTrafficPermitted", "stopAt", "authorityRef", "scope"],
+      "properties": {
+        "liveTrafficPermitted": {"const": false}, "stopAt": {"const": "G0"},
+        "authorityRef": {"type": "null"}, "scope": {"const": "offline-only"}
+      }
+    },
+    "sourcePlan": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"$ref": "#/$defs/sha"}}, "additionalProperties": false},
+    "actorRefs": {"const": ["anonymous", "A", "B"]},
+    "operations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/operation"}},
+    "operationActorDenominator": {"type": "array", "minItems": 1, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["method", "path", "actorRef", "status", "oracleRef", "resourceBinding"],
+      "properties": {"method": {"type": "string"}, "path": {"type": "string"}, "actorRef": {"enum": ["anonymous", "A", "B"]}, "status": {"const": "unknown"}, "oracleRef": {"type": "string", "minLength": 1}, "resourceBinding": {"const": "required-at-live-entry"}}
+    }},
+    "tracks": {"type": "array", "items": {
+      "type": "object", "additionalProperties": false, "required": ["trackId", "required", "gates"],
+      "properties": {"trackId": {"type": "string"}, "required": {"type": "boolean"}, "gates": {"type": "array", "minItems": 1, "items": {"type": "string"}}}
+    }},
+    "caseIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^C[0-9]{2}$"}},
+    "bindings": {"type": "object"}, "oracleContract": {"type": "object"}, "thresholds": {"type": "object"},
+    "modes": {"type": "array", "items": {"type": "object"}}, "statusModel": {"type": "object"}, "phaseReuse": {"type": "object"}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "operation": {"type": "object", "additionalProperties": false, "required": ["method", "path"], "properties": {"method": {"enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE"]}, "path": {"type": "string", "pattern": "^/"}}}
+  }
+}

@@ -1,0 +1,43 @@
+# Research-only, explicit local retention. Do not mount into a shared/release deployment.
+# Copy into a private local directory; replace fixture actor ID, email and password FILE reference.
+zap:
+  auth:
+    experimental-json-bearer-enabled: true
+  scan:
+    jobs:
+      store:
+        backend: in-memory
+    queue:
+      coordinator:
+        backend: single-node
+    limits:
+      maxConcurrentActiveScans: 1
+      maxConcurrentSpiderScans: 1
+      threadPerHost: 1
+      maxActiveScanDurationInMins: 2
+      maxSpiderScanDurationInMins: 1
+    url:
+      allowPrivateNetworks: true
+      whitelist: backend
+      blacklist: localhost,127.0.0.1,169.254.0.0/16
+mcp:
+  server:
+    auth:
+      bootstrap:
+        profiles:
+          - id: finalsource-research-A
+            kind: json-bearer
+            allowed-origin: http://backend:3000
+            credential-reference: file:/research/password
+            login-url: http://backend:3000/api/auth/login
+            username: replace-with-fresh-fixture-email
+            username-json-field: email
+            password-json-field: password
+            token-json-pointer: /data/accessToken
+            header-name: Authorization
+            header-prefix: 'Bearer '
+            verification-url: http://backend:3000/api/v1/accounts
+            logged-in-indicator-regex: '"user_id"\s*:'
+            logged-out-indicator-regex: '"statusCode"\s*:\s*401'
+            subject-json-pointer: /data/user_id
+            expected-subject: 'REPLACE_WITH_FIXTURE_ID'

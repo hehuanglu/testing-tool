@@ -1,0 +1,1232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zap-assessment:evidence:2.0",
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "planHash": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{64}|\\$self)$"
+        },
+        "targetBinding": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "buildRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "actorRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "resourceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "techniqueId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "phaseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "oracleVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "assessmentId",
+        "planHash",
+        "targetBinding",
+        "buildRef",
+        "actorRef",
+        "resourceRef",
+        "operation",
+        "techniqueId",
+        "phaseId",
+        "oracleVersion"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH",
+            "HEAD",
+            "OPTIONS",
+            "TRACE"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "body": {}
+      },
+      "required": [
+        "method",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "minItems": 1,
+          "maxItems": 2048,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "ref",
+        "binding",
+        "request",
+        "statuses"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": [
+            "string",
+            "integer"
+          ],
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subjectPointer": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "rolePointer": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "maxAgeSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 5
+        },
+        "proof": {
+          "$ref": "#/$defs/spec"
+        }
+      },
+      "required": [
+        "subject",
+        "role",
+        "subjectPointer",
+        "rolePointer",
+        "maxAgeSeconds",
+        "proof"
+      ],
+      "additionalProperties": false
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "resourceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "wireId": {
+          "type": [
+            "string",
+            "integer"
+          ],
+          "minLength": 1
+        },
+        "ownerActorRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "ownerSubject": {
+          "type": [
+            "string",
+            "integer"
+          ],
+          "minLength": 1
+        },
+        "idPointer": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "ownerPointer": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        }
+      },
+      "required": [
+        "resourceRef",
+        "wireId",
+        "ownerActorRef",
+        "ownerSubject",
+        "idPointer",
+        "ownerPointer"
+      ],
+      "additionalProperties": false
+    },
+    "assertion": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "assertionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "required": {
+          "const": true
+        },
+        "trackId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "primaryRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "identities": {
+          "type": "object",
+          "maxProperties": 64,
+          "additionalProperties": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        "resource": {
+          "$ref": "#/$defs/resource"
+        },
+        "ownerPositive": {
+          "$ref": "#/$defs/spec"
+        },
+        "preState": {
+          "$ref": "#/$defs/spec"
+        },
+        "postState": {
+          "$ref": "#/$defs/spec"
+        },
+        "statePointer": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "expectedPreState": {},
+        "expectedPostState": {},
+        "oracle": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "resource-read",
+                "denial",
+                "validation",
+                "state-transition"
+              ]
+            },
+            "statuses": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 100,
+                "maximum": 599
+              },
+              "minItems": 1,
+              "maxItems": 2048,
+              "uniqueItems": true
+            },
+            "responseEquals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "pointer": {
+                    "type": "string",
+                    "maxLength": 1024,
+                    "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "pointer",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 2048
+            },
+            "forbiddenPointers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 1024,
+                "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+              },
+              "minItems": 1,
+              "maxItems": 2048,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "kind",
+            "statuses",
+            "responseEquals"
+          ],
+          "additionalProperties": false
+        },
+        "reusePolicy": {
+          "const": "completed-before-phase-failure"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "assertionId",
+        "required",
+        "trackId",
+        "binding",
+        "request",
+        "primaryRef",
+        "identities",
+        "resource",
+        "oracle"
+      ],
+      "additionalProperties": false
+    },
+    "phase": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "not_started",
+            "running",
+            "completed",
+            "failed",
+            "timed_out",
+            "cancelled"
+          ]
+        },
+        "clockId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "failedAt": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completedAt": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "status",
+        "clockId"
+      ],
+      "additionalProperties": false
+    },
+    "record": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "response": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 599
+            },
+            "contentType": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "body": {
+              "type": "string",
+              "maxLength": 4194304
+            }
+          },
+          "required": [
+            "status",
+            "contentType",
+            "body"
+          ],
+          "additionalProperties": false
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "responseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "at": {
+          "type": "number",
+          "minimum": 0
+        },
+        "authEpoch": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "clockId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "authMode": {
+          "enum": [
+            "authenticated",
+            "anonymous"
+          ]
+        }
+      },
+      "required": [
+        "binding",
+        "request",
+        "response",
+        "requestId",
+        "responseId",
+        "at",
+        "authEpoch",
+        "clockId",
+        "authMode"
+      ],
+      "additionalProperties": false
+    },
+    "boundary": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "enum": [
+            "target",
+            "guard",
+            "infrastructure",
+            "unknown"
+          ]
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "responseId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "at": {
+          "type": "number",
+          "minimum": 0
+        },
+        "authEpoch": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "clockId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "authMode": {
+          "enum": [
+            "authenticated",
+            "anonymous"
+          ]
+        },
+        "requestSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "responseSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "source",
+        "binding",
+        "requestId",
+        "responseId",
+        "at",
+        "authEpoch",
+        "clockId",
+        "authMode",
+        "requestSha256",
+        "responseSha256"
+      ],
+      "additionalProperties": false
+    },
+    "reuse": {
+      "type": "object",
+      "properties": {
+        "recordRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "clockId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "completedAt": {
+          "type": "number",
+          "minimum": 0
+        },
+        "authEpochs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "stateBeforeRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "stateAfterRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "exchangeRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "minItems": 1,
+          "maxItems": 2048,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "recordRef",
+        "binding",
+        "clockId",
+        "completedAt",
+        "authEpochs",
+        "stateBeforeRef",
+        "stateAfterRef",
+        "exchangeRefs"
+      ],
+      "additionalProperties": false
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "actorRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "subject": {
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "authMode": {
+          "enum": [
+            "authenticated",
+            "anonymous"
+          ]
+        },
+        "identityResourceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "actorRef",
+        "subject",
+        "role",
+        "authMode",
+        "identityResourceRef"
+      ],
+      "additionalProperties": false
+    },
+    "normalized-plan": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "planKind": {
+          "const": "coverage-verification"
+        },
+        "verificationOnly": {
+          "const": true
+        },
+        "assessmentId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "targetBinding": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "buildRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "fixtureHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "requiredTracks": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "api-ownership-business",
+              "active-controls",
+              "browser-business",
+              "evidence-verification",
+              "regression",
+              "alternate-product"
+            ]
+          },
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "phaseId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "trackId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "required": {
+                "const": true
+              }
+            },
+            "required": [
+              "phaseId",
+              "trackId",
+              "required"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion"
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "reportId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "format": {
+                "enum": [
+                  "json",
+                  "html"
+                ]
+              },
+              "sourcePath": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "reportId",
+              "format",
+              "sourcePath"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        },
+        "unprovenRuntimeGates": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "G3",
+              "G4",
+              "G5",
+              "G6",
+              "G7",
+              "G8",
+              "G9",
+              "G10",
+              "G11",
+              "G12-D"
+            ]
+          },
+          "minItems": 10,
+          "maxItems": 10,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "planKind",
+        "verificationOnly",
+        "assessmentId",
+        "targetBinding",
+        "buildRef",
+        "fixtureHash",
+        "requiredTracks",
+        "phases",
+        "assertions",
+        "reports",
+        "unprovenRuntimeGates"
+      ],
+      "additionalProperties": false
+    },
+    "fixture-manifest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "assessmentId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "targetBinding": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "buildRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/actor"
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource"
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "assessmentId",
+        "targetBinding",
+        "buildRef",
+        "actors",
+        "resources"
+      ],
+      "additionalProperties": false
+    },
+    "observations": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "exchanges": {
+          "type": "object",
+          "maxProperties": 4096,
+          "additionalProperties": {
+            "$ref": "#/$defs/record"
+          }
+        },
+        "boundaries": {
+          "type": "object",
+          "maxProperties": 4096,
+          "additionalProperties": {
+            "$ref": "#/$defs/boundary"
+          }
+        },
+        "phases": {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 2048,
+          "additionalProperties": {
+            "$ref": "#/$defs/phase"
+          }
+        },
+        "reuseRecords": {
+          "type": "object",
+          "maxProperties": 2048,
+          "additionalProperties": {
+            "$ref": "#/$defs/reuse"
+          }
+        },
+        "cleanup": {
+          "const": "not_applicable"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "exchanges",
+        "boundaries",
+        "phases",
+        "reuseRecords",
+        "cleanup"
+      ],
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assertionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "oracleResult": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "inconclusive"
+                ]
+              }
+            },
+            "required": [
+              "assertionId",
+              "oracleResult"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "assertions"
+      ],
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "assessmentId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "executionStatus": {
+          "enum": [
+            "not_started",
+            "running",
+            "completed",
+            "failed",
+            "timed_out",
+            "cancelled"
+          ]
+        },
+        "evidenceStatus": {
+          "enum": [
+            "complete",
+            "incomplete"
+          ]
+        },
+        "securityVerdict": {
+          "enum": [
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "cleanupStatus": {
+          "const": "not_applicable"
+        },
+        "gateDecision": {
+          "const": "block"
+        },
+        "applicationOracleCounts": {
+          "type": "object",
+          "properties": {
+            "pass": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "fail": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "inconclusive": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ],
+          "additionalProperties": false
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "trackId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "status": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "inconclusive",
+                  "not_run"
+                ]
+              }
+            },
+            "required": [
+              "trackId",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "coverageEvidenceStatus": {
+          "enum": [
+            "complete",
+            "incomplete"
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "assessmentId",
+        "executionStatus",
+        "evidenceStatus",
+        "securityVerdict",
+        "cleanupStatus",
+        "gateDecision",
+        "applicationOracleCounts",
+        "tracks",
+        "coverageEvidenceStatus"
+      ],
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "2.0"
+        },
+        "assessmentId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "planHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "documents": {
+          "type": "object",
+          "properties": {
+            "plan": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "fixture": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "observations": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "coverage": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "plan",
+            "fixture",
+            "observations",
+            "coverage",
+            "summary"
+          ],
+          "additionalProperties": false
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "reportId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "artifactPath": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "chunkPaths": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "minItems": 1,
+                "maxItems": 2048,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "reportId",
+              "artifactPath",
+              "chunkPaths"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 2048
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 16777216
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "bytes",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "assessmentId",
+        "planHash",
+        "documents",
+        "reports",
+        "artifacts"
+      ],
+      "additionalProperties": false
+    },
+    "report-chunk": {
+      "type": "object",
+      "properties": {
+        "reportPath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nextOffset": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "charactersReturned": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "endOfFile": {
+          "type": "boolean"
+        },
+        "totalCharacters": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777216
+        },
+        "offsetUnit": {
+          "const": "unicodeCodePoints"
+        },
+        "artifactSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 16777216
+        }
+      },
+      "required": [
+        "reportPath",
+        "offset",
+        "nextOffset",
+        "charactersReturned",
+        "endOfFile",
+        "totalCharacters",
+        "offsetUnit",
+        "artifactSha256",
+        "content"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

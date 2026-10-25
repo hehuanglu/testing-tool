@@ -1,0 +1,922 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "fe-authenticated-journeys/1.0"
+    },
+    "recipe": {
+      "enum": [
+        "finalsource-fe-auth/1.0",
+        "reviewed-fe-auth/1.0"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "json-bearer"
+        },
+        "loginPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "usernameField": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passwordField": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tokenPointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "storageKey": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "subjectPointer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rolePointer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expectedRole": {
+              "type": "string",
+              "minLength": 1
+            },
+            "roleProvenance": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "roleByActor": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "path",
+            "subjectPointer",
+            "expectedRole",
+            "roleProvenance"
+          ],
+          "additionalProperties": false
+        },
+        "loginSelectors": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "minLength": 1
+            },
+            "password": {
+              "type": "string",
+              "minLength": 1
+            },
+            "submit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "remember": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "username",
+            "password",
+            "submit"
+          ],
+          "additionalProperties": false
+        },
+        "maxLoginsPerActor": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "kind",
+        "loginPath",
+        "usernameField",
+        "passwordField",
+        "tokenPointer",
+        "storageKey",
+        "identity",
+        "loginSelectors",
+        "maxLoginsPerActor"
+      ],
+      "additionalProperties": false
+    },
+    "sessionGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actorRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "remember": {
+            "type": "boolean"
+          },
+          "terminal": {
+            "enum": [
+              "logout",
+              "dispose",
+              "switch-actor"
+            ]
+          },
+          "actorRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true,
+            "minItems": 1,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "id",
+          "actorRef",
+          "remember",
+          "terminal"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "journeys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "responsibilityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sessionGroup": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actorRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phase": {
+            "enum": [
+              "login-pending",
+              "identity-verifying",
+              "authenticated",
+              "logout",
+              "lost",
+              "terminal"
+            ]
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "enum": [
+                    "navigate",
+                    "fill",
+                    "click",
+                    "submit",
+                    "wait",
+                    "reload",
+                    "select",
+                    "check",
+                    "uncheck",
+                    "back",
+                    "forward",
+                    "new-tab",
+                    "identity-probe",
+                    "logout-boundary",
+                    "reopen",
+                    "readback",
+                    "post-state"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "selector": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {},
+                "fixtureField": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "predicate": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "exists",
+                        "absent",
+                        "text",
+                        "urlPath",
+                        "invalid",
+                        "disabled",
+                        "attribute",
+                        "storagePresent",
+                        "storageAbsent",
+                        "valueLength",
+                        "ready",
+                        "checked",
+                        "count",
+                        "textAbsent",
+                        "imageLoaded"
+                      ]
+                    },
+                    "selector": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "value": {},
+                    "attribute": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "key": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "area": {
+                      "enum": [
+                        "local",
+                        "session"
+                      ]
+                    },
+                    "seconds": {
+                      "type": "number",
+                      "minimum": 0.1,
+                      "maximum": 12
+                    },
+                    "fixtureField": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "kind"
+                  ],
+                  "additionalProperties": false
+                },
+                "seconds": {
+                  "type": "number",
+                  "minimum": 0.1,
+                  "maximum": 12
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "matchPointer": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "matchFixture": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "valuePointer": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "expectedValue": {},
+                "expectedFixture": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "idFormat": {
+                  "enum": [
+                    "integer",
+                    "uuid",
+                    "slug"
+                  ]
+                }
+              },
+              "required": [
+                "action"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "expectedUi": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "exists",
+                    "absent",
+                    "text",
+                    "urlPath",
+                    "invalid",
+                    "disabled",
+                    "attribute",
+                    "storagePresent",
+                    "storageAbsent",
+                    "valueLength",
+                    "ready",
+                    "checked",
+                    "count",
+                    "textAbsent",
+                    "imageLoaded"
+                  ]
+                },
+                "selector": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {},
+                "attribute": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "area": {
+                  "enum": [
+                    "local",
+                    "session"
+                  ]
+                },
+                "seconds": {
+                  "type": "number",
+                  "minimum": 0.1,
+                  "maximum": 12
+                },
+                "fixtureField": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "expectedNetwork": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "enum": [
+                    "GET",
+                    "HEAD",
+                    "POST",
+                    "PUT",
+                    "PATCH",
+                    "DELETE",
+                    "OPTIONS"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "statuses": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "absent": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "method",
+                "path"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "postState": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "ui-reload",
+                    "network-json",
+                    "owned-readback",
+                    "no-mutation",
+                    "retention"
+                  ]
+                },
+                "ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fixtureField": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "expected": {}
+              },
+              "required": [
+                "kind",
+                "ref"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "effect": {
+            "enum": [
+              "read",
+              "validation",
+              "mutation",
+              "lifecycle"
+            ]
+          },
+          "evidenceDepth": {
+            "type": "string",
+            "minLength": 1
+          },
+          "setupRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "setupPermissions": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "fixture-setup",
+                "db-prerequisite"
+              ]
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "responsibilityIds",
+          "provenance",
+          "sessionGroup",
+          "actorRef",
+          "phase",
+          "prerequisites",
+          "steps",
+          "expectedUi",
+          "expectedNetwork",
+          "postState",
+          "effect",
+          "evidenceDepth"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "responsibilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "route": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1
+          },
+          "input": {
+            "type": "string",
+            "minLength": 1
+          },
+          "journeyIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "branchIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "disposition": {
+            "enum": [
+              "planned",
+              "gap",
+              "not-applicable"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "provenance",
+          "route",
+          "action",
+          "role",
+          "state",
+          "input",
+          "journeyIds",
+          "branchIds",
+          "disposition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "requestPolicies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phase": {
+            "enum": [
+              "public",
+              "bootstrap",
+              "identity",
+              "protected",
+              "setup",
+              "teardown"
+            ]
+          },
+          "effect": {
+            "enum": [
+              "read",
+              "mutation",
+              "bootstrap"
+            ]
+          },
+          "queryKeys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "jsonFields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "pathParameters": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "format": {
+                "enum": [
+                  "integer",
+                  "uuid",
+                  "slug"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "format"
+            ],
+            "additionalProperties": false
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "jsonSchema": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "method",
+          "path",
+          "phase",
+          "effect",
+          "provenance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "campaigns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "journeyIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "actorRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authKind": {
+            "enum": [
+              "json-bearer",
+              "form"
+            ]
+          },
+          "method": {
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "body": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "vector": {
+            "enum": [
+              "query",
+              "json-body"
+            ]
+          },
+          "vectorFields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "ruleIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "maxDelivered": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30
+          },
+          "maxAppRequests": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          },
+          "postState": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "ui-reload",
+                    "network-json",
+                    "owned-readback",
+                    "no-mutation",
+                    "retention"
+                  ]
+                },
+                "ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fixtureField": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "expected": {}
+              },
+              "required": [
+                "kind",
+                "ref"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "sinkProvenance": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "depth": {
+            "type": "string",
+            "minLength": 1
+          },
+          "effect": {
+            "enum": [
+              "read",
+              "mutation"
+            ]
+          },
+          "bodyBindings": {
+            "type": "object",
+            "maxProperties": 12,
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "queryBindings": {
+            "type": "object",
+            "maxProperties": 12,
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "resultBindings": {
+            "type": "object",
+            "maxProperties": 12,
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        },
+        "required": [
+          "id",
+          "journeyIds",
+          "actorRef",
+          "authKind",
+          "method",
+          "path",
+          "vector",
+          "vectorFields",
+          "ruleIds",
+          "maxDelivered",
+          "maxAppRequests",
+          "postState",
+          "sinkProvenance",
+          "depth",
+          "effect"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recipe",
+    "sources",
+    "auth",
+    "sessionGroups",
+    "journeys",
+    "responsibilities",
+    "requestPolicies",
+    "campaigns"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

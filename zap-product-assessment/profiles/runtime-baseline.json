@@ -1,0 +1,9 @@
+{
+  "zap": "zaproxy/zap-stable@sha256:5ccfff9a411743ab2615136a2edd7416bec9ce41572fa94e935df38c14adb2b6",
+  "mcp": "dtkmn/mcp-zap-server@sha256:c62be3c0622a52cd5e81747dde3c32117e480853ae2733bb3f3281434618f673",
+  "python": "python@sha256:2d9aefe2fef018a7eb2c13064c89c71929800fd2e5dccdbf52ea5da5bb8d929a",
+  "boundary": "sha256:ef7533a958152d8737944296ed388d697d6589e26ee5d81d5436693564173cd1",
+  "mcpSourceRef": "0ebe11c3ae4c17de59fde0654e19b3e35e42ca20",
+  "mcpVersion": "0.16.0",
+  "zapVersion": "2.17.0"
+}

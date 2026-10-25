@@ -4,11 +4,19 @@
 !.env.example
 !**/.env.example
 **/.local-tls/
+.zap-auth/
 
 # Dependencies and generated output
 **/node_modules/
 **/dist/
 **/coverage/
+test-artifacts/
+review/
+operations/
+reports/
+handoffs/
+**/__pycache__/
+**/.pytest_cache/
 
 # OS/editor noise
 .DS_Store

@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.1"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+    },
+    "planHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "startedAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "endedAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "targetBuildRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "sourceRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "orchestrator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "mcp": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "orchestrator",
+        "mcp"
+      ]
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "maxLength": 256
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "ownership": {
+      "type": "object"
+    },
+    "operationIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "tracks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "track": {
+            "enum": [
+              "explore-public",
+              "api-schema"
+            ]
+          },
+          "executionStatus": {
+            "enum": [
+              "not_started",
+              "running",
+              "completed",
+              "failed",
+              "timed_out",
+              "cancelled"
+            ]
+          },
+          "evidenceStatus": {
+            "enum": [
+              "pending",
+              "complete",
+              "incomplete",
+              "invalid"
+            ]
+          },
+          "securityVerdict": {
+            "enum": [
+              "not_evaluated",
+              "pass",
+              "fail",
+              "inconclusive"
+            ]
+          },
+          "cleanupStatus": {
+            "enum": [
+              "pending",
+              "clean",
+              "retained_by_policy",
+              "incomplete"
+            ]
+          },
+          "gateDecision": {
+            "enum": [
+              "allow",
+              "block",
+              "review_required"
+            ]
+          },
+          "expected": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "method": {
+                  "enum": [
+                    "GET"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "pattern": "^/[a-zA-Z0-9/_-]*$"
+                },
+                "status": {
+                  "type": "integer",
+                  "minimum": 200,
+                  "maximum": 299
+                }
+              },
+              "required": [
+                "method",
+                "path",
+                "status"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "observed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "status": {
+                  "type": "integer"
+                },
+                "actor": {
+                  "const": "anonymous"
+                },
+                "phase": {
+                  "const": "seed"
+                },
+                "assertion": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "method",
+                "path",
+                "status",
+                "actor",
+                "phase",
+                "assertion"
+              ]
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "track",
+          "executionStatus",
+          "evidenceStatus",
+          "securityVerdict",
+          "cleanupStatus",
+          "gateDecision",
+          "expected",
+          "observed",
+          "warnings"
+        ]
+      },
+      "minItems": 2,
+      "uniqueItems": true
+    },
+    "executionStatus": {
+      "enum": [
+        "not_started",
+        "running",
+        "completed",
+        "failed",
+        "timed_out",
+        "cancelled"
+      ]
+    },
+    "evidenceStatus": {
+      "enum": [
+        "pending",
+        "complete",
+        "incomplete",
+        "invalid"
+      ]
+    },
+    "securityVerdict": {
+      "enum": [
+        "not_evaluated",
+        "pass",
+        "fail",
+        "inconclusive"
+      ]
+    },
+    "cleanupStatus": {
+      "enum": [
+        "pending",
+        "clean",
+        "retained_by_policy",
+        "incomplete"
+      ]
+    },
+    "gateDecision": {
+      "enum": [
+        "allow",
+        "block",
+        "review_required"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.-]+$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "bytes",
+          "sha256"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "retentionDays": {
+      "type": "integer"
+    },
+    "reviewReferences": {
+      "const": []
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "initiator": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "runId",
+    "planHash",
+    "startedAt",
+    "endedAt",
+    "targetBuildRef",
+    "sourceRefs",
+    "provenance",
+    "scope",
+    "ownership",
+    "operationIds",
+    "tracks",
+    "executionStatus",
+    "evidenceStatus",
+    "securityVerdict",
+    "cleanupStatus",
+    "gateDecision",
+    "artifacts",
+    "retentionDays",
+    "reviewReferences",
+    "limitations",
+    "initiator"
+  ]
+}

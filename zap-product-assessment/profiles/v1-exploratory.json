@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "workflowId": "v1-exploratory",
+  "version": "1",
+  "mode": "direct",
+  "authMode": "none",
+  "crawlStrategy": "http",
+  "requiredTracks": [
+    "explore-public",
+    "api-schema"
+  ],
+  "active": false,
+  "operations": [
+    "health",
+    "seed",
+    "crawl",
+    "import"
+  ],
+  "destructiveLevel": "read-only",
+  "budgets": {
+    "total": 1800,
+    "crawl": 300,
+    "active": 900,
+    "settle": 300,
+    "stop": 120,
+    "poll": 1
+  },
+  "maxRate": 2,
+  "maxConcurrency": 1,
+  "stableObservations": 2,
+  "maxArtifactBytes": 52428800
+}

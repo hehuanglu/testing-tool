@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.1",
+  "recordId": "pending-finalsource-authority",
+  "productId": "finalsource",
+  "environmentIdentity": "UNVERIFIED-owner-environment",
+  "owner": "UNRESOLVED",
+  "issuer": "UNRESOLVED",
+  "approvalRef": "PENDING-owner-approval",
+  "environmentEvidenceRef": "UNVERIFIED-owner-evidence",
+  "validFrom": null,
+  "validUntil": null,
+  "attackOrigins": [
+    "http://172.18.0.2:3000"
+  ],
+  "resolvedAddresses": [
+    "172.18.0.2"
+  ],
+  "operations": [
+    "health",
+    "crawl",
+    "import",
+    "seed"
+  ],
+  "destructiveLevel": "read-only",
+  "maxRuntimeSeconds": 1800,
+  "maxRate": 2,
+  "maxConcurrency": 1,
+  "bindingHash": "9861a9e91b9718844a6948e7917f07bb04eaed561efe91dc2bbaa6f9083272ba",
+  "allowedPaths": [
+    "/api/health"
+  ],
+  "retentionDays": 30
+}

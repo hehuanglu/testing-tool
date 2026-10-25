@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.2"
+    },
+    "adapter": {
+      "const": "finalsource-account-read-v1"
+    },
+    "productId": {
+      "enum": [
+        "finalsource",
+        "synthetic-account"
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "synthetic",
+            "test",
+            "staging"
+          ]
+        },
+        "identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "evidenceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "kind",
+        "identity",
+        "evidenceRef"
+      ]
+    },
+    "origin": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "targetBuildRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "binding": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "containerId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "imageId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "networkId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "address": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "startedAt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "containerId",
+            "imageId",
+            "networkId",
+            "address",
+            "startedAt"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accountId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "ownerId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nonOwnerId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "provenanceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "accountId",
+        "ownerId",
+        "nonOwnerId",
+        "provenanceRef"
+      ]
+    },
+    "credentials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tokenEnv": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+            }
+          },
+          "required": [
+            "tokenEnv"
+          ]
+        },
+        "B": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tokenEnv": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+            }
+          },
+          "required": [
+            "tokenEnv"
+          ]
+        }
+      },
+      "required": [
+        "A",
+        "B"
+      ]
+    },
+    "anonymous": {
+      "const": true
+    },
+    "requestTimeoutSeconds": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 5
+    },
+    "totalTimeoutSeconds": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 60
+    },
+    "maxRate": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 2
+    },
+    "retentionDays": {
+      "enum": [
+        14,
+        30
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "adapter",
+    "productId",
+    "environment",
+    "origin",
+    "targetBuildRef",
+    "binding",
+    "fixture",
+    "credentials",
+    "anonymous",
+    "requestTimeoutSeconds",
+    "totalTimeoutSeconds",
+    "maxRate",
+    "retentionDays"
+  ]
+}

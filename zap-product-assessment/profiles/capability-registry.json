@@ -1,0 +1,244 @@
+{
+  "schemaVersion": "capability-registry/1.0",
+  "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+  "grantsAuthority": false,
+  "runtimeAttestation": false,
+  "capabilities": [
+    {
+      "capabilityId": "verification-v2",
+      "evidenceLevel": "source-supported",
+      "executionPolicy": "offline-only",
+      "gateStatus": "offline-only",
+      "contractVersion": "2.0",
+      "scope": "Offline external-plan-pinned JSON direct API coverage verification and report reconstruction.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "Operational G3/G4/G8/G10/G11/G12-D incomplete; independent human acceptance pending"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "verification-v2-source"
+      ]
+    },
+    {
+      "capabilityId": "anonymous-http",
+      "evidenceLevel": "source-supported",
+      "executionPolicy": "existing-contract",
+      "gateStatus": "existing-contract",
+      "contractVersion": "1.0-1.1",
+      "scope": "Existing anonymous isolated HTTP/OpenAPI JSON/report CLI, including exact borrowed Docker binding.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "HTTPS/DNS/IPv6/browser/auth/active outside this admitted adapter",
+        "Legacy guard lacks independent correlation; synthetic observer does not enable borrowed/P0 mode",
+        "Dedicated W4 development fixture is evaluated separately; borrowed/protected mode acceptance remains absent"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "anonymous-http-source"
+      ]
+    },
+    {
+      "capabilityId": "bola-account-read",
+      "evidenceLevel": "source-supported",
+      "executionPolicy": "existing-contract",
+      "gateStatus": "existing-contract",
+      "contractVersion": "1.2-1.4",
+      "scope": "Separate direct-client account-read BOLA; borrowed v1.4 performs two logins and nine GET controls.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "Client dispatch is not target-side wire attestation; historical proof must not bypass source drift"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "bola-account-read-source"
+      ]
+    },
+    {
+      "capabilityId": "p0-native",
+      "evidenceLevel": "blocked",
+      "executionPolicy": "blocked",
+      "gateStatus": "blocked",
+      "contractVersion": "historical P0; G3/G12-N pending",
+      "scope": "Native authenticated browser/Client Spider diagnostic path.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "Historical password/JWT persistence in history, scripts, tool responses and reports; G3 failed"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "p0-native-source"
+      ]
+    },
+    {
+      "capabilityId": "p0-delegated",
+      "evidenceLevel": "blocked",
+      "executionPolicy": "blocked",
+      "gateStatus": "blocked",
+      "contractVersion": "W5 core 1.0 + owned scanner diagnostic 1.0; operational blocked",
+      "scope": "Per-actor/epoch guard candidate plus owned ZAP/MCP canary pipeline; no finalsource or P0 operational admission.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "G3 operational remains blocked: generic production source/broker contract and complete actual per-sink seeded lifecycle controls have no acceptance; opaque synthetic source proof is narrower",
+        "G4 finalsource: unavailable identity/role/lifecycle cases may be skipped in user-authorized tester scope after discovery; source-supported features remain runtime-unverified, full G4 is not passed and synthetic outcomes cannot replace product proof",
+        "Regular crash case kills holder after producers terminal; separate historical mid-crawl SIGKILL evidence is diagnostic only.",
+        "All failed/cancelled attempts remain in the W5 scanner checkpoint; no protected modes enabled"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "p0-delegated-source"
+      ]
+    },
+    {
+      "capabilityId": "p0-business",
+      "evidenceLevel": "blocked",
+      "executionPolicy": "blocked",
+      "gateStatus": "blocked",
+      "contractVersion": "Historical P0 blocked; w6-owned-business-1 synthetic implementation verified",
+      "scope": "W6 dynamic manifest/minor-unit account CRUD, goal, expense/revenue/ownership/list API adapter on owned synthetic fixtures; historical P0 remains blocked.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "Operational G3 and full product G4 remain blocked/unverified; no R1 or product G7 admission.",
+        "No permitted populated-bill fixture creation API found; product category preparation has no observed create route.",
+        "Finalsource adapter is source-derived/runtime-unverified; synthetic identity and reserved IDs are not product proof."
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "p0-business-source"
+      ]
+    },
+    {
+      "capabilityId": "browser-e2e",
+      "evidenceLevel": "blocked",
+      "executionPolicy": "blocked",
+      "gateStatus": "blocked",
+      "contractVersion": "w7-owned-ui-diagnostic-1; functional synthetic verified; operational blocked",
+      "scope": "Actual owned Firefox login/create/expense/balance/reload/A-B-denial/final-state diagnostic; three fresh fixed flows13/13, five fault flows and session spike.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "Actual Firefox profile localStorage SQLite retains synthetic canary after browser close; secretVerdict/securityVerdict fail.",
+        "Oversize startup cache and full143 sink/lifecycle/encoding controls remain unproven; no generic product broker or server revocation proof.",
+        "Canonical TLS/CORS/cookie/CSRF and product runtime unverified."
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "browser-e2e-source"
+      ]
+    },
+    {
+      "capabilityId": "canonical-origin",
+      "evidenceLevel": "blocked",
+      "executionPolicy": "blocked",
+      "gateStatus": "blocked",
+      "contractVersion": "G12-C candidate",
+      "scope": "Future exact scheme/host/port TLS/cookie/CORS/CSRF fidelity.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "G12-C no candidate campaign/transport equivalence proof"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "canonical-origin-source"
+      ]
+    },
+    {
+      "capabilityId": "shared-ha",
+      "evidenceLevel": "blocked",
+      "executionPolicy": "blocked",
+      "gateStatus": "blocked",
+      "contractVersion": "G12-H candidate",
+      "scope": "Future same-target concurrent clients, durable queue/history and fault acceptance.",
+      "limitations": "Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.",
+      "knownFailures": [
+        "G12-H topology/fault/RPO/RTO and independent acceptance unproven"
+      ],
+      "sourceImagePins": "Current source reference only; no source-to-image or runtime attestation.",
+      "evidenceRefs": [
+        "shared-ha-source"
+      ]
+    }
+  ],
+  "references": [
+    {
+      "referenceId": "verification-v2-source",
+      "path": "zap-product-assessment/src/zap_assessment/verification.py",
+      "sha256": "481f58e9a155a8dec04fd94282994025b1e6840fcd944171f1d75c26ae8b10aa",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "anonymous-http-source",
+      "path": "zap-product-assessment/src/zap_assessment/anonymous_runner.py",
+      "sha256": "629c9c49b29efba358f5f5335d2375975c5c58bddc887375ca4e2672db152dfa",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "bola-account-read-source",
+      "path": "zap-product-assessment/src/zap_assessment/bola.py",
+      "sha256": "1d6efee53e5a9bf7653bae4978c2184fdd8dc703089cbd93fa862a4faf62c4f0",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "p0-native-source",
+      "path": "zap-product-assessment/src/zap_assessment/capabilities.py",
+      "sha256": "4776e4ea22ee2658e3fd067c2b6c313550467ae0a8df06df1fe62c008e8914cf",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "p0-delegated-source",
+      "path": "zap-product-assessment/src/zap_assessment/capabilities.py",
+      "sha256": "4776e4ea22ee2658e3fd067c2b6c313550467ae0a8df06df1fe62c008e8914cf",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "p0-business-source",
+      "path": "zap-product-assessment/src/zap_assessment/capabilities.py",
+      "sha256": "4776e4ea22ee2658e3fd067c2b6c313550467ae0a8df06df1fe62c008e8914cf",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "browser-e2e-source",
+      "path": "zap-product-assessment/src/zap_assessment/fe_authenticated_runner.py",
+      "sha256": "06b0a658cdff00dde5dc105101dd3489cddfdb04cddbb1c8c87dcd20cc0a5fac",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "canonical-origin-source",
+      "path": "zap-product-assessment/src/zap_assessment/capabilities.py",
+      "sha256": "4776e4ea22ee2658e3fd067c2b6c313550467ae0a8df06df1fe62c008e8914cf",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    },
+    {
+      "referenceId": "shared-ha-source",
+      "path": "zap-product-assessment/src/zap_assessment/capabilities.py",
+      "sha256": "4776e4ea22ee2658e3fd067c2b6c313550467ae0a8df06df1fe62c008e8914cf",
+      "classification": "source-supported",
+      "recordedAt": "2026-10-25T11:39:29.551148+00:00",
+      "proves": "Implementation source is present for inspection; execution policy is unchanged.",
+      "limitations": "Does not establish successful execution, qualification or authority."
+    }
+  ]
+}

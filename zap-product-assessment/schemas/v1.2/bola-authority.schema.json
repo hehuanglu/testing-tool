@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.2"
+    },
+    "recordId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "approvalRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validUntil": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "configHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "operations": {
+      "const": [
+        "account-list-identity",
+        "account-detail-owner",
+        "account-detail-cross-user",
+        "account-detail-anonymous"
+      ]
+    },
+    "fixtureMode": {
+      "const": "borrowed-read-only"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recordId",
+    "owner",
+    "issuer",
+    "approvalRef",
+    "validFrom",
+    "validUntil",
+    "configHash",
+    "operations",
+    "fixtureMode"
+  ]
+}

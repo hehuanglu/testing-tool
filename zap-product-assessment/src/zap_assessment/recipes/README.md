@@ -1,0 +1,1 @@
+Recipes are a finite code-owned allowlist. Source policy remains a hypothesis until independently accepted. Unknown inventory operations remain explicit gaps. Registering a recipe does not grant traffic authority or qualify its product.

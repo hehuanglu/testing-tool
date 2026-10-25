@@ -1,0 +1,8 @@
+.baseline/
+.venv/
+__pycache__/
+*.egg-info/
+runs/
+.pytest_cache/
+# Product discovery/authority evidence is restricted and never committed.
+docs/evidence/m2-binding/finalsource-*.json

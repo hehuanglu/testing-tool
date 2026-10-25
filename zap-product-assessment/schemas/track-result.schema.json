@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "track": {
+      "enum": [
+        "explore-public",
+        "api-schema"
+      ]
+    },
+    "executionStatus": {
+      "enum": [
+        "not_started",
+        "running",
+        "completed",
+        "failed",
+        "timed_out",
+        "cancelled"
+      ]
+    },
+    "evidenceStatus": {
+      "enum": [
+        "pending",
+        "complete",
+        "incomplete",
+        "invalid"
+      ]
+    },
+    "securityVerdict": {
+      "enum": [
+        "not_evaluated",
+        "pass",
+        "fail",
+        "inconclusive"
+      ]
+    },
+    "cleanupStatus": {
+      "enum": [
+        "pending",
+        "clean",
+        "retained_by_policy",
+        "incomplete"
+      ]
+    },
+    "gateDecision": {
+      "enum": [
+        "allow",
+        "block",
+        "review_required"
+      ]
+    },
+    "expected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "method": {
+            "enum": [
+              "GET"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^/[a-zA-Z0-9/_-]*$"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 299
+          }
+        },
+        "required": [
+          "method",
+          "path",
+          "status"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "observed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "method": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "status": {
+            "type": "integer"
+          },
+          "actor": {
+            "const": "anonymous"
+          },
+          "phase": {
+            "const": "seed"
+          },
+          "assertion": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "method",
+          "path",
+          "status",
+          "actor",
+          "phase",
+          "assertion"
+        ]
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "track",
+    "executionStatus",
+    "evidenceStatus",
+    "securityVerdict",
+    "cleanupStatus",
+    "gateDecision",
+    "expected",
+    "observed",
+    "warnings"
+  ]
+}

@@ -7,7 +7,7 @@ Hỗ trợ các track BE anonymous, BE authenticated, FE anonymous, FE authentic
 ## Thành phần của workflow tổng quát
 
 - [Skill mcp-zap-repo-operations](.agents/skills/mcp-zap-repo-operations/SKILL.md): hướng dẫn điều phối, phạm vi từng track, lựa chọn operation/runner, xử lý lỗi và bàn giao kết quả. Tài liệu và helper đi kèm nằm trong cùng thư mục skill.
-- [`mcp-zap-server/`](mcp-zap-server/): Git submodule chứa scanner server và các operation MCP để import, crawl, scan, quản lý phiên và đọc kết quả.
+- [`mcp-zap-server/`](mcp-zap-server/): Source scanner server và các operation MCP được lưu trực tiếp trong repository để import, crawl, scan, quản lý phiên và đọc kết quả.
 - [`zap-product-assessment/`](zap-product-assessment/): thư viện, schema, recipe, runner và regression tests dùng chung. Một số entry và recipe vẫn dành cho sản phẩm hoặc contract cụ thể; cần kiểm tra điều kiện áp dụng trước khi dùng.
 
 Skill điều phối cách sử dụng công cụ. Các operation native và thư viện thực hiện công việc cụ thể; có mã nguồn hoặc chạy được `--help` chưa chứng minh một track đã được kiểm thử trên sản phẩm.

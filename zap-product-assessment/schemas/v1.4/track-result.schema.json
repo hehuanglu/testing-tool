@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "track": {
+      "const": "ownership-bola"
+    },
+    "executionStatus": {
+      "enum": [
+        "not_started",
+        "running",
+        "completed",
+        "failed",
+        "timed_out",
+        "cancelled"
+      ]
+    },
+    "evidenceStatus": {
+      "enum": [
+        "pending",
+        "complete",
+        "incomplete",
+        "invalid"
+      ]
+    },
+    "securityVerdict": {
+      "enum": [
+        "not_evaluated",
+        "pass",
+        "fail",
+        "inconclusive"
+      ]
+    },
+    "cleanupStatus": {
+      "enum": [
+        "pending",
+        "clean",
+        "retained_by_policy",
+        "incomplete"
+      ]
+    },
+    "gateDecision": {
+      "enum": [
+        "allow",
+        "block",
+        "review_required"
+      ]
+    },
+    "expected": {
+      "const": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{id}"
+        }
+      ]
+    },
+    "observed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "method": {
+            "enum": [
+              "GET",
+              "POST"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "actor": {
+            "enum": [
+              "A",
+              "B",
+              "anonymous"
+            ]
+          },
+          "phase": {
+            "enum": [
+              "identity-before",
+              "identity-after",
+              "owner-before",
+              "owner-after",
+              "negative",
+              "anonymous-identity",
+              "anonymous",
+              "login"
+            ]
+          },
+          "credentialSlot": {
+            "enum": [
+              "A",
+              "B",
+              "none"
+            ]
+          },
+          "response": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "status": {
+                "type": "integer",
+                "minimum": 100,
+                "maximum": 599
+              },
+              "bodyBytes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65536
+              },
+              "identityValid": {
+                "type": "boolean"
+              },
+              "membershipValid": {
+                "type": "boolean"
+              },
+              "ownerObjectValid": {
+                "type": "boolean"
+              },
+              "denialValid": {
+                "type": "boolean"
+              },
+              "disclosure": {
+                "type": "boolean"
+              },
+              "ownerValueMatch": {
+                "type": "boolean"
+              },
+              "disclosureFields": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "bank_name",
+                    "account_type",
+                    "branch_name",
+                    "account_number_last_4",
+                    "balance",
+                    "recent_transactions",
+                    "description",
+                    "receipt_id"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "status",
+              "bodyBytes",
+              "identityValid",
+              "membershipValid",
+              "ownerObjectValid",
+              "denialValid",
+              "disclosure",
+              "ownerValueMatch",
+              "disclosureFields"
+            ]
+          }
+        },
+        "required": [
+          "method",
+          "path",
+          "actor",
+          "phase",
+          "credentialSlot",
+          "response"
+        ]
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "track",
+    "executionStatus",
+    "evidenceStatus",
+    "securityVerdict",
+    "cleanupStatus",
+    "gateDecision",
+    "expected",
+    "observed",
+    "warnings"
+  ]
+}

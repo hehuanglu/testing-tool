@@ -1,0 +1,533 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "product": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0"
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+        },
+        "profileVersion": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "targetBuildRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "synthetic",
+                "test",
+                "staging",
+                "production"
+              ]
+            },
+            "identity": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "kind",
+            "identity"
+          ]
+        },
+        "authorizationRef": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+        },
+        "attackOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 256
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "dependencyOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 256
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "healthPath": {
+          "type": "string",
+          "pattern": "^/[a-zA-Z0-9/_-]*$"
+        },
+        "publicSeeds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "openapi"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "kind",
+            "path",
+            "sha256"
+          ]
+        },
+        "expectedOperations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "method": {
+                "enum": [
+                  "GET"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^/[a-zA-Z0-9/_-]*$"
+              },
+              "status": {
+                "type": "integer",
+                "minimum": 200,
+                "maximum": 299
+              }
+            },
+            "required": [
+              "method",
+              "path",
+              "status"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 90
+        },
+        "crawlPath": {
+          "enum": [
+            "/health",
+            "/api/echo?q=baseline"
+          ]
+        },
+        "adapter": {
+          "const": "synthetic-http-v1"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "productId",
+        "profileVersion",
+        "owner",
+        "targetBuildRef",
+        "environment",
+        "authorizationRef",
+        "attackOrigins",
+        "dependencyOrigins",
+        "healthPath",
+        "publicSeeds",
+        "schema",
+        "expectedOperations",
+        "retentionDays",
+        "adapter"
+      ]
+    },
+    "workflow": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0"
+        },
+        "workflowId": {
+          "enum": [
+            "v1-exploratory",
+            "w4-owned-active-conformance"
+          ]
+        },
+        "version": {
+          "const": "1"
+        },
+        "mode": {
+          "const": "direct"
+        },
+        "authMode": {
+          "const": "none"
+        },
+        "crawlStrategy": {
+          "const": "http"
+        },
+        "requiredTracks": {
+          "const": [
+            "explore-public",
+            "api-schema"
+          ]
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "health",
+              "seed",
+              "crawl",
+              "import",
+              "active"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "destructiveLevel": {
+          "enum": [
+            "read-only",
+            "synthetic-mutations"
+          ]
+        },
+        "budgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "total": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1800
+            },
+            "crawl": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1800
+            },
+            "active": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1800
+            },
+            "settle": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1800
+            },
+            "stop": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1800
+            },
+            "poll": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1800
+            }
+          },
+          "required": [
+            "total",
+            "crawl",
+            "active",
+            "settle",
+            "stop",
+            "poll"
+          ]
+        },
+        "maxRate": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "maxConcurrency": {
+          "const": 1
+        },
+        "stableObservations": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 10
+        },
+        "maxArtifactBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 52428800
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "workflowId",
+        "version",
+        "mode",
+        "authMode",
+        "crawlStrategy",
+        "requiredTracks",
+        "active",
+        "operations",
+        "destructiveLevel",
+        "budgets",
+        "maxRate",
+        "maxConcurrency",
+        "stableObservations",
+        "maxArtifactBytes"
+      ]
+    },
+    "authority": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "1.0"
+        },
+        "recordId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+        },
+        "environmentIdentity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "issuer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "approvalRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "attackOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 256
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "resolvedAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "health",
+              "seed",
+              "crawl",
+              "import",
+              "active"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "destructiveLevel": {
+          "enum": [
+            "read-only",
+            "synthetic-mutations"
+          ]
+        },
+        "maxRuntimeSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        },
+        "maxRate": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "maxConcurrency": {
+          "const": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "recordId",
+        "productId",
+        "environmentIdentity",
+        "owner",
+        "issuer",
+        "approvalRef",
+        "validFrom",
+        "validUntil",
+        "attackOrigins",
+        "resolvedAddresses",
+        "operations",
+        "destructiveLevel",
+        "maxRuntimeSeconds",
+        "maxRate",
+        "maxConcurrency"
+      ]
+    },
+    "authorizationHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "profileHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "workflowHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "schema": {
+      "type": "object"
+    },
+    "schemaHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "effectiveEgress": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "capabilities": {
+      "const": [
+        "http-crawl",
+        "openapi-json",
+        "report-chunks"
+      ]
+    },
+    "limitations": {
+      "const": [
+        "anonymous public/API only",
+        "seed coverage is not active-rule coverage",
+        "session exclusive until report export"
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zap",
+        "mcp",
+        "python",
+        "boundary",
+        "mcpSourceRef",
+        "mcpVersion",
+        "zapVersion"
+      ],
+      "properties": {
+        "zap": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mcp": {
+          "type": "string",
+          "minLength": 1
+        },
+        "python": {
+          "type": "string",
+          "minLength": 1
+        },
+        "boundary": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "mcpSourceRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mcpVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "zapVersion": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "product",
+    "workflow",
+    "authority",
+    "authorizationHash",
+    "profileHash",
+    "workflowHash",
+    "schema",
+    "schemaHash",
+    "effectiveEgress",
+    "capabilities",
+    "limitations",
+    "runtime"
+  ]
+}

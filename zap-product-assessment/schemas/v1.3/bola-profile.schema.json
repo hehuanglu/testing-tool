@@ -1,0 +1,126 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.3"
+    },
+    "productId": {
+      "const": "finalsource-synthetic"
+    },
+    "environmentClass": {
+      "const": "synthetic"
+    },
+    "environmentIdentity": {
+      "const": "isolated-bola-account-fixture"
+    },
+    "owner": {
+      "const": "synthetic-test-owner"
+    },
+    "issuer": {
+      "const": "synthetic-fixture-harness"
+    },
+    "reviewer": {
+      "const": "pending-human-review"
+    },
+    "approvalRef": {
+      "const": "this-user-message-synthetic-only"
+    },
+    "variant": {
+      "enum": [
+        "fixed",
+        "vulnerable"
+      ]
+    },
+    "logicalBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "const": "owner-a"
+            },
+            "userId": {
+              "const": "synthetic-user-a"
+            },
+            "credentialRef": {
+              "const": "run-secret://actor-a"
+            }
+          },
+          "required": [
+            "label",
+            "userId",
+            "credentialRef"
+          ]
+        },
+        "B": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "const": "nonowner-b"
+            },
+            "userId": {
+              "const": "synthetic-user-b"
+            },
+            "credentialRef": {
+              "const": "run-secret://actor-b"
+            }
+          },
+          "required": [
+            "label",
+            "userId",
+            "credentialRef"
+          ]
+        },
+        "accountId": {
+          "const": "synthetic-account-a-001"
+        }
+      },
+      "required": [
+        "A",
+        "B",
+        "accountId"
+      ]
+    },
+    "wireIds": {
+      "const": {
+        "A": 11,
+        "B": 22,
+        "account": 101
+      }
+    },
+    "maxRuntimeSeconds": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 900
+    },
+    "maxRate": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 2
+    },
+    "retentionDays": {
+      "const": 14
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "productId",
+    "environmentClass",
+    "environmentIdentity",
+    "owner",
+    "issuer",
+    "reviewer",
+    "approvalRef",
+    "variant",
+    "logicalBindings",
+    "wireIds",
+    "maxRuntimeSeconds",
+    "maxRate",
+    "retentionDays"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "workflowId": {
+      "enum": [
+        "v1-exploratory",
+        "w4-owned-active-conformance"
+      ]
+    },
+    "version": {
+      "const": "1"
+    },
+    "mode": {
+      "const": "direct"
+    },
+    "authMode": {
+      "const": "none"
+    },
+    "crawlStrategy": {
+      "const": "http"
+    },
+    "requiredTracks": {
+      "const": [
+        "explore-public",
+        "api-schema"
+      ]
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "health",
+          "seed",
+          "crawl",
+          "import",
+          "active"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "destructiveLevel": {
+      "enum": [
+        "read-only",
+        "synthetic-mutations"
+      ]
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "total": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        },
+        "crawl": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        },
+        "active": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        },
+        "settle": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        },
+        "stop": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        },
+        "poll": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1800
+        }
+      },
+      "required": [
+        "total",
+        "crawl",
+        "active",
+        "settle",
+        "stop",
+        "poll"
+      ]
+    },
+    "maxRate": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2
+    },
+    "maxConcurrency": {
+      "const": 1
+    },
+    "stableObservations": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 10
+    },
+    "maxArtifactBytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 52428800
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "workflowId",
+    "version",
+    "mode",
+    "authMode",
+    "crawlStrategy",
+    "requiredTracks",
+    "active",
+    "operations",
+    "destructiveLevel",
+    "budgets",
+    "maxRate",
+    "maxConcurrency",
+    "stableObservations",
+    "maxArtifactBytes"
+  ]
+}

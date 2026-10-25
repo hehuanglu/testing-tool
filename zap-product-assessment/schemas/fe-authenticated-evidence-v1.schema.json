@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "fe-authenticated-evidence/1.0"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "planHash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result": {
+      "type": "object"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "path",
+          "bytes",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "runId",
+    "planHash",
+    "result",
+    "artifacts"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

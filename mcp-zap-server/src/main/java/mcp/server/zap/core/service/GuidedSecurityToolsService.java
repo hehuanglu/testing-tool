@@ -1,0 +1,423 @@
+package mcp.server.zap.core.service;
+
+import java.util.Locale;
+import mcp.server.zap.core.gateway.ArtifactRecord;
+import mcp.server.zap.core.gateway.EngineAdapter;
+import mcp.server.zap.core.gateway.EngineCapability;
+import mcp.server.zap.core.gateway.GatewayRecordFactory;
+import mcp.server.zap.core.gateway.TargetDescriptor;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.stereotype.Service;
+
+/**
+ * Intent-first MCP facade that exposes a small guided tool surface.
+ */
+@Service
+public class GuidedSecurityToolsService {
+    private static final String DEFINITION_TYPE_OPENAPI = "openapi";
+    private static final String SOURCE_KIND_CONTENT = "content";
+    private static final String REPORT_FORMAT_HTML = "html";
+    private static final String REPORT_FORMAT_JSON = "json";
+    private static final String NEXT_ACTIONS_HEADER = "Next Actions:";
+
+    private final GuidedScanWorkflowService guidedScanWorkflowService;
+    private final ReportService reportService;
+    private final FindingsService findingsService;
+    private final OpenApiService openApiService;
+    private final EngineAdapter engineAdapter;
+    private final GatewayRecordFactory gatewayRecordFactory;
+
+    public GuidedSecurityToolsService(GuidedScanWorkflowService guidedScanWorkflowService,
+                                      ReportService reportService,
+                                      FindingsService findingsService,
+                                      OpenApiService openApiService,
+                                      EngineAdapter engineAdapter,
+                                      GatewayRecordFactory gatewayRecordFactory) {
+        this.guidedScanWorkflowService = guidedScanWorkflowService;
+        this.reportService = reportService;
+        this.findingsService = findingsService;
+        this.openApiService = openApiService;
+        this.engineAdapter = engineAdapter;
+        this.gatewayRecordFactory = gatewayRecordFactory;
+    }
+
+    @Tool(
+            name = "zap_target_import",
+            description = """
+                    Import an OpenAPI/Swagger definition, GraphQL schema, or SOAP WSDL to prepare API endpoints for testing.
+                    Use when you have an API definition; use zap_crawl_start to discover ordinary web pages.
+                    Requires a reachable, configured ZAP instance with the matching OpenAPI, GraphQL, or SOAP add-on.
+                    Import changes the current ZAP session and may send requests to the definition source and API targets;
+                    use only authorized targets. It does not start an active scan: after reviewing import messages,
+                    call zap_attack_start with the API target URL when active testing is needed.
+                    Content mode accepts actual OpenAPI JSON/YAML text with a required full HTTP(S) hostOverride
+                    and an explicitly enabled shared filesystem; it cannot read chat attachments automatically.
+                    Returns plain text containing definition type, source kind, and import status. URL/file mode
+                    also includes source and engine messages; content mode withholds contents, internal paths,
+                    and raw engine warning text. Review warnings before proceeding.
+                    Invalid inputs, blocked URLs, and ZAP API failures raise errors.
+                    """
+    )
+    public String importTargetDefinition(
+            @ToolParam(description = "Required definition format: openapi (OpenAPI/Swagger), graphql (GraphQL schema), or soap (WSDL). Case-insensitive.") String definitionType,
+            @ToolParam(description = "Required source mode: url for a definition ZAP downloads, file for a definition on ZAP's filesystem, or content for self-contained OpenAPI JSON/YAML text. Content is OpenAPI-only and requires configured shared staging. Case-insensitive.") String sourceKind,
+            @ToolParam(description = "Required definition URL, ZAP-readable file path, or actual JSON/YAML text when sourceKind=content. A chat attachment name, client-local path or inaccessible resource URI is not definition content. Content imports are bounded to 1 MiB and reject external references and YAML aliases.") String source,
+            @ToolParam(required = false, description = "Required for graphql: HTTP(S) API endpoint to test, for example https://api.example.com/graphql; must be reachable by ZAP and allowed by server URL policy. Ignored for openapi and soap.") String endpointUrl,
+            @ToolParam(required = false, description = "OpenAPI target override allowed by server URL policy. Required full HTTP(S) URL for content imports, for example https://api.example.com/v1. URL/file imports also allow authority/path with an explicit host, for example api.example.com:9090/v1; omit only for trusted definition-derived targets constrained by ZAP egress controls. Ignored for graphql and soap.") String hostOverride
+    ) {
+        gatewayRecordFactory.requireCapability(engineAdapter, EngineCapability.TARGET_IMPORT, "target import");
+        String normalizedType = normalizeDefinitionType(definitionType);
+        String normalizedSourceKind = normalizeSourceKind(sourceKind);
+        if (SOURCE_KIND_CONTENT.equals(normalizedSourceKind) && !DEFINITION_TYPE_OPENAPI.equals(normalizedType)) {
+            throw new IllegalArgumentException("sourceKind=content is supported only for OpenAPI definitions");
+        }
+        String normalizedSource = SOURCE_KIND_CONTENT.equals(normalizedSourceKind) ? source : requireText(source, "source");
+        String delegateResponse = importDefinition(
+                normalizedType,
+                normalizedSourceKind,
+                normalizedSource,
+                endpointUrl,
+                hostOverride
+        );
+        return formatImportMessage(normalizedType, normalizedSourceKind, normalizedSource, delegateResponse);
+    }
+
+    @Tool(
+            name = "zap_crawl_start",
+            description = "Start a guided crawl for a target host or root URL. The server decides direct versus queued execution from deployment topology. Use strategy=http for traditional server-rendered sites, strategy=client for JavaScript-driven apps using Client Spider, or strategy=browser for the existing AJAX Spider API. strategy=auto starts with HTTP Spider; only an unauthenticated direct HTTP start failure triggers AJAX fallback. Auto does not detect JavaScript coverage. Client Spider requires the Client Side Integration add-on and headless Firefox. Prepared browser authentication sessions require strategy=client; prepared HTTP form-login sessions require http or auto."
+    )
+    public String startCrawl(
+            @ToolParam(description = "Target host or root URL to crawl, for example https://app.example.com or https://app.example.com/admin") String targetUrl,
+            @ToolParam(required = false, description = "Optional crawl strategy: auto starts HTTP (unauthenticated direct mode alone falls back to AJAX on HTTP start failure), http for traditional link discovery, client for Client Spider on JavaScript-driven apps, or browser for the AJAX Spider API. Auto does not detect JavaScript coverage.") String strategy,
+            @ToolParam(required = false, description = "Optional idempotency key used only when guided execution selects queued mode; ignored in direct mode.") String idempotencyKey,
+            @ToolParam(required = false, description = "Optional session ID from zap_auth_session_prepare. Use a kind=browser profile with strategy=client, or a kind=form/json-bearer profile with http/auto. The browser strategy means AJAX Spider and rejects authSessionId.") String authSessionId
+    ) {
+        return guidedScanWorkflowService.startCrawl(targetUrl, strategy, idempotencyKey, authSessionId);
+    }
+
+    @Tool(
+            name = "zap_crawl_status",
+            description = "Get status for a guided crawl operation."
+    )
+    public String getCrawlStatus(
+            @ToolParam(description = "Guided crawl operation ID returned by zap_crawl_start") String operationId
+    ) {
+        return guidedScanWorkflowService.getCrawlStatus(operationId);
+    }
+
+    @Tool(
+            name = "zap_crawl_stop",
+            description = "Stop a guided crawl operation."
+    )
+    public String stopCrawl(
+            @ToolParam(description = "Guided crawl operation ID returned by zap_crawl_start") String operationId
+    ) {
+        return guidedScanWorkflowService.stopCrawl(operationId);
+    }
+
+    @Tool(
+            name = "zap_attack_start",
+            description = "Start a guided active scan for a specific target host or base URL after crawl/import setup. The server decides direct versus queued execution from deployment topology. When authSessionId is supplied, guided attack accepts prepared form-login or validated JSON-bearer sessions (JSON bearer is direct only)."
+    )
+    public String startAttack(
+            @ToolParam(description = "Target host or base URL to attack, for example https://app.example.com or https://app.example.com/api") String targetUrl,
+            @ToolParam(required = false, description = "Optional recurse flag (default: true)") String recurse,
+            @ToolParam(required = false, description = "Optional active-scan policy name when you need a non-default rule set") String policy,
+            @ToolParam(required = false, description = "Optional idempotency key used only when guided execution selects queued mode; ignored in direct mode.") String idempotencyKey,
+            @ToolParam(required = false, description = "Optional prepared auth session ID from zap_auth_session_prepare. Guided attack accepts form-login or validated JSON-bearer sessions (JSON bearer is direct only).") String authSessionId,
+            @ToolParam(required = false, description = "Optional exact HTTP method for a previously seeded authenticated request. Requires direct execution and authSessionId.") String method,
+            @ToolParam(required = false, description = "Optional exact seeded request body, at most 64 KiB. Used with explicit POST/PUT/PATCH/DELETE method. Never supply target credentials here.") String postData
+    ) {
+        return guidedScanWorkflowService.startAttack(targetUrl, recurse, policy, idempotencyKey, authSessionId, method, postData);
+    }
+
+    public String startAttack(String targetUrl, String recurse, String policy, String idempotencyKey, String authSessionId) {
+        return guidedScanWorkflowService.startAttack(targetUrl, recurse, policy, idempotencyKey, authSessionId);
+    }
+
+    @Tool(
+            name = "zap_attack_status",
+            description = "Get status for a guided active-scan operation."
+    )
+    public String getAttackStatus(
+            @ToolParam(description = "Guided attack operation ID returned by zap_attack_start") String operationId
+    ) {
+        return guidedScanWorkflowService.getAttackStatus(operationId);
+    }
+
+    @Tool(
+            name = "zap_attack_stop",
+            description = "Stop a guided active-scan operation."
+    )
+    public String stopAttack(
+            @ToolParam(description = "Guided attack operation ID returned by zap_attack_start") String operationId
+    ) {
+        return guidedScanWorkflowService.stopAttack(operationId);
+    }
+
+    @Tool(
+            name = "zap_findings_summary",
+            description = "Get the first-pass findings view after a scan or passive-scan wait. This returns a concise grouped risk summary for fast triage. Requires a nonblank target baseUrl covered by scan evidence visible to the caller."
+    )
+    public String getGuidedFindingsSummary(
+            @ToolParam(description = "Required nonblank target base URL covered by scan evidence visible to the caller, for example https://app.example.com/admin") String baseUrl
+    ) {
+        gatewayRecordFactory.requireCapability(engineAdapter, EngineCapability.FINDINGS_READ, "findings read");
+        String normalizedBaseUrl = trimToEmpty(baseUrl);
+        TargetDescriptor target = gatewayRecordFactory.optionalTarget(normalizedBaseUrl, TargetDescriptor.Kind.WEB);
+        String findingsSummary = findingsService.getFindingsSummary(normalizedBaseUrl);
+        return formatGuidedFindingsSummary(targetScope(target), findingsSummary);
+    }
+
+    @Tool(
+            name = "zap_findings_details",
+            description = "Drill into findings after reading the summary. Requires a nonblank target baseUrl covered by scan evidence visible to the caller. By default this returns grouped details for matching alerts. Set includeInstances=true when you need bounded raw alert occurrences with concrete URLs, params, evidence, or attack samples."
+    )
+    public String getGuidedFindingsDetails(
+            @ToolParam(description = "Required nonblank target base URL covered by scan evidence visible to the caller") String baseUrl,
+            @ToolParam(required = false, description = "Optional plugin ID filter when you already know the ZAP alert/plugin identifier to inspect") String pluginId,
+            @ToolParam(required = false, description = "Optional alert name filter when you want one alert family only") String alertName,
+            @ToolParam(required = false, description = "Optional true to include bounded raw instances with concrete URLs and evidence; false returns grouped detail blocks") Boolean includeInstances,
+            @ToolParam(required = false, description = "Optional instance limit used only when includeInstances is true") Integer limit
+    ) {
+        gatewayRecordFactory.requireCapability(engineAdapter, EngineCapability.FINDINGS_READ, "findings read");
+        String normalizedBaseUrl = trimToEmpty(baseUrl);
+        String normalizedPluginId = trimToEmpty(pluginId);
+        String normalizedAlertName = trimToEmpty(alertName);
+        TargetDescriptor target = gatewayRecordFactory.optionalTarget(normalizedBaseUrl, TargetDescriptor.Kind.WEB);
+        String findingsDetails = Boolean.TRUE.equals(includeInstances)
+                ? findingsService.getAlertInstances(normalizedBaseUrl, normalizedPluginId, normalizedAlertName, limit)
+                : findingsService.getAlertDetails(normalizedBaseUrl, normalizedPluginId, normalizedAlertName);
+        return formatGuidedFindingsDetails(
+                targetScope(target),
+                normalizedPluginId,
+                normalizedAlertName,
+                includeInstances,
+                limit,
+                findingsDetails
+        );
+    }
+
+    @Tool(
+            name = "zap_report_generate",
+            description = "Generate a human-shareable report artifact using guided defaults. Use this after passive scan backlog drains when you want an export or handoff artifact; use findings summary/details for interactive triage."
+    )
+    public String generateGuidedReport(
+            @ToolParam(required = false, description = "Optional absolute HTTP(S) origin or path prefix. Supplying it publishes a target-scoped report; omission explicitly includes the full ZAP session.") String baseUrl,
+            @ToolParam(required = false, description = "Optional report format: html for human reading or json for machine processing") String format,
+            @ToolParam(required = false, description = "Optional light/dark theme for full-session HTML. Target-scoped HTML uses the standard template's default appearance; JSON has no theme.") String theme
+    ) {
+        gatewayRecordFactory.requireCapability(engineAdapter, EngineCapability.REPORT_GENERATE, "report generation");
+        String normalizedFormat = normalizeReportFormat(format);
+        String normalizedTheme = hasText(theme) ? theme.trim() : "light";
+        String normalizedBaseUrl = trimToEmpty(baseUrl);
+        String displayedTheme = "json".equals(normalizedFormat) ? "not applicable"
+                : hasText(normalizedBaseUrl) ? "engine default" : normalizedTheme;
+        TargetDescriptor target = gatewayRecordFactory.optionalTarget(normalizedBaseUrl, TargetDescriptor.Kind.WEB);
+        String reportPath = reportService.generateReport(
+                reportTemplateFor(normalizedFormat),
+                normalizedTheme,
+                normalizedBaseUrl
+        );
+        ArtifactRecord artifact = gatewayRecordFactory.reportArtifact(engineAdapter, target, reportPath, normalizedFormat);
+        return new StringBuilder()
+                .append("Guided report generated.\n")
+                .append("Format: ").append(normalizedFormat).append('\n')
+                .append("Theme: ").append(displayedTheme).append('\n')
+                .append("Scope: ").append(targetScope(artifact.target())).append('\n')
+                .append("Path: ").append(artifact.location()).append('\n')
+                .append(reportNextActions(targetScope(artifact.target())))
+                .toString();
+    }
+
+    @Tool(
+            name = "zap_report_read",
+            description = "Preview a generated report artifact through MCP after zap_report_generate. If truncated, use zap_report_read_chunk to retrieve the complete artifact in bounded pages."
+    )
+    public String readGuidedReport(
+            @ToolParam(description = "Report path returned by zap_report_generate") String reportPath,
+            @ToolParam(required = false, description = "Maximum characters to return (optional, default: 20000, max: 200000)") Integer maxChars
+    ) {
+        String normalizedReportPath = requireText(reportPath, "reportPath");
+        String report = reportService.readReport(normalizedReportPath, maxChars);
+        return new StringBuilder()
+                .append("Guided report readback.\n")
+                .append("Path: ").append(normalizedReportPath).append('\n')
+                .append("Use: review the generated artifact before attaching it to internal or customer-facing evidence.\n")
+                .append(NEXT_ACTIONS_HEADER).append('\n')
+                .append("- Complete report: if truncated, call zap_report_read_chunk from offset 0, then follow nextOffset with the returned artifactSha256 until endOfFile is true.\n")
+                .append("- Internal evidence: call zap_scan_history_release_evidence for the same target or evidence window.\n")
+                .append("- Customer summary: call zap_scan_history_customer_handoff only after reviewing report content and release-evidence warnings.\n\n")
+                .append(report)
+                .toString();
+    }
+
+    @Tool(
+            name = "zap_report_read_chunk",
+            description = "Retrieve a generated UTF-8 report in bounded JSON pages. Append content in order, follow nextOffset until endOfFile=true, and supply the first page's artifactSha256 as expectedSha256 on later pages. Offsets and maxChars count Unicode code points. Artifacts are limited to 50 MiB; the SHA-256 identifies the full original UTF-8 file."
+    )
+    public ReportService.ReportChunk readGuidedReportChunk(
+            @ToolParam(description = "Report path returned by zap_report_generate") String reportPath,
+            @ToolParam(required = false, description = "Starting Unicode code point offset (default: 0)") Long offset,
+            @ToolParam(required = false, description = "Maximum Unicode code points in this page (default: 20000, maximum: 200000)") Integer maxChars,
+            @ToolParam(required = false, description = "Full artifact SHA-256 from the first page; subsequent pages reject a changed report") String expectedSha256
+    ) {
+        return reportService.readReportChunk(requireText(reportPath, "reportPath"), offset, maxChars, expectedSha256);
+    }
+
+    private String importDefinition(String definitionType,
+                                    String sourceKind,
+                                    String source,
+                                    String endpointUrl,
+                                    String hostOverride) {
+        return switch (definitionType) {
+            case DEFINITION_TYPE_OPENAPI -> switch (sourceKind) {
+                case "url" -> openApiService.importOpenApiSpec(source, hostOverride);
+                case "file" -> openApiService.importOpenApiSpecFile(source, hostOverride);
+                case SOURCE_KIND_CONTENT -> openApiService.importOpenApiContent(source, hostOverride);
+                default -> throw new IllegalStateException("Unexpected OpenAPI source kind: " + sourceKind);
+            };
+            case "graphql" -> {
+                String normalizedEndpointUrl = requireText(endpointUrl, "endpointUrl");
+                yield switch (sourceKind) {
+                    case "url" -> openApiService.importGraphqlSchemaUrl(normalizedEndpointUrl, source);
+                    case "file" -> openApiService.importGraphqlSchemaFile(normalizedEndpointUrl, source);
+                    default -> throw new IllegalStateException("Unexpected GraphQL source kind: " + sourceKind);
+                };
+            }
+            case "soap" -> switch (sourceKind) {
+                case "url" -> openApiService.importSoapWsdlUrl(source);
+                case "file" -> openApiService.importSoapWsdlFile(source);
+                default -> throw new IllegalStateException("Unexpected SOAP source kind: " + sourceKind);
+            };
+            default -> throw new IllegalStateException("Unexpected definition type: " + definitionType);
+        };
+    }
+
+    private String formatImportMessage(String definitionType,
+                                       String sourceKind,
+                                       String source,
+                                       String delegateResponse) {
+        return new StringBuilder()
+                .append(SOURCE_KIND_CONTENT.equals(sourceKind) ? "Guided target import result.\n" : "Guided target import completed.\n")
+                .append("Definition Type: ").append(definitionType).append('\n')
+                .append("Source Kind: ").append(sourceKind).append('\n')
+                .append("Source: ").append(SOURCE_KIND_CONTENT.equals(sourceKind) ? "client-supplied definition (contents withheld)" : source).append('\n')
+                .append('\n')
+                .append(delegateResponse)
+                .toString();
+    }
+
+    private String formatGuidedFindingsSummary(String baseUrl, String delegateResponse) {
+        return new StringBuilder()
+                .append("Guided findings summary.\n")
+                .append("Scope: ").append(hasText(baseUrl) ? baseUrl : "All targets").append('\n')
+                .append("Use: first-pass triage before drilldown or report generation.\n")
+                .append(NEXT_ACTIONS_HEADER).append('\n')
+                .append("- Drill down: call zap_findings_details for one alert family or concrete instances when you need evidence.\n")
+                .append("- Report: call zap_report_generate after passive analysis has drained and the summary is ready to share.\n\n")
+                .append(delegateResponse)
+                .toString();
+    }
+
+    private String formatGuidedFindingsDetails(String baseUrl,
+                                               String pluginId,
+                                               String alertName,
+                                               Boolean includeInstances,
+                                               Integer limit,
+                                               String delegateResponse) {
+        StringBuilder output = new StringBuilder()
+                .append("Guided findings details.\n")
+                .append("Scope: ").append(hasText(baseUrl) ? baseUrl : "All targets").append('\n')
+                .append("Mode: ").append(Boolean.TRUE.equals(includeInstances) ? "raw instances" : "grouped details").append('\n');
+        if (hasText(pluginId)) {
+            output.append("Plugin ID Filter: ").append(pluginId).append('\n');
+        }
+        if (hasText(alertName)) {
+            output.append("Alert Name Filter: ").append(alertName).append('\n');
+        }
+        if (Boolean.TRUE.equals(includeInstances) && limit != null) {
+            output.append("Requested Limit: ").append(limit).append('\n');
+        }
+        output.append("Use: ")
+                .append(Boolean.TRUE.equals(includeInstances)
+                        ? "inspect concrete URLs, params, evidence, and attack samples."
+                        : "inspect grouped detail before expanding into raw per-occurrence evidence.")
+                .append('\n')
+                .append(NEXT_ACTIONS_HEADER)
+                .append('\n')
+                .append("- Report: call zap_report_generate when you need a human-shareable artifact.")
+                .append('\n')
+                .append("- Handoff: after a report exists, call zap_scan_history_release_evidence for internal review, then zap_scan_history_customer_handoff for the curated external summary.")
+                .append("\n\n")
+                .append(delegateResponse);
+        return output.toString();
+    }
+
+    private String reportNextActions(String scope) {
+        String targetAdvice = hasText(scope) && !"All targets".equals(scope)
+                ? " with target filter " + scope
+                : " with a target filter when you need scoped evidence";
+        return new StringBuilder(NEXT_ACTIONS_HEADER)
+                .append('\n')
+                .append("- Report readback: call zap_report_read with the Path above before creating evidence or sharing the artifact.\n")
+                .append("- Large report: use zap_report_read_chunk when the preview is truncated; follow nextOffset with the first artifactSha256.\n")
+                .append("- Internal evidence: call zap_scan_history_release_evidence").append(targetAdvice).append(".\n")
+                .append("- Customer summary: call zap_scan_history_customer_handoff after reviewing release-evidence warnings.")
+                .toString();
+    }
+
+    private String normalizeDefinitionType(String definitionType) {
+        String normalized = requireText(definitionType, "definitionType").toLowerCase(Locale.ROOT);
+        return switch (normalized) {
+            case DEFINITION_TYPE_OPENAPI, "graphql", "soap" -> normalized;
+            default -> throw new IllegalArgumentException("definitionType must be one of: openapi, graphql, soap");
+        };
+    }
+
+    private String normalizeSourceKind(String sourceKind) {
+        String normalized = requireText(sourceKind, "sourceKind").toLowerCase(Locale.ROOT);
+        return switch (normalized) {
+            case "url", "file", SOURCE_KIND_CONTENT -> normalized;
+            default -> throw new IllegalArgumentException("sourceKind must be one of: url, file, content");
+        };
+    }
+
+    private String normalizeReportFormat(String format) {
+        if (!hasText(format)) {
+            return REPORT_FORMAT_HTML;
+        }
+        String normalized = format.trim().toLowerCase(Locale.ROOT);
+        return switch (normalized) {
+            case REPORT_FORMAT_HTML, REPORT_FORMAT_JSON -> normalized;
+            default -> throw new IllegalArgumentException("format must be one of: html, json");
+        };
+    }
+
+    private String reportTemplateFor(String reportFormat) {
+        return REPORT_FORMAT_JSON.equals(reportFormat) ? "traditional-json-plus" : "traditional-html-plus";
+    }
+
+    private String trimToEmpty(String value) {
+        return hasText(value) ? value.trim() : "";
+    }
+
+    private String targetScope(TargetDescriptor target) {
+        if (target == null || !hasText(target.baseUrl())) {
+            return "All targets";
+        }
+        return target.baseUrl();
+    }
+
+    private String requireText(String value, String fieldName) {
+        if (!hasText(value)) {
+            throw new IllegalArgumentException(fieldName + " cannot be null or blank");
+        }
+        return value.trim();
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
+    }
+}

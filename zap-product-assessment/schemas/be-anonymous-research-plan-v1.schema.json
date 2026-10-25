@@ -1,0 +1,464 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "be-anonymous-research-plan/1.0"
+    },
+    "assuranceProfile": {
+      "const": "be-anonymous-research/1.0"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{3,48}$"
+    },
+    "environment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "targetBinding": {
+      "type": "object"
+    },
+    "transportBinding": {
+      "type": "object"
+    },
+    "origin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "discovery": {
+      "type": "object"
+    },
+    "discoverySha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "environment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "discoveryRead": {
+          "type": "boolean"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "publicMutation": {
+          "type": "boolean"
+        },
+        "deniedMutation": {
+          "type": "boolean"
+        },
+        "fixtureSetup": {
+          "type": "boolean"
+        },
+        "secretPersistenceAccepted": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "environment",
+        "source",
+        "discoveryRead",
+        "active",
+        "publicMutation",
+        "deniedMutation",
+        "fixtureSetup"
+      ],
+      "additionalProperties": false
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "method": {
+            "enum": [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "body": {
+            "type": [
+              "object",
+              "array",
+              "string",
+              "null"
+            ]
+          },
+          "fixtureRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "expected": {
+            "type": "object",
+            "properties": {
+              "statuses": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "integer",
+                  "minimum": 100,
+                  "maximum": 599
+                }
+              },
+              "contentType": {
+                "type": "string",
+                "minLength": 1
+              },
+              "equals": {
+                "type": "object"
+              },
+              "present": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "bodySha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "statuses",
+              "contentType",
+              "equals",
+              "present"
+            ],
+            "additionalProperties": false
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "privateBodyRef": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "operationId",
+          "method",
+          "path",
+          "category",
+          "body",
+          "fixtureRefs",
+          "expected"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 600
+    },
+    "campaigns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "caseId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ruleIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "vectors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "mutableKeys": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "maxForwarded": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "strength": {
+            "const": "LOW"
+          },
+          "baselineSeed": {
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "caseId",
+          "ruleIds",
+          "vectors",
+          "mutableKeys",
+          "maxForwarded",
+          "strength",
+          "baselineSeed"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 2
+    },
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ownership": {
+            "type": "string",
+            "minLength": 1
+          },
+          "preparationEvidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "cleanup": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "runId",
+          "ownership",
+          "preparationEvidence",
+          "cleanup"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dispositions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "disposition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "operationId",
+          "disposition",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "requestsPerSecond": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxForwarded": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxMutations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requestBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "responseBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requestTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "executionSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "operationSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stopSeconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "artifactBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reserveBytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "requestsPerSecond",
+        "maxForwarded",
+        "maxMutations",
+        "requestBytes",
+        "responseBytes",
+        "requestTimeoutSeconds",
+        "executionSeconds",
+        "operationSeconds",
+        "stopSeconds",
+        "artifactBytes",
+        "reserveBytes",
+        "concurrency"
+      ],
+      "additionalProperties": false
+    },
+    "notAfter": {
+      "type": "number"
+    },
+    "anonymousState": {
+      "type": "object",
+      "properties": {
+        "propagateIdentity": {
+          "const": false
+        },
+        "cookies": {
+          "type": "object"
+        },
+        "redirects": {
+          "const": "deny"
+        }
+      },
+      "required": [
+        "propagateIdentity",
+        "cookies",
+        "redirects"
+      ],
+      "additionalProperties": false
+    },
+    "runtime": {
+      "const": "dedicated-docker-http/1.0"
+    },
+    "jobStore": {
+      "const": "in-memory"
+    },
+    "coordinator": {
+      "const": "single-node"
+    },
+    "targetOwnership": {
+      "enum": [
+        "borrowed",
+        "run-owned"
+      ]
+    },
+    "lockedAt": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "assuranceProfile",
+    "runId",
+    "environment",
+    "targetBinding",
+    "transportBinding",
+    "origin",
+    "discovery",
+    "discoverySha256",
+    "authority",
+    "cases",
+    "campaigns",
+    "fixtures",
+    "dispositions",
+    "limits",
+    "notAfter",
+    "anonymousState",
+    "runtime",
+    "jobStore",
+    "coordinator",
+    "targetOwnership",
+    "lockedAt"
+  ],
+  "additionalProperties": false
+}

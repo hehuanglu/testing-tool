@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "runId",
+    "adapter",
+    "scale",
+    "actors",
+    "resources",
+    "transitions",
+    "coverageGaps"
+  ],
+  "properties": {
+    "contractVersion": {
+      "const": "w6-owned-business-1"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^w6-[a-zA-Z0-9-]+$"
+    },
+    "adapter": {
+      "enum": [
+        "finalsource-shaped",
+        "alternate-ledger"
+      ]
+    },
+    "scale": {
+      "const": 4
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actorRef",
+          "subject"
+        ],
+        "properties": {
+          "actorRef": {
+            "enum": [
+              "A",
+              "B",
+              "anonymous"
+            ]
+          },
+          "subject": {
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "resourceRef",
+          "wireId",
+          "kind",
+          "ownerActorRef",
+          "initial",
+          "provenance"
+        ],
+        "properties": {
+          "resourceRef": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "wireId": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_-]+$"
+              }
+            ]
+          },
+          "kind": {
+            "enum": [
+              "account",
+              "goal",
+              "category"
+            ]
+          },
+          "ownerActorRef": {
+            "enum": [
+              "A",
+              "B"
+            ]
+          },
+          "initial": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "exists"
+            ],
+            "properties": {
+              "exists": {
+                "type": "boolean"
+              },
+              "balanceMinor": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "targetMinor": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "runId",
+              "sourceRef",
+              "method"
+            ],
+            "properties": {
+              "runId": {
+                "type": "string"
+              },
+              "sourceRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "method": {
+                "const": "owned-synthetic-seed"
+              }
+            }
+          }
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "caseId",
+          "actorRef",
+          "operation",
+          "resourceRef",
+          "input"
+        ],
+        "properties": {
+          "caseId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          },
+          "actorRef": {
+            "enum": [
+              "A",
+              "B",
+              "anonymous"
+            ]
+          },
+          "operation": {
+            "type": "string"
+          },
+          "resourceRef": {
+            "type": "string"
+          },
+          "input": {
+            "type": "object"
+          },
+          "positiveCaseId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "coverageGaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capability",
+          "disposition",
+          "reason"
+        ],
+        "properties": {
+          "capability": {
+            "type": "string"
+          },
+          "disposition": {
+            "enum": [
+              "unsupported",
+              "skipped"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

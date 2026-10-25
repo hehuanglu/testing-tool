@@ -1,0 +1,163 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "capability-registry/1.0"
+    },
+    "recordedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "grantsAuthority": {
+      "const": false
+    },
+    "runtimeAttestation": {
+      "const": false
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capabilityId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceLevel": {
+            "enum": [
+              "source-supported",
+              "pilot-verified",
+              "blocked",
+              "unverified"
+            ]
+          },
+          "executionPolicy": {
+            "enum": [
+              "offline-only",
+              "existing-contract",
+              "blocked"
+            ]
+          },
+          "gateStatus": {
+            "enum": [
+              "blocked",
+              "existing-contract",
+              "offline-only"
+            ]
+          },
+          "contractVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limitations": {
+            "type": "string",
+            "minLength": 1
+          },
+          "knownFailures": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "sourceImagePins": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "capabilityId",
+          "evidenceLevel",
+          "executionPolicy",
+          "gateStatus",
+          "contractVersion",
+          "scope",
+          "limitations",
+          "knownFailures",
+          "sourceImagePins",
+          "evidenceRefs"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "referenceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "classification": {
+            "enum": [
+              "source-supported",
+              "historical-pilot",
+              "historical-readback",
+              "offline-development"
+            ]
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "proves": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limitations": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "referenceId",
+          "path",
+          "sha256",
+          "classification",
+          "recordedAt",
+          "proves",
+          "limitations"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recordedAt",
+    "grantsAuthority",
+    "runtimeAttestation",
+    "capabilities",
+    "references"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

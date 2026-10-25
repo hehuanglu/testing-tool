@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "productId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+    },
+    "profileVersion": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "targetBuildRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "synthetic",
+            "test",
+            "staging",
+            "production"
+          ]
+        },
+        "identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "kind",
+        "identity"
+      ]
+    },
+    "authorizationRef": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$"
+    },
+    "attackOrigins": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "maxLength": 256
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "dependencyOrigins": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "maxLength": 256
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "healthPath": {
+      "type": "string",
+      "pattern": "^/[a-zA-Z0-9/_-]*$"
+    },
+    "publicSeeds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "openapi"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "kind",
+        "path",
+        "sha256"
+      ]
+    },
+    "expectedOperations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "method": {
+            "enum": [
+              "GET"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^/[a-zA-Z0-9/_-]*$"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 299
+          }
+        },
+        "required": [
+          "method",
+          "path",
+          "status"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "retentionDays": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 90
+    },
+    "crawlPath": {
+      "enum": [
+        "/health",
+        "/api/echo?q=baseline"
+      ]
+    },
+    "adapter": {
+      "const": "synthetic-http-v1"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "productId",
+    "profileVersion",
+    "owner",
+    "targetBuildRef",
+    "environment",
+    "authorizationRef",
+    "attackOrigins",
+    "dependencyOrigins",
+    "healthPath",
+    "publicSeeds",
+    "schema",
+    "expectedOperations",
+    "retentionDays",
+    "adapter"
+  ]
+}

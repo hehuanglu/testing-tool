@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.4"
+    },
+    "config": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "1.4"
+        },
+        "adapter": {
+          "const": "finalsource-account-read-v1"
+        },
+        "productId": {
+          "enum": [
+            "finalsource",
+            "borrowed-synthetic-account"
+          ]
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "synthetic",
+                "test",
+                "staging"
+              ]
+            },
+            "identity": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "evidenceRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "kind",
+            "identity",
+            "evidenceRef"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "targetBuildRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "containerId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "imageId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "networkId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "address": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "startedAt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "containerId",
+            "imageId",
+            "networkId",
+            "address",
+            "startedAt"
+          ]
+        },
+        "fixture": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "accountId": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "ownerId": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "nonOwnerId": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "provenanceRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "accountId",
+            "ownerId",
+            "nonOwnerId",
+            "provenanceRef"
+          ]
+        },
+        "credentials": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "A": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "loginEnv": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+                }
+              },
+              "required": [
+                "loginEnv"
+              ]
+            },
+            "B": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "loginEnv": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]{0,95}$"
+                }
+              },
+              "required": [
+                "loginEnv"
+              ]
+            }
+          },
+          "required": [
+            "A",
+            "B"
+          ]
+        },
+        "anonymous": {
+          "const": true
+        },
+        "requestTimeoutSeconds": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 5
+        },
+        "totalTimeoutSeconds": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 900
+        },
+        "maxRate": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 2
+        },
+        "retentionDays": {
+          "enum": [
+            14,
+            30
+          ]
+        },
+        "jwt": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "issuer": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "audience": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "algorithm": {
+              "const": "HS256"
+            }
+          },
+          "required": [
+            "issuer",
+            "audience",
+            "algorithm"
+          ]
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "docker-isolated-client"
+            },
+            "imageId": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "workerSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "kind",
+            "imageId",
+            "workerSha256"
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapter",
+        "productId",
+        "environment",
+        "origin",
+        "targetBuildRef",
+        "binding",
+        "fixture",
+        "credentials",
+        "anonymous",
+        "requestTimeoutSeconds",
+        "totalTimeoutSeconds",
+        "maxRate",
+        "retentionDays",
+        "jwt",
+        "runtime"
+      ]
+    },
+    "authority": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": "1.4"
+        },
+        "recordId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "issuer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "approvalRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "validFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "validUntil": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "configHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "operations": {
+          "const": [
+            "actor-login",
+            "account-list-ownership",
+            "account-detail-owner",
+            "account-detail-cross-user",
+            "account-detail-anonymous"
+          ]
+        },
+        "fixtureMode": {
+          "const": "borrowed-read-only"
+        },
+        "reviewer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "productId": {
+          "enum": [
+            "finalsource",
+            "borrowed-synthetic-account"
+          ]
+        },
+        "environmentIdentity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "assumed": {
+          "const": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "recordId",
+        "owner",
+        "issuer",
+        "approvalRef",
+        "validFrom",
+        "validUntil",
+        "configHash",
+        "operations",
+        "fixtureMode",
+        "reviewer",
+        "productId",
+        "environmentIdentity",
+        "assumed"
+      ]
+    },
+    "sourceDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "config",
+    "authority",
+    "sourceDigest"
+  ]
+}

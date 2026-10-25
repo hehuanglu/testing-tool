@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "mode",
+    "scope",
+    "runId",
+    "fixtureHash",
+    "containerName",
+    "profileVolume",
+    "image",
+    "fidelity",
+    "fault",
+    "sourcePins",
+    "securityApproval",
+    "productRequestsPermitted",
+    "spikePlanHash",
+    "steps",
+    "evidenceKind"
+  ],
+  "properties": {
+    "contractVersion": {
+      "const": "w7-owned-ui-diagnostic-1"
+    },
+    "mode": {
+      "const": "owned-synthetic-ui-diagnostic"
+    },
+    "scope": {
+      "enum": [
+        "session-spike",
+        "ui-business-flow"
+      ]
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^w6-w7-[a-zA-Z0-9-]+$"
+    },
+    "fixtureHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "containerName": {
+      "type": "string",
+      "pattern": "^w7-ui-[a-zA-Z0-9-]+$"
+    },
+    "profileVolume": {
+      "type": "string",
+      "pattern": "^w7-ui-[a-zA-Z0-9-]+-profile$"
+    },
+    "image": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "fidelity": {
+      "const": "owned-synthetic-source-derived-ui"
+    },
+    "fault": {
+      "enum": [
+        "fixed",
+        "wrong-balance",
+        "error-page",
+        "denied-mutated",
+        "denied-disclosure",
+        "no-submit"
+      ]
+    },
+    "sourcePins": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "securityApproval": {
+      "const": false
+    },
+    "productRequestsPermitted": {
+      "const": false
+    },
+    "spikePlanHash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 13,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stepId",
+          "action",
+          "actorRef"
+        ],
+        "properties": {
+          "stepId": {
+            "type": "string"
+          },
+          "action": {
+            "enum": [
+              "login",
+              "logout",
+              "create",
+              "read",
+              "reload",
+              "expense",
+              "update"
+            ]
+          },
+          "actorRef": {
+            "enum": [
+              "A",
+              "B",
+              "anonymous"
+            ]
+          },
+          "case": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "caseId",
+              "actorRef",
+              "operation",
+              "resourceRef",
+              "input"
+            ],
+            "properties": {
+              "caseId": {
+                "type": "string"
+              },
+              "actorRef": {
+                "enum": [
+                  "A",
+                  "B",
+                  "anonymous"
+                ]
+              },
+              "operation": {
+                "type": "string"
+              },
+              "resourceRef": {
+                "type": "string"
+              },
+              "input": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "evidenceKind": {
+      "enum": [
+        "actual-webdriver",
+        "unit-contract-corpus"
+      ]
+    },
+    "unifiedBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessmentId",
+        "childRunId",
+        "epochPolicy",
+        "fixtureHash",
+        "phase",
+        "planHash",
+        "scopeHash"
+      ],
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "planHash": {
+          "type": "string"
+        },
+        "phase": {
+          "type": "string"
+        },
+        "childRunId": {
+          "type": "string"
+        },
+        "fixtureHash": {
+          "type": "string"
+        },
+        "scopeHash": {
+          "type": "string"
+        },
+        "epochPolicy": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "fe-anonymous-research-plan/1.0"
+    },
+    "profile": {
+      "const": "fe-anonymous-research/1.0"
+    },
+    "track": {
+      "const": "fe-anonymous"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{3,48}$"
+    },
+    "discovery": {
+      "type": "object"
+    },
+    "discoverySha256": {
+      "type": "string",
+      "minLength": 1
+    },
+    "journeys": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "fe-anonymous-journeys/1.0"
+        },
+        "recipe": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "id",
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "journeys": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "branch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "provenance": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "enum": [
+                        "navigate",
+                        "click",
+                        "fill",
+                        "submit",
+                        "reload",
+                        "wait"
+                      ]
+                    },
+                    "path": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "selector": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "fixtureField": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "predicate": {
+                      "type": "object"
+                    },
+                    "seconds": {
+                      "type": "number",
+                      "minimum": 0.1,
+                      "maximum": 12
+                    }
+                  },
+                  "required": [
+                    "action"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "expected": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "network": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "transition": {
+                "type": "boolean"
+              },
+              "prerequisites": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "setupHook": {
+                "enum": [
+                  "owned-guest-route-fixtures"
+                ]
+              },
+              "fixtureRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "branch",
+              "provenance",
+              "steps",
+              "expected",
+              "network"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "provenance": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "journeyIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "disposition": {
+                "enum": [
+                  "planned",
+                  "gap",
+                  "not-applicable"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "provenance",
+              "journeyIds",
+              "disposition"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "requestPolicies": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "campaigns": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "recipe",
+        "sources",
+        "journeys",
+        "responsibilities",
+        "requestPolicies",
+        "campaigns"
+      ],
+      "additionalProperties": false
+    },
+    "journeysSha256": {
+      "type": "string",
+      "minLength": 1
+    },
+    "selection": {
+      "type": "object"
+    },
+    "authority": {
+      "type": "object"
+    },
+    "journeyIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "requestPolicies": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "campaigns": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "implementationPins": {
+      "type": "object"
+    },
+    "notAfter": {
+      "type": "number"
+    },
+    "limits": {
+      "type": "object"
+    },
+    "retention": {
+      "type": "object"
+    },
+    "stopPolicy": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "profile",
+    "track",
+    "runId",
+    "discovery",
+    "discoverySha256",
+    "journeys",
+    "journeysSha256",
+    "selection",
+    "authority",
+    "journeyIds",
+    "requestPolicies",
+    "campaigns",
+    "implementationPins",
+    "notAfter",
+    "limits",
+    "retention",
+    "stopPolicy"
+  ],
+  "additionalProperties": false
+}

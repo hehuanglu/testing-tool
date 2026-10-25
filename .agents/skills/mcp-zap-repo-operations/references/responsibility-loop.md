@@ -1,0 +1,55 @@
+# Inventory → allocation → readback → hành động tiếp
+
+Đây là đường dùng chung cho cả năm track, không thay gate của executor. Dùng cases/observations hiện có, không bắt bộ evidence/schema mới cho assessment. Code ở `zap-product-assessment/src/zap_assessment/product_scope.py`; CLI qua `scripts/product_assessment.py scope` từ assessment checkout (`PYTHONPATH=src .venv/bin/python`).
+
+## Inventory trước workload
+
+Đọc source/spec/UI calls/role/state; ghi trong plan/discovery/RUN hiện có dưới `responsibilityInventory`: `productLocation`, `track`, `complete` và `cases`. `complete` là đánh giá completeness discovery của tester, không là approval mới. Ban đầu chưa đủ thì false và tiếp tục discovery. Mỗi case giữ `caseId`, nguồn `evidenceRefs` sẵn có, câu hỏi và `requiredEvidence` (loại quan sát cần đọc), cùng role/actor/state/relation nếu có nghĩa. Ví dụ một protected GET có `active:query:q` và `result-read`; baseline/passive không cấp hai đơn vị đó. Không tạo mọi rule × field × role × state.
+
+`inventory_from_operations` tạo câu hỏi theo tất cả source operations, trước selection/recipe. Nó chưa chọn kỹ thuật hoặc chứng minh đủ roles/UI; tester phải bổ sung. `select_techniques` thêm đơn vị cần kiểm và rationale, không thực thi hay đóng chúng. FE finalsource đọc call sites/router riêng để giữ API/route ngoài recipe. Reviewed inventory được bổ sung từ product, không chép lại campaigns để làm mẫu số. FE `discover --inventory` và common `plan --inventory` nhận bản đã đối soát; không được bỏ source duties. Product chưa có recipe: common `discover --product ... --observations ... --output ...` không cần recipe. `authObservations` giữ cookie/SSO facts không vừa compiler, không giả bearer.
+
+Với trách nhiệm input cần phân biệt validation và xử lý nghiệp vụ, ghi mục tiêu cùng điều kiện quan sát trong `question`/`requiredEvidence` hiện có trước execution. Một nhãn active chỉ nói có payload không được đại diện thêm cho kết quả tạo/lưu. Nếu case endpoint–role đang quá gộp, bổ sung yêu cầu hoặc tách case theo câu hỏi input/nhánh cần phân biệt, giữ nguồn và liên hệ endpoint–role gốc; không đổi schema, bỏ nghĩa vụ cũ hoặc sinh tích mọi tổ hợp. Adapter phải kiểm điều kiện ngữ nghĩa của từng đơn vị trước cấp nhãn; thêm nhãn yêu cầu mà vẫn sao chép sang observation không sửa được lỗi.
+
+## Chọn phương án có thể thực hiện
+
+Dùng `executor_routing.classify_workload` xác định nested JSON/content type/auth/role; dùng `choose_executor` với tools/list và auth semantics thực để chọn deployment. Đây là compatibility, không qualification hoặc quyền traffic. Không gửi fields ngoài schema. Giữ cả nghĩa vụ không vừa lane; nếu không có ứng viên thì bổ sung mapping/primitive tối thiểu, kiểm rồi tạo allocation mới. Đừng đổi body/ID/role của product để qua gate.
+
+Guard FE nhận path scalar có ownership exact; readback `idFormat` chọn integer/uuid/slug. `jsonSchema` trong request policy biểu đạt nested input có ràng buộc; schema không được external reference. Điều này không tự mở nested native campaigns, cookie FE research hay mọi protocol. Nhu cầu ngoài lane đi qua executor phù hợp hoặc adapter cụ thể đã kiểm, vẫn thuộc inventory.
+
+## Reconcile và chạy bước tiếp
+
+Khi caller cần phân biệt kết quả theo kỹ thuật, dùng [question-level readback](operational-readback.md#khép-đúng-câu-hỏi-đã-chọn): giữ unit từng câu hỏi trước start và nối kết quả vào reconciliation. Helper `active_questions` không để generic mutation của rule khác cấp unit cho kỹ thuật zero probes; adapter vẫn chịu trách nhiệm diễn giải HTTP/input/fixture thực.
+
+`scope reconcile --inventory TASK.json --observations OBS.json --prerequisites PRE.json --output NEW_DIRECTORY` trả toàn trách nhiệm mở, không chỉ selected. Observations map caseId → outcome `matched/violated`, `evidenceUnits`, `resultRead:true`, actor/role/state/relation tương ứng khi case yêu cầu. Product bug/violated vẫn là ca đã kiểm nếu đủ quan sát. Unknown outcome không bị ACK/status che mất. Empty inventory chưa chứng minh complete.
+
+Adapter/agent phải suy từng observation từ request/result thực và [điều kiện khép câu hỏi input](assessment-scope-and-completion.md#ý-nghĩa-kết-quả-từng-input). Không sao chép `requiredEvidence` thành `evidenceUnits`, gán chung `outcome: matched` hoặc `resultRead:true` chỉ để đủ hợp đồng helper. Helper đối soát các nhãn caller cung cấp, không tự xác minh payload đã biến đổi từng input hay tới nhánh xử lý nào. Kiểm ngược observations trước dùng reconciliation làm completion; chỉ ghi đơn vị đã quan sát và đọc kết quả, giữ trách nhiệm thiếu mở dù helper/composer trả `complete`. Không sửa metadata để che phần chưa thực thi hoặc khép mục chỉ vì scan kết thúc, zero probes, mất phiên hay traffic của input khác; sửa mapping/fixture và tiếp tục phần còn thiếu trong quyền.
+
+Phần thiếu phải hiện trong input đối soát, không chỉ trong đoạn limitations: giữ yêu cầu chưa đạt, không cấp đơn vị quan sát đó, hoặc giữ case riêng cho câu hỏi còn mở. Kết quả validation đã có vẫn được ghi đúng cho câu hỏi validation. Reconcile lại inventory/observations đã sửa, rồi tổng hợp RUN theo kết quả này; đối chiếu `taskCompletion`, `notPerformed`, `nextSteps` với toàn trách nhiệm mở trước bàn giao. Một ghi chú chưa kiểm đi kèm `complete` và danh sách phần chưa làm rỗng là kết quả tổng hợp cần sửa, không là điểm dừng hợp lệ. Giữ raw/lượt gốc; sửa kết luận dẫn xuất có giải thích, không gán thành đã retest.
+
+### Ghép quan sát đúng câu hỏi
+
+Dùng thông tin và ID sẵn có để ghép request/result với product/môi trường, method–route, content type, vị trí input và mục tiêu đang kiểm; actor/object/state phải tương ứng khi chúng ảnh hưởng câu hỏi. Field cùng tên ở hai nhánh JSON không là cùng input. Không gộp active của object A với kết quả object B, hoặc dùng dữ liệu build/lượt cũ cho phần đã thay đổi mà chưa đánh giá tương thích. Cùng role không tự là cùng actor/fixture. `continue_work` hợp các đơn vị theo actorRef/role/state/relation; nó không tự kiểm mọi khác biệt origin/object/lượt. Agent phải kiểm sự tương ứng trước đưa observations vào helper, không đòi schema/hash/manifest mới.
+
+Đối chiếu mutation ở request thực tới ứng dụng với baseline hiệu lực của ca đó. Thay đổi do setup/uniqueness, refresh session hoặc sắp xếp JSON không cấp active coverage cho field đích chưa đổi. Payload được scanner sinh nhưng bị mapping/guard thay về seed chưa kiểm field đó; sửa mapping trong quyền, không nới guard. Ngược lại, ứng dụng đã nhận payload rồi normalize/sanitize đúng hợp đồng vẫn là xử lý có ý nghĩa, không bắt lưu nguyên payload hoặc chứng minh exploit.
+
+Phiên hợp lệ trước và sau scan không tự cấp danh tính cho request ở giữa đã redirect/login/denied. Kiểm thông tin auth/response thực phù hợp flow; giữ phần đã kiểm đúng, làm mới phiên và tiếp tục phần thiếu trong quyền. Token hết hạn sau phần đã hoàn tất không xóa coverage lịch sử hợp lệ; chỉ ảnh hưởng thao tác tiếp theo. Nếu chưa phân định được phần nào mất điều kiện, giữ phần chưa xác định mở.
+
+N/A của một kỹ thuật phải giữ ở đúng câu hỏi/kỹ thuật đó. `disposition: not-applicable` loại cả case trong helper; không đặt trên case endpoint gộp còn câu hỏi khác chưa xử lý. Tách hoặc giữ yêu cầu còn áp dụng trong inventory theo contract hiện có rồi reconcile; thiếu auth/fixture/capability vẫn là phần mở. Nhãn phase/workload completed cũng không xác định user chỉ giao giai đoạn đó; phạm vi bàn giao vẫn theo yêu cầu user và inventory toàn nhiệm vụ.
+
+Agent phải thực hiện các action còn hợp lệ. Với runner sẵn có, dùng `scope continue` cùng ba input trên, `--actions ACTIONS.json --output NEW_DIRECTORY`. Task cases có `actions` theo thứ tự: `id`, `kind` (execute/prepare-fixture/repair/reconcile-state), `effect` (read/mutation/start), `requires` (prerequisite keys), `dependsOnCases` khi phụ thuộc state. Chuẩn bị chỉ thỏa prerequisite, không thay kết quả UI/active. Execute của case blocked không được dispatch. Còn repair/fixture phù hợp thì làm trước rồi reconcile lại.
+
+ACTIONS map action ID → `arguments` là argv của existing `product_assessment.py` entry (run/prepare/import-actor/business-fixtures); không shell, không import code từ input. Mỗi allocation giữ plan/selection/actors/output mới và admission gốc. `resultBindings` map responsibility tới checker case hoặc native campaign/attack index và đơn vị cần đọc; UI/direct không cung cấp active units. Preparation dùng `prerequisiteBindings` map prerequisite key tới actorRef đã độc lập verify. Agent-owned adapter có thể dùng `continue_work(...handlers=..., persist=...)` để phối hợp fixture/repair/operation sẵn có, vẫn phải thực thi và đọc kết quả thật; không lấy callback return0 làm coverage. Không cần viết scanner mới.
+
+Journal ghi intent trước dispatch và ACK/failure sau readback. Dùng `--previous PREVIOUS_DIRECTORY` để tự nạp observations/prerequisites/actionHistory đã lưu, đối soát scope và giữ unknown outcomes. `_attempts` nhận events từ journal khi controller mất trước khi có RUN; không xóa lịch sử. Action ACK/unknown/intent cũ không dispatch lại. Outcome unknown chỉ được action reconcile-state; mutation/start mới phải chờ state readback. Exception cục bộ giữ case mở, các action độc lập vẫn chạy. Hết max_actions/cap của lượt còn partial; agent lập batch tiếp trong task đang được giao, không tự tăng cap/hạ reserve.
+
+## Sửa tool và chuyển allocation
+
+Dừng đúng owned producer khi cần; đọc operation ACK/native IDs/current state/fixtures. Giữ nguyên pins/plan/raw cũ. Sửa helper/selector/contract cho lượt mới, kiểm tác động, dùng `remaining_actions` bỏ action đã intent/ACK/unknown khỏi allocation chạy lại. Một mutation đã ACK nhưng selector lỗi chỉ còn readback/UI phần thiếu; không tạo object lần hai. Unknown mutation giữ mở cho tới reconcile. Helper recovery stop/export/cleanup xong chưa kết thúc nhiệm vụ: actor/role/state hợp lệ khác tiếp tục bằng allocation mới.
+
+Fixture theo setupRefs thật: owned-account không tự tạo native disposable; category không tự tạo bill. Đọc ledger trước gọi lại helper; ID đã ACK không bị tạo lại. Cleanup theo exact ledger hiện có, không số mẫu; object thiếu DELETE hợp lệ được retain có lý do. Thiếu quyền mới là dependency quyền, không N/A; quyền đã có không xin lại.
+
+## Handoff và trạng thái
+
+`scope report --inventory ... --observations ... --prerequisites ... --run WORKING_RUN.json --alerts EXISTING_ALERTS.json --output NEW_DIRECTORY` dùng `compact_results` ghi đúng RUN/ALERTS. Nó không scan, không tự đếm lại attribution hoặc cấp completion theo format. Giữ mọi open duty và next action; không xóa vì exit0/64 journeys/scan100%/zero alerts. Legacy verifier nói `workloadCompletion` cho phần nó biết; whole-task chỉ theo inventory/readback. Không ép raw runner partial mặc định thành bằng chứng thiếu khi observations thực đã đủ.
+
+Còn action thực hiện được thì agent tiếp tục trước bàn giao. Chỉ dừng tại scope/giai đoạn PM giao, PM yêu cầu dừng hoặc dependency thật sau chẩn đoán các phương án trong quyền; phần bị chặn vẫn mở. `source-hypothesis` BOLA không thành policy approval. Findings samples/truncated giữ đúng count và đọc tiếp bằng interface thật nếu có. Offline tests chỉ xác nhận cơ chế đã kiểm; không chứng nhận mọi product/runtime.

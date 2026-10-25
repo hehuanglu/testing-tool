@@ -1,0 +1,372 @@
+package mcp.server.zap.core.service.queue;
+
+import mcp.server.zap.core.gateway.EngineBusyException;
+import mcp.server.zap.core.model.ScanJobType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+class ScanJobDispatcherTest {
+
+    private ScanJobRuntimeExecutor runtimeExecutor;
+    private ScanJobDispatcher dispatcher;
+
+    @BeforeEach
+    void setUp() {
+        runtimeExecutor = mock(ScanJobRuntimeExecutor.class);
+        dispatcher = new ScanJobDispatcher(runtimeExecutor, Executors.newSingleThreadExecutor());
+    }
+
+    @AfterEach
+    void tearDown() {
+        dispatcher.close();
+    }
+
+    @Test
+    void dispatchesPollAndStartTargetsThroughRuntimeExecutor() {
+        Map<String, String> parameters = Map.of(ScanJobParameterNames.TARGET_URL, "https://example.com");
+        ScanJobClaimToken claimToken = claimToken();
+        ScanJobPollTarget pollTarget = new ScanJobPollTarget(
+                "job-running",
+                ScanJobType.ACTIVE_SCAN,
+                "active-1",
+                claimToken
+        );
+        ScanJobStartTarget startTarget = new ScanJobStartTarget(
+                "job-queued",
+                ScanJobType.SPIDER_SCAN,
+                parameters,
+                claimToken
+        );
+        when(runtimeExecutor.readProgress(ScanJobType.ACTIVE_SCAN, "active-1")).thenReturn(42);
+        when(runtimeExecutor.startScan(ScanJobType.SPIDER_SCAN, parameters)).thenReturn("spider-1");
+
+        ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(
+                List.of(pollTarget),
+                List.of(startTarget)
+        ));
+
+        assertEquals(List.of(ScanJobPollResult.success(pollTarget, 42)), result.pollResults());
+        assertEquals(
+                List.of(ScanJobStartResult.success(startTarget, "spider-1")),
+                result.startResults()
+        );
+        verify(runtimeExecutor).readProgress(ScanJobType.ACTIVE_SCAN, "active-1");
+        verify(runtimeExecutor).startScan(ScanJobType.SPIDER_SCAN, parameters);
+    }
+
+    @Test
+    void distinguishesEngineBusyFromStartupFailure() {
+        ScanJobStartTarget target = startTarget("job-busy", "https://example.com");
+        when(runtimeExecutor.startScan(target.type(), target.parameters()))
+                .thenThrow(new EngineBusyException("Engine is finishing another scan", null));
+
+        ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(List.of(), List.of(target)));
+
+        assertEquals(List.of(ScanJobStartResult.busy(target, "Engine is finishing another scan")),
+                result.startResults());
+        assertEquals(List.of(), result.pollResults());
+    }
+
+    @Test
+    void ajaxDispatchPassesJobClaimForLaunchValidation() {
+        ScanJobStartTarget target = new ScanJobStartTarget("ajax-job", ScanJobType.AJAX_SPIDER,
+                Map.of(ScanJobParameterNames.TARGET_URL, "https://example.com"), claimToken());
+        when(runtimeExecutor.startScan(target)).thenThrow(new EngineBusyException("Claim no longer owns launch", null));
+
+        ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(List.of(), List.of(target)));
+
+        assertEquals(List.of(ScanJobStartResult.busy(target, "Claim no longer owns launch")), result.startResults());
+        verify(runtimeExecutor).startScan(target);
+    }
+
+    @Test
+    void convertsRuntimeExceptionsIntoDispatchFailures() {
+        Map<String, String> parameters = Map.of(ScanJobParameterNames.TARGET_URL, "https://example.com");
+        ScanJobClaimToken claimToken = claimToken();
+        when(runtimeExecutor.readProgress(ScanJobType.ACTIVE_SCAN, "active-1"))
+                .thenThrow(new RuntimeException("status boom"));
+        when(runtimeExecutor.startScan(ScanJobType.SPIDER_SCAN, parameters))
+                .thenThrow(new RuntimeException("startup boom"));
+
+        ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(
+                List.of(new ScanJobPollTarget("job-running", ScanJobType.ACTIVE_SCAN, "active-1", claimToken)),
+                List.of(new ScanJobStartTarget("job-queued", ScanJobType.SPIDER_SCAN, parameters, claimToken))
+        ));
+
+        ScanJobPollResult pollResult = result.pollResults().getFirst();
+        assertFalse(pollResult.success());
+        assertEquals("job-running", pollResult.jobId());
+        assertTrue(pollResult.error().contains("Runtime status check failed: status boom"));
+
+        ScanJobStartResult startResult = result.startResults().getFirst();
+        assertFalse(startResult.success());
+        assertEquals("job-queued", startResult.jobId());
+        assertTrue(startResult.error().contains("Startup failed: startup boom"));
+    }
+
+    @Test
+    void timedOutPollDoesNotBlockStartDispatch() throws Exception {
+        dispatcher.close();
+        dispatcher = new ScanJobDispatcher(
+                runtimeExecutor,
+                Executors.newFixedThreadPool(2),
+                Duration.ofMillis(100)
+        );
+        Map<String, String> parameters = Map.of(ScanJobParameterNames.TARGET_URL, "https://example.com");
+        ScanJobClaimToken claimToken = claimToken();
+        CountDownLatch pollStarted = new CountDownLatch(1);
+        CountDownLatch pollInterrupted = new CountDownLatch(1);
+        when(runtimeExecutor.readProgress(ScanJobType.ACTIVE_SCAN, "active-1"))
+                .thenAnswer(invocation -> {
+                    pollStarted.countDown();
+                    try {
+                        Thread.sleep(10_000);
+                    } catch (InterruptedException e) {
+                        pollInterrupted.countDown();
+                        Thread.currentThread().interrupt();
+                    }
+                    return 0;
+                });
+        when(runtimeExecutor.startScan(ScanJobType.SPIDER_SCAN, parameters)).thenReturn("spider-1");
+        ScanJobPollTarget pollTarget = new ScanJobPollTarget(
+                "job-running",
+                ScanJobType.ACTIVE_SCAN,
+                "active-1",
+                claimToken
+        );
+        ScanJobStartTarget startTarget = new ScanJobStartTarget(
+                "job-queued",
+                ScanJobType.SPIDER_SCAN,
+                parameters,
+                claimToken
+        );
+
+        ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(
+                List.of(pollTarget),
+                List.of(startTarget)
+        ));
+
+        assertTrue(pollStarted.await(1, TimeUnit.SECONDS));
+        assertTrue(pollInterrupted.await(1, TimeUnit.SECONDS));
+        assertEquals(List.of(ScanJobPollResult.failure(
+                pollTarget,
+                "Runtime status check failed: dispatch timed out"
+        )), result.pollResults());
+        assertEquals(List.of(ScanJobStartResult.success(startTarget, "spider-1")), result.startResults());
+    }
+
+    @Test
+    void timedOutStartCleansUpLateScanIdWhenFutureCompletes() throws Exception {
+        dispatcher.close();
+        dispatcher = new ScanJobDispatcher(
+                runtimeExecutor,
+                Executors.newSingleThreadExecutor(),
+                Duration.ofMillis(50)
+        );
+        Map<String, String> parameters = Map.of(ScanJobParameterNames.TARGET_URL, "https://example.com");
+        ScanJobClaimToken claimToken = claimToken();
+        CountDownLatch stopCalled = new CountDownLatch(1);
+        when(runtimeExecutor.startScan(ScanJobType.SPIDER_SCAN, parameters))
+                .thenAnswer(invocation -> {
+                    try {
+                        Thread.sleep(10_000);
+                    } catch (InterruptedException ignored) {
+                        // Simulate a ZAP call that still produced a scan after cancellation was requested.
+                    }
+                    return "spider-late";
+                });
+        doAnswer(invocation -> {
+            stopCalled.countDown();
+            return null;
+        }).when(runtimeExecutor).stopScan(ScanJobType.SPIDER_SCAN, "spider-late");
+        ScanJobStartTarget startTarget = new ScanJobStartTarget(
+                "job-late-start",
+                ScanJobType.SPIDER_SCAN,
+                parameters,
+                claimToken
+        );
+
+        ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(
+                List.of(),
+                List.of(startTarget)
+        ));
+
+        ScanJobStartResult startResult = result.startResults().getFirst();
+        assertFalse(startResult.success());
+        assertEquals("Startup failed: dispatch timed out", startResult.error());
+        assertTrue(stopCalled.await(1, TimeUnit.SECONDS));
+        verify(runtimeExecutor).stopScan(ScanJobType.SPIDER_SCAN, "spider-late");
+    }
+
+    @ParameterizedTest
+    @EnumSource(ScanJobType.class)
+    void timedOutStartHandsTypeJobAndScanIdentityToDurableCleanup(ScanJobType type) throws Exception {
+        dispatcher.close();
+        CountDownLatch startEntered = new CountDownLatch(1);
+        CountDownLatch releaseStart = new CountDownLatch(1);
+        CountDownLatch cleanupCalled = new CountDownLatch(1);
+        AtomicReference<ScanJobStopRequest> cleanupIdentity = new AtomicReference<>();
+        dispatcher = new ScanJobDispatcher(runtimeExecutor, Executors.newSingleThreadExecutor(),
+                Duration.ofMillis(100), request -> {
+                    cleanupIdentity.set(request);
+                    cleanupCalled.countDown();
+                });
+        ScanJobStartTarget target = new ScanJobStartTarget("late-job", type,
+                Map.of(ScanJobParameterNames.TARGET_URL, "https://example.com"), claimToken());
+        var start = type == ScanJobType.AJAX_SPIDER
+                ? when(runtimeExecutor.startScan(target))
+                : when(runtimeExecutor.startScan(type, target.parameters()));
+        start.thenAnswer(invocation -> {
+            startEntered.countDown();
+            boolean released = false;
+            while (!released) {
+                try {
+                    releaseStart.await();
+                    released = true;
+                } catch (InterruptedException ignored) {
+                    // The remote start can complete despite dispatch cancellation.
+                }
+            }
+            return "scan-late";
+        });
+
+        try {
+            ScanJobDispatchResult result = dispatcher.dispatch(new ScanJobWorkPlan(List.of(), List.of(target)));
+
+            assertTrue(startEntered.await(1, TimeUnit.SECONDS));
+            assertEquals(List.of(ScanJobStartResult.failure(target, "Startup failed: dispatch timed out")),
+                    result.startResults());
+        } finally {
+            releaseStart.countDown();
+        }
+
+        assertTrue(cleanupCalled.await(1, TimeUnit.SECONDS));
+        assertEquals(new ScanJobStopRequest(type, "scan-late", "late-job"), cleanupIdentity.get());
+        if (type == ScanJobType.AJAX_SPIDER) {
+            verify(runtimeExecutor).startScan(target);
+        } else {
+            verify(runtimeExecutor).startScan(type, target.parameters());
+        }
+        verifyNoMoreInteractions(runtimeExecutor);
+    }
+
+    @ParameterizedTest
+    @EnumSource(ScanJobType.class)
+    void abandonedStartHandsTypeJobAndScanIdentityToDurableCleanup(ScanJobType type) {
+        dispatcher.close();
+        AtomicReference<ScanJobStopRequest> cleanupIdentity = new AtomicReference<>();
+        dispatcher = new ScanJobDispatcher(runtimeExecutor, Executors.newSingleThreadExecutor(),
+                Duration.ofSeconds(1), cleanupIdentity::set);
+
+        dispatcher.executeStopRequests(List.of(
+                new ScanJobStopRequest(type, "scan-abandoned", "abandoned-job")));
+
+        assertEquals(new ScanJobStopRequest(type, "scan-abandoned", "abandoned-job"), cleanupIdentity.get());
+        verifyNoInteractions(runtimeExecutor);
+    }
+
+    @Test
+    void durableCleanupRequestsContinueAfterIndividualPersistenceFailure() {
+        dispatcher.close();
+        List<ScanJobStopRequest> requested = new ArrayList<>();
+        ScanJobStopRequest first = new ScanJobStopRequest(ScanJobType.ACTIVE_SCAN, "active-1", "active-job");
+        ScanJobStopRequest second = new ScanJobStopRequest(ScanJobType.SPIDER_SCAN, "spider-1", "spider-job");
+        dispatcher = new ScanJobDispatcher(runtimeExecutor, Executors.newSingleThreadExecutor(),
+                Duration.ofSeconds(1), request -> {
+                    requested.add(request);
+                    if (request.equals(first)) {
+                        throw new IllegalStateException("cleanup persistence unavailable");
+                    }
+                });
+
+        dispatcher.executeStopRequests(List.of(first, second));
+
+        assertEquals(List.of(first, second), requested);
+        verifyNoInteractions(runtimeExecutor);
+    }
+
+    @Test
+    void lateStartGuardCleansCompletedScanWhenTimeoutIsMarkedAfterCompletion() {
+        ScanJobStartTarget target = startTarget("job-race", "https://example.com/race");
+        AtomicReference<String> stoppedScanId = new AtomicReference<>();
+        ScanJobDispatcher.LateStartGuard guard = new ScanJobDispatcher.LateStartGuard(
+                target,
+                (ignoredTarget, scanId) -> stoppedScanId.set(scanId)
+        );
+
+        assertTrue(guard.complete("spider-race"));
+        guard.markTimedOut();
+
+        assertEquals("spider-race", stoppedScanId.get());
+    }
+
+    @Test
+    void lateStartGuardCleansLateCompletionOnlyOnce() {
+        ScanJobStartTarget target = startTarget("job-late", "https://example.com/late");
+        AtomicInteger cleanupCount = new AtomicInteger();
+        ScanJobDispatcher.LateStartGuard guard = new ScanJobDispatcher.LateStartGuard(
+                target,
+                (ignoredTarget, scanId) -> cleanupCount.incrementAndGet()
+        );
+
+        guard.markTimedOut();
+        assertFalse(guard.complete("spider-late"));
+        guard.markTimedOut();
+
+        assertEquals(1, cleanupCount.get());
+    }
+
+    @Test
+    void cleanupStopsContinueAfterIndividualStopFailure() {
+        doThrow(new RuntimeException("stop boom"))
+                .when(runtimeExecutor).stopScan(ScanJobType.ACTIVE_SCAN, "active-1");
+
+        dispatcher.executeStopRequests(List.of(
+                new ScanJobStopRequest(ScanJobType.ACTIVE_SCAN, "active-1"),
+                new ScanJobStopRequest(ScanJobType.SPIDER_SCAN, "spider-1")
+        ));
+
+        verify(runtimeExecutor).stopScan(ScanJobType.ACTIVE_SCAN, "active-1");
+        verify(runtimeExecutor).stopScan(ScanJobType.SPIDER_SCAN, "spider-1");
+    }
+
+    private ScanJobClaimToken claimToken() {
+        return new ScanJobClaimToken(
+                "node-a",
+                "fence-1"
+        );
+    }
+
+    private ScanJobStartTarget startTarget(String jobId, String targetUrl) {
+        return new ScanJobStartTarget(
+                jobId,
+                ScanJobType.SPIDER_SCAN,
+                Map.of(ScanJobParameterNames.TARGET_URL, targetUrl),
+                claimToken()
+        );
+    }
+}

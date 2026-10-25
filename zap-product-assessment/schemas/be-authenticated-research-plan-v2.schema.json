@@ -1,0 +1,435 @@
+{
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "assuranceProfile",
+    "secretPersistenceAccepted",
+    "environment",
+    "authority",
+    "targetBinding",
+    "jobStore",
+    "coordinator",
+    "origin",
+    "actorSubject",
+    "actor",
+    "discovery",
+    "discoverySha256",
+    "operations",
+    "fixtures",
+    "ruleIds",
+    "vectors",
+    "identityPath",
+    "limits"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "research-plan/2.0"
+    },
+    "assuranceProfile": {
+      "const": "be-authenticated-research/1.0"
+    },
+    "secretPersistenceAccepted": {
+      "const": true
+    },
+    "environment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "fixtureActiveAuthorized",
+        "source"
+      ],
+      "properties": {
+        "fixtureActiveAuthorized": {
+          "const": true
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "targetBinding": {
+      "type": "object",
+      "required": [
+        "containerId",
+        "imageId",
+        "startedAt",
+        "networkId",
+        "address"
+      ],
+      "properties": {
+        "containerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "imageId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "networkId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "address": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "jobStore": {
+      "const": "in-memory"
+    },
+    "coordinator": {
+      "const": "single-node"
+    },
+    "origin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actorSubject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor": {
+      "type": "object",
+      "required": [
+        "subject",
+        "runId",
+        "credentialRef",
+        "sourceOperationId",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "credentialRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceOperationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "provenanceKind": {
+          "const": "private-credential-import/1.0"
+        },
+        "importReceipt": {
+          "type": "object",
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "discovery": {
+      "type": "object"
+    },
+    "discoverySha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "method",
+          "path",
+          "operationId",
+          "evidenceRefs"
+        ],
+        "properties": {
+          "method": {
+            "enum": [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixtureOwned": {
+            "type": "boolean"
+          },
+          "fixtureRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "runId",
+          "actorSubject",
+          "paths",
+          "preparationEvidence",
+          "postconditions"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actorSubject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "paths": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "preparationEvidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "postconditions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "ruleIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          40012,
+          40018
+        ]
+      }
+    },
+    "vectors": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["query", "JSON-body", "path"]}
+    },
+    "identityPath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "limits": {
+      "type": "object",
+      "required": [
+        "monitorIntervalSeconds",
+        "stopDeadlineSeconds",
+        "hostReserveBytes",
+        "operationTimeoutSeconds"
+      ],
+      "properties": {
+        "monitorIntervalSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 2
+        },
+        "stopDeadlineSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        },
+        "hostReserveBytes": {
+          "type": "integer",
+          "minimum": 2147483648
+        },
+        "operationTimeoutSeconds": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 180
+        }
+      },
+      "additionalProperties": false
+    },
+    "parameterScope": {
+      "type": "object"
+    },
+    "excludedVectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "seeds",
+        "crawl",
+        "attacks"
+      ],
+      "properties": {
+        "seeds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "method",
+              "path"
+            ],
+            "properties": {
+              "method": {
+                "enum": [
+                  "GET",
+                  "HEAD",
+                  "OPTIONS",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {},
+              "expected": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "crawl": {
+          "type": "string"
+        },
+        "attacks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "method",
+              "path"
+            ],
+            "properties": {
+              "method": {
+                "enum": [
+                  "GET",
+                  "HEAD",
+                  "OPTIONS",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "body": {},
+              "expected": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research plan 2.0 \u2014 discovery bound"
+}

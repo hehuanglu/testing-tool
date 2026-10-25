@@ -25,6 +25,7 @@ def observed(*units,outcome='matched'):
 def action(aid,kind='execute',effect='read',**kw):return {'id':aid,'kind':kind,'effect':effect,**kw}
 
 class OfflineAuditTests(unittest.TestCase):
+    @unittest.skipUnless((Path(__file__).resolve().parents[2]/'finalsource').is_dir(), 'Optional product source is not bundled')
     def test_O01_empty_campaign_is_valid_ui_workload_but_not_active_task(self):
         d=discover(WORKSPACE/'finalsource','finalsource-fe-auth/1.0');j=copy.deepcopy(d['journeys']);j['campaigns']=[]
         validate_journeys(j)  # intentionally legal finite UI executor input
@@ -32,6 +33,7 @@ class OfflineAuditTests(unittest.TestCase):
         self.assertEqual(fe_readback(p,{'journeys':[],'delivery':[]},[])['taskCompletion'],'partial')
         ui=inventory([case(required=('ui','result-read'))])
         self.assertEqual(reconcile(ui,{'search':observed('ui','result-read')},{})['taskCompletion'],'complete')
+    @unittest.skipUnless((Path(__file__).resolve().parents[2]/'finalsource').is_dir(), 'Optional product source is not bundled')
     def test_O02_deleted_journey_and_workload_duty_still_in_product_inventory(self):
         d=discover(WORKSPACE/'finalsource','finalsource-fe-auth/1.0');j=copy.deepcopy(d['journeys'])
         j['journeys']=[x for x in j['journeys'] if x['id']!='account-create'];j['responsibilities']=[x for x in j['responsibilities'] if x['id']!='account-create']

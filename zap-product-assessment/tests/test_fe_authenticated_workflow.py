@@ -6,6 +6,7 @@ from zap_assessment.fe_authenticated_contract import validate_journeys
 from zap_assessment.product_cli import main
 
 class WorkflowTests(unittest.TestCase):
+    @unittest.skipUnless((Path(__file__).resolve().parents[2]/'finalsource').is_dir(), 'Optional product source is not bundled')
     def test_discovery_and_status_are_offline_and_preserve_inventory_gaps(self):
         product=Path(__file__).resolve().parents[2]/'finalsource'
         with patch('zap_assessment.runtime.docker',side_effect=AssertionError('offline command touched runtime')):
@@ -18,6 +19,7 @@ class WorkflowTests(unittest.TestCase):
                 self.assertEqual(json.loads(result.getvalue())['taskCompletion'],'partial')
     def test_unsupported_recipe_does_not_fallback(self):
         with self.assertRaisesRegex(ValueError,'unsupported'):discover(Path('/missing'),'unknown-auth/1.0')
+    @unittest.skipUnless((Path(__file__).resolve().parents[2]/'finalsource').is_dir(), 'Optional product source is not bundled')
     def test_wrong_actor_or_missing_responsibility_rejects(self):
         d=discover(Path(__file__).resolve().parents[2]/'finalsource','finalsource-fe-auth/1.0')['journeys']
         b=copy.deepcopy(d);b['journeys'][0]['actorRef']='actor-c'

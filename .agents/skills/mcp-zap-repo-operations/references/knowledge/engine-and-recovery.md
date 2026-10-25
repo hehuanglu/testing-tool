@@ -20,11 +20,6 @@ Kiểm gần nhất 25/10/2026. Tra theo [hướng dẫn kho tri thức](../oper
 - Quyết định: dùng ràng buộc key của runtime thực, kiểm script/containment trước producer và xử lý loss khi chạy; script cố định + config cập nhật là phương án đã dùng trong adapter đó. Không hạ guard/cap để ra payload. Baseline/control do engine phát sinh cũng có thể tiêu budget; đọc requests thực theo semantics workload trước sửa allocation.
 - Giới hạn: không quy mọi lỗi thành reload race; không bắt qualification campaign hoặc generic guard mới cho mọi scan. Kiểm phần thay đổi trong entry hiện có.
 
-## Rule có 0 request và điều kiện áp dụng
-
-- ByteMe, ZAP 2.17.0/ascanrules 84.0.0: PUT trước đó chọn reflected-XSS 40012 với threshold MEDIUM có 0 request; lượt mới dùng LOW alert threshold có 25 application requests từ rule đó. [Source rule](https://github.com/zaproxy/zap-extensions/blob/main/addOns/ascanrules/src/main/java/org/zaproxy/zap/extension/ascanrules/CrossSiteScriptingScanRule.java) có nhánh return cho PUT nếu threshold không LOW. Source hiện hành và kết quả runtime cùng hỗ trợ chẩn đoán này; kiểm lại khi version/config thay đổi.
-- Quyết định: phân biệt strength với alert threshold, kiểm điều kiện rule trước gọi là lỗi engine hoặc N/A toàn PUT. Unit của câu hỏi XSS phải đi qua reconciliation riêng. JSON reflection mức Low không chứng minh browser execution. Đường dùng helper/reader ở [operational readback](../operational-readback.md); không lấy kết quả SQLi để cấp unit XSS.
-
 ## Recovery không replay và checkpoint nhất quán
 
 - Quan sát: UI mutation đã ACK nhưng selector/assertion hỏng được reconcile rồi tiếp tục; checkpoint giai đoạn 6 có status/count cũ lẫn operations mới. [Đối soát chỉ đọc](</Users/hahoangloc/Working/testing tool/review/finalsource-operating-responsibility-audit-20261025/READBACK_CHECK.json>).

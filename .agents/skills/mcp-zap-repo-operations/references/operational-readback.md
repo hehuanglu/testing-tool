@@ -33,4 +33,4 @@ Mặc định xuất vào folder mới. Chỉ dùng `overwrite=True` khi user đ
 
 Dự toán fixture theo câu hỏi và số request dự kiến, rồi đối chiếu số object thực. Reuse actor/fixture khi vẫn đúng quota/state; không cache response attack hoặc đổi mutation tạo mới thành duplicate baseline để giảm số account. Không có API cleanup thì ghi retention đúng quyền; một ngưỡng object tùy tiện không là tiêu chí pass.
 
-Các regression tập trung: `tests/test_operational_readback.py`, `tests/test_byteme_operational_adapter.py`; các kiểm scope/continuation cũ vẫn ở `tests/test_pm_scope.py`. Unit tests kiểm cơ chế; kết quả runtime từng product ở hai file đã được chỉ định, không nâng test offline thành nghiệm thu mọi track.
+Các regression tập trung: `tests/test_operational_readback.py`; các kiểm scope/continuation cũ vẫn ở `tests/test_pm_scope.py`. Unit tests kiểm cơ chế; kết quả runtime từng product ở hai file đã được chỉ định, không nâng test offline thành nghiệm thu mọi track.

@@ -1,27 +1,9 @@
 import copy,json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from zap_assessment.recipes import spring_orders
 from zap_assessment.product_checks import check_case
 from zap_assessment.product_bola import compile_cases
 from test_multi_product import workflow
-
-class StatePolicyTests(unittest.TestCase):
- def decision(self,role,action,state,next_state=None,kind='DELIVERY',relation='nonowner'):
-  return spring_orders.expected_case(role,relation,action,state,{'body':{'status':next_state}},{'typeValue':kind,'typePointer':'/orderType'})
- def test_granted_role_does_not_allow_invalid_transition_or_inherit_other_roles(self):
-  self.assertEqual(self.decision('EMPLOYEE','order.confirm','PENDING')['access'],'allow')
-  self.assertEqual(self.decision('EMPLOYEE','order.confirm','CONFIRMED')['denialStatuses'],[409])
-  self.assertEqual(self.decision('EMPLOYEE','order.status','SHIPPING','CANCELLED')['denialStatuses'],[409])
-  self.assertEqual(self.decision('EMPLOYEE','order.status','PROCESSING','SHIPPING',kind='DINE_IN')['denialStatuses'],[409])
-  self.assertEqual(self.decision('EMPLOYEE','order.status','PROCESSING','SHIPPING')['access'],'allow')
-  self.assertEqual(self.decision('EMPLOYEE','order.status','COMPLETED','PROCESSING')['denialStatuses'],[409])
-  self.assertEqual(self.decision('ADMIN','order.status','PENDING','CONFIRMED')['denialStatuses'],[403])
-  self.assertEqual(self.decision('ANONYMOUS','order.read','PENDING')['denialStatuses'],[401])
-  self.assertEqual(self.decision('CUSTOMER','cart.update','PENDING')['denialStatuses'],[404])
- def test_missing_type_and_bad_next_state_are_not_silent_allow(self):
-  with self.assertRaisesRegex(ValueError,'type provenance'):spring_orders.expected_case('EMPLOYEE','nonowner','order.status','PROCESSING',{'body':{'status':'SHIPPING'}},{})
-  self.assertEqual(self.decision('EMPLOYEE','order.status','PENDING','PENDING')['denialStatuses'],[400])
 
 class CreatedResourceOracleTests(unittest.TestCase):
  def test_created_key_is_bound_from_ack_then_read_through_frozen_route(self):

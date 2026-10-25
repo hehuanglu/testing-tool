@@ -5,7 +5,7 @@ from test_multi_product import workflow
 from zap_assessment.product_workflow import validate_body_action,compile_workflow
 from zap_assessment.product_native import check_transition
 from zap_assessment.product_identity import strategy,check_identity
-from zap_assessment.recipes import archive,spring_orders
+from zap_assessment.recipes import archive
 from zap_assessment.research import ResearchRun
 from test_research import BIND,FakeClient,FakeZap
 
@@ -57,7 +57,6 @@ class IdentityTests(unittest.TestCase):
         check_identity(200,'application/json',{'principal':{'key':'staff-owned','tier':'LIBRARIAN'}},'staff-owned','LIBRARIAN',m)
         for status,body in [(200,{'principal':{'key':'other','tier':'LIBRARIAN'}}),(200,{'principal':{'key':'staff-owned','tier':'READER'}}),(401,{}),(200,{})]:
             with self.assertRaises((ValueError,KeyError)):check_identity(status,'application/json',body,'staff-owned','LIBRARIAN',m)
-        with self.assertRaisesRegex(ValueError,'unsupported'):strategy(spring_orders,p['discovery'],'EMPLOYEE',imported=True)
         with self.assertRaisesRegex(ValueError,'unsupported'):strategy(archive,p['discovery'],'UNREVIEWED',imported=True)
     def test_native_callback_failure_latches_and_prevents_next_start(self):
         p,i=workflow();from test_multi_product import actor

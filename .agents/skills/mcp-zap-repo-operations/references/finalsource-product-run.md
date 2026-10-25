@@ -33,7 +33,7 @@ ra từ chính chỉ thị người dùng. `--run-bola` thực hiện thêm runn
 
 ```sh
 '/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python' \
-  '/Users/hahoangloc/.codex/skills/mcp-zap-repo-operations/scripts/prepare_finalsource_fixture.py' \
+  '/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/scripts/prepare_finalsource_fixture.py' \
   --receipt /absolute/run/user-authorization.json --output /absolute/run/fixture --run-bola
 ```
 

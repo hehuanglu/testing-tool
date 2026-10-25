@@ -36,7 +36,7 @@ G3 operational vẫn thiếu generic production source/broker và actual seeded 
 
 ## Amendment scope tester theo người dùng
 
-Người dùng xác nhận không có contract nội bộ và cho phép bỏ nghiệp vụ không thể kiểm của sản phẩm. Skill đã có [auth discovery](</Users/hahoangloc/.codex/skills/mcp-zap-repo-operations/references/auth-capability-discovery.md>): tự khảo sát API/UI/nguồn có sẵn trong quyền hiện tại, chọn business probe và phân biệt local logout với server invalidation. Không yêu cầu contract làm điều kiện bắt đầu discovery; không bắt buộc endpoint tên whoami nếu có identity oracle độc lập tương đương.
+Người dùng xác nhận không có contract nội bộ và cho phép bỏ nghiệp vụ không thể kiểm của sản phẩm. Skill đã có [auth discovery](</Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/auth-capability-discovery.md>): tự khảo sát API/UI/nguồn có sẵn trong quyền hiện tại, chọn business probe và phân biệt local logout với server invalidation. Không yêu cầu contract làm điều kiện bắt đầu discovery; không bắt buộc endpoint tên whoami nếu có identity oracle độc lập tương đương.
 
 [Báo cáo finalsource](../../../test-artifacts/mcp-zap-remediation/w5-resource-20261019T084619Z/product-auth-discovery.json) pin toàn bộ controller backend và các nguồn auth liên quan. Login/protected business/expiry/client logout là source-supported, runtime unverified trong checkpoint này. Continuous identity/role, refresh và server revoke chưa xác nhận được trong scope nguồn đã đọc:4 mục skipped với coverage gap theo quyền người dùng. Không kết luận toàn sản phẩm không có tính năng từ tìm kiếm hữu hạn, không tính skip thành pass và không sửa historical productG4=blocked trong native bundles. Không chạy product HTTP hay resolve credential.
 

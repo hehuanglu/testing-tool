@@ -6,7 +6,6 @@ Nơi lưu bài học đã kiểm từ các lượt vận hành, để thay đổ
 
 - Schema/source/image khác nhau, exact body, native report samples, script guard, chunk/EOF và checkpoint: [cơ chế và recovery](knowledge/engine-and-recovery.md).
 - Product **đã xác minh là finalsource**: category/bill setup, goal uniqueness và current-month UI, profile browser/JSON-bearer: [finalsource](knowledge/finalsource.md).
-- Product **đã xác minh là ByteMe**: ownership giỏ/đơn, shared stock trong CartDto và pagination rỗng: [ByteMe](knowledge/byteme.md).
 - Chọn operation/entry vẫn theo [dispatcher](operation-dispatch.md) và [runner mapping](runner-routing.md). Tri thức chỉ gợi ý đường cần kiểm, không thay contract/admission hiện tại.
 
 Tìm theo triệu chứng và product; chỉ đọc entry liên quan. Kiểm lại origin/binding/version/source và điều kiện của entry trước dùng. Thông tin đúng ở một deployment không đại diện mọi deployment; tên/version giống nhau chưa bảo đảm cùng schema.
@@ -26,8 +25,8 @@ Trạng thái hiện tại và phần còn mở vẫn ở RUN/journal được c
 `../scripts/review_open_work.py` chỉ đọc JSON caller ánh xạ từ inventory/plan/RUN đã có; không đổi schema executor hoặc bộ đầu ra hai file. Dùng khi cần kiểm quyết định/tiếp tục một cách lặp lại, không là gate bắt buộc:
 
 ```sh
-python3 /Users/hahoangloc/.codex/skills/mcp-zap-repo-operations/scripts/review_open_work.py work --input /absolute/work-review.json
-python3 /Users/hahoangloc/.codex/skills/mcp-zap-repo-operations/scripts/review_open_work.py checkpoint --checkpoint /absolute/checkpoint.json --current /absolute/current-state.json
+python3 .agents/skills/mcp-zap-repo-operations/scripts/review_open_work.py work --input /absolute/work-review.json
+python3 .agents/skills/mcp-zap-repo-operations/scripts/review_open_work.py checkpoint --checkpoint /absolute/checkpoint.json --current /absolute/current-state.json
 ```
 
 Input `work`: `responsibilities` là inventory trách nhiệm độc lập, mỗi mục có `id`, `requiredObservations` (các loại quan sát thực sự cần, không phải mọi kỹ thuật). `observations` map ID sang danh sách loại đã quan sát, hoặc `{completed: [...], outcomeUnknown: true}`. `decisions` map ID sang `{action, basis, nextStep}` cho `execute/repair/prepare-fixture/reconcile`; `dependency` cần thêm `diagnosis`, `optionsEvaluated` (mỗi option có `option`, `basis`) và `blockedBy`. `not-applicable` cần `applicability`; `user-excluded/outside-assignment` cần `scopeBasis`. Chỉ đưa dữ liệu đã lọc secret, không đưa raw native report vào helper.

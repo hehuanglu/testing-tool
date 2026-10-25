@@ -14,7 +14,6 @@ from zap_assessment.product_checks import check_case,check_pages,check_checkout,
 from zap_assessment.product_bola import compile_cases,execute,cleanup_owned
 from zap_assessment.product_prepare import prepare
 from zap_assessment.product_native import profile,report_readback,protected_success
-from zap_assessment.recipes import spring_orders
 from zap_assessment.bola_research import DirectClient
 from zap_assessment.bola_http import exchange
 from test_research import BIND
@@ -41,42 +40,7 @@ def workflow(d=None,track='be-authenticated',w=None,inspection=None):
 def actor(subject='reader-owned'):
     return {'subject':subject,'runId':'control-run','credentialRef':'private:actor','sourceOperationId':'join','evidenceRefs':['register.json']}
 
-class SourceTests(unittest.TestCase):
-    def test_source_discovery_no_environment_fe_or_runtime_claim(self):
-        c=spring_orders.discover(ROOT/'example');validate_candidate(c)
-        self.assertEqual(len(c['operations']),18);self.assertEqual(sum(not o['protected'] for o in c['operations']),5)
-        self.assertIsNone(c['environment']);self.assertIsNone(c['binding']);self.assertEqual(c['origins'],[])
-        self.assertEqual(c['auth']['tokenPointer'],'/accessToken');self.assertEqual(c['auth']['identity']['subjectPointer'],'/userId')
-        self.assertFalse(any('finalsource' in json.dumps(v) for v in c['operations']))
-    def test_candidate_rejects_fake_environment_and_source_drift(self):
-        c=spring_orders.discover(ROOT/'example');c['environment']='fake'
-        with self.assertRaisesRegex(ValueError,'deployment'):validate_candidate(c)
-        c=spring_orders.discover(ROOT/'example');c['sources'][0]['sha256']='0'*64
-        with self.assertRaisesRegex(ValueError,'source changed'):validate_candidate(c)
-    def test_materialize_requires_real_deployment(self):
-        c=spring_orders.discover(ROOT/'example')
-        with self.assertRaisesRegex(ValueError,'unresolved'):materialize(c,{},'',None,[])
-    def test_renamed_source_folder_and_method_inventory_drift(self):
-        import shutil
-        with tempfile.TemporaryDirectory() as temp:
-            dest=Path(temp)/'renamed';shutil.copytree(ROOT/'example',dest)
-            self.assertEqual(len(spring_orders.discover(dest)['operations']),18)
-            p=dest/'cart/controller/CartController.java';p.write_text(p.read_text().replace('@PostMapping("/items")','@PatchMapping("/items")'))
-            with self.assertRaisesRegex(ValueError,'conflict'):spring_orders.discover(dest)
 
-    def test_spring_project_source_layout_keeps_checkout_provenance(self):
-        import shutil
-        with tempfile.TemporaryDirectory() as temp:
-            dest=Path(temp)/'byteme'
-            source=dest/'src/main/java/org/example'
-            source.parent.mkdir(parents=True)
-            shutil.copytree(ROOT/'example',source)
-            candidate=spring_orders.discover(dest)
-            validate_candidate(candidate)
-            self.assertEqual(candidate['productLocation'],str(dest.resolve()))
-            self.assertEqual(len(candidate['operations']),18)
-            self.assertTrue(all(s['id'].startswith('src/main/java/org/example/') for s in candidate['sources']))
-            self.assertEqual(len(spring_orders.admit(candidate,'be-authenticated')),18)
 
 class BindingTests(unittest.TestCase):
     def fixture(self):
@@ -152,12 +116,6 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(n['subject-json-pointer'],'/principal/key')
 
 class SemanticTests(unittest.TestCase):
-    def test_roles_no_admin_inheritance_and_shared_catalog(self):
-        policy=spring_orders.policy
-        for role,relation,action,state,want in [('EMPLOYEE','nonowner','order.read','PENDING','allow'),('CUSTOMER','nonowner','order.read','PENDING','deny'),
-            ('ADMIN','owner','order.read','PENDING','deny'),('CUSTOMER','shared-catalog','cart.add','PENDING','allow'),('CUSTOMER','nonowner','cart.update','PENDING','deny'),
-            ('CUSTOMER','owner','order.cancel','CANCELLED','deny'),('CUSTOMER','owner','order.cancel','PENDING','allow')]:
-            self.assertEqual(policy(role,relation,action,state),want)
     def test_declared_201_204_and_cancel_not_404(self):
         for status,post in [(201,{'phase':'live'}),(204,{'phase':'archived'}),(200,{'status':'CANCELLED'})]:
             e={'access':'allow','successStatuses':[status],'postEquals':{'/'+k:v for k,v in post.items()}}
@@ -179,9 +137,6 @@ class SemanticTests(unittest.TestCase):
         self.assertTrue(check_checkout(before,after,**kw));after['cart']['items']=[1];self.assertFalse(check_checkout(before,after,**kw))
         b={'order':{'id':42,'status':'PENDING'},'stock':8};a={'order':{'id':42,'status':'CANCELLED'},'stock':10}
         self.assertTrue(check_cancel(b,a,2,copy.deepcopy(a)));again=copy.deepcopy(a);again['stock']=12;self.assertFalse(check_cancel(b,a,2,again))
-    def test_delivery_dine_in_and_registration_fields(self):
-        self.assertIn('tableNumber',spring_orders.checkout('DINE_IN'));self.assertNotIn('tableNumber',spring_orders.checkout('DELIVERY'))
-        self.assertIn('shippingAddress',spring_orders.checkout('DELIVERY'));r=spring_orders.registration('marker','private','0901234567');self.assertIn('phone',r);self.assertIn('confirmPassword',r)
 
 class OwnedHTTPTests(unittest.TestCase):
     def setUp(self):

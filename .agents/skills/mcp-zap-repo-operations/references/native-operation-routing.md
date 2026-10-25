@@ -5,7 +5,7 @@
 Để rà drift, chạy helper chỉ đọc (không kết nối hoặc scan):
 
 ```sh
-python3 /Users/hahoangloc/.codex/skills/mcp-zap-repo-operations/scripts/inspect_operations.py --repo '/Users/hahoangloc/Working/testing tool/mcp-zap-server' --routing /Users/hahoangloc/.codex/skills/mcp-zap-repo-operations/references/native-operation-routing.md
+python3 .agents/skills/mcp-zap-repo-operations/scripts/inspect_operations.py --repo '/Users/hahoangloc/Working/testing tool/mcp-zap-server' --routing .agents/skills/mcp-zap-repo-operations/references/native-operation-routing.md
 ```
 
 Có thể thêm `--runtime-tools /absolute/shared-tools.json` để so registration và tên tham số source với runtime; thêm `--candidate-tools /absolute/candidate-tools.json` để đối chiếu **hai schema runtime thực**: properties, requiredness, types, constraints và additionalProperties. Source comparison vẫn chỉ so tên; helper không suy type/requiredness source hoặc xác nhận configured auth/session từ description. Không lấy secret/config, không đổi runtime. Name coverage không thay hiểu semantics; operation mới phải đọc service/delegate và bổ sung quyết định routing, không chỉ thêm tên. ToolParam trong source giúp tìm input; schema runtime mới là interface được gọi. Khác checkout/source/image/schema giữ ở trạng thái chưa xác minh.

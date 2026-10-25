@@ -11,23 +11,12 @@ from test_multi_product import workflow,authority,ROOT,actor
 from test_discovery_transport import modern
 from test_research import BIND,FakeClient,FakeZap
 from zap_assessment import product_workflow as pw
-from zap_assessment.recipes import spring_orders
 from zap_assessment.product_cli import main
 from zap_assessment.product_native import report_readback
 from zap_assessment.product_bola import compile_cases
 from zap_assessment.research import ResearchRun
 
 class EdgeTests(unittest.TestCase):
-    def test_source_status_and_templates_no_network_or_fe(self):
-        candidate=spring_orders.discover(ROOT/'example')
-        with tempfile.TemporaryDirectory() as tmp:
-            path=Path(tmp)/'candidate.json';path.write_text(json.dumps(candidate))
-            for command in ('status','templates'):
-                with patch('zap_assessment.product_cli.verify_binding',side_effect=AssertionError('network forbidden')),contextlib.redirect_stdout(io.StringIO()) as output:
-                    code=main([command,'--product',str(ROOT/'example'),'--discovery',str(path),'--recipe','spring-orders/1.0','--track','be-anonymous'])
-                self.assertEqual(code,0)
-                if command=='status':self.assertEqual(json.loads(output.getvalue())['executionStatus'],'not-run')
-                else:self.assertIn('fixtureDAG',json.loads(output.getvalue()))
     def test_common_anonymous_no_actor_token_propagation_and_identity_rejection(self):
         p,i=workflow();d=p['discovery'];cases=[{'id':'denial','operationId':'identity','method':'GET','path':'/principal','body':None,'fixtureRefs':[],'category':'protected-denial',
                                              'expected':{'statuses':[401],'contentType':'application/json','equals':{},'present':[]}}]
@@ -86,8 +75,6 @@ class EdgeTests(unittest.TestCase):
         e={'access':'deny','denialStatuses':[403]};o={'response':{'status':403,'body':{}},'before':{},'after':{},'disclosed':False,'captureComplete':False,'pass':True}
         with patch('zap_assessment.bola_research.evaluate',side_effect=AssertionError('forbidden oracle')):
             self.assertEqual(check_case(e,o)['outcome'],'inconclusive')
-    def test_employee_cannot_use_customer_cart_identity(self):
-        with self.assertRaisesRegex(ValueError,'CUSTOMER-only'):spring_orders.validate_actor({'role':'EMPLOYEE','identityRequest':{'operationRef':'cart.read'}})
 
 if __name__=='__main__':unittest.main()
 
@@ -110,11 +97,6 @@ class AdditionalGuardTests(unittest.TestCase):
         p,i=workflow();d=copy.deepcopy(p['discovery']);d['auth']['usernameField']='changed';spy=[]
         with self.assertRaisesRegex(ValueError,'mapping'):pw.compile_workflow(ROOT,d,p['recipe'],p['track'],p['authority'],p['workload'],lambda:spy.append(1),'r')
         self.assertEqual(spy,[])
-    def test_candidate_status_product_mismatch(self):
-        c=spring_orders.discover(ROOT/'example')
-        with tempfile.TemporaryDirectory() as temp:
-            path=Path(temp)/'c.json';path.write_text(json.dumps(c))
-            with self.assertRaisesRegex(ValueError,'mismatch'):main(['status','--product',str(ROOT/'finalsource'),'--discovery',str(path),'--recipe','spring-orders/1.0','--track','be-anonymous'])
 
 class RelatedPostStateTests(unittest.TestCase):
     def test_denial_order_unchanged_but_stock_changed_is_detected(self):

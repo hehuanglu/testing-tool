@@ -22,7 +22,7 @@ Entry `zap-product-assessment/scripts/product_assessment.py` → `src/zap_assess
 - `reconcile`, `continue-plan`: finite cases/allocations cũ. `scope reconcile/continue/report` nối inventory độc lập → actions hữu hạn → existing executor → reader → reconciliation; xem [cách chạy](responsibility-loop.md). Agent vẫn phải khám phá/sửa/chuẩn bị và thực hiện phần còn thiếu; đây không là universal scanner.
 - `handoff`: composer lineage/evidence cũ, chưa tự là output hai file hiện hành.
 
-Backend registry hiện gồm spring-orders, finalsource-ledger, archive-control. Archive là control. Không thay URL để biến recipe cũ thành product mới. Recipe phù hợp thì dùng; product mới cần đọc source/spec và tạo adapter riêng hoặc orchestration native phù hợp.
+Backend registry hiện gồm finalsource-ledger, archive-control. Archive là control. Không thay URL để biến recipe cũ thành product mới. Recipe phù hợp thì dùng; product mới cần đọc source/spec và tạo adapter riêng hoặc orchestration native phù hợp.
 
 Common plan pin cả product modules/recipes/schemas, không chỉ dependency của product. Sửa recipe chung có thể làm plan product khác drift; tránh sửa trong lúc còn run dùng pins đó. Ưu tiên adapter product riêng, ghi ảnh hưởng khi cần đổi core; không regenerate pins để ép plan cũ pass hoặc phát lại mutation.
 

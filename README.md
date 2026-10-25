@@ -1,8 +1,17 @@
-# MCP ZAP Testing Tool
+# Security Testing Tool
 
-Project phục vụ vận hành kiểm thử bảo mật bằng MCP ZAP theo nghiệp vụ tester: khám phá sản phẩm, xác định phạm vi, chọn kỹ thuật, thực hiện, đọc kết quả và đối soát phần việc còn thiếu.
+Project cung cấp hai skill kiểm thử bảo mật: ZAP cho kiểm thử động và Semgrep cho phân tích source local. Workflow ZAP theo nghiệp vụ tester: khám phá sản phẩm, xác định phạm vi, chọn kỹ thuật, thực hiện, đọc kết quả và đối soát phần việc còn thiếu.
 
 Hỗ trợ các track BE anonymous, BE authenticated, FE anonymous, FE authenticated và BOLA ownership. Phạm vi kiểm thử xuất phát từ sản phẩm và yêu cầu của người dùng; khả năng của một runner không tự định nghĩa lại phạm vi đó.
+
+## Skills
+
+Hai skill được đặt chung trong `.agents/skills/`:
+
+- [mcp-zap-repo-operations](.agents/skills/mcp-zap-repo-operations/SKILL.md): vận hành MCP ZAP cho BE/FE anonymous, authenticated và BOLA ownership.
+- [run-semgrep-scan](.agents/skills/run-semgrep-scan/SKILL.md): chạy các track Semgrep OSS trên source được cho phép, với rules và runner đi kèm.
+
+Đây là vị trí skill theo project của Codex: [tài liệu OpenAI](https://developers.openai.com/blog/skills-agents-sdk).
 
 ## Thành phần của workflow tổng quát
 
@@ -12,18 +21,15 @@ Hỗ trợ các track BE anonymous, BE authenticated, FE anonymous, FE authentic
 
 Skill điều phối cách sử dụng công cụ. Các operation native và thư viện thực hiện công việc cụ thể; có mã nguồn hoặc chạy được `--help` chưa chứng minh một track đã được kiểm thử trên sản phẩm.
 
-## Thành phần riêng cho ByteMe và dữ liệu chạy
+## Source kiểm thử và dữ liệu chạy
 
-- [`byteme/`](byteme/): bản source tham khảo của ByteMe phục vụ discovery; không phải thư viện chung của scanner.
-- [`adapters/byteme/`](adapters/byteme/README.md): runner, guard, rule, reader và composer được tạo khi kiểm thử ByteMe. Đây là mã hỗ trợ riêng cho sản phẩm, không phải kết quả scan và không phải thành phần bắt buộc của workflow tổng quát.
-- `operations/`: working data của từng lượt chạy, có thể gồm plan, actor/session, journal, request/response và kết quả trung gian. Dữ liệu này có thể chứa secret; chỉ giữ local và không đưa vào Git.
-- `reports/`, `handoffs/`: nơi có thể lưu kết quả tổng hợp và bộ bàn giao của từng lượt chạy.
+Project không đóng gói source sản phẩm thử nghiệm. Chuẩn bị source/deployment được cho phép cho từng lượt; chọn operation, recipe hoặc adapter theo sản phẩm thực tế, không dùng mapping của sản phẩm trước làm mặc định.
 
-`adapters/byteme/` và `operations/` không định nghĩa workflow tổng quát. Có thể bỏ chúng khi không cần vận hành hoặc tiếp tục một lượt ByteMe. Trước khi xoá working data, cần hoàn tất cleanup tài nguyên thuộc lượt chạy; không xoá dữ liệu của lượt đang hoạt động.
+Skill Semgrep hiện yêu cầu layout `finalsource/fe`, `finalsource/be`, `finalsource/compose.yaml` trong checkout chứa skill. Đây là contract đầu vào của runner; thư mục source thử nghiệm `finalsource/` không được lưu trong project này.
 
-Không tái sử dụng route, role, fixture ID, policy hoặc expected result của ByteMe cho sản phẩm khác bằng cách chỉ đổi URL. Với sản phẩm mới, discovery lại source/deployment và chọn operation hoặc adapter phù hợp.
+`operations/` là working data có thể được tạo khi chạy, gồm plan, actor/session, journal và kết quả trung gian. `reports/`, `handoffs/` có thể chứa kết quả tổng hợp. Dữ liệu này chỉ giữ local, không đưa vào Git; cleanup tài nguyên thuộc lượt chạy trước khi xoá working data đang dùng.
 
-## Cách vận hành
+## Cách vận hành ZAP
 
 1. Đọc skill, xác minh sản phẩm, deployment, phạm vi và quyền kiểm thử.
 2. Lập inventory endpoint, role, input và UI journey phù hợp với track được giao.
@@ -55,7 +61,7 @@ Một số schema/contract cũ vẫn được thư viện hoặc regression test
 
 Xem [hướng dẫn scanner](mcp-zap-server/README.md) và [vận hành runtime local](.agents/skills/mcp-zap-repo-operations/references/local-runtime.md) để kiểm tra hoặc quản lý scanner. Xác minh Compose file set và tài nguyên đang sử dụng trước khi restart; không coi restart hoặc rebuild là một bước mặc định của assessment.
 
-## Đầu ra
+## Đầu ra ZAP
 
 Bộ bàn giao cuối của mỗi assessment gồm hai file trong một thư mục ổn định:
 
@@ -63,3 +69,11 @@ Bộ bàn giao cuối của mỗi assessment gồm hai file trong một thư m�
 - `RUN.json`: scope/track, môi trường, thao tác đã thực hiện, kết quả, coverage, hạn chế, phần chưa hoàn tất và bước tiếp theo.
 
 Log và trạng thái nội bộ có thể được runner tạo trong working directory. Không biến chúng thành một bộ bằng chứng bổ sung mặc định. Chỉ ghi đã hoàn tất khi inventory trong phạm vi đã được đối soát; runner kết thúc hoặc exit code 0 chưa đủ để kết luận.
+
+## Entry point Semgrep
+
+```sh
+python3 -B .agents/skills/run-semgrep-scan/scripts/scan.py --help
+```
+
+Lệnh trên chỉ hiển thị hướng dẫn. Chuẩn bị source và xác nhận phạm vi theo skill trước khi chạy scan. Các rule, metacheck và metadata của Semgrep được giữ cùng skill; dữ liệu chạy nằm trong Git metadata local.

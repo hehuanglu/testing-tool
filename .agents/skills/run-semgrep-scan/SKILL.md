@@ -14,13 +14,13 @@ Default order is `be-public-static` (`finalsource/be`), `fe-public-static` (`fin
 From the repository root, check readiness without scanning product source:
 
 ```text
-python3 -B .codex/skills/run-semgrep-scan/scripts/scan.py --check
+python3 -B .agents/skills/run-semgrep-scan/scripts/scan.py --check
 ```
 
 After researcher authorization, scan all five tracks or append `--tracks <TRACK> ...` for the approved subset:
 
 ```text
-python3 -B .codex/skills/run-semgrep-scan/scripts/scan.py --product . --authorized-local
+python3 -B .agents/skills/run-semgrep-scan/scripts/scan.py --product . --authorized-local
 ```
 
 The runner prints an explicit batch ID and run IDs. Resume only that checkpoint with `--resume <BATCH-ID> --authorized-local`; pass `--tracks` only if it repeats the checkpoint's exact ordered selection. Verify a frozen run without scanner, network or live source using `--verify <RUN-ID>`. A changed source or rule set requires a new batch; never overwrite terminal runs. An interrupted in-progress track needs investigation before a new batch.

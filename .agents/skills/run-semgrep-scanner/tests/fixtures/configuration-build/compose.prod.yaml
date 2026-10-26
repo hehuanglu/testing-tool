@@ -1,0 +1,6 @@
+# Synthetic path-filter probe: expected excluded by the selected bundled rule.
+# This is NOT a semantic negative and is not annotated ok.
+services:
+  variant:
+    image: synthetic/image:1
+    privileged: true

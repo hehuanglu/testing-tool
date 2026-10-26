@@ -1,0 +1,24 @@
+{
+  "id": "R-02",
+  "purpose": "REPLACE with a question-scoped local scan purpose",
+  "source_state_id": "REPLACE with an existing RUN source state ID",
+  "cwd": "/absolute/product",
+  "targets": ["/absolute/product/source"],
+  "argv": [
+    "semgrep", "scan", "--oss-only",
+    "--config", "/absolute/selected-local-rules.yml",
+    "--metrics=off", "--disable-version-check", "--strict",
+    "--no-rewrite-rule-ids", "--verbose", "--time",
+    "--json-output", "{native_json}", "/absolute/product/source"
+  ],
+  "privacy": {
+    "settings": "/absolute/private-work/settings.yml",
+    "metrics": "off",
+    "version_check": "off",
+    "network_guard": null,
+    "note": "Illustrative configured settings only; set the process environment before running. No scan or isolation is asserted."
+  },
+  "rules_selection": [{"file": "/absolute/selected-local-rules.yml", "origin": "local; inspect before execution"}],
+  "exclusions": [],
+  "redact_values": []
+}

@@ -1,1 +1,0 @@
-{"info":{"title":"finalsource proposed public health subset (source-derived, runtime unverified)","version":"draft-2"},"openapi":"3.0.3","paths":{"/api/health":{"get":{"responses":{"200":{"description":"Proposed public health response; owner oracle confirmation required"}}}}},"servers":[{"url":"http://172.18.0.2:3000"}]}

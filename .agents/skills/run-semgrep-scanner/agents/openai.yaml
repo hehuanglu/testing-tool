@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run Semgrep Scanner"
+  short_description: "Kiểm thử source bằng Semgrep theo nghiệp vụ tester"
+  default_prompt: "Dùng $run-semgrep-scanner để discovery product và vận hành tuần tự các track trong scope; mỗi track chọn câu hỏi/kỹ thuật, chạy Semgrep local, đọc source để triage, tự kiểm quy trình và evidence, lưu ALERTS/RUN rồi mới chuyển track tiếp theo."

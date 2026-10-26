@@ -92,7 +92,7 @@ class AssessmentTests(unittest.TestCase):
             if mode=='budget':a['maxRuntimeSeconds']=1
             with self.assertRaises(Blocked):make_plan(*args)
     def test_draft_structural_only(self):
-        draft=json.loads((ROOT/'profiles'/'finalsource.draft.json').read_text());validate('product',draft)
+        draft=json.loads((ROOT/'profiles'/'example-existing.draft.json').read_text());validate('product',draft)
         with self.assertRaises(Blocked):AuthorityRegistry({}).get(draft['authorizationRef'])
     def test_external_schema_refs_and_server_override_block(self):
         for payload in [{'$ref':'http://evil.invalid/schema'},{'servers':[{'url':'http://127.0.0.1:8090'}]},{'servers':[{'url':'http://127.0.0.1:18080/path'}]}]:

@@ -1,0 +1,681 @@
+{
+  "schema": "semgrep-tester-alerts-v2",
+  "assessment_id": "synthetic-example-contract-v2",
+  "status": "partial",
+  "summary": {
+    "native_matches_by_round": {
+      "R-01": 3
+    },
+    "finding_records": 4,
+    "unique_issues": null,
+    "by_source": {
+      "semgrep": 3,
+      "manual-source-review": 1
+    },
+    "by_native_severity": {
+      "WARNING": 2,
+      "ERROR": 1
+    },
+    "native_severity_null_records": 1,
+    "by_triage": {
+      "supported": 2,
+      "needs-review": 1,
+      "false-positive": 1,
+      "not-applicable": 0
+    },
+    "counting_method": "Synthetic illustrative counts: 3 native-shaped occurrences and 4 observation records; no actual scanner execution. Severity counts use only native-bearing finding records.",
+    "deduplication": "One record per distinct illustrated concern; no shared root cause asserted. unique_issues null while F-02 remains unresolved; false-positive and needs-review are not vulnerabilities."
+  },
+  "findings": [
+    {
+      "id": "F-01",
+      "source": "semgrep",
+      "track_ids": [
+        "be-input"
+      ],
+      "question_ids": [
+        "Q-01"
+      ],
+      "round_ids": [
+        "R-01"
+      ],
+      "manual_review_ids": [
+        "MR-01"
+      ],
+      "rule_id": "nestjs-public-request-to-sql-text-local",
+      "native_severity": "WARNING",
+      "native_confidence": "MEDIUM",
+      "message": "Request-derived data reaches SQL text or a sort argument in the local function. Review validation, allowlists and bindings; request origin is not an exploit verdict.",
+      "locations": [
+        {
+          "path": "synthetic/search.ts",
+          "start": {
+            "line": 12,
+            "column": null
+          },
+          "end": {
+            "line": 12,
+            "column": null
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "id": "O-01",
+          "round_id": "R-01",
+          "native_rule_id": "nestjs-public-request-to-sql-text-local",
+          "location": {
+            "path": "synthetic/search.ts",
+            "start": {
+              "line": 12,
+              "column": null
+            },
+            "end": {
+              "line": 12,
+              "column": null
+            }
+          },
+          "native_identifier": null
+        }
+      ],
+      "related_finding_ids": [],
+      "triage": {
+        "status": "supported",
+        "rationale": "Synthetic source path constructs SQL from the request value; the reviewed function passes no value bindings and the in-scope caller supplies the request directly. Claim is limited to this source path.",
+        "impact": "Untrusted query text may alter the intended SQL operation.",
+        "assumptions": [
+          "All described paths and controls are synthetic examples."
+        ],
+        "next_step": null
+      },
+      "tester_priority": null,
+      "evidence": [
+        {
+          "id": "E-1N",
+          "kind": "native-match",
+          "provenance": "semgrep",
+          "claim": "The illustrative rule matches the indicated source shape.",
+          "observation": "Synthetic schema illustration only; no actual Semgrep output or trace is asserted.",
+          "locations": [
+            {
+              "path": "synthetic/search.ts",
+              "start": {
+                "line": 12,
+                "column": null
+              },
+              "end": {
+                "line": 12,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": "R-01",
+          "manual_review_id": null,
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "This example is not a scan result.",
+            "A match alone is not the triage conclusion."
+          ]
+        },
+        {
+          "id": "E-1S",
+          "kind": "source-review",
+          "provenance": "manual-source-review",
+          "claim": "Request data participates in SQL text on the reviewed synthetic path.",
+          "observation": "The handler forwards a request filter directly; the query function concatenates it into SQL.",
+          "locations": [
+            {
+              "path": "synthetic/search.ts",
+              "start": {
+                "line": 6,
+                "column": null
+              },
+              "end": {
+                "line": 6,
+                "column": null
+              }
+            },
+            {
+              "path": "synthetic/search.ts",
+              "start": {
+                "line": 12,
+                "column": null
+              },
+              "end": {
+                "line": 12,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": null,
+          "manual_review_id": "MR-01",
+          "reference": null,
+          "flow_steps": [
+            {
+              "order": 1,
+              "location": {
+                "path": "synthetic/search.ts",
+                "start": {
+                  "line": 6,
+                  "column": null
+                },
+                "end": {
+                  "line": 6,
+                  "column": null
+                }
+              },
+              "observation": "Request filter read."
+            },
+            {
+              "order": 2,
+              "location": {
+                "path": "synthetic/search.ts",
+                "start": {
+                  "line": 12,
+                  "column": null
+                },
+                "end": {
+                  "line": 12,
+                  "column": null
+                }
+              },
+              "observation": "Concatenated text passed to query API."
+            }
+          ],
+          "limitations": [
+            "Manual call-path, not native dataflow.",
+            "No database runtime execution."
+          ]
+        },
+        {
+          "id": "E-1C",
+          "kind": "control-review",
+          "provenance": "manual-source-review",
+          "claim": "No binding or allowlist applies on this reviewed path.",
+          "observation": "The complete synthetic handler and query function were reviewed; neither transforms the filter to a fixed allowlisted SQL fragment.",
+          "locations": [
+            {
+              "path": "synthetic/search.ts",
+              "start": {
+                "line": 12,
+                "column": null
+              },
+              "end": {
+                "line": 12,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": null,
+          "manual_review_id": "MR-01",
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "Limited to these functions and their in-scope caller, not the whole system."
+          ]
+        }
+      ],
+      "evidence_gaps": []
+    },
+    {
+      "id": "F-02",
+      "source": "semgrep",
+      "track_ids": [
+        "authentication-session"
+      ],
+      "question_ids": [
+        "Q-02"
+      ],
+      "round_ids": [
+        "R-01"
+      ],
+      "manual_review_ids": [
+        "MR-02"
+      ],
+      "rule_id": "nestjs-auth-hardcoded-jwt-secret",
+      "native_severity": "ERROR",
+      "native_confidence": "MEDIUM",
+      "message": "secret/secretOrKey configuration contains a literal or literal fallback. Confirm JWT use and effective external configuration; review reachable fallback paths.",
+      "locations": [
+        {
+          "path": "synthetic/session.ts",
+          "start": {
+            "line": 8,
+            "column": null
+          },
+          "end": {
+            "line": 8,
+            "column": null
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "id": "O-02",
+          "round_id": "R-01",
+          "native_rule_id": "nestjs-auth-hardcoded-jwt-secret",
+          "location": {
+            "path": "synthetic/session.ts",
+            "start": {
+              "line": 8,
+              "column": null
+            },
+            "end": {
+              "line": 8,
+              "column": null
+            }
+          },
+          "native_identifier": null
+        }
+      ],
+      "related_finding_ids": [],
+      "triage": {
+        "status": "needs-review",
+        "rationale": "Literal secret-shaped configuration is an observation; the referenced runtime loader is absent from the provided synthetic source, so effective JWT use/fallback reachability is unresolved.",
+        "impact": "Effective credential exposure is not established.",
+        "assumptions": [
+          "All described paths and controls are synthetic examples."
+        ],
+        "next_step": "Obtain the missing loader and effective session configuration; no independent source-only step remains for this question."
+      },
+      "tester_priority": null,
+      "evidence": [
+        {
+          "id": "E-2N",
+          "kind": "native-match",
+          "provenance": "semgrep",
+          "claim": "The illustrative rule matches the indicated source shape.",
+          "observation": "Synthetic schema illustration only; no actual Semgrep output or trace is asserted.",
+          "locations": [
+            {
+              "path": "synthetic/session.ts",
+              "start": {
+                "line": 8,
+                "column": null
+              },
+              "end": {
+                "line": 8,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": "R-01",
+          "manual_review_id": null,
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "This example is not a scan result.",
+            "A match alone is not the triage conclusion."
+          ]
+        },
+        {
+          "id": "E-2C",
+          "kind": "config-review",
+          "provenance": "manual-source-review",
+          "claim": "Effective configuration cannot be established from the provided source.",
+          "observation": "The session configuration references a loader whose implementation was not provided.",
+          "locations": [
+            {
+              "path": "synthetic/session.ts",
+              "start": {
+                "line": 8,
+                "column": null
+              },
+              "end": {
+                "line": 8,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": null,
+          "manual_review_id": "MR-02",
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "No runtime config, secret value or credential validity is represented."
+          ]
+        }
+      ],
+      "evidence_gaps": [
+        "Missing referenced configuration loader and effective JWT consumer settings."
+      ]
+    },
+    {
+      "id": "F-03",
+      "source": "semgrep",
+      "track_ids": [
+        "authorization-ownership"
+      ],
+      "question_ids": [
+        "Q-03"
+      ],
+      "round_ids": [
+        "R-01"
+      ],
+      "manual_review_ids": [
+        "MR-03"
+      ],
+      "rule_id": "nestjs-ownership-id-only-find-one",
+      "native_severity": "WARNING",
+      "native_confidence": "MEDIUM",
+      "message": "Identifier lookup is an ownership review candidate. Read all predicates and before-use server authorization; this pattern does not establish that ownership is missing.",
+      "locations": [
+        {
+          "path": "synthetic/orders.ts",
+          "start": {
+            "line": 20,
+            "column": null
+          },
+          "end": {
+            "line": 20,
+            "column": null
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "id": "O-03",
+          "round_id": "R-01",
+          "native_rule_id": "nestjs-ownership-id-only-find-one",
+          "location": {
+            "path": "synthetic/orders.ts",
+            "start": {
+              "line": 20,
+              "column": null
+            },
+            "end": {
+              "line": 20,
+              "column": null
+            }
+          },
+          "native_identifier": null
+        }
+      ],
+      "related_finding_ids": [],
+      "triage": {
+        "status": "false-positive",
+        "rationale": "Synthetic assertOrderAccess implementation checks the verified principal against the order grant and throws before the lookup on denial; caller and exact object ID binding were reviewed.",
+        "impact": "No issue supported for this reviewed lookup path.",
+        "assumptions": [
+          "All described paths and controls are synthetic examples."
+        ],
+        "next_step": null
+      },
+      "tester_priority": null,
+      "evidence": [
+        {
+          "id": "E-3N",
+          "kind": "native-match",
+          "provenance": "semgrep",
+          "claim": "The illustrative rule matches the indicated source shape.",
+          "observation": "Synthetic schema illustration only; no actual Semgrep output or trace is asserted.",
+          "locations": [
+            {
+              "path": "synthetic/orders.ts",
+              "start": {
+                "line": 20,
+                "column": null
+              },
+              "end": {
+                "line": 20,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": "R-01",
+          "manual_review_id": null,
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "This example is not a scan result.",
+            "A match alone is not the triage conclusion."
+          ]
+        },
+        {
+          "id": "E-3C",
+          "kind": "control-review",
+          "provenance": "manual-source-review",
+          "claim": "The ID lookup is protected by a binding access check on this synthetic caller path.",
+          "observation": "The guard verifies the principal, and assertOrderAccess checks the same order ID and throws on missing grant before lookup.",
+          "locations": [
+            {
+              "path": "synthetic/guard.ts",
+              "start": {
+                "line": 5,
+                "column": null
+              },
+              "end": {
+                "line": 5,
+                "column": null
+              }
+            },
+            {
+              "path": "synthetic/order-policy.ts",
+              "start": {
+                "line": 9,
+                "column": null
+              },
+              "end": {
+                "line": 9,
+                "column": null
+              }
+            },
+            {
+              "path": "synthetic/orders.ts",
+              "start": {
+                "line": 20,
+                "column": null
+              },
+              "end": {
+                "line": 20,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": null,
+          "manual_review_id": "MR-03",
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "Manual review, not a native trace.",
+            "No claim about other callers."
+          ]
+        },
+        {
+          "id": "E-3S",
+          "kind": "source-review",
+          "provenance": "manual-source-review",
+          "claim": "The manually reviewed path binds the principal and object before lookup.",
+          "observation": "The guard verifies the principal, and assertOrderAccess checks the same order ID and throws on missing grant before lookup.",
+          "locations": [
+            {
+              "path": "synthetic/guard.ts",
+              "start": {
+                "line": 5,
+                "column": null
+              },
+              "end": {
+                "line": 5,
+                "column": null
+              }
+            },
+            {
+              "path": "synthetic/order-policy.ts",
+              "start": {
+                "line": 9,
+                "column": null
+              },
+              "end": {
+                "line": 9,
+                "column": null
+              }
+            },
+            {
+              "path": "synthetic/orders.ts",
+              "start": {
+                "line": 20,
+                "column": null
+              },
+              "end": {
+                "line": 20,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": null,
+          "manual_review_id": "MR-03",
+          "reference": null,
+          "flow_steps": [
+            {
+              "order": 1,
+              "location": {
+                "path": "synthetic/guard.ts",
+                "start": {
+                  "line": 5,
+                  "column": null
+                },
+                "end": {
+                  "line": 5,
+                  "column": null
+                }
+              },
+              "observation": "Principal verified and bound."
+            },
+            {
+              "order": 2,
+              "location": {
+                "path": "synthetic/order-policy.ts",
+                "start": {
+                  "line": 9,
+                  "column": null
+                },
+                "end": {
+                  "line": 9,
+                  "column": null
+                }
+              },
+              "observation": "Grant for the same ID checked before use."
+            },
+            {
+              "order": 3,
+              "location": {
+                "path": "synthetic/orders.ts",
+                "start": {
+                  "line": 20,
+                  "column": null
+                },
+                "end": {
+                  "line": 20,
+                  "column": null
+                }
+              },
+              "observation": "Lookup follows the access check."
+            }
+          ],
+          "limitations": [
+            "Manual review, not a native trace.",
+            "No claim about other callers."
+          ]
+        }
+      ],
+      "evidence_gaps": []
+    },
+    {
+      "id": "F-04",
+      "source": "manual-source-review",
+      "track_ids": [
+        "configuration-build"
+      ],
+      "question_ids": [
+        "Q-04"
+      ],
+      "round_ids": [],
+      "manual_review_ids": [
+        "MR-04"
+      ],
+      "rule_id": null,
+      "native_severity": null,
+      "native_confidence": null,
+      "message": null,
+      "locations": [
+        {
+          "path": "synthetic/release.pipeline.yml",
+          "start": {
+            "line": 15,
+            "column": null
+          },
+          "end": {
+            "line": 15,
+            "column": null
+          }
+        }
+      ],
+      "occurrences": [],
+      "related_finding_ids": [],
+      "triage": {
+        "status": "supported",
+        "rationale": "Synthetic release declaration publishes internal diagnostic files to a public artifact destination, contrary to the supplied example policy; this custom filename has no applicable bundled detector.",
+        "impact": "Declaration conflicts with the illustrative artifact privacy policy.",
+        "assumptions": [
+          "All described paths and controls are synthetic examples."
+        ],
+        "next_step": null
+      },
+      "tester_priority": null,
+      "evidence": [
+        {
+          "id": "E-4S",
+          "kind": "config-review",
+          "provenance": "manual-source-review",
+          "claim": "The synthetic release config declares public diagnostic artifact publication.",
+          "observation": "The nonstandard pipeline filename declares internal diagnostic paths under a public artifact destination.",
+          "locations": [
+            {
+              "path": "synthetic/release.pipeline.yml",
+              "start": {
+                "line": 15,
+                "column": null
+              },
+              "end": {
+                "line": 15,
+                "column": null
+              }
+            }
+          ],
+          "source_state_id": "SS-01",
+          "round_id": null,
+          "manual_review_id": "MR-04",
+          "reference": null,
+          "flow_steps": [],
+          "limitations": [
+            "No pipeline execution or public download observed."
+          ]
+        },
+        {
+          "id": "E-4P",
+          "kind": "policy-reference",
+          "provenance": "provided-policy",
+          "claim": "Diagnostic files must stay private in this illustrative release contract.",
+          "observation": "The supplied synthetic policy states diagnostic artifacts are private.",
+          "locations": [],
+          "source_state_id": null,
+          "round_id": null,
+          "manual_review_id": null,
+          "reference": "Synthetic policy EXAMPLE-POLICY section 2; illustrative provided policy, not a product policy.",
+          "flow_steps": [],
+          "limitations": []
+        }
+      ],
+      "evidence_gaps": []
+    }
+  ]
+}

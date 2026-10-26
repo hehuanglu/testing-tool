@@ -1,0 +1,2 @@
+# Engine version used by the bundled regression fixtures; not a transitive lock.
+semgrep==1.176.0

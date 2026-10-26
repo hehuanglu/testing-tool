@@ -17,6 +17,11 @@ reports/
 handoffs/
 **/__pycache__/
 **/.pytest_cache/
+**/.venv/
+/.venv-semgrep/
+/finalsource/
+/semgrep-evaluation-*/
+/semgrep-scanner-implementation-plan.md
 
 # OS/editor noise
 .DS_Store

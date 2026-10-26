@@ -1,0 +1,10 @@
+# Synthetic declarations for one generic rule, not a deployment.
+services:
+  positive:
+    image: synthetic/image:1
+    # ruleid: config-compose-privileged
+    privileged: true
+  negative:
+    image: synthetic/image:1
+    # ok: config-compose-privileged
+    privileged: false

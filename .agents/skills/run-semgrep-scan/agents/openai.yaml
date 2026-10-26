@@ -1,4 +1,0 @@
-interface:
-  display_name: "Run Semgrep Scan"
-  short_description: "Run local Semgrep OSS source scans"
-  default_prompt: "Use $run-semgrep-scan to scan this product's authorized source with the local rule tracks and report observed findings and limits."

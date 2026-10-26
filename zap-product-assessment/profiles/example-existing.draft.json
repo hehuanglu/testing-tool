@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.1",
+  "productId": "example-existing",
+  "profileVersion": "example-1",
+  "owner": "UNRESOLVED",
+  "targetBuildRef": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "environment": {
+    "kind": "staging",
+    "identity": "UNVERIFIED-owner-environment"
+  },
+  "authorizationRef": "pending-example-authority",
+  "attackOrigins": [
+    "http://172.28.0.2:3000"
+  ],
+  "dependencyOrigins": [],
+  "healthPath": "/api/health",
+  "healthAssertions": [
+    {
+      "pointer": "/success",
+      "equals": true
+    },
+    {
+      "pointer": "/data/status",
+      "equals": "ok"
+    }
+  ],
+  "crawlPath": "/api/health",
+  "publicSeeds": [
+    "/api/health"
+  ],
+  "schema": {
+    "kind": "openapi",
+    "sourceKind": "content",
+    "path": "example-existing.public.openapi.json",
+    "sha256": "266fad304cd6b7a4838f2069f64b299663036aedc1504adfacfd15349d3d8649"
+  },
+  "expectedOperations": [
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    }
+  ],
+  "allowedPaths": [
+    "/api/health"
+  ],
+  "retentionDays": 30,
+  "adapter": "docker-existing-http-v1",
+  "binding": {
+    "containerId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "imageId": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "networkId": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "address": "172.28.0.2",
+    "startedAt": "2000-01-01T00:00:00Z"
+  }
+}

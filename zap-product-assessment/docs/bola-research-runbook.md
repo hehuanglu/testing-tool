@@ -2,7 +2,7 @@
 
 Entry mới `scripts/bola_research.py` dùng contract `bola-research/1.0`, độc lập với borrowed v1.4 read-only và W6 owned synthetic. Core hiểu actor/object/policy và ID path/query/body; product adapter hiện chỉ finalsource local test. Product khác chưa được admit tự động. Không gọi BE-auth compiler, không cần ZAP session, native report hay active scan.
 
-Quyền triển khai không tự là quyền product execution. Trong lượt ngày 21/10, prompt BOLA revision 2 mục 2 cho login, fresh API-only fixtures A/B, bounded read/mutation/poststate/cleanup trên deployment test đã xác minh từ checkout. Không có quyền DB helper, ID cũ, active ZAP, production, rebuild/restart target hoặc sửa product. Receipt ghi lại chỉ thị, không reviewer approval. Luôn xác minh lại binding và deadline; mỗi run mới có fixtures và credentials mới.
+Quyền triển khai không tự là quyền product execution. Xác minh quyền hiện hành, binding và deadline; mỗi run có fixtures và credentials riêng.
 
 Từ workspace `/Users/hahoangloc/Working/testing tool`:
 
@@ -35,11 +35,6 @@ zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_rese
 
 Test harness mock pacing waits để fault corpus chạy nhanh; target HTTP/server state thật, không là product throughput proof. Product runs giữ pacing thật. Focused regression dùng `.venv/bin/python -m unittest` với `PYTHONPATH=src:tests` từ assessment. Historical BE-auth/anonymous proofs chỉ chuyển recipe/mechanics, không chuyển verdict hoặc authority.
 
-Latest evidence/progress: [BOLA implementation](../../test-artifacts/bola-research-20261021T070245Z/PROGRESS_VI.md). Transaction/category/Expense-goal/bills populated coverage cần fixture API hiện không có; related empty transactions không chứng minh populated cascade. Fixed selected product build, natural expiry/refresh và independent review vẫn phải báo riêng. Zero findings không kết luận toàn product an toàn hoặc toàn track complete.
-
-Latest verified checkpoint 21/10/2026: final-source product-D/product-E,36cases each; product-interrupted stops after2cases with confirmed account cleanup. Regression132/132 and9owned controls pass expected outcomes. See [progress](</Users/hahoangloc/Working/testing tool/test-artifacts/bola-research-20261021T070245Z/PROGRESS_VI.md>) and [tester handoff](</Users/hahoangloc/Working/testing tool/test-artifacts/bola-research-20261021T070245Z/technical/TESTER_REPORT_VI.md>). Zero findings in executed scope; populated fixtures/fixed build/natural expiry pending. No mutation replay or reuse of prior credentials.
-
-
 ## Branch/populated continuation (explicit DB prerequisite authority)
 
 `bola-inventory/1.1` adds branches with operationRef, branchRef, predicate, reference locations, policy/evidence refs, fixture dependencies and applicability disposition. `bola_research_branches.coverage` only accepts executed proof references; candidate alone is never tested. Historical inventory1.0 and implicit legacy inventories retain their old readback semantics.
@@ -47,12 +42,3 @@ Latest verified checkpoint 21/10/2026: final-source product-D/product-E,36cases 
 Use `scripts/bola_continuation.py run --discovery DISCOVERY --inventory INVENTORY --receipt RECEIPT --output NEW_RUN [--failure]` only with the explicit local-test DB prerequisite/fault scope. Discovery remains `scripts/bola_research.py discover`. Never reuse historical credentials or fixture IDs. DB is independently bound before 4 bounded inserts; APIs under test still create transactions/goals and exercise ownership. Fresh target/unrelated/disposable accounts carry real relations; real transaction pages use limit2 and source-supported type/offset. Owner injection names come from DTO/entity/persistence mappings.
 
 Offline verification: `scripts/bola_continuation.py verify --output RUN`; legacy `bola_research.py verify --run OLD_RUN` remains separate. Selected state checker has no evaluate import; same repository and shared artifact origin limit independence. Fault mode preserves proxy forwarding proof, journal and readbacks without request replay; surviving controller credentials are not whole-session recovery proof. Retain goals/users/categories with exact ledger; API cascade and exact bill cleanup are verified separately.
-
-
-## Verified continuation checkpoint — 21/10/2026 (supersedes historical coverage above)
-
-Current proof: [continuation progress](</Users/hahoangloc/Working/testing tool/test-artifacts/bola-continuation-20261021T125040Z/PROGRESS_VI.md>) and [tester handoff](</Users/hahoangloc/Working/testing tool/test-artifacts/bola-continuation-20261021T125040Z/technical/TESTER_REPORT_VI.md>). Fresh product-A/B use the same frozen source/build/logical cases with distinct IDs:150 cases/398requests each,16/22 operations and22/22 relevant branches;6 operations not applicable. Actual product-failure has150 cases/407requests plus3 in-flight fault controls. Earlier derisk03 had144 cases and source had already advanced before resume; do not relabel it as the final pair.
-
-POST56 cases/run: transactions32,goals16,accounts8, including foreign references, anonymous/nonexistent and property whitelist controls. Populated account PUT/DELETE, Saving/Expense goal PUT, collection/aggregate reads and14 transaction pages (limit2) use fresh related transactions/categories/bills. Category/bill DB provisioning stays4 prerequisite inserts after independent binding/schema/FK checks; it is not API coverage. Fault proof reconciles exactly one successful create for lost-response and SIGKILL child, denied0, no replay. Surviving controller memory is not whole-session recovery.
-
-Current independent checker also corroborates fault intent/no ACK, exact forwarded request/actor/count/status/created ID and selected readback state; source receipt binds productLocation and explicit owned-client-fault permission.141 focused compatibility tests pass. Accounts/transactions/bills cleanup verified; retained users/goals/categories have exact ledger. No findings in this executed scope; source BOLA/direct-client/property authorization, not native ZAP or whole-product safe. Natural JWT expiry TTL3600s, fixed-build remediation and populated receipt relations remain unproved. Do not wait for expiry or require a fixed build to hand off current findings. See ALERTS.json, KNOWN_GAPS, REPEATABILITY and VERIFICATION in this namespace.

@@ -1,0 +1,1 @@
+{"info":{"title":"Synthetic public health subset; not a deployed product","version":"example-1"},"openapi":"3.0.3","paths":{"/api/health":{"get":{"responses":{"200":{"description":"Proposed public health response; owner oracle confirmation required"}}}}},"servers":[{"url":"http://172.28.0.2:3000"}]}

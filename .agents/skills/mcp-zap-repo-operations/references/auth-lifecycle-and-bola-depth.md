@@ -137,8 +137,3 @@ không chứng minh race/concurrent isolation hoặc tenant boundary. Không có
 hỗ trợ thì ghi chưa kiểm/unsupported đúng entry hoặc chưa quan sát applicability;
 không hứa capability chỉ vì tài liệu nêu candidate. Thêm executor/adapter hoặc
 concurrent dispatch là task code riêng, không nằm trong module documentation này.
-
-Historical finalsource auth gaps và BOLA receipt/role/tenant/race gaps chỉ là
-[auth snapshot](</Users/hahoangloc/Working/testing tool/test-artifacts/be-authenticated-research-20261020T173556Z/KNOWN_GAPS.md>)
-và [BOLA snapshot](</Users/hahoangloc/Working/testing tool/test-artifacts/bola-continuation-20261021T125040Z/KNOWN_GAPS.md>).
-Không biến chúng thành status runtime hôm nay hoặc quyền chạy kiểm tiếp.

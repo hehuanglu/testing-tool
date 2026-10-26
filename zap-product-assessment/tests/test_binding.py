@@ -112,9 +112,9 @@ class ProductCLIInputs(unittest.TestCase):
     def test_locked_schema_content_digest_is_checked(self):
         d=make_plan(*inputs()).data;d['schema']['info']['description']='malicious instruction'
         with self.assertRaises(Blocked):validate_locked_plan(Plan(canonical(d)))
-    def test_finalsource_candidate_and_template_remain_non_executable(self):
+    def test_example_candidate_and_template_remain_non_executable(self):
         from zap_assessment.cli import product_plan
-        with self.assertRaises(Blocked):product_plan(ROOT/'profiles/finalsource.draft.json',ROOT/'profiles/finalsource.authority.template.json')
+        with self.assertRaises(Blocked):product_plan(ROOT/'profiles/example-existing.draft.json',ROOT/'profiles/example-existing.authority.template.json')
 
 class CLIRecoveryStatus(unittest.TestCase):
     def test_failed_recovery_never_claims_cleanup_clean(self):

@@ -5,7 +5,6 @@ Nơi lưu bài học đã kiểm từ các lượt vận hành, để thay đổ
 ## Tra theo vấn đề
 
 - Schema/source/image khác nhau, exact body, native report samples, script guard, chunk/EOF và checkpoint: [cơ chế và recovery](knowledge/engine-and-recovery.md).
-- Product **đã xác minh là finalsource**: category/bill setup, goal uniqueness và current-month UI, profile browser/JSON-bearer: [finalsource](knowledge/finalsource.md).
 - Chọn operation/entry vẫn theo [dispatcher](operation-dispatch.md) và [runner mapping](runner-routing.md). Tri thức chỉ gợi ý đường cần kiểm, không thay contract/admission hiện tại.
 
 Tìm theo triệu chứng và product; chỉ đọc entry liên quan. Kiểm lại origin/binding/version/source và điều kiện của entry trước dùng. Thông tin đúng ở một deployment không đại diện mọi deployment; tên/version giống nhau chưa bảo đảm cùng schema.
@@ -16,7 +15,7 @@ Mỗi bài học giữ ngắn: **điều kiện áp dụng → quan sát và m�
 
 Sửa/bổ sung entry đang có thay vì chép thành nhật ký mỗi phase. Khi cơ chế không còn đúng, ghi entry bị thay thế và điều kiện mới; không xóa kết quả/raw lịch sử. Bài học chưa có execution có thể lưu như giả thuyết cần kiểm, nhưng phải gắn nhãn đó. Chỉ tách entry/product mới khi có kiến thức thực sự ảnh hưởng quyết định.
 
-Không lưu credential/token/cookie, dữ liệu cá nhân, full request/response hoặc object ID/session ID làm default. Chỉ dẫn source/working result đã có khi hữu ích; không đòi proof/hash bundle mới. Owner/role/expected của product ở entry product; cơ chế dùng chung không chứa giả định finalsource. Khả năng setup không tự cấp quyền mutation/DB hoặc quyền sang target khác.
+Không lưu credential/token/cookie, dữ liệu cá nhân, full request/response hoặc object ID/session ID làm default. Chỉ dẫn source/working result đã có khi hữu ích; không đòi proof/hash bundle mới. Owner/role/expected của product ở entry product; cơ chế dùng chung không chứa giả định product cụ thể. Khả năng setup không tự cấp quyền mutation/DB hoặc quyền sang target khác.
 
 Trạng thái hiện tại và phần còn mở vẫn ở RUN/journal được chỉ định; kho này không thay checkpoint. Không bắt mỗi run phải tạo một entry hoặc chạy helper dưới đây.
 

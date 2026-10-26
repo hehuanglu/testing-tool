@@ -72,7 +72,6 @@ Hai phần phải khớp hai file kết quả; không có phần Context hoặc 
 - Trước tái sử dụng checkpoint/fixture hoặc khi gặp lỗi đã từng xử lý: tra [tri thức vận hành](references/operational-knowledge.md) theo triệu chứng/product, kiểm lại điều kiện áp dụng rồi dùng vào quyết định; cập nhật bài học sau khi đã xác minh.
 - Status/setup/restart/stop: [local runtime](references/local-runtime.md). Status-only không start/rebuild/scan target.
 - Build/tests/docs/packaging: [repo map](references/repo-map.md). Trước workload nặng hoặc khi thiếu tài nguyên: [resource preflight](references/resource-preflight.md).
-- Chỉ khi product đã xác minh là finalsource và mode phù hợp: [adapter legacy](references/finalsource-product-run.md), [pilot P0 riêng](references/finalsource-p0-pilot.md). Không dùng chúng làm mặc định cho product khác.
 
 ## Trạng thái máy và ranh giới
 

@@ -83,4 +83,4 @@ Trước stop/restart xác định có run đang dùng scanner và xử lý đú
 - Client không thấy tool: đối chiếu native client, guided/expert và scopes; doctor không chứng minh client đó đã reload. Không mở rộng quyền hoặc đổi server surface chỉ để hiện tool.
 - Queue restart: cần backend thực tế, worker lease/fence và operation identity; đọc queue runbook. In-memory không bảo đảm phục hồi qua restart.
 - `ha.sh`: hiện thiếu `docker-compose.ha.yml` và nginx template; script chủ động fail trước mutation. Không tự tạo HA config để coi setup đã đủ.
-- Không dùng hướng dẫn `down -v` trong tài liệu test finalsource cũ như một bước cleanup chung. Đây là target riêng, không thuộc scanner stop.
+- Không dùng hướng dẫn `down -v` trong tài liệu test product như một bước cleanup chung. Đây là target riêng, không thuộc scanner stop.

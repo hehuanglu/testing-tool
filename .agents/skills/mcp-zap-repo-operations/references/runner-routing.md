@@ -50,7 +50,7 @@ Common path cần actor, JAR/pin, binding và recipe; chủ yếu GET/query, con
 
 Đường `research_product.provision` + `ResearchRun.prepare/start/wait` + `seed_as_user` hỗ trợ orchestration native trên scanner riêng; schema và auth/direct semantics phải lấy từ đúng candidate. Cho tác vụ implementation/validation được giao, adapter product hữu hạn có thể reuse các helpers này với plan/admission thật, owned fixture, scope guard, auth monitor, journal và state readback; không giả body proof để gọi common CLI đang enforce proof.
 
-Control finalsource ngày 25/10/2026 dùng JAR sẵn có khác shared để kiểm riêng PUT flat JSON `bank_name` trên account disposable với rule 40018. Chỉ nâng thành observed sau khi đọc kết quả execution hiện hành; xem working result `review/finalsource-phase2-20261025/EXACT_BODY_RESULT.json`. Những method/body/vector chưa kiểm giữ not-operated. Workload anonymous login/register cần lane anonymous có method/body phù hợp; không gắn phiên authenticated chỉ để vượt semantics của guided exact-body.
+Exact method/body phải được kiểm trên deployment hiện hành trước khi ghi observed. Các method/body/vector chưa kiểm giữ not-operated. Workload anonymous cần lane có semantics phù hợp, không gắn phiên authenticated để vượt gate.
 
 ## 5. BOLA executor
 

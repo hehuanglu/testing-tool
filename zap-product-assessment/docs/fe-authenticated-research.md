@@ -2,7 +2,7 @@
 
 `fe-authenticated-research/1.0` is a separate research lane. Its contracts are `fe-authenticated-research-plan/1.0`, `fe-authenticated-journeys/1.0`, and `fe-authenticated-evidence/1.0`. It does not change strict contracts or the existing backend/anonymous gates.
 
-The implementation and qualification ledger for the current work is `/Users/hahoangloc/Working/testing tool/test-artifacts/fe-authenticated-20261023T174107Z/WORK_ITEMS.json`; read `IMPLEMENTATION_STATUS.md` in that directory before treating any capability as qualified. Current control execution is not finalsource acceptance.
+Inspect the current source, supported contracts and qualification inputs before execution. Prior product runs are not packaged or reusable authority. Code/help availability alone does not establish runtime qualification.
 
 Use `PYTHONPATH=src .venv/bin/python scripts/product_assessment.py fe-authenticated --help` from the assessment checkout. Dedicated entry: `scripts/fe_authenticated_research.py`. Supported commands:
 

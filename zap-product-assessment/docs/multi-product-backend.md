@@ -21,7 +21,7 @@ Policy for BOLA observations is locked before traffic. The independent checker r
 
 Runtime control runner: `scripts/multi_product_control.py --track be-authenticated|be-anonymous --kind fresh|interrupted --output NEW_DIR`. It creates an owned archive backend/network, uses the same plan/prepare/run CLI, retains private evidence, then removes only exact owned control/scanner resources. It never logs in to example/finalsource. Native artifact/resource gates use the existing bounded Docker HTTP research profile, with topology qualification still separate.
 
-Current proof, commands, failures and dependencies are in `test-artifacts/multi-product-20261021T135734Z/`. Source/compiler/control/runtime states are separate. No new product runtime qualification is implied. Handoff uses existing `pm-alerts/1.0`; raw native files remain private. Never manufacture product ALERTS.json when product traffic was not run.
+Source/compiler/control/runtime states are separate. No new product runtime qualification is implied. Handoff uses existing `pm-alerts/1.0`; raw native files remain private. Never manufacture product ALERTS.json when product traffic was not run.
 
 The common native active boundary includes GET/query and conditional
 `native-flat-json-update/1.0`: PUT/PATCH, a flat JSON object, one recipe-mapped
@@ -44,8 +44,7 @@ JWT claims and public200 do not replace protected identity.
 allocation reconciliation. `handoff --lineage FILE --output NEW_DIR` composes pinned
 retained and continuation handoffs with unique obligation units; retry units cannot
 be counted twice. Raw run status tuples remain in the lineage. This does not close
-task coverage or accept source-hypothesis policy. See the latest resume evidence
-under `test-artifacts/assessment-resume-20261023T085641Z/` for commands, proofs and limits.
+task coverage or accept source-hypothesis policy.
 
 The optional `signed-jwt-protected-probe/1.0` identity strategy is for explicitly
 reviewed research recipes. Freeze `actorRole`, independent subject/role evidence,
@@ -57,5 +56,4 @@ business success. Status0 history records are retained as no-response/unproved
 coverage. Unknown mappings, keys, claims or source drift reject execution.
 Research-plan2.1 adds only an optional versioned identityStrategy field; old2.0/2.1
 readers/default protected JSON behavior keep their existing meaning. Queue and
-strict/native secret-safe gates are unchanged. See the identity continuation
-evidence under `test-artifacts/assessment-identity-20261023T094019Z/`.
+strict/native secret-safe gates are unchanged.

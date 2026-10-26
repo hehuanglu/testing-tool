@@ -1,0 +1,787 @@
+{
+  "schema": "semgrep-tester-run-v2",
+  "assessment_id": "synthetic-example-contract-v2",
+  "status": "partial",
+  "started_at": null,
+  "finished_at": null,
+  "product": {
+    "path": "synthetic-product",
+    "roots": [
+      "synthetic/"
+    ],
+    "languages": [
+      "typescript",
+      "yaml"
+    ],
+    "frameworks": [
+      "illustrative Node/TypeORM shapes"
+    ],
+    "notes": "Schema example only. No real source, revision, runtime or Semgrep execution."
+  },
+  "scope": {
+    "request": "Illustrate four source questions and v2 reporting relationships.",
+    "source": "Synthetic example specification.",
+    "triage": "Full triage for these four questions; Q-02 depends on missing source.",
+    "exclusions": [
+      "No actual product assessment.",
+      "fe-browser not selected in this illustrative scope."
+    ]
+  },
+  "source_states": [
+    {
+      "id": "SS-01",
+      "roots": [
+        "synthetic/"
+      ],
+      "observed_at": null,
+      "revision": null,
+      "dirty": null,
+      "notes": "Illustrative source state; paths and line references are fictional, not files from a product."
+    }
+  ],
+  "tracks": [
+    {
+      "id": "be-input",
+      "scope": "Q-01 only",
+      "selected_base_ids": [
+        "BE-IN-01"
+      ],
+      "applicability": "Applicable to the illustrated feature; synthetic only.",
+      "status": "completed",
+      "remaining_question_ids": [],
+      "rationale": "Synthetic source path constructs SQL from the request value; the reviewed function passes no value bindings and the in-scope caller supplies the request directly. Claim is limited to this source path.",
+      "review": {
+        "reviewed_at": null,
+        "reviewer_mode": "synthetic example of operator-self-review; no real review or execution",
+        "process_assessment": {
+          "observation": "Synthetic source path constructs SQL from the request value; the reviewed function passes no value bindings and the in-scope caller supplies the request directly. Claim is limited to this source path.",
+          "question_ids": [
+            "Q-01"
+          ],
+          "limit": "Illustrates source-scope judgment only; no independent operator behavior validated."
+        },
+        "evidence_assessment": {
+          "observation": "Illustrative native/manual records preserve separate provenance and controls; bookkeeping consistency does not validate real source evidence.",
+          "finding_ids": [
+            "F-01"
+          ]
+        },
+        "remaining_dependencies": [],
+        "next_steps": []
+      }
+    },
+    {
+      "id": "authentication-session",
+      "scope": "Q-02 only",
+      "selected_base_ids": [
+        "AUTH-03"
+      ],
+      "applicability": "Applicable to the illustrated feature; synthetic only.",
+      "status": "partial",
+      "remaining_question_ids": [
+        "Q-02"
+      ],
+      "rationale": "Literal secret-shaped configuration is an observation; the referenced runtime loader is absent from the provided synthetic source, so effective JWT use/fallback reachability is unresolved.",
+      "review": {
+        "reviewed_at": null,
+        "reviewer_mode": "synthetic example of operator-self-review; no real review or execution",
+        "process_assessment": {
+          "observation": "Literal secret-shaped configuration is an observation; the referenced runtime loader is absent from the provided synthetic source, so effective JWT use/fallback reachability is unresolved.",
+          "question_ids": [
+            "Q-02"
+          ],
+          "limit": "Illustrates source-scope judgment only; no independent operator behavior validated."
+        },
+        "evidence_assessment": {
+          "observation": "Illustrative native/manual records preserve separate provenance and controls; bookkeeping consistency does not validate real source evidence.",
+          "finding_ids": [
+            "F-02"
+          ]
+        },
+        "remaining_dependencies": [
+          {
+            "question_id": "Q-02",
+            "dependency": "Obtain the missing loader and effective session configuration; no independent source-only step remains for this question."
+          }
+        ],
+        "next_steps": [
+          "Obtain the missing loader and effective session configuration; no independent source-only step remains for this question."
+        ]
+      }
+    },
+    {
+      "id": "authorization-ownership",
+      "scope": "Q-03 only",
+      "selected_base_ids": [
+        "AUTHZ-02"
+      ],
+      "applicability": "Applicable to the illustrated feature; synthetic only.",
+      "status": "completed",
+      "remaining_question_ids": [],
+      "rationale": "Synthetic assertOrderAccess implementation checks the verified principal against the order grant and throws before the lookup on denial; caller and exact object ID binding were reviewed.",
+      "review": {
+        "reviewed_at": null,
+        "reviewer_mode": "synthetic example of operator-self-review; no real review or execution",
+        "process_assessment": {
+          "observation": "Synthetic assertOrderAccess implementation checks the verified principal against the order grant and throws before the lookup on denial; caller and exact object ID binding were reviewed.",
+          "question_ids": [
+            "Q-03"
+          ],
+          "limit": "Illustrates source-scope judgment only; no independent operator behavior validated."
+        },
+        "evidence_assessment": {
+          "observation": "Illustrative native/manual records preserve separate provenance and controls; bookkeeping consistency does not validate real source evidence.",
+          "finding_ids": [
+            "F-03"
+          ]
+        },
+        "remaining_dependencies": [],
+        "next_steps": []
+      }
+    },
+    {
+      "id": "configuration-build",
+      "scope": "Q-04 only",
+      "selected_base_ids": [
+        "CFG-05"
+      ],
+      "applicability": "Applicable to the illustrated feature; synthetic only.",
+      "status": "completed",
+      "remaining_question_ids": [],
+      "rationale": "Synthetic release declaration publishes internal diagnostic files to a public artifact destination, contrary to the supplied example policy; this custom filename has no applicable bundled detector.",
+      "review": {
+        "reviewed_at": null,
+        "reviewer_mode": "synthetic example of operator-self-review; no real review or execution",
+        "process_assessment": {
+          "observation": "Synthetic release declaration publishes internal diagnostic files to a public artifact destination, contrary to the supplied example policy; this custom filename has no applicable bundled detector.",
+          "question_ids": [
+            "Q-04"
+          ],
+          "limit": "Illustrates source-scope judgment only; no independent operator behavior validated."
+        },
+        "evidence_assessment": {
+          "observation": "Illustrative native/manual records preserve separate provenance and controls; bookkeeping consistency does not validate real source evidence.",
+          "finding_ids": [
+            "F-04"
+          ]
+        },
+        "remaining_dependencies": [],
+        "next_steps": []
+      }
+    }
+  ],
+  "inventory": [
+    {
+      "id": "I-01",
+      "kind": "function",
+      "name": "search handler/query helper",
+      "locations": [
+        {
+          "path": "synthetic/search.ts",
+          "start": {
+            "line": 12,
+            "column": null
+          },
+          "end": {
+            "line": 12,
+            "column": null
+          }
+        }
+      ],
+      "discovery_source": "Synthetic source inventory defined independently of observations.",
+      "certainty": "illustrative",
+      "track_ids": [
+        "be-input"
+      ],
+      "scope_decision": "in-scope"
+    },
+    {
+      "id": "I-02",
+      "kind": "config",
+      "name": "session configuration",
+      "locations": [
+        {
+          "path": "synthetic/session.ts",
+          "start": {
+            "line": 8,
+            "column": null
+          },
+          "end": {
+            "line": 8,
+            "column": null
+          }
+        }
+      ],
+      "discovery_source": "Synthetic source inventory defined independently of observations.",
+      "certainty": "illustrative",
+      "track_ids": [
+        "authentication-session"
+      ],
+      "scope_decision": "in-scope"
+    },
+    {
+      "id": "I-03",
+      "kind": "function",
+      "name": "order detail lookup",
+      "locations": [
+        {
+          "path": "synthetic/orders.ts",
+          "start": {
+            "line": 20,
+            "column": null
+          },
+          "end": {
+            "line": 20,
+            "column": null
+          }
+        }
+      ],
+      "discovery_source": "Synthetic source inventory defined independently of observations.",
+      "certainty": "illustrative",
+      "track_ids": [
+        "authorization-ownership"
+      ],
+      "scope_decision": "in-scope"
+    },
+    {
+      "id": "I-04",
+      "kind": "config",
+      "name": "release artifact declaration",
+      "locations": [
+        {
+          "path": "synthetic/release.pipeline.yml",
+          "start": {
+            "line": 15,
+            "column": null
+          },
+          "end": {
+            "line": 15,
+            "column": null
+          }
+        }
+      ],
+      "discovery_source": "Synthetic source inventory defined independently of observations.",
+      "certainty": "illustrative",
+      "track_ids": [
+        "configuration-build"
+      ],
+      "scope_decision": "in-scope"
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q-01",
+      "question": "Can the search filter enter SQL syntax on this path?",
+      "base_question_id": "BE-IN-01",
+      "track_id": "be-input",
+      "surface_ids": [
+        "I-01"
+      ],
+      "expectation": "SQL request values must be separated from query syntax (explicit illustrative source hypothesis).",
+      "expectation_source": "illustrative source hypothesis, not confirmed product policy",
+      "techniques": [
+        "Illustrative Semgrep candidate and manual source/control review"
+      ],
+      "round_ids": [
+        "R-01"
+      ],
+      "manual_review_ids": [
+        "MR-01"
+      ],
+      "result": "Synthetic source path constructs SQL from the request value; the reviewed function passes no value bindings and the in-scope caller supplies the request directly. Claim is limited to this source path.",
+      "status": "resolved",
+      "next_step": null,
+      "closure_condition": "Answer this illustrative source claim with linked operation and control review; identify remaining source dependency.",
+      "recorded_at": null,
+      "introduced_after_round_id": null,
+      "changes": []
+    },
+    {
+      "id": "Q-02",
+      "question": "Is the literal fallback effective for session signing?",
+      "base_question_id": "AUTH-03",
+      "track_id": "authentication-session",
+      "surface_ids": [
+        "I-02"
+      ],
+      "expectation": "Effective session signing configuration must be established before judging a literal fallback.",
+      "expectation_source": "illustrative source hypothesis, not confirmed product policy",
+      "techniques": [
+        "Illustrative Semgrep candidate and manual source/control review"
+      ],
+      "round_ids": [
+        "R-01"
+      ],
+      "manual_review_ids": [
+        "MR-02"
+      ],
+      "result": "Literal secret-shaped configuration is an observation; the referenced runtime loader is absent from the provided synthetic source, so effective JWT use/fallback reachability is unresolved.",
+      "status": "blocked",
+      "next_step": "Obtain the missing loader and effective session configuration; no independent source-only step remains for this question.",
+      "closure_condition": "Answer this illustrative source claim with linked operation and control review; identify remaining source dependency.",
+      "recorded_at": null,
+      "introduced_after_round_id": null,
+      "changes": []
+    },
+    {
+      "id": "Q-03",
+      "question": "Does this lookup require the same object access grant?",
+      "base_question_id": "AUTHZ-02",
+      "track_id": "authorization-ownership",
+      "surface_ids": [
+        "I-03"
+      ],
+      "expectation": "Access grant for the verified principal must apply to the same object before use (illustrative source hypothesis).",
+      "expectation_source": "illustrative source hypothesis, not confirmed product policy",
+      "techniques": [
+        "Illustrative Semgrep candidate and manual source/control review"
+      ],
+      "round_ids": [
+        "R-01"
+      ],
+      "manual_review_ids": [
+        "MR-03"
+      ],
+      "result": "Synthetic assertOrderAccess implementation checks the verified principal against the order grant and throws before the lookup on denial; caller and exact object ID binding were reviewed.",
+      "status": "resolved",
+      "next_step": null,
+      "closure_condition": "Answer this illustrative source claim with linked operation and control review; identify remaining source dependency.",
+      "recorded_at": null,
+      "introduced_after_round_id": null,
+      "changes": []
+    },
+    {
+      "id": "Q-04",
+      "question": "Does release configuration publish private diagnostics?",
+      "base_question_id": "CFG-05",
+      "track_id": "configuration-build",
+      "surface_ids": [
+        "I-04"
+      ],
+      "expectation": "Diagnostic artifacts must remain private per Synthetic policy EXAMPLE-POLICY section 2.",
+      "expectation_source": "provided synthetic policy",
+      "techniques": [
+        "Illustrative manual config and provided-policy review"
+      ],
+      "round_ids": [],
+      "manual_review_ids": [
+        "MR-04"
+      ],
+      "result": "Synthetic release declaration publishes internal diagnostic files to a public artifact destination, contrary to the supplied example policy; this custom filename has no applicable bundled detector.",
+      "status": "resolved",
+      "next_step": null,
+      "closure_condition": "Answer this illustrative source claim with linked operation and control review; identify remaining source dependency.",
+      "recorded_at": null,
+      "introduced_after_round_id": null,
+      "changes": []
+    }
+  ],
+  "rounds": [
+    {
+      "id": "R-01",
+      "purpose": "Illustrative record of three native-shaped matches; not an executed command or output.",
+      "started_at": null,
+      "finished_at": null,
+      "command": null,
+      "cwd": null,
+      "targets": [
+        "synthetic/search.ts",
+        "synthetic/session.ts",
+        "synthetic/orders.ts"
+      ],
+      "source_state_id": "SS-01",
+      "engine": null,
+      "version": null,
+      "rules_selection": [
+        {
+          "id": "nestjs-public-request-to-sql-text-local",
+          "origin": "bundled rule ID used for schema illustration"
+        },
+        {
+          "id": "nestjs-auth-hardcoded-jwt-secret",
+          "origin": "bundled rule ID used for schema illustration"
+        },
+        {
+          "id": "nestjs-ownership-id-only-find-one",
+          "origin": "bundled rule ID used for schema illustration"
+        }
+      ],
+      "exclusions": [],
+      "privacy": {
+        "settings": null,
+        "metrics": null,
+        "version_check": null,
+        "network_guard": null,
+        "note": "No scanner ran; no actual privacy/runtime capability asserted."
+      },
+      "exit_code": null,
+      "errors": null,
+      "skips": null,
+      "timeouts": null,
+      "counts": {
+        "native_matches": 3,
+        "rules_configured": 3,
+        "rules_loaded": null,
+        "rules_executed": null,
+        "candidate_files": null,
+        "scanned_files": null,
+        "skipped_files": null,
+        "excluded_binary_files": null
+      },
+      "status": "completed",
+      "finding_ids": [
+        "F-01",
+        "F-02",
+        "F-03"
+      ]
+    }
+  ],
+  "manual_reviews": [
+    {
+      "id": "MR-01",
+      "question_ids": [
+        "Q-01"
+      ],
+      "source_state_id": "SS-01",
+      "locations": [
+        {
+          "path": "synthetic/search.ts",
+          "start": {
+            "line": 6,
+            "column": null
+          },
+          "end": {
+            "line": 6,
+            "column": null
+          }
+        },
+        {
+          "path": "synthetic/search.ts",
+          "start": {
+            "line": 12,
+            "column": null
+          },
+          "end": {
+            "line": 12,
+            "column": null
+          }
+        },
+        {
+          "path": "synthetic/search.ts",
+          "start": {
+            "line": 12,
+            "column": null
+          },
+          "end": {
+            "line": 12,
+            "column": null
+          }
+        }
+      ],
+      "call_paths": [
+        [
+          {
+            "order": 1,
+            "location": {
+              "path": "synthetic/search.ts",
+              "start": {
+                "line": 6,
+                "column": null
+              },
+              "end": {
+                "line": 6,
+                "column": null
+              }
+            },
+            "observation": "Request filter read."
+          },
+          {
+            "order": 2,
+            "location": {
+              "path": "synthetic/search.ts",
+              "start": {
+                "line": 12,
+                "column": null
+              },
+              "end": {
+                "line": 12,
+                "column": null
+              }
+            },
+            "observation": "Concatenated text passed to query API."
+          }
+        ]
+      ],
+      "observations": [
+        "The handler forwards a request filter directly; the query function concatenates it into SQL.",
+        "The complete synthetic handler and query function were reviewed; neither transforms the filter to a fixed allowlisted SQL fragment."
+      ],
+      "controls": [
+        "The complete synthetic handler and query function were reviewed; neither transforms the filter to a fixed allowlisted SQL fragment."
+      ],
+      "expectation": "SQL request values must be separated from query syntax (explicit illustrative source hypothesis).",
+      "finding_ids": [
+        "F-01"
+      ],
+      "evidence_ids": [
+        "E-1S",
+        "E-1C"
+      ]
+    },
+    {
+      "id": "MR-02",
+      "question_ids": [
+        "Q-02"
+      ],
+      "source_state_id": "SS-01",
+      "locations": [
+        {
+          "path": "synthetic/session.ts",
+          "start": {
+            "line": 8,
+            "column": null
+          },
+          "end": {
+            "line": 8,
+            "column": null
+          }
+        }
+      ],
+      "call_paths": [],
+      "observations": [
+        "The session configuration references a loader whose implementation was not provided."
+      ],
+      "controls": [],
+      "expectation": "Effective session signing configuration must be established before judging a literal fallback.",
+      "finding_ids": [
+        "F-02"
+      ],
+      "evidence_ids": [
+        "E-2C"
+      ]
+    },
+    {
+      "id": "MR-03",
+      "question_ids": [
+        "Q-03"
+      ],
+      "source_state_id": "SS-01",
+      "locations": [
+        {
+          "path": "synthetic/guard.ts",
+          "start": {
+            "line": 5,
+            "column": null
+          },
+          "end": {
+            "line": 5,
+            "column": null
+          }
+        },
+        {
+          "path": "synthetic/order-policy.ts",
+          "start": {
+            "line": 9,
+            "column": null
+          },
+          "end": {
+            "line": 9,
+            "column": null
+          }
+        },
+        {
+          "path": "synthetic/orders.ts",
+          "start": {
+            "line": 20,
+            "column": null
+          },
+          "end": {
+            "line": 20,
+            "column": null
+          }
+        }
+      ],
+      "call_paths": [
+        [
+          {
+            "order": 1,
+            "location": {
+              "path": "synthetic/guard.ts",
+              "start": {
+                "line": 5,
+                "column": null
+              },
+              "end": {
+                "line": 5,
+                "column": null
+              }
+            },
+            "observation": "Principal verified and bound."
+          },
+          {
+            "order": 2,
+            "location": {
+              "path": "synthetic/order-policy.ts",
+              "start": {
+                "line": 9,
+                "column": null
+              },
+              "end": {
+                "line": 9,
+                "column": null
+              }
+            },
+            "observation": "Grant for the same ID checked before use."
+          },
+          {
+            "order": 3,
+            "location": {
+              "path": "synthetic/orders.ts",
+              "start": {
+                "line": 20,
+                "column": null
+              },
+              "end": {
+                "line": 20,
+                "column": null
+              }
+            },
+            "observation": "Lookup follows the access check."
+          }
+        ]
+      ],
+      "observations": [
+        "The guard verifies the principal, and assertOrderAccess checks the same order ID and throws on missing grant before lookup."
+      ],
+      "controls": [
+        "The guard verifies the principal, and assertOrderAccess checks the same order ID and throws on missing grant before lookup."
+      ],
+      "expectation": "Access grant for the verified principal must apply to the same object before use (illustrative source hypothesis).",
+      "finding_ids": [
+        "F-03"
+      ],
+      "evidence_ids": [
+        "E-3C",
+        "E-3S"
+      ]
+    },
+    {
+      "id": "MR-04",
+      "question_ids": [
+        "Q-04"
+      ],
+      "source_state_id": "SS-01",
+      "locations": [
+        {
+          "path": "synthetic/release.pipeline.yml",
+          "start": {
+            "line": 15,
+            "column": null
+          },
+          "end": {
+            "line": 15,
+            "column": null
+          }
+        }
+      ],
+      "call_paths": [],
+      "observations": [
+        "The nonstandard pipeline filename declares internal diagnostic paths under a public artifact destination."
+      ],
+      "controls": [],
+      "expectation": "Diagnostic artifacts must remain private per Synthetic policy EXAMPLE-POLICY section 2.",
+      "finding_ids": [
+        "F-04"
+      ],
+      "evidence_ids": [
+        "E-4S"
+      ]
+    }
+  ],
+  "coverage": {
+    "unit": "Four illustrative source question instances, not files/role/runtime coverage.",
+    "resolved_question_ids": [
+      "Q-01",
+      "Q-03",
+      "Q-04"
+    ],
+    "remaining_question_ids": [
+      "Q-02"
+    ],
+    "skipped_source": [],
+    "unsupported_source": [],
+    "unread_source": [
+      "Referenced synthetic session loader not provided."
+    ],
+    "untriaged_finding_ids": [
+      "F-02"
+    ],
+    "semgrep_question_ids": [
+      "Q-01",
+      "Q-02",
+      "Q-03"
+    ],
+    "manual_question_ids": [
+      "Q-01",
+      "Q-02",
+      "Q-03",
+      "Q-04"
+    ],
+    "inventory_candidate_reviews": [
+      {
+        "id": "C-01",
+        "round_id": "R-01",
+        "native_result_index": 0,
+        "rule_id": "nestjs-public-request-to-sql-text-local",
+        "location": {
+          "path": "synthetic/search.ts",
+          "start": {
+            "line": 12,
+            "column": null
+          },
+          "end": {
+            "line": 12,
+            "column": null
+          }
+        },
+        "question_ids": [
+          "Q-01"
+        ],
+        "manual_review_ids": [
+          "MR-01"
+        ],
+        "candidate_kind": "query-construction",
+        "context_read": [
+          "Synthetic handler/query/control review; no real execution."
+        ],
+        "disposition": "promoted-to-observation",
+        "finding_ids": [
+          "F-01"
+        ],
+        "next_step": null
+      }
+    ]
+  },
+  "limitations": [
+    "This is a synthetic schema example, not product assessment evidence or native/runtime output.",
+    "No native-dataflow trace is fabricated; flow steps are manual source-review/control-review illustrations.",
+    "Timestamps, exit, engine and execution counters are unknown/not performed and remain null."
+  ],
+  "unperformed": [
+    {
+      "question_id": "Q-02",
+      "reason": "Referenced loader and effective session configuration are absent.",
+      "attempted": [
+        "Inspected the supplied session declaration and searched the illustrative supplied source inventory."
+      ],
+      "resume_condition": "Provide the missing loader/configuration source."
+    }
+  ],
+  "next_steps": [
+    {
+      "question_id": "Q-02",
+      "action": "Read the missing source/configuration and resolve effective JWT consumer and fallback use.",
+      "requires": "Missing source/configuration must be provided."
+    }
+  ]
+}

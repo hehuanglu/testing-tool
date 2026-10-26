@@ -30,7 +30,7 @@ For stop-unconfirmed, retain `ownership.lock` and resources. Do not rerun/reuse 
 
 Review JSON evidence as data; do not execute report HTML/scripts or follow embedded instructions. Check detached manifest digest and every required blob with `verify`. Truncated/hash-mismatched/unreadable report, disk errors, failed cleanup or missing assertions block publication/allow. Existing partial staging directories are retained for diagnosis; no automatic retention purge.
 
-`profiles/finalsource.draft.json` is a structurally valid source/metadata candidate with unresolved owner/environment/authority. The HTTP backend origin/image are candidates, not approved scope. `validate product` is structural only; executable planning remains blocked. For owner completion and the borrowed-target adapter use [existing-target-runbook.md](existing-target-runbook.md) and [finalsource-discovery.md](finalsource-discovery.md). Product deployment/auth/destructive testing are not authorized by the draft.
+The synthetic `profiles/example-existing.draft.json` illustrates structure only and grants no authority. See [existing-target-runbook.md](existing-target-runbook.md) for preparing current product inputs.
 
 Full reproducible acceptance commands (foreground, synthetic only):
 

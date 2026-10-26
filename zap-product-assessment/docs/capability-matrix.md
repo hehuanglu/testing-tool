@@ -15,7 +15,7 @@ for current claims, scope, known failures and hashed evidence links. See the
 sink readiness. Native/delegated/business P0 is blocked; v2 is offline-only. Existing
 anonymous and direct-client BOLA contracts keep their own admission checks.
 
-Everything below is the **historical M2/M3 snapshot**, including old finalsource
+Everything below is the **historical M2/M3 snapshot**, including old product
 unverified/metadata-only statements and fixed counts. Later bounded product proof
 is recorded in implementation-status.md and the registry; no current IP, authority
 or runtime acceptance is inferred from this historical matrix.
@@ -42,11 +42,6 @@ Pinned clean source reference: upstream v0.16.0 commit0ebe11c3ae4c17de59fde0654e
 - Independent campaign covers two fresh sessions, target identity/build mismatch before crawl, exact-path egress/credential refusal, target preservation after scanner cleanup, interruption/lost ACK and real report hash/truncation faults. Final campaign allAssertionsPassed=true, all10 cases passed; verification.json confirms readback. A separate health-only-binding.json also passed and observed only GET /api/health reaching its independent synthetic target, including nested health assertions. Kernel/guard proofs and full chunk readback are required by v1.1 verifier. Guard refuses credential requests/responses before forwarding; this is anonymous safety, not authenticated secret-gate coverage.
 - Supplemental MCP findings lookup requires a crawl-covered URL prefix; requesting root after path-only crawl is rejected upstream. Summary uses approved crawlPath; full JSON report determines verdict for all declared seeds. Guard-generated Server/Date headers are a report provenance limitation.
 - Owned scanner anchor, guard, ZAP, MCP and content staging volume are cleaned; borrowed container/network/volumes are never stopped, removed, reset or exec'd by runtime. Anchor attaches to approved bridge with inert sleep PID1; DROP rules precede scanner/MCP/guard startup. No host ports or Docker socket exposed. INPUT and IPv6 also DROP for this binding.
-
-## finalsource — source candidates + metadata only; runtime unverified
-
-- Read-only source supports proposed `/api/health` anonymous GET; interceptor body oracle and local OpenAPI3 subset proposed. Current Docker metadata identifies backend172.18.0.2:3000, image/container/bridge/StartedAt. Neither metadata nor development NODE_ENV grants environment authority. No HTTP request/crawl/import/seed to finalsource was made.
-- Later metadata readback showed StartedAt drift and restartCount401 (cause unverified); the profile snapshot is stale and environment stability is blocked. Candidate backend HTTP origin requires owner approval distinct from frontend HTTPS localhost:8080. Human permission for the exact health-only scope/budgets was received for24h (receipt/expiry in restricted run evidence), but owner/issuer/reviewer names are still placeholders and StartedAt keeps drifting. Draft authority remains non-executable; product step blocks before scanner/HTTP traffic. Schema endpoint `/docs-json`, health responses/build oracle, TLS trust and product coverage have not been runtime verified. See finalsource-discovery.md and existing-target-runbook.md.
 
 ## Unsupported or unverified
 

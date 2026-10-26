@@ -16,7 +16,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
-from .research import PROFILE, WORKSPACE, ResearchRun, ZapApi, gate, digest, manifest, write_json
+from .research import PROFILE, WORKSPACE, PACKAGE_ROOT, ResearchRun, ZapApi, gate, digest, manifest, write_json
 
 from .discovery import validate_discovery, compile_plan, matches, verify_identity, canonical_hash, verify_local_sources, validate_transport, execution_origin
 
@@ -508,7 +508,7 @@ def main(argv=None):
                  'owner':'user','userRequest':'Implement R00-R09 with owned fixtures on test; current request 2026-10-21',
                  'fixtureRequest':'Create A/B owned categories using existing fixture helper; no existing-row edits'}
         write_json(out/'authority.json',receipt)
-        category=subprocess.run([sys.executable,str(WORKSPACE/'zap-product-assessment/scripts/prepare_finalsource_category_fixture.py'),
+        category=subprocess.run([sys.executable,str(PACKAGE_ROOT/'scripts/prepare_finalsource_category_fixture.py'),
                                 '--receipt',str(out/'authority.json'),'--credentials',str(out/'credentials.json'),
                                 '--output',str(out/'category-fixture')],capture_output=True,timeout=60)
         (out/'category-fixture.log').write_bytes(category.stdout+category.stderr)

@@ -55,6 +55,6 @@ Root `artifact-manifest.json` không bắt buộc SHA cho copied native report t
 
 ## Assessment phụ
 
-`../zap-product-assessment/` không phải upstream runner. `cli.py` anonymous planner/pilot/recover/verify; `bola.py` adapter cơ bản; `bola_operational.py` owned synthetic login+read; `bola_borrowed.py` borrowed Docker prepare/plan/preflight/run/verify/cleanup. Python3.13 và `.venv` riêng.
+`$ASSESSMENT_ROOT/` không phải upstream runner. `cli.py` anonymous planner/pilot/recover/verify; `bola.py` adapter cơ bản; `bola_operational.py` owned synthetic login+read; `bola_borrowed.py` borrowed Docker prepare/plan/preflight/run/verify/cleanup. Python3.13 và `.venv` riêng.
 
 Campaign scripts: integration, binding, fault, bola_campaign, bola_operational_pilot, bola_borrowed_pilot. Fault dùng fake transport không chứng minh ZAP. Các campaign tạo traffic/fixtures, không chạy để làm status. Schema builders có thể ghi file; `verify_m2_evidence.py` từ chối output đã có, `verify_m3_evidence.py` ghi đè verification.json, borrowed verifier cũng có output mặc định lịch sử. Dùng helper readback của skill cho audit không rewrite.

@@ -1,6 +1,6 @@
 # Chọn runner từ code đã kiểm
 
-Đây là bản đồ **khả năng và giới hạn code**, không phải chứng nhận runtime. Paths dưới đây tương đối với workspace. Kiểm lại source/help khi checkout đổi; không chọn runner chỉ từ tên. Bộ điều phối cấp skill nằm ở [operation-dispatch](operation-dispatch.md); không nhầm với `product_cli.py` là dispatcher kỹ thuật của một tập executor hữu hạn.
+Đây là bản đồ **khả năng và giới hạn code**, không phải chứng nhận runtime. Paths assessment dưới đây dùng `$ASSESSMENT_ROOT` trong skill; paths scanner dùng checkout `$MCP_ZAP_REPO` đã xác minh. Kiểm lại source/help khi checkout đổi; không chọn runner chỉ từ tên. Bộ điều phối cấp skill nằm ở [operation-dispatch](operation-dispatch.md); không nhầm với `product_cli.py` là dispatcher kỹ thuật của một tập executor hữu hạn.
 
 ## 1. Operations native trực tiếp và CI runner gốc
 
@@ -12,7 +12,7 @@
 
 ## 2. Common CLI và discovery backend
 
-Entry `zap-product-assessment/scripts/product_assessment.py` → `src/zap_assessment/product_cli.py`. Đã kiểm dispatch, admission, run branches và `product_workflow.py`.
+Entry `${ASSESSMENT_ROOT}/scripts/product_assessment.py` → `src/zap_assessment/product_cli.py`. Đã kiểm dispatch, admission, run branches và `product_workflow.py`.
 
 - `discover`: recipe hoặc reviewed observations → source candidate. Có `--observations` thì đọc source candidate trước và không cần registry; recipe chỉ cần khi chọn executor. Auth khác khuôn bearer được giữ trong `authObservations`, chưa thành runtime support.
 - `materialize`: nối source candidate với deployment/binding đã xác minh.

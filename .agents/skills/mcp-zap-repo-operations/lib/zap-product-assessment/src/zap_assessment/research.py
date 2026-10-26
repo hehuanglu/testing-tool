@@ -17,8 +17,11 @@ import urllib.error
 import urllib.request
 
 PROFILE = 'be-authenticated-research/1.0'
-WORKSPACE = Path(__file__).resolve().parents[3]
-_spec = importlib.util.spec_from_file_location('research_ci_helpers', WORKSPACE/'mcp-zap-server/.github/actions/zap-security-gate/mcp_zap_gate.py')
+PACKAGE_ROOT = Path(__file__).resolve().parents[2]
+BUNDLED_ROOT = PACKAGE_ROOT.parent
+# Legacy product adapters use an explicitly selected workspace, never the skill folder.
+WORKSPACE = Path(os.environ.get('ZAP_PRODUCT_WORKSPACE', os.getcwd())).resolve()
+_spec = importlib.util.spec_from_file_location('research_ci_helpers', BUNDLED_ROOT/'mcp-zap-server/.github/actions/zap-security-gate/mcp_zap_gate.py')
 gate = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gate)
 
@@ -40,7 +43,7 @@ def admit(plan, live_binding):
         from .discovery import validate_plan
         return validate_plan(plan, live_binding)
     from jsonschema import Draft202012Validator
-    schema=json.loads((WORKSPACE/'zap-product-assessment/schemas/be-authenticated-research-plan-v1.schema.json').read_text())
+    schema=json.loads((PACKAGE_ROOT/'schemas/be-authenticated-research-plan-v1.schema.json').read_text())
     if not Draft202012Validator(schema).is_valid(plan):raise ValueError('invalid research plan schema')
     if plan.get('assuranceProfile') != PROFILE or plan.get('secretPersistenceAccepted') is not True:
         raise ValueError('explicit research contract required')

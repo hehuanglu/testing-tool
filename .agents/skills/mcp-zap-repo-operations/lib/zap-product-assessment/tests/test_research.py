@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 from zap_assessment.research import ResearchRun, admit, manifest, verify_manifest
 
 BIND={'containerId':'a'*64,'imageId':'sha256:'+'b'*64,'startedAt':'2026-10-21T00:00:00Z','networkId':'c'*64,'address':'172.19.0.2'}
@@ -24,6 +26,21 @@ class FakeZap:
     def call(self,*args,**kwargs):return {'scans':[{'id':'17','progress':'50'}]}
 
 class ResearchTests(unittest.TestCase):
+    def setUp(self):
+        # Unit tests use a synthetic filesystem sample, independent of host disk.
+        sample=SimpleNamespace(f_bavail=8*1024**3,f_frsize=1)
+        self.disk=patch('zap_assessment.research.os.statvfs',return_value=sample)
+        self.disk.start();self.addCleanup(self.disk.stop)
+
+    def test_resource_reserve_still_blocks_start_before_dispatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            c=FakeClient();r=ResearchRun(plan=plan(),binding=lambda:BIND,client=c,monitor_client=c,zap=FakeZap(),output=tmp)
+            r.session='opaque-session'
+            with patch('zap_assessment.research.os.statvfs',return_value=SimpleNamespace(f_bavail=1,f_frsize=1)):
+                with self.assertRaisesRegex(RuntimeError,'reserve'):
+                    r.start('attack','http://backend:3000/api/v1/accounts')
+            self.assertEqual(c.calls,[])
+
     def test_explicit_contract_drift_topology_and_owned_write_admission(self):
         self.assertEqual(admit(plan(),BIND)['actorSubject'],'42')
         for key,value in [('assuranceProfile','strict'),('secretPersistenceAccepted',False),('jobStore','postgres'),('actorSubject','')]:

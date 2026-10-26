@@ -4,7 +4,7 @@ Entry mới `scripts/bola_research.py` dùng contract `bola-research/1.0`, độ
 
 Quyền triển khai không tự là quyền product execution. Xác minh quyền hiện hành, binding và deadline; mỗi run có fixtures và credentials riêng.
 
-Từ workspace `/Users/hahoangloc/Working/testing tool`:
+Từ thư mục assessment được đóng gói trong skill (`$ASSESSMENT_ROOT`):
 
 ```sh
 zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research.py --help

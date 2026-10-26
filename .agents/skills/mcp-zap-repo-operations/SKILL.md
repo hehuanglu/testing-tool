@@ -5,11 +5,9 @@ description: Vận hành mcp-zap-server theo nghiệp vụ tester cho BE/FE anon
 
 # Vận hành mcp-zap-server
 
-Repo scanner: `/Users/hahoangloc/Working/testing tool/mcp-zap-server`.
-Workspace: `/Users/hahoangloc/Working/testing tool`.
-Assessment phụ: `/Users/hahoangloc/Working/testing tool/zap-product-assessment`.
-Dùng checkout khác khi user chọn và đã xác minh; không clone thêm theo suy đoán.
+Skill độc lập với project được kiểm: giải `SKILL_DIR` theo chính file SKILL.md này. Helpers nằm trong `scripts/`; thư viện, schemas, profiles và regression tests đi kèm tại `lib/zap-product-assessment/` (`ASSESSMENT_ROOT`). Không cần checkout gốc của người phát triển. Xem [setup và di chuyển skill](references/setup.md) khi cài hoặc đổi project.
 
+Product/source/deployment lấy từ yêu cầu và discovery. Scanner MCP/ZAP là runtime bên ngoài: ưu tiên connector đã cấu hình; khi cần source/build/doctor thì xác minh checkout scanner riêng (`MCP_ZAP_REPO`), không đoán từ cwd product. Hướng dẫn repo-map/build chỉ áp dụng khi có source scanner đó.
 ## General context và tư tưởng vận hành
 
 Agent làm việc như tester sử dụng ZAP: hiểu câu hỏi kiểm thử, chuẩn bị baseline/actor/fixture, chọn kỹ thuật, thực hiện, đọc kết quả và xử lý phần còn thiếu. PM không cần cung cấp nghiệp vụ kỹ thuật mà agent tự discovery được. Đọc [general context](references/tester-context.md) trước lập assessment; đọc [ý định và phạm vi từng track](references/track-intents.md) cho track được giao.

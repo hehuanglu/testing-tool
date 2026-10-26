@@ -21,8 +21,8 @@ import time
 from urllib.parse import urlsplit
 import uuid
 
-WORKSPACE=Path('/Users/hahoangloc/Working/testing tool')
-sys.path.insert(0,str(WORKSPACE/'zap-product-assessment/src'))
+ASSESSMENT_ROOT=Path(__file__).resolve().parents[1]/'lib/zap-product-assessment'
+sys.path.insert(0,str(ASSESSMENT_ROOT/'src'))
 sys.dont_write_bytecode=True
 
 
@@ -124,7 +124,7 @@ def run_scan(args):
             if metadata('finalsource-zap-test-frontend-1')!=front or metadata('finalsource-zap-test-backend-1')!=back:
                 raise ValueError('borrowed app binding changed')
         def provision(self):
-            baseline=json.loads((WORKSPACE/'zap-product-assessment/profiles/runtime-baseline.json').read_bytes())
+            baseline=json.loads((ASSESSMENT_ROOT/'profiles/runtime-baseline.json').read_bytes())
             wrk=out/'workspace';wrk.mkdir(mode=0o777);wrk.chmod(0o777)
             config=out/'config';config.mkdir(mode=0o755);config.chmod(0o755)
             evidence=out/'guard';evidence.mkdir(mode=0o777);evidence.chmod(0o777)

@@ -17,8 +17,8 @@ import sys
 import time
 import uuid
 
-WORKSPACE = Path('/Users/hahoangloc/Working/testing tool')
-sys.path.insert(0, str(WORKSPACE/'zap-product-assessment/src'))
+ASSESSMENT_ROOT = Path(__file__).resolve().parents[1]/'lib/zap-product-assessment'
+sys.path.insert(0, str(ASSESSMENT_ROOT/'src'))
 sys.dont_write_bytecode = True
 
 WORKER = r'''
@@ -164,7 +164,7 @@ def main():
         result.update(executionStatus='completed',fixture=fixture,planHash=plan.hash)
         if args.run_bola:
             env={config['credentials'][a]['loginEnv']:json.dumps({k:credentials['actors'][a][k] for k in ('email','password')}) for a in ('A','B')}
-            run=run_bola(plan,WORKSPACE/'zap-product-assessment/runs',plan.hash,environ=env)
+            run=run_bola(plan,out/'working-runs',plan.hash,environ=env)
             write(out/'bola-result.json',run)
             manifest=verify_bundle(run['bundle'])
             write(out/'bola-verification.json',{'verified':True,'bundle':run['bundle'],**{k:manifest[k] for k in ('executionStatus','evidenceStatus','securityVerdict','cleanupStatus','gateDecision')}})

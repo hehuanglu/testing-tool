@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 
 
-SPEC = importlib.util.spec_from_file_location("semgrep_skill", Path(__file__).resolve().parents[1] / "scripts/semgrep_skill.py")
+SPEC = importlib.util.spec_from_file_location("semgrep_skill", Path(__file__).resolve().parents[1] / "scripts/install_skill.py")
 skill = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(skill)
 
@@ -71,7 +71,7 @@ class SkillInstallationTests(unittest.TestCase):
         rename = Path.rename
 
         def fail_staging(path, target):
-            if path.name.startswith(".semgrep-install-"):
+            if path.name.startswith(".skill-install-"):
                 raise OSError("replacement failed")
             return rename(path, target)
 

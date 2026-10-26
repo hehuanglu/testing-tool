@@ -3,7 +3,7 @@
 This contract represents discovery for five tracks. Backend authenticated, backend anonymous and [BOLA research](bola-research-runbook.md) now consume it through separate compilers and explicitly selected test adapters. The original authenticated-plan contract below remains historical context; a BOLA direct plan never fabricates scanner/auth-session requirements. Synthetic metadata tests do not prove another live product or track.
 
 Agent workflow is in the personal operations skill's
-[product-discovery reference](/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/product-discovery.md).
+[product-discovery reference](../../../references/product-discovery.md).
 The manifest schema is `schemas/product-discovery-v1.1.schema.json`; the plan schema
 is `schemas/be-authenticated-research-plan-v2.1.schema.json`. `research.admit` dispatches
 on the new plan version; schema/admission v1 semantics remain intact. The assurance

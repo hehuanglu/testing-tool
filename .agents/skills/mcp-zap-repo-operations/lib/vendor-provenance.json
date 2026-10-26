@@ -1,0 +1,19 @@
+{
+  "origin": "mcp-zap-server snapshot in testing-tool",
+  "repositoryRevision": "c1eb5a9d0f01d378bf2a61bc5f5ccf7e73ddae4f",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": ".github/actions/zap-security-gate/run-assessment-regression.sh",
+      "sha256": "a612c0bad5489b32c86ac7949450dea6e79ced380e498b6196fc9effad6547a4"
+    },
+    {
+      "path": ".github/actions/zap-security-gate/mcp_zap_gate.py",
+      "sha256": "f7bd042ed8cd951b00e5229e8a138f7b170a784d6854998d0eb8e1c5f5b4255e"
+    }
+  ],
+  "purpose": "Local MCP transport/report parser and offline regression helper; scanner service is external."
+}

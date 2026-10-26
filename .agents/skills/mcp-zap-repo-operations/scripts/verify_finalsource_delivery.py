@@ -8,8 +8,8 @@ import re
 import sys
 from urllib.parse import urlsplit
 
-WORKSPACE=Path('/Users/hahoangloc/Working/testing tool')
-sys.path.insert(0,str(WORKSPACE/'zap-product-assessment/src'))
+ASSESSMENT_ROOT=Path(__file__).resolve().parents[1]/'lib/zap-product-assessment'
+sys.path.insert(0,str(ASSESSMENT_ROOT/'src'))
 sys.dont_write_bytecode=True
 
 

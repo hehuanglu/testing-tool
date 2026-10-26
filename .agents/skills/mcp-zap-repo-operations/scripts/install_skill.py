@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install or compare the complete repository Semgrep skill using Python stdlib."""
+"""Install or compare the complete skill folder using Python stdlib."""
 import argparse
 from datetime import datetime, timezone
 import filecmp
@@ -9,8 +9,8 @@ import tempfile
 import uuid
 
 
-SOURCE = Path(__file__).resolve().parents[1] / ".agents/skills/run-semgrep-scanner"
-IGNORED = {"__pycache__", ".DS_Store"}
+SOURCE = Path(__file__).resolve().parents[1]
+IGNORED = {"__pycache__", ".DS_Store", ".pytest_cache", ".venv", ".venv-semgrep", ".git"}
 
 
 def files(root):
@@ -53,7 +53,7 @@ def install(source, target, update=False):
     if target.exists() and not update:
         raise ValueError("installed copy differs; inspect with check, then use install --update (keeps a backup)")
     target.parent.mkdir(parents=True, exist_ok=True)
-    staging = Path(tempfile.mkdtemp(prefix=".semgrep-install-", dir=target.parent))
+    staging = Path(tempfile.mkdtemp(prefix=".skill-install-", dir=target.parent))
     backup = None
     try:
         for relative, path in files(source).items():
@@ -83,7 +83,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("check", "install"))
     parser.add_argument("--target", type=Path,
-                        default=Path.home() / ".codex/skills/run-semgrep-scanner")
+                        default=Path.home() / ".codex/skills" / SOURCE.name)
     parser.add_argument("--update", action="store_true", help="replace a differing copy after backing it up outside skills/")
     args = parser.parse_args()
     try:
@@ -100,7 +100,7 @@ def main():
             backup = install(SOURCE, args.target, args.update)
             if backup:
                 print(f"Previous copy: {backup}")
-        print(f"Skill matches repository: {args.target}")
+        print(f"Skill matches source folder: {args.target}")
         return 0
     except (OSError, ValueError) as exc:
         parser.exit(2, f"{exc}\n")

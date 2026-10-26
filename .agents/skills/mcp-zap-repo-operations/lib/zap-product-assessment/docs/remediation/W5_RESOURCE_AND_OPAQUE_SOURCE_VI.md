@@ -36,7 +36,7 @@ G3 operational vẫn thiếu generic production source/broker và actual seeded 
 
 ## Amendment scope tester theo người dùng
 
-Người dùng xác nhận không có contract nội bộ và cho phép bỏ nghiệp vụ không thể kiểm của sản phẩm. Skill đã có [auth discovery](</Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/auth-capability-discovery.md>): tự khảo sát API/UI/nguồn có sẵn trong quyền hiện tại, chọn business probe và phân biệt local logout với server invalidation. Không yêu cầu contract làm điều kiện bắt đầu discovery; không bắt buộc endpoint tên whoami nếu có identity oracle độc lập tương đương.
+Người dùng xác nhận không có contract nội bộ và cho phép bỏ nghiệp vụ không thể kiểm của sản phẩm. Skill đã có [auth discovery](../../../../references/auth-capability-discovery.md): tự khảo sát API/UI/nguồn có sẵn trong quyền hiện tại, chọn business probe và phân biệt local logout với server invalidation. Không yêu cầu contract làm điều kiện bắt đầu discovery; không bắt buộc endpoint tên whoami nếu có identity oracle độc lập tương đương.
 
 Auth discovery must preserve source-supported and runtime-unverified states separately. Do not reuse prior product discovery or credentials as current evidence.
 

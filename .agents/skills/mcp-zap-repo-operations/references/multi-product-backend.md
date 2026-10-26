@@ -4,7 +4,7 @@ Mọi product bắt đầu từ vị trí user giao, không chọn theo tên fol
 
 ## Entry thật và phạm vi
 
-Repo gốc cung cấp operations ZAP. Assessment phụ là một tập executor có giới hạn riêng, không phải bộ điều phối đầy đủ của skill hoặc định nghĩa toàn capability của ZAP. Chọn đường native hay executor theo [dispatcher](operation-dispatch.md) và [runner đã kiểm](runner-routing.md). Common CLI: `zap-product-assessment/scripts/product_assessment.py`; đọc help/schema/source khi cần dùng. Registry hiện có các recipe `finalsource-ledger/1.0`, `archive-control/1.0`; recipe control không phải product thực. Đây là thông tin interface, không là gán product/route/role mặc định.
+Repo gốc cung cấp operations ZAP. Assessment phụ là một tập executor có giới hạn riêng, không phải bộ điều phối đầy đủ của skill hoặc định nghĩa toàn capability của ZAP. Chọn đường native hay executor theo [dispatcher](operation-dispatch.md) và [runner đã kiểm](runner-routing.md). Common CLI: `${ASSESSMENT_ROOT}/scripts/product_assessment.py`; đọc help/schema/source khi cần dùng. Registry hiện có các recipe `finalsource-ledger/1.0`, `archive-control/1.0`; recipe control không phải product thực. Đây là thông tin interface, không là gán product/route/role mặc định.
 
 - `discover` tạo source candidate bằng recipe phù hợp hoặc observations do agent đọc source/spec; không bắt PM điền routes/IDs có thể tự tìm.
 - `materialize` nối candidate với deployment/origin đã xác minh. Source-only chưa là môi trường chạy.

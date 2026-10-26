@@ -1,6 +1,6 @@
 # Inventory → allocation → readback → hành động tiếp
 
-Đây là đường dùng chung cho cả năm track, không thay gate của executor. Dùng cases/observations hiện có, không bắt bộ evidence/schema mới cho assessment. Code ở `zap-product-assessment/src/zap_assessment/product_scope.py`; CLI qua `scripts/product_assessment.py scope` từ assessment checkout (`PYTHONPATH=src .venv/bin/python`).
+Đây là đường dùng chung cho cả năm track, không thay gate của executor. Dùng cases/observations hiện có, không bắt bộ evidence/schema mới cho assessment. Code ở `${ASSESSMENT_ROOT}/src/zap_assessment/product_scope.py`; CLI qua `scripts/product_assessment.py scope` từ assessment checkout (`PYTHONPATH=src .venv/bin/python`).
 
 ## Inventory trước workload
 

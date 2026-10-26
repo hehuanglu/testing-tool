@@ -1,6 +1,6 @@
 # Câu hỏi kỹ thuật và reader đã kiểm
 
-Đọc khi lập workload BE, viết adapter/composer, hoặc gặp zero probes, fixture conflict, readback bị ghi đè hay metadata mất nghĩa. Source dùng chung ở `zap-product-assessment/src/zap_assessment/`; mapping route/role/field/state của product vẫn ở adapter. Không dùng các helper dưới đây làm oracle ngữ nghĩa độc lập.
+Đọc khi lập workload BE, viết adapter/composer, hoặc gặp zero probes, fixture conflict, readback bị ghi đè hay metadata mất nghĩa. Source dùng chung ở `${ASSESSMENT_ROOT}/src/zap_assessment/`; mapping route/role/field/state của product vẫn ở adapter. Không dùng các helper dưới đây làm oracle ngữ nghĩa độc lập.
 
 ## Khép đúng câu hỏi đã chọn
 

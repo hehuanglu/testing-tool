@@ -11,12 +11,12 @@ Profile `fe-anonymous-research/1.0`, plan `fe-anonymous-research-plan/1.0`, jour
 Dùng Python `.venv` của assessment, từ workspace đã xác minh:
 
 ```sh
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/product_assessment.py fe-anonymous --help
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/fe_anonymous_research.py discover --product /absolute/product --recipe reviewed-fe/1.0 --observations /absolute/observations.json --output /absolute/new-discovery
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/fe_anonymous_research.py plan --discovery /absolute/DISCOVERY.json --journeys /absolute/FE_JOURNEYS.json --selection /absolute/selection.json --authority /absolute/authority.json --output /absolute/new-plan.json
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/fe_anonymous_research.py run --plan /absolute/plan.json --selection /absolute/selection.json --output /absolute/new-run
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/fe_anonymous_research.py verify --run /absolute/run --expected-plan-hash PLAN_SHA256
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/fe_anonymous_research.py handoff --lineage /absolute/lineage.json --output /absolute/new-handoff
+"$ZAP_PYTHON" ${ASSESSMENT_ROOT}/scripts/product_assessment.py fe-anonymous --help
+"$ZAP_PYTHON" ${ASSESSMENT_ROOT}/scripts/fe_anonymous_research.py discover --product /absolute/product --recipe reviewed-fe/1.0 --observations /absolute/observations.json --output /absolute/new-discovery
+"$ZAP_PYTHON" ${ASSESSMENT_ROOT}/scripts/fe_anonymous_research.py plan --discovery /absolute/DISCOVERY.json --journeys /absolute/FE_JOURNEYS.json --selection /absolute/selection.json --authority /absolute/authority.json --output /absolute/new-plan.json
+"$ZAP_PYTHON" ${ASSESSMENT_ROOT}/scripts/fe_anonymous_research.py run --plan /absolute/plan.json --selection /absolute/selection.json --output /absolute/new-run
+"$ZAP_PYTHON" ${ASSESSMENT_ROOT}/scripts/fe_anonymous_research.py verify --run /absolute/run --expected-plan-hash PLAN_SHA256
+"$ZAP_PYTHON" ${ASSESSMENT_ROOT}/scripts/fe_anonymous_research.py handoff --lineage /absolute/lineage.json --output /absolute/new-handoff
 ```
 
 `discover`, `status`, `verify`, `handoff` offline: không start Docker/browser/network. `plan` kiểm selection/deployment, không chạy journey. Unknown recipe không tự chọn product theo folder name. `finalsource-fe/1.0` chỉ là adapter explicit; đọc source/DOM trước dùng, không lấy ví dụ làm discovery product mới. No-source input cần bounded authorized UI discovery rồi observations có provenance; source provider hiện cần observations, không giả source parser chạy được cho mọi framework.
@@ -41,7 +41,7 @@ Handoff theo [hai file kết quả](product-assessment-handoff.md#3-bộ-bàn-gi
 
 Rule `40012` là reflected XSS; `40018` là SQL Injection. Không suy tên rule từ tên campaign. Recipe phải nói đúng độ sâu: payload tới validation/credential-error không chứng minh đã tới SQL sink. Native history đọc từng message khi response JS lớn; không tăng transport cap để che mất capture. Driver của Client Spider cần loopback ports trong namespace owned, vẫn giữ management auth và deny direct/IPv6/external egress.
 
-Đọc [runbook trong assessment](</Users/hahoangloc/Working/testing tool/zap-product-assessment/docs/fe-anonymous-research.md>) khi chuẩn bị selection/authority hoặc tái hiện. Verifier nối browser/broker với native history và kiểm DOM đã capture; các giá trị pass do producer báo riêng không đủ. Handoff có optional triage ref với hash; raw vẫn private và native classification không đổi.
+Đọc [runbook trong assessment](../lib/zap-product-assessment/docs/fe-anonymous-research.md) khi chuẩn bị selection/authority hoặc tái hiện. Verifier nối browser/broker với native history và kiểm DOM đã capture; các giá trị pass do producer báo riêng không đủ. Handoff có optional triage ref với hash; raw vẫn private và native classification không đổi.
 
 ZAP Selenium mặc định có thể yêu cầu `acceptInsecureCerts=true`. FE runtime dùng `fe_anonymous_geckodriver.py` cho browser phụ Client Spider: ép W3C session sang false, kiểm capability trả về và fail closed nếu không đúng. Đọc `CLIENT_BROWSER_CAPABILITIES.json`; chỉ broker TLS pass không thay proof browser capability. Nếu chat/controller mất, không replay start/POST; stop/export theo Journal/owned IDs và giữ interrupted/partial. Lượt fresh thay thế dùng run ID/profile/fixture mới, không gộp alert lặp.
 

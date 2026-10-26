@@ -11,8 +11,8 @@ import time
 import uuid
 
 sys.path.insert(0,str(Path(__file__).parent))
-from prepare_finalsource_fixture import docker,write,canonical,WORKSPACE
-sys.path.insert(0,str(WORKSPACE/'zap-product-assessment/src'))
+from prepare_finalsource_fixture import docker,write,canonical,ASSESSMENT_ROOT
+sys.path.insert(0,str(ASSESSMENT_ROOT/'src'))
 from zap_assessment.bola import binding_readback
 
 WORKER=r'''

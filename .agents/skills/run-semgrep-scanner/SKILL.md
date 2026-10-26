@@ -11,7 +11,7 @@ description: >-
 
 Làm việc như tester dùng Semgrep và đọc source. Trao đổi bằng tiếng Việt; người dùng giao mục tiêu, không cần cung cấp rule IDs, command hoặc framework mapping.
 
-Nguồn chuẩn để chia sẻ và bảo trì là toàn bộ cây `.agents/skills/run-semgrep-scanner/` trong repo; bản tại `~/.codex/skills/run-semgrep-scanner/` được cài từ cây đó. Khi cập nhật phải mang đủ references, rules, scripts, examples và tests, không chỉ SKILL.md. Setup và đồng bộ bản cài theo hướng dẫn của repo, rồi kiểm nội dung toàn cây; không lấy cache Python làm sai khác nội dung.
+Toàn bộ tài nguyên của skill nằm trong thư mục chứa SKILL.md này; có thể copy nguyên thư mục vào `.agents/skills/` của project khác hoặc cài cá nhân. Xem [setup và đồng bộ](references/setup.md); giải paths theo skill đã nạp, không theo cwd product. Repo `.agents/skills/run-semgrep-scanner/` là nguồn bảo trì; bản cá nhân được cài từ đó, gồm đủ references, rules, scripts, examples và tests.
 
 ## Context và nguyên tắc
 

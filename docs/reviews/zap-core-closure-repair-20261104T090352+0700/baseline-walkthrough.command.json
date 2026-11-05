@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/examples/state_recovery_walkthrough.py",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-closure-repair-20261104T090352+0700/baseline-walkthrough-fixture"
+  ],
+  "exitCode": 0
+}

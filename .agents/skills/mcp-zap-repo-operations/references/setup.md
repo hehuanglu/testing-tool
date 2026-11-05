@@ -1,37 +1,36 @@
-# Cài và mang skill sang project khác
+# Install and move the skill between projects
 
-Copy nguyên thư mục `mcp-zap-repo-operations` vào `.agents/skills/` của project mới, hoặc cài cá nhân bằng helper của chính skill. Không cần copy source product, reports, secret hay thư mục `.venv` từ máy dev.
-
-Từ thư mục skill:
+Copy the complete `mcp-zap-repo-operations` directory into a project's `.agents/skills/`, or install it personally from the skill directory:
 
 ```sh
 python3 -B scripts/install_skill.py install
 python3 -B scripts/install_skill.py check
 ```
 
-Nếu bản cài khác nguồn, kiểm danh sách từ `check`, rồi dùng `install --update`. Helper giữ bản cũ trong `~/.codex/skill-backups/` trước khi thay; có `--target` để chọn nơi cài khác. Helper chỉ dùng stdlib và không cài dependency, cấu hình MCP hoặc gửi traffic. Khi dùng bản project trực tiếp thì không cần cài cá nhân.
+Inspect drift before `install --update`. The helper backs up the old installation under `~/.codex/skill-backups/`; use `--target` for another destination. It uses only stdlib and does not install dependencies, configure MCP, or send traffic. Project-local usage needs no personal installation. Do not copy product source, reports, secrets, or virtual environments from a developer machine.
 
-## Paths và dependencies
+Repo-only maintenance does not authorize synchronizing a divergent personal copy. Use `check` read-only and report drift separately from implementation validation. Current criteria/report CLI usage is documented in the [v2 criteria workflow](criteria-driven-workflow.md).
 
-Giải đường dẫn tuyệt đối từ vị trí skill đã nạp:
+## Paths and dependencies
+
+Resolve paths from the loaded skill:
 
 ```sh
-export SKILL_DIR="$PWD"
+# Set this to the directory containing the loaded SKILL.md, independently of cwd.
+export SKILL_DIR='/absolute/path/to/mcp-zap-repo-operations'
 export ASSESSMENT_ROOT="$SKILL_DIR/lib/zap-product-assessment"
 export ZAP_PYTHON='/absolute/path/to/python-with-assessment-dependencies'
 PYTHONPATH="$ASSESSMENT_ROOT/src" "$ZAP_PYTHON" \
   "$ASSESSMENT_ROOT/scripts/product_assessment.py" --help
 ```
 
-Thư viện assessment hiện yêu cầu Python 3.13 và dependencies trong `lib/zap-product-assessment/requirements.lock`. Chuẩn bị venv riêng ngoài skill/product khi cần; không mang venv giữa các máy hoặc tự tải package trong assessment. Native helpers stdlib như `inspect_operations.py` và `review_open_work.py` không yêu cầu thư viện assessment.
+The assessment library requires Python 3.13 and `lib/zap-product-assessment/requirements.lock`. Prepare a separate environment outside skill/product when setup is assigned; do not copy virtual environments or fetch packages automatically during assessment. Stdlib helpers such as `inspect_operations.py`/`review_open_work.py` do not need the assessment library.
 
-`lib/zap-product-assessment/` chứa source, schemas, profiles, CLI scripts và tests. `lib/mcp-zap-server/` chỉ đóng gói helper transport/report parser và regression entry mà thư viện import, kèm license và provenance; đây không phải một scanner server. ZAP/MCP endpoint, auth profile, Docker/browser, pinned images hoặc JAR chỉ cần khi executor được chọn thực sự dùng chúng. Xác minh runtime hiện hành; skill không tự dựng scanner khi nhận task source/status.
+`lib/zap-product-assessment/` includes source/schemas/profiles/CLI/tests. `lib/mcp-zap-server/` includes reused transport/report helpers and regression entry points with license/provenance; it is not a scanner server. MCP endpoints/auth profiles/Docker/browsers/pinned images/JARs are needed only by the selected executor. Source/status tasks do not automatically provision scanners.
 
-Khi cần build/doctor scanner riêng, xác minh `MCP_ZAP_REPO` trỏ tới source scanner đã chuẩn bị. Không suy nó từ cwd hoặc tên project; không mặc định checkout đó tồn tại. Các chỉ dẫn build/CI/Helm trong repo-map là tham khảo cho source scanner bên ngoài. Dùng connector MCP đã cấu hình khi không cần build/source.
+For scanner build/doctor tasks, verify the separately prepared `MCP_ZAP_REPO`; do not infer it from cwd/product names. Otherwise prefer the configured connector. Legacy product-named adapters retain their own contracts, rather than defining defaults for new products. When a legacy layout is actually selected, `ZAP_PRODUCT_WORKSPACE` is the caller-selected product workspace (default cwd), not the skill directory. Do not create products or reuse historical credentials to satisfy it.
 
-Product mới dùng discovery/common entry và mapping của product đó. Các helper/adapter legacy có tên product giữ contract riêng, không là mặc định cho mọi project. Khi thực sự dùng legacy adapter có layout cố định, `ZAP_PRODUCT_WORKSPACE` là workspace product do caller chọn; mặc định cwd hiện hành, không trỏ vào skill. Không tạo product hoặc dùng credential lịch sử để thoả layout.
-
-## Kiểm khi di chuyển
+## Portability checks
 
 ```sh
 PYTHONPATH="$ASSESSMENT_ROOT/src:$ASSESSMENT_ROOT/tests" "$ZAP_PYTHON" -B \
@@ -40,6 +39,10 @@ PYTHONPATH="$ASSESSMENT_ROOT/src" "$ZAP_PYTHON" -B \
   -m zap_assessment.capabilities check
 ```
 
-Đây là kiểm offline contract/bookkeeping, không là product assessment hay runtime qualification. Output/actor/raw của assessment luôn ở thư mục private ngoài skill và product. Không lưu dữ liệu chạy mới vào `lib/` để chia sẻ sang project sau.
+These are offline contract/bookkeeping checks, rather than product assessment/runtime qualification. Keep actor/raw/run data private outside skill/product, never in `lib/` for reuse.
 
-Kiểm di chuyển ngày 26/10/2026: copy riêng thư mục skill sang project mới, cài từ bản copy đó sang target khác và chạy từ cwd ngoài checkout dev; 85 tests contract/binding/capabilities/research/portability đạt với Python/dependencies có sẵn. Transport bundled khớp provenance; CLI/helpers `--help` chạy được mà không dùng source scanner ngoài. Thêm 79 ca regression/discovery/common workflow đạt khi dùng sample storage 8 GiB giả lập trong test harness. Lượt mặc định của nhóm mở rộng có sáu ca bị guard reserve chặn do dung lượng host; đây không là product execution. Test riêng giữ xác nhận thiếu reserve thì không dispatch; không hạ guard runtime. Chưa chạy assessment mới, provision scanner hoặc chứng nhận đa nền tảng.
+Historical portability checks on 2026-10-26 copied/installed the standalone tree and ran outside the developer checkout: 85 contract/binding/capability/research/portability tests passed with existing Python/dependencies. Bundled transport matched provenance; CLI/helper help needed no external scanner source. Another 79 regression/discovery/common-workflow cases passed with a simulated 8 GiB storage sample; six default extended cases were blocked by host reserve guards. A separate test verified no dispatch below reserve. Runtime guards were not lowered. No new product assessment, scanner provisioning, or cross-platform qualification occurred.
+
+## Managed state commands
+
+Use the existing project interpreter with PYTHONPATH set to the bundled assessment library src directory. Invoke python -m zap_assessment.product_cli scope with state-inspect or state-next and the explicit state directory. Locate a registered assessment with state-resolve and the explicit registry directory. See the helper contract for arguments and status codes.

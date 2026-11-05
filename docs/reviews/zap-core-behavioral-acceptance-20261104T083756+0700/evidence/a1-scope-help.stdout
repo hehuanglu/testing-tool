@@ -1,0 +1,17 @@
+usage: product_cli.py [-h]
+                      {state-init,state-resolve,state-inspect,state-commit,state-merge,state-next,state-render,state-inspect-recovery,state-recover-leases,state-repair-open,state-repair-update,criteria-review,criteria-digest,criteria-packet,criteria-merge,criteria-native-read,criteria-reconcile-action,criteria-release-task,review-business,review-residuals,review-closure,resume-next,inspect-resume,reconcile,continue,report,next-work} ...
+
+Offline task reconciliation and guarded continuation through existing CLIs.
+
+positional arguments:
+  {state-init,state-resolve,state-inspect,state-commit,state-merge,state-next,state-render,state-inspect-recovery,state-recover-leases,state-repair-open,state-repair-update,criteria-review,criteria-digest,criteria-packet,criteria-merge,criteria-native-read,criteria-reconcile-action,criteria-release-task,review-business,review-residuals,review-closure,resume-next,inspect-resume,reconcile,continue,report,next-work}
+    criteria-native-read
+                        Execute one approved read-only native MCP action
+    criteria-reconcile-action
+                        Reconcile a leased action from reviewed RUN evidence
+    criteria-release-task
+                        Release a retained task after reconciliation
+    resume-next         Select one offline v2 recovery task
+
+options:
+  -h, --help            show this help message and exit

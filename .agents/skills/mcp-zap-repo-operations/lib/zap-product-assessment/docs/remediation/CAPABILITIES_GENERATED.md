@@ -30,7 +30,7 @@ Known failures: HTTPS/DNS/IPv6/browser/auth/active outside this admitted adapter
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
-Evidence: [anonymous-http-source](../../../zap-product-assessment/src/zap_assessment/anonymous_runner.py)
+Evidence: [anonymous-http-source](../../../zap-product-assessment/docs/remediation/source-snapshots/anonymous_runner.py.snapshot)
 
 ## bola-account-read
 
@@ -100,7 +100,7 @@ Known failures: Actual Firefox profile localStorage SQLite retains synthetic can
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
-Evidence: [browser-e2e-source](../../../zap-product-assessment/src/zap_assessment/fe_authenticated_runner.py)
+Evidence: [browser-e2e-source](../../../zap-product-assessment/docs/remediation/source-snapshots/fe_authenticated_runner.py.snapshot)
 
 ## canonical-origin
 

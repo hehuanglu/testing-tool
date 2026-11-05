@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "taskId": "closure-read",
+  "workerId": "coordinator",
+  "assessmentId": "synthetic-closure-selector-repair",
+  "criteriaRevision": "C-1",
+  "planRevision": "P-1",
+  "criteriaDigest": "708add4319eb43475ae60cab5948a9cdae0ff6a392b5dd932147209787f59258",
+  "planDigest": "5c2a35e8436dcb12d7a62527e16dcd4bfc9ee21582d5d1c79f33097236b01c3b",
+  "criterionIds": [
+    "C-FINAL"
+  ],
+  "caseIds": [
+    "T-FINAL"
+  ],
+  "cases": [
+    {
+      "id": "T-FINAL",
+      "criterionIds": [
+        "C-FINAL"
+      ],
+      "objective": "Verify local fixture resource disposition before delivery",
+      "expectedBehavior": "Stopped",
+      "expectationBasis": "Predeclared fixture oracle",
+      "requiredEvidence": [
+        "resource-disposition"
+      ],
+      "coverageContext": {
+        "environment": "offline",
+        "objective": "Verify local fixture resource disposition before delivery",
+        "product": "synthetic-closure"
+      },
+      "effects": [
+        "read"
+      ]
+    }
+  ],
+  "authority": {
+    "allowedEffects": [
+      "read"
+    ],
+    "source": "synthetic read-only plan",
+    "target": "https://fixture.invalid"
+  },
+  "resourceIds": [
+    "synthetic-resource"
+  ],
+  "refs": {},
+  "packetDigest": "25871c49d949087ec0b99926293a55d3df51f52997312b13281e312b4383a45f"
+}

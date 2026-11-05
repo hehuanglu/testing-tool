@@ -5,6 +5,7 @@
 !**/.env.example
 **/.local-tls/
 .zap-auth/
+.zap-gate1-prep*/
 
 # Dependencies and generated output
 **/node_modules/

@@ -1,5 +1,7 @@
 # FE anonymous research lane
 
+This is a browser research contract guide. Read the [documentation boundaries](README.md); its technical status and qualification rules do not override criteria workflow v2 or establish current runtime qualification.
+
 `fe-anonymous-research/1.0` is a separate research contract. `product_assessment.py fe-anonymous` dispatches to `fe_anonymous_cli`; the backend `TRACKS` tuple, strict browser/canonical-origin capabilities and legacy diagnostic runner retain their contracts. Qualification evidence and unresolved obligations are recorded in the workspace's `review/fe-anonymous-audit-2026-10-23/IMPLEMENTATION_STATUS.md`.
 
 ## Commands

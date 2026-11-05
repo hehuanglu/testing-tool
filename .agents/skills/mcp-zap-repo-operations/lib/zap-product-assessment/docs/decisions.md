@@ -1,5 +1,7 @@
 # M0 decision log
 
+Historical decisions, preserved with their original contract scope. Read the [documentation boundaries](README.md); these identity, authority and release decisions are not additional intake requirements for criteria workflow v2.
+
 Source of truth: ../../MCP_ZAP_SKILL_LONG_TERM_OPERATING_PLAN_VI.md v2.0; no changes to gates.
 
 - **ADR-001 Runtime:** Python 3.13, JSON Schema 2020-12, stdlib unittest and Docker CLI. Upstream Java requires JDK25, whereas the operator default is JDK11. Use the already present, digest-pinned v0.16.0 runtime; do not build the dirty Java checkout. Exact Python dependency versions are in requirements.lock. No new scanner engine/queue/report service.

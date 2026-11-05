@@ -1,0 +1,50 @@
+[
+  {
+    "script": "scripts/inspect_operations.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/install_skill.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/prepare_finalsource_fixture.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/probe_finalsource_auth.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/review_open_work.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/run_finalsource_native.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/verify_finalsource_delivery.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  },
+  {
+    "script": "scripts/verify_saved_evidence.py",
+    "exit": 0,
+    "usagePresent": true,
+    "stderr": ""
+  }
+]

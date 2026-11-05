@@ -98,8 +98,9 @@ def review_work(document):
         'taskCompletion': 'unverified-by-review-helper',
         'continuationRequired': bool(actions),
         'workComplete': bool(ids) and not unresolved and not actions and not dependencies,
+        'declaredListHandled': bool(ids) and not unresolved and not actions and not dependencies,
         'canHandOffPartial': bool(dependencies) and not unresolved and not actions,
-        'limits': 'Caller-declared inventory and grounds only; no proof of completeness, authority, policy or live execution. Planned actions still require execution.'
+        'limits': 'workComplete/declaredListHandled mean only the declared list was handled, not assignment completion. Caller-declared inventory and grounds only; no proof of completeness, authority, policy or live execution. Planned actions still require execution.'
     }
 
 
@@ -108,7 +109,8 @@ def review_checkpoint(checkpoint, current):
     for field in ('product', 'environment'):
         if not nonblank(checkpoint.get(field)) or checkpoint.get(field) != current.get(field):
             conflicts.append(field + '-missing-or-different')
-    for field in ('runId', 'attemptId', 'origin', 'targetBinding'):
+    for field in ('runId', 'attemptId', 'origin', 'targetBinding', 'runtimeBinding',
+                  'image', 'build', 'schemaRevision', 'scopeRevision'):
         if (field in checkpoint or field in current) and checkpoint.get(field) != current.get(field):
             conflicts.append(field + '-missing-or-different')
     for label, snapshot in (('checkpoint', checkpoint), ('current', current)):
@@ -136,6 +138,140 @@ def review_checkpoint(checkpoint, current):
     }
 
 
+def review_session(run, current=None, *, alerts=None, scope_alerts=None):
+    """Review handoff data, independently of dependency-based canHandOffPartial.
+
+    Pending reconciliation does not prevent a usable checkpoint. Missing data is
+    recoverable; this helper neither writes state nor determines task completion.
+    Diagnostics contain field paths/codes only, never untrusted checkpoint prose.
+    """
+    if 'criteriaWorkflow' in run or run.get('workflowVersion') == 2:
+        raise ValueError('legacy session reviewer cannot evaluate v2; use scope criteria-review')
+    missing, conflicts = [], []
+    context = run.get('assessmentContext', {})
+    scope = run.get('scope', {})
+    if not isinstance(context, dict):
+        missing.append('assessmentContext')
+        context = {}
+    if not isinstance(scope, dict):
+        scope = {}
+    for field in ('product', 'environment'):
+        value = context.get(field, run.get(field, scope.get(field)))
+        if field == 'product' and value is None:
+            value = scope.get('productLocation')
+        if value is None or value == 'unknown' or value == '':
+            missing.append('assessmentContext.' + field)
+    continuation = run.get('continuation')
+    if not isinstance(continuation, dict):
+        missing.append('continuation')
+        continuation = {}
+    if type(continuation.get('version')) is not int or continuation['version'] != 1:
+        missing.append('continuation.version')
+    for key in ('status', 'reason', 'updatedAt'):
+        if not nonblank(continuation.get(key)):
+            missing.append('continuation.' + key)
+    focus = continuation.get('currentFocus')
+    if not isinstance(focus, dict) or not nonblank(focus.get('progress')):
+        missing.append('continuation.currentFocus.progress')
+
+    def rows(key, fields):
+        value = continuation.get(key)
+        if not isinstance(value, list):
+            missing.append('continuation.' + key)
+            return []
+        for i, row in enumerate(value):
+            for field in fields:
+                if not isinstance(row, dict) or not nonblank(row.get(field)):
+                    missing.append('continuation.' + key + '.' + str(i) + '.' + field)
+        return value
+
+    # An actual handoff needs actionable user guidance. In-progress recovery
+    # saves need no continuation prompt; missing legacy data remains saveable.
+    if continuation.get('status') == 'checkpointed':
+        guidance = continuation.get('userGuidance')
+        if not isinstance(guidance, dict):
+            guidance = {}
+        if guidance.get('contextRecommendation') not in ('continue-here', 'new-context-recommended'):
+            missing.append('continuation.userGuidance.contextRecommendation')
+        for field in ('reason', 'userAction', 'resumePrompt'):
+            if not nonblank(guidance.get(field)):
+                missing.append('continuation.userGuidance.' + field)
+
+    actions = rows('nextActions', ('action',))
+    if not actions and run.get('taskCompletion') != 'complete':
+        missing.append('continuation.nextActions.first-step')
+    for i, row in enumerate(actions):
+        for field in ('readFirst', 'dependsOn'):
+            if not isinstance(row, dict) or not string_list(row.get(field)):
+                missing.append('continuation.nextActions.' + str(i) + '.' + field)
+    revalidate = rows('revalidate', ('subject', 'reason', 'readVia'))
+    pending = rows('pendingOperations', ('operationRef', 'lastKnownState', 'owner', 'readVia', 'nextAction'))
+    rows('resourceDisposition', ('resourceRef', 'disposition', 'reason'))
+    # Known live/unknown work must remain visible, even when metadata lagged.
+    pending_refs = {p['operationRef'] for p in pending
+                    if isinstance(p, dict) and nonblank(p.get('operationRef'))}
+    unrecorded_pending = False
+    operations = run.get('operations', [])
+    if not isinstance(operations, list):
+        missing.append('operations')
+        operations = []
+    for i, op in enumerate(operations):
+        if not isinstance(op, dict):
+            missing.append('operations.' + str(i))
+            continue
+        state = op.get('status', op.get('executionStatus', op.get('state')))
+        live = (op.get('outcomeUnknown') is True or op.get('pendingStart') is True or
+                state in ('running', 'queued', 'pending', 'accepted', 'acknowledged', 'unknown',
+                          'stop-requested', 'stop-acknowledged') or
+                (op.get('effect') in ('start', 'mutation') and state == 'intent'))
+        if live and not any(str(op.get(k)) in pending_refs for k in
+                            ('id', 'operationId', 'actionId', 'nativeScanId') if op.get(k) is not None):
+            missing.append('operations.' + str(i) + '.pending-readback')
+            unrecorded_pending = True
+    if continuation and run.get('taskCompletion') != 'complete' and run.get('handoffClosesTask') is not False:
+        missing.append('handoffClosesTask.false-for-open-work')
+    if current is not None:
+        def snapshot(value):
+            context = value.get('assessmentContext', {})
+            if not isinstance(context, dict):
+                conflicts.append('assessmentContext-invalid')
+                context = {}
+            return {**context, **value}
+        conflicts.extend(review_checkpoint(snapshot(run), snapshot(current))['conflicts'])
+    if alerts is not None or scope_alerts is not None:
+        reports = (run, alerts, scope_alerts)
+        if any(not isinstance(r, dict) for r in reports):
+            conflicts.append('report-bundle-incomplete')
+        else:
+            for field in ('assessmentContext', 'taskCompletion'):
+                if any(r.get(field) != run.get(field) for r in reports[1:]):
+                    conflicts.append('report-bundle-' + field + '-different')
+            generations = [r.get('reportGeneration', {}) for r in reports]
+            ids = [g.get('bundleId') if isinstance(g, dict) else None for g in generations]
+            if (any(not isinstance(g, dict) for g in generations) or
+                    (any(i is not None for i in ids) and
+                     (not all(nonblank(i) for i in ids) or ids[1:] != ids[:-1]))):
+                conflicts.append('report-bundle-generation-different')
+    steps = ['read-official-run-and-related-artifacts']
+    if missing:
+        steps.append('recover-missing-checkpoint-information')
+    if pending or unrecorded_pending or conflicts:
+        steps.append('reconcile-journal-ack-status-and-object-state-before-dependent-effects')
+    if revalidate:
+        steps.append('revalidate-next-action-dependencies')
+    steps.append('choose-next-work-unit-under-existing-admission')
+    return {
+        'checkpointReady': not missing,
+        'missingInformation': missing,
+        'requiresReconciliation': bool(pending or unrecorded_pending or conflicts),
+        'conflicts': conflicts,
+        'nextActionCount': len(actions),
+        'revalidationRequired': bool(revalidate),
+        'resumeSteps': steps,
+        'limits': 'Handoff data only; does not verify facts/liveness, justify ending a work session, close the task, grant authority, dispatch, read private references or permit replay. Incomplete checkpoints may still be saved.'
+    }
+
+
 def read(path):
     with open(path, encoding='utf-8') as stream:
         value = json.load(stream)
@@ -152,14 +288,24 @@ def main(argv=None):
     checkpoint = commands.add_parser('checkpoint')
     checkpoint.add_argument('--checkpoint', required=True)
     checkpoint.add_argument('--current', required=True)
+    session = commands.add_parser('session', help='Review RUN continuation data; runnable work may remain')
+    session.add_argument('--run', required=True)
+    session.add_argument('--current')
+    session.add_argument('--alerts')
+    session.add_argument('--scope-alerts')
     args = parser.parse_args(argv)
     try:
         if args.command == 'work':
             result = review_work(read(args.input))
             attention = bool(result['unresolved'] or result['nextActions'])
-        else:
+        elif args.command == 'checkpoint':
             result = review_checkpoint(read(args.checkpoint), read(args.current))
             attention = result['requiresReconciliation']
+        else:
+            result = review_session(read(args.run), read(args.current) if args.current else None,
+                alerts=read(args.alerts) if args.alerts else None,
+                scope_alerts=read(args.scope_alerts) if args.scope_alerts else None)
+            attention = not result['checkpointReady'] or result['requiresReconciliation']
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         # Do not echo arbitrary file contents/exception messages containing secrets.
         print(json.dumps({'error': 'invalid-or-unreadable-review-input'}))

@@ -1,35 +1,19 @@
-# Backend authenticated DAST
+# Authenticated backend DAST
 
-Điểm xuất phát nghiệp vụ và scope ở [track intents](track-intents.md); chọn operations/executor theo [dispatcher](operation-dispatch.md). Reference này bổ sung chi tiết của entry hiện có, không mở rộng nhiệm vụ hoặc bắt chạy qualification.
+Use this technique only within the approved [criteria-driven plan](criteria-driven-workflow.md); it adds no track-wide assignment or alternative workflow. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-Đọc [multi-product](multi-product-backend.md) và [mục tiêu authenticated DAST](authenticated-dast-goal.md). Mục tiêu là ZAP DAST thật toàn API protected thuộc scope, với đúng actor/role và theo dõi phiên. Đầu ra [ALERTS/RUN](product-assessment-handoff.md), không có phần bằng chứng.
+Start from [track intents](track-intents.md) and select operations/executors through [dispatch](operation-dispatch.md). Entry-specific details do not expand scope or require an additional qualification campaign. Deliver the [Drive assessment table](product-assessment-handoff.md); retain RUN/ALERTS/SCOPE_ALERTS internally, without evidence sections/folders.
 
-## Trách nhiệm trước chọn workload
+Read [multi-product](multi-product-backend.md)/[authenticated goal](authenticated-dast-goal.md). DAST every in-scope protected method/route with meaningful role/input differences and valid sessions. Discover legitimate actors/fixtures; missing roles remain untested rather than represented by another role. Do not forge JWT/roles or modify DB to create authority; empty/sample cases do not cover business functionality.
 
-Giữ mọi protected method–route, input và role có hành vi khác biệt. Khảo sát account/role/fixture hợp lệ trong scope; thiếu role là mục chưa kiểm, không loại role hoặc lấy role hiện có đại diện. Không forge JWT/role hoặc sửa DB để tạo quyền. Ưu tiên nghiệp vụ lõi; danh sách rỗng/request mẫu không đại diện toàn nghiệp vụ.
+`be-authenticated-research/1.0` may retain credentials/tokens in private native raw. Necessary retention is authorized with notification; reflect it in input contracts without re-requesting approval. Do not enable experimental/queue behavior or change other deployments' contracts automatically.
 
-## Chọn executor và capability
+Use actual common CLI/auth prepare/validate/authSessionId capabilities for crawl/attack. Root method/postData fields do not admit every wrapper body/vector. GET/query, flat PUT/PATCH, and paths have conditions; POST creation/addition may require additional allocations/oracles. Inspect help/source and suitable supported paths before minimal adapter extensions. Do not use another product's legacy adapter as fallback.
 
-Profile `be-authenticated-research/1.0` có thể lưu credential/token trong raw native private. Skill đã cho phép local retention cần thiết: chỉ thông báo, ghi nhận vào input contract và không hỏi lại. Không tự bật experimental/queue hoặc đổi contract của deployment khác.
+Preserve enforced proof/pin gates without adding routine source archives/full-checksum/strict assurance campaigns. Diagnose actual dependencies and repair within scope rather than declaring product failure or substituting direct requests for DAST.
 
-Dùng common CLI, MCP auth prepare/validate và authSessionId cho crawl/attack theo capability thực. Root method/postData không tự nghĩa wrapper admit mọi body/vector. Common GET/query, flat PUT/PATCH và path có điều kiện; POST create/add có thể còn dependency allocation/oracle. Đọc help/source, chọn đường hợp lệ sẵn có trước mở rộng runner; không dùng legacy adapter product khác làm fallback.
+Verify target/actor/input/fixtures, execute real ZAP, monitor operations/session, and stop dependent branches on auth loss. 401 is not authenticated coverage. New login/restarts are new handles/sessions, not fictional resume. Inspect mutation object/owner/state and reconcile ACKs before retry. Read sufficient actual reports with native severity/confidence, distinguishing guard/application responses where possible and stating unknowns without raw exports.
 
-Những gate proof/pin trong code vẫn giữ, nhưng skill không thêm proof campaign, source archive, strict secret-safe qualification hay full checksum readback thành nhiệm vụ mặc định. Nếu thật sự bị gate chặn, chẩn đoán đúng phần công cụ, sửa tối thiểu trong scope hoặc nêu dependency cụ thể; không đổi thành product fail hay dùng direct request thay authenticated DAST.
+Expiry/refresh/revoke, faults/repeatability, and strict platform/secret qualification apply only when assigned or genuinely required by the selected executor. Do not wait for TTL/two fresh runs/independent approval for routine alerts. Active-session checks do not establish lifecycle coverage.
 
-## Thực thi phần đã chọn
-
-Xác minh target, actor/role và input/fixture; chạy ZAP thật, theo dõi operation và phiên đăng nhập. Mất auth dừng nhánh phụ thuộc, ghi partial; 401 không cộng coverage. Restart/auth handle mới phải được ghi đúng, không gọi login mới là resume phiên cũ. Mutation kiểm trạng thái liên quan để biết owner/object/kết quả, tránh replay khi ACK chưa rõ.
-
-Dùng collector/report có sẵn, đọc đủ nội dung để báo đúng. Giữ native severity/confidence, phân biệt app/guard response khi thông tin có sẵn; thiếu thông tin thì nêu giới hạn, không dựng dữ liệu giả. Không yêu cầu xuất raw history/request archive/hash trong báo cáo cuối.
-
-## Lifecycle và qualification khi được yêu cầu
-
-Expiry/refresh/revoke, fault/repeatability và strict platform/secret assurance là mục tiêu riêng khi user giao hoặc executor đã chọn thực sự yêu cầu. Không đợi TTL, hai fresh runs hay independent approval để trả alerts thường. Không biến kiểm tra phiên đang hoạt động thành lifecycle đã kiểm.
-
-## Protected identity khi response không echo caller
-
-Dùng nguồn actor/role hợp lệ cùng protected probe/strategy được executor hỗ trợ; không lấy owner field làm caller. Signed-token validation có thể là lựa chọn theo entry, không ép mọi product có cùng issuer/key/route. Không đọc password/hash DB để làm báo cáo. Ghi đúng role nào đã xác minh và role nào chưa chạy.
-
-## Kết quả và tiếp tục
-
-RUN giữ method–route/role/kỹ thuật, thao tác/kết quả/lỗi, toàn inventory và phần chưa làm. ALERTS giữ native findings và nhận định có giới hạn; không có evidenceStatus hoặc mục/folder bằng chứng trong báo cáo dẫn xuất. Còn API/role trong scope chưa kiểm thì partial, tiếp tục các ca đủ điều kiện.
+When protected responses do not echo callers, use legitimate account/role sources and suitable supported probes/strategies; owner fields are not caller identity. Signed-token validation is an entry-specific option without universal issuer/key/route assumptions. Do not read password/hash DB data for reporting. RUN retains complete method/route/role inventory and open work; remaining APIs/roles mean partial and continued eligible work.

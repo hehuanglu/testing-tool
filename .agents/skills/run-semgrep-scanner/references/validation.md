@@ -1,127 +1,58 @@
-# Validation và giới hạn xác nhận
+# Validation and verification limits
 
-## Cập nhật workflow tuần tự — 2026-10-26
+## How to validate maintenance
 
-Theo yêu cầu đưa cách vận hành của lượt trước thành mặc định: assessment chọn các track trong scope, vận hành/thu output/triage/tự kiểm từng track trước execution track kế tiếp. Operator hoàn thiện operation/UI/config ledger và kiểm hai chiều quy trình/evidence; tự kiểm nằm trong `tracks[].review`, cặp ALERTS/RUN riêng mỗi track. Partial/blocked vì external dependency sau khi hết source step khả thi không ngăn track độc lập. Không mặc định chạy cả năm track cho targeted task hoặc ép một round/YAML mỗi track.
+Check actual relative Markdown files/anchors and frontmatter/UI YAML. Parse the [synthetic report pair](../examples/README.md) and reconcile IDs/counts/provenance/source states/statuses/backlinks without calling it a real scan. Use existing local parsers/help rather than installing dependencies or fetching remote validation rules merely to pass.
 
-Entrypoint, workflow/reporting/evidence/CLI routing, UI default prompt và ví dụ synthetic đã đồng bộ. Không đổi matcher/rules, helper code, engine/privacy policy, product hoặc reports assessment lịch sử. Ví dụ gộp chỉ minh họa schema/references, không là default execution hoặc review thật.
+Run helper tests and the example checker where relevant. [offline-rule-lints.yml](offline-rule-lints.yml) checks only fix/fix-regex. Actual [fixtures](../tests/README.md) compare complete positive/negative positions and inspect exits/errors/skips/timeouts/scanned paths; skipped files are not semantic negatives. Match test scope to changes, then inspect baseline/diff before intentional installation updates. Preserve private/custom content via the installer backup contract.
 
-Validation thực: 23 tests stdlib pass; checker cặp JSON synthetic pass; skill-creator quick_validate pass bằng Python/venv local có sẵn PyYAML; relative Markdown links và YAML/frontmatter/agent config được kiểm local. Không cài dependency. Vì không đổi matcher/helper, không chạy lại semantic fixtures hay product assessment để chứng nhận thay đổi hướng dẫn.
+## Decision scenarios
 
-Đã review logic các nhánh scope hẹp, nhiều track có dependency ngoài, manual-only question, native results cần accounting và combined execution do user yêu cầu. Đây là review hướng dẫn, không phải behavioral test của operator mới. Chưa forward-test junior độc lập theo mặc định mới; lượt product trước là vận hành có hỗ trợ, không chuyển thành chứng nhận autonomous/recall. Những acceptance/history bên dưới giữ mô tả workflow và validation tại thời điểm cũ; mặc định tuần tự hiện hành nằm trong [workflow theo track](sequential-track-workflow.md).
+Review unsupported Python/Java/Go against applicable local/custom/manual options rather than zero TS matches; unfamiliar wrappers/owners through actual models/principals/criteria; alternate Compose filenames through consumers/path limits; JWT decode against same-token verification/global guards; missing policy against labeled source hypotheses and threshold heuristics; native traces versus manual provenance; zero matches with missing paths; timeouts/partial output with feasible remediation; and filter/rule/ignore changes during retests.
 
-## Cách kiểm
+Supported issues do not prevent scope completion, whereas required unfinished needs-review triage does. Candidates-only assignments retain their narrower claims. Blocked-before-scan findings may be empty while native counts remain null. Only ALERTS/RUN is required, with embedded evidence rather than archive/hash gates. Execute feasible next steps rather than stopping after writing next_step.
 
-1. Kiểm relative Markdown links/file routing có thật; không cần web để kiểm local link.
-2. Parse [JSON examples](../examples/README.md), đối soát IDs/counts/provenance/source states, statuses và liên kết hai chiều. Đây là schema illustration, không scan thật.
-3. Dùng YAML parser local có sẵn và CLI/core help thực để kiểm config/rules; không dùng remote validate hoặc cài dependencies chỉ để vượt kiểm tra.
-4. Chạy [offline metacheck](offline-rule-lints.yml) trên rules, chỉ kiểm directive fix/fix-regex; không kiểm toàn ngữ nghĩa.
-5. [Fixtures](../tests/README.md) chọn một rule mỗi track, so actual match locations và negatives; đọc exits/errors/skips/timeouts, không lấy file skip làm negative pass.
-6. Review tình huống ở dưới, rồi so baseline/diff và đồng bộ đúng file thay đổi sang installed copy, không mirror delete.
+## Historical sequential-workflow update — 2026-10-26
 
-## Review tình huống bắt buộc
+The default became per-track discovery/execution/readback/triage/process-and-evidence self-review before the next track, with operation/UI/configuration ledgers and `tracks[].review` in each pair. Independent tracks may continue after exhausted local options leave documented external dependencies. Targeted tasks do not open all tracks, and one round/YAML is not mandatory.
 
-- Python/Java/Go: inspect local rules, applicability, custom/fixtures khi hữu ích, manual review và remaining scope; bộ TS zero matches chưa completed.
-- Repository wrapper/owner tên lạ: inventory từ model/callers, đọc wrapper/principal/criteria, không dựa naming regex.
-- Compose override tên khác: discovery từ consumer/CI, ghi path-filter limitation và đọc/custom rule, không sửa product.
-- JWT decode/verify: đọc verifier cùng token và caller/global guard/principal binding; tên biến không control.
-- Thiếu policy/threshold: giữ source hypothesis, bcrypt <10 và MinLength 0..7 là heuristic; không tự policy violation/N/A.
-- Native trace vs manual path: native-dataflow chỉ khi output thật có trace và đã đọc; manual path source-review. False-positive cần control evidence; needs-review giữ gaps.
-- Zero matches + skipped/unsupported: round output không khép câu hỏi/source còn thiếu; sửa config/chia lượt/manual khả thi trước dừng.
-- Timeout/output lỗi: đọc errors/partial, chẩn đoán và thực hiện bước phù hợp; next_step còn làm được chưa đủ xử lý.
-- Exit 0 vs completion: supported issue có thể completed, triage cần thiết còn needs-review thì partial; candidates-only ghi mức giao riêng.
-- Retest: rule/path/ignore change làm mất match chưa fixed; giữ native/report lịch sử.
-- Handoff: chỉ ALERTS/RUN, evidence nhúng; blocked trước scan có thể findings [] nhưng native counts unknown null.
+Entrypoint/references/UI prompts/synthetic examples were synchronized without matcher/helper/engine/privacy/product/historical-report changes. Historical validation reported 23 stdlib tests, example checker, quick_validate with an existing PyYAML environment, local links/frontmatter/UI parsing, and instruction walkthroughs. No dependencies, new product assessment, or unnecessary matcher fixtures were run. Walkthroughs were instruction review rather than independent new-operator behavioral tests. Earlier assisted product operation did not establish autonomous recall. Older combined-execution examples are historical; current defaults follow [sequential workflow](sequential-track-workflow.md).
 
-## Lượt thực hiện báo cáo cải thiện — 2026-10-26
+## Historical improvement work — 2026-10-26
 
-Thực hiện các hạng mục DOC-01…04, TRACK-01…05, HELP-01…04, RULE-01…08 và TEST-01/02 trong báo cáo được giao. Đây là sửa skill và kiểm thử local, không phải assessment/retest product hoặc kiểm định verdict của năm lượt trước.
+The assigned DOC-01…04, TRACK-01…05, HELP-01…04, RULE-01…08, and TEST-01/02 work affected skill/local validation, rather than product assessment/retest or acceptance of prior verdicts.
 
-### Thay đổi và quyết định theo báo cáo
+- DOC: pre-execution RUN checkpoints/closure/timestamps/change reasons; split questions by trust/action/control/consumer/expectation; group with caller mappings. Separate source facts/policy dependencies/feasible steps and document-source authority/currentness. No permission gate or README-as-policy assumption.
+- TRACK: actual backend flows, UI/API/server boundaries, credential lifecycle, actor/action/object/relation/state, and config consumer/precedence/layer ledgers without product-specific hardcoding.
+- HELP: stdlib collection/private raw, undecided drafts/questions, read-only provenance/count/reference checking, canonical RUN candidate ledger, and native-location review grouping preserving every index/rule/message. Root-cause dedup remains tester judgment.
+- RULE-01: literal/sensitive-property/template/synthetic credential-shaped/redact-named logging candidates remain broad inventory; aliases/wrappers remain blind spots. Guidance distinguishes fixed messages from actual material, without trusting redaction names.
+- RULE-02: Map/Set.delete, service.update, TypeORM repositories/managers/aliases remain broad receiver candidates requiring provenance/actual-write review, rather than repository allowlists/service exclusions.
+- RULE-03: request/response/shared DTO owner fields remain candidates; aliases/inheritance require callers/serialization mapping. Wording changed from input DTO to owner-field candidate without matcher changes or blanket ResponseDto exclusions.
+- RULE-04: config/factory/DB/helper/direct-controller returns can match; caller-returning-helper may not directly match and safe projections are negative. Preserve broad inventory and prioritize actual HTTP callers rather than path exclusions/duplicate ranking detectors.
+- RULE-05: enrollment/login/change/reset/shared/effective-validator cases keep heuristics/matchers, with lifecycle/policy guidance; login MinLength does not establish weak enrollment.
+- RULE-06: six synthetic nginx cases (absent/always/multiple servers/parent-child/missing include/nested locations) produced four old-rule results with six scanned files and no errors. Another location's CSP does not establish sibling response policy. Replaced historical `config-nginx-missing-content-security-policy` with inventory `config-nginx-csp-scope-review-v2`, recording replaces/catalog mapping; preserve historical IDs/verdicts. New regressions retain server/header/include/inheritance responsibilities without universal old-matcher defect claims.
+- RULE-07: id-only lookup also matched id+owner/id+status and prior guards, overlapping additional-criteria. Preserve matcher/ID/neutral wording, documenting name limits rather than inferring authorized extra predicates.
+- RULE-08: select_rules.py projects role/base/follow-up from canonical catalog and language/path/options/engine from YAML, without duplicate mappings or inferred coverage.
+- TEST: native/manual/mixed/multiple rounds, zero scanned/unreadable/partial, source-state mismatch, privacy/non-overwrite, filter/source-change retest history, policy dependencies, unusual wrappers/fields, alternate filenames/languages. Record-level workflow tests are not independent junior behavior measurements.
 
-- DOC-01/02: checkpoint RUN trước execution, closure condition, thời điểm/lý do phát sinh/đổi kỹ thuật; quy tắc tách theo trust/action/control/consumer/expectation/closure và gộp khi có callers mapping. Không thêm permission gate.
-- DOC-03/04: mẫu source fact/policy dependency/source steps/external step, giới hạn policy đúng claim; mẫu discrepancy tài liệu–source kèm authority/currentness. Không biến README thành policy hoặc declaration thành runtime claim.
-- TRACK-01…05: mỗi track có mẫu flow/ledger trong result/manual review; source/support modules, UI–API–server, credential lifecycle, actor–action–object–relation–state, config consumer/precedence/layer. Không hardcode product route/field/policy.
-- HELP-01/02/03: scripts stdlib thu round/private raw, draft/question serializer, read-only checker; candidate ledger canonical tại RUN.coverage.inventory_candidate_reviews. Decisions null đến khi tester chọn; không invent output/evidence/counts, native/manual nguồn riêng.
-- HELP-04: grouping cùng native location giữ mỗi index/rule và message reference về private raw; caller/control grouping và root cause do tester sau đọc. Không tự dedup vulnerabilities.
-- RULE-01: fixtures xác nhận fixed text, sensitive property/template, synthetic credential-shaped literal và redact-named call có thể là positives của inventory naming matcher. Alias/wrapper là blind spots. Giữ matcher, làm rõ literal-versus-material guidance/message; không blanket-exclude literals hoặc tin tên redaction.
-- RULE-02: fixtures xác nhận Map/Set.delete, service.update, TypeORM Repository, transaction manager và alias có thể match. Giữ matcher rộng, đổi wording/guidance yêu cầu receiver provenance trước persistence claim; không whitelist receiver names hoặc loại wrappers.
-- RULE-03: DTO response/request/shared đều match; inherited field/alias usage cần manual mapping. Sửa message input DTO thành DTO owner-field candidate, không đổi matcher hoặc exclude ResponseDto.
-- RULE-04: config factory/DB options/helper/controller direct credential-shaped returns match; caller returning helper không có direct object match; safe projection negative. Giữ broad inventory rule/message vốn trung tính; ưu tiên HTTP/controller path qua lifecycle guidance, không thêm rule trùng chỉ để xếp hạng.
-- RULE-05: register/login/change/reset/shared/effective-other-validator fixtures; giữ threshold/matcher, bổ sung lifecycle wording/guidance. Login candidate không tự là weak enrollment hoặc policy violation.
-- RULE-06: probe matcher cũ trên sáu configs tổng hợp (absent, always, multi-server, parent/child headers, missing include và nested locations), exit 0/errors []; sáu files scanned, bốn results. Có CSP ở một location không trả lời CSP cho sibling/effective responses. Không tái hiện nguyên case product hoặc kết luận matcher cũ sai trên mọi cấu trúc. Chọn inventory server/header/include thay claim absence; ID mới `config-nginx-csp-scope-review-v2`, metadata replaces và mapping catalog rõ; không rewrite history. Regression mới giữ server/header/include, parent/child, always, multi-server và missing include responsibilities.
-- RULE-07: actual fixture positions xác nhận id-only matcher cũng match id+owner/id+status, overlap với additional-criteria rule; prior guard vẫn match. Giữ matcher/ID/message trung tính và ghi giới hạn tên “id-only”; không suy extra keys authorized hoặc gọi prior guard là negative.
-- RULE-08: select_rules.py chiếu JSON trực tiếp từ catalog role/base/follow-up canonical và YAML declarations canonical; không giữ mapping thứ hai, không tính coverage từ metadata.
-- TEST-01/02: regression rules tách tests helper; bổ sung zero scanned, unreadable/partial output, native/manual/mixed/multi-round, source-state mismatch, source-change/filter-retest bảo toàn history, policy dependency record, wrapper/field names, alternate config basename và source ngoài language. Các ca workflow chỉ kiểm bản ghi/logic vận hành, chưa là đo hành vi junior độc lập.
+### Historical results
 
-### Kết quả thực đã chạy
+23 stdlib tests passed, including dangling/duplicate links/counts/state/provenance, native rounds incorrectly receiving manual-only findings, collector exit 7 with undecided status, privacy and non-overwrite. Fourteen fixture cases passed: 12 shape/semantic cases with 59 exact positive and 23 absent negative positions; two outside-path/language cases had zero scanned and were capability limitations rather than clean negatives.
 
-- 23 tests stdlib: pass. Bao gồm phát hiện native round nhận manual-only finding, evidence khác source state, dangling/duplicate IDs/backlinks/counts; synthetic native-only/manual-only/mixed support, nhiều rounds và null output/counts. Collector được thử scanner-like process exit 7, không default completed; metadata không chứa message/source trong ca privacy; tạo mới không overwrite.
-- Fixture runner: 14 cases, exit 0/errors []/không skipped rules cho từng lượt. 12 cases semantic/shape với 59 actual ID/path/start.line khớp positives và 23 negative rule/line positions vắng. Hai ca còn lại là `compose.prod.yaml` ngoài path filter và `outside-language.py` ngoài language của rule đã chọn, exit 0/scanned rỗng; đây là capability limitations có trách nhiệm, không negative semantic hoặc clean.
-- YAML/frontmatter/agent config/metacheck parse bằng ruamel.yaml local; 85 unique bundled IDs. Core `-parse_rules` exit 0. Full 5-config smoke trên cases: exit 0, errors [], 59 matches, 13 files scanned. Không coi smoke là semantic test toàn 85 rules.
-- Offline autofix metacheck: đủ 5 YAML files, exit 0/errors [], zero matches; chỉ kiểm fix/fix-regex.
-- Capture helper chạy engine thật trên một synthetic SQL fixture: exit 0, 1 native match, 1 scanned file, native column chuẩn hóa, status vẫn null chờ tester; native/version/requested-engine giữ đúng nguồn. Không chạy trên product.
-- `quick_validate.py`: pass qua Python/venv local đã có PyYAML; Python mặc định thiếu PyYAML, không cài dependency hoặc sửa validator. JSON example checker pass; projection catalog đủ 85 IDs, filters/language/options giữ từ YAML thật.
-- Semgrep OSS 1.176.0, settings private, metrics/version check off, token trống. Network guard sandbox-exec được kiểm đối chứng loopback connect thành công không guard và bị từ chối khi có guard; mọi lượt Semgrep trên đây dùng guard đó. Không network download/upload hoặc runtime provisioning.
+Local ruamel.yaml parsed frontmatter/UI/metacheck/five rule files with 85 unique IDs; semgrep-core parse_rules exited 0. Full-config synthetic smoke: 59 matches, 13 scanned files, no errors. Five-file autofix metacheck: no matches/errors, limited to fix/fix-regex. Actual collector synthetic SQL smoke: one match/one scanned file, correct normalized native columns/version/requested-engine, status still null pending review. Example checker and 85-ID catalog projection passed. quick_validate used an existing PyYAML environment because default Python lacked it; nothing was installed or validator modified.
 
-Đối soát cuối lượt cải thiện: 91 relative Markdown links hợp lệ; 36 files sửa/tạo đã đồng bộ, hai bản skill có nội dung tương ứng giống nhau, không xóa file riêng.
+Semgrep OSS 1.176.0 used private settings, disabled metrics/version checks, empty token, and verified sandbox-exec network denial (unguarded loopback success/guarded denial). No downloads/uploads/runtime provisioning. At that point 91 links were valid and 36 changed/new files were synchronized to baseline-matching copies without deleting private content.
 
-Raw/baseline/probes nằm trong workspace bảo trì private ngoài skill và source product. Báo cáo assessment cũ và product không bị sửa. Sync từng file thay đổi sang copy workspace chỉ sau khi xác nhận copy đó trùng baseline; không mirror-delete nội dung riêng. Chưa forward-test junior/agent độc lập, chưa semantic-test mọi rule/framework/engine version, chưa xác nhận cải thiện workload trên product. Không dùng giảm matches hoặc đủ fields để chứng nhận workflow tốt hơn.
+Private probes/raw/baselines stayed outside skill/product. No prior product reports/source were modified. No independent operator forward test, all-rule/framework/version semantic qualification, or measured product-workload improvement occurred. Fewer matches/filled fields do not establish improved correctness or recall.
 
-## Lịch sử — lượt bảo trì trước báo cáo cải thiện
+## Earlier maintenance history
 
-Ngày 2026-10-26, Semgrep OSS 1.176.0 trên macOS, settings riêng, local configs, metrics/version check off và sandbox-exec deny network. Guard được kiểm đối chứng: cùng loopback connect thành công không guard và bị PermissionError khi có guard. Điều này xác nhận cơ chế guard tại môi trường kiểm, không hứa mọi nền tảng/version.
+On 2026-10-26, Semgrep OSS 1.176.0/macOS used private local rules/settings and verified network denial. Earlier checks reported 75 valid links; synthetic examples had four findings/ten evidence records/three native-shaped occurrences/four questions with checked IDs/counts/state/backlinks; five YAML files/85 IDs and 30 question bases parsed/reconciled. quick_validate used an existing local PyYAML interpreter, without installs.
 
-- Relative Markdown links/file routes: 75 links hợp lệ tại lượt kiểm trước bổ sung ghi nhận này; đối soát lại khi đóng bảo trì.
-- JSON examples: parse hợp lệ; 4 findings, 10 evidence records, 3 native-shaped occurrences, 4 questions. Counts/IDs/source_states, provenance, statuses, references hai chiều và partial/blocked đã đối soát bằng đoạn kiểm local. Không là scan thật.
-- YAML: frontmatter/agent config, 5 bundled files (85 unique IDs) và metacheck parse bằng ruamel.yaml local. Catalog đủ 85 IDs; 30 base questions có đủ applicability/expectation/technique/control/evidence/closure.
-- Skill authoring `quick_validate.py`: pass bằng Python local sẵn có PyYAML. Python mặc định ban đầu thiếu PyYAML; không cài dependency mới hoặc sửa validator.
-- Core help đã đọc; `semgrep-core -parse_rules` trên toàn rules: exit 0. CLI full-config scan trên fixtures staged: exit 0, errors [], 8 actual match locations khớp expectation.
-- Offline metacheck: quét đủ 5 files rules, exit 0, errors [], 0 matches. Chỉ kiểm directive fix/fix-regex.
-- Fixtures trực tiếp theo annotation positions: 5 representative rules, 8 positive locations, 7 negative locations không match. BE 1, FE 1, AUTH 3, AUTHZ 2, CFG 1 matches. AUTHZ guard-before-lookup vẫn match như review candidate, slug negative không chứng minh authorization.
-- CFG single-rule round: compose.yaml có match true và false không match; compose.prod.yaml có true nhưng không nằm paths.scanned, dù CLI nhận 2 targets và chỉ scan 1. Native paths.skipped là [] nên không invent skipped count/reason field. Rule.paths bốn basenames giải thích giới hạn; full-config round có file variant trong scanned vì rules khác áp dụng, vẫn không có privileged match cho variant.
-- Đã review logic các tình huống ở trên và acceptance dưới. Không gọi đó là thực thi product assessment.
+Core parsing and all-config representative scans passed with eight exact positives/seven absent negatives across five representative rules (BE 1, FE 1, AUTH 3, AUTHZ 2, CFG 1). Prior-guard AUTHZ remained a candidate, and unmatched slugs did not prove authorization. Privileged alternate Compose files could be missing from scanned paths despite empty skipped lists; other full-config rules scanning the file did not establish privileged-detector applicability.
 
-Lượt fixtures đầu bị default Semgrep ignores cho tests/fixtures: exit 0, scanned rỗng, không được tính pass. Đã stage nội dung tổng hợp vào private cases/<track>/, giữ basename và mapping về tests/fixtures; không đổi ignore/product/rule paths. Khi đối chiếu saved output còn chuẩn hóa realpath /var → /private/var để không báo sai khác đường dẫn tương đương. Giữ raw các lượt thất bại và lượt mới riêng trong working notes ngoài skill.
+Initial direct tests/fixtures scanning produced empty scanned output because of default ignores and was not counted as passing. Synthetic data was staged privately with unchanged names/content/rule paths and explicit mappings. Realpath /var versus /private/var was normalized for comparison. Failed/new outputs stayed separate.
 
-### Thay đổi matcher duy nhất có regression
+A real JWT-secret matcher regression replaced nested VALUE metavariable matching (which falsely matched config.getOrThrow("JWT_SIGNING_KEY")) with direct literal, CONFIG || literal, and CONFIG ?? literal object-value patterns under secret/secretOrKey. Original getter-negative plus member-config/unrelated-key negatives and fallback positives passed: three positives/three negatives. Expectations were not relaxed. The other 84 patterns and all IDs/languages/severity/confidence remained; heuristic metadata replaced dangling workload-policy references without creating default policy.
 
-`nestjs-auth-hardcoded-jwt-secret` trước dùng metavariable-pattern trên VALUE nên bắt nhầm chuỗi nested trong config.getOrThrow("JWT_SIGNING_KEY"). Negative fixture gốc thất bại. Đã đổi thành ba object-value patterns trực tiếp: literal, CONFIG || literal, CONFIG ?? literal, giữ key constraint secret/secretOrKey. Regression giữ nguyên getter-negative và thêm member-config/unrelated-key negatives, ||/?? positives; actual 3 positives và 3 negatives đúng. Không đổi expectation để bỏ ca lỗi.
-
-84 rules còn lại giữ patterns; cả 85 giữ IDs/languages/severity/confidence. Chỉ dọn metadata semantics và message ngữ cảnh cũ; metadata workload_policy trỏ file không tồn tại được thay bằng mô tả detector heuristic, giữ cost <10 và MinLength 0..7. Thay đổi không tạo policy mặc định.
-
-### Giới hạn validation
-
-Không chạy native --test harness; dùng CLI scan và so toàn bộ ID/path/start.line theo annotations. Không semantic-test đủ 85 rules hoặc mọi import/taint/framework/version; core parse và all-config smoke chỉ xác nhận cấu hình chạy trên ca đã chọn. Không chạy product assessment, browser/traffic, runtime/secret validity, remote rules, upload hoặc dependency install. Không thay native outputs/báo cáo lịch sử. Mapping product và các ca ngoài stack vẫn cần discovery/review khi vận hành.
-
-Working notes/raw/baseline/diff local nằm ngoài skill, không kèm product source hoặc assessment history. Đồng bộ từng file thay đổi/tạo sau kiểm baseline installed; không mirror-delete file riêng.
-
-
-## Acceptance lịch sử — trước báo cáo cải thiện
-
-- [x] SKILL.md chọn base/dispatcher/bàn giao từ context sạch; agent prompt ngắn.
-- [x] Không routing vận hành sang skill/runner khác hoặc product layout cũ.
-- [x] Năm track đủ 30 IDs và nội dung kỹ thuật/control/evidence/closure cụ thể.
-- [x] Discovery quyết định applicability; scope hẹp chỉ chọn base liên quan.
-- [x] Tuyên bố track là thông báo, không hỏi lại quyền local/rule mỗi lượt.
-- [x] Một lượt phục vụ nhiều track, không mặc định năm scans.
-- [x] Inventory/câu hỏi độc lập matches và whitelist rules.
-- [x] Catalog map đủ 85 IDs, công khai stack/name/path/threshold limits.
-- [x] Python/Java/Go có repo/local/custom/manual path, không nhận zero TS là clean.
-- [x] Repository wrapper/owner tên lạ vẫn cần discovery và đọc implementation/callers.
-- [x] Config override khác tên được giữ inventory; fixture ghi nhận path filter thực.
-- [x] JWT decode/verify và principal binding đọc caller/global config, không tin tên.
-- [x] Source policy hypothesis có nhãn; threshold không tự violation.
-- [x] Evidence nối location/state/thao tác; manual path không native trace.
-- [x] False-positive có control evidence; needs-review giữ gaps, không đòi fake exploit.
-- [x] Manual finding native fields null; tester priority tách native severity.
-- [x] Zero matches + skip/unsupported không completed whole scope.
-- [x] Exit 0 khác task completion; supported issue không tự partial.
-- [x] Missing rule/timeout/output còn bước khả thi thì tiếp tục chẩn đoán/khắc phục.
-- [x] Retest không coi ignore/rule change là fixed, không sửa lịch sử.
-- [x] Handoff chỉ ALERTS/RUN với evidence nhúng, không archive/hash gate.
-- [x] Examples synthetic, counts/references nhất quán, không trình bày scan thật.
-- [x] Parser/metacheck/fixtures/document review có giới hạn ghi rõ.
-- [x] Quy trình đồng bộ có chủ đích, kiểm baseline để bảo toàn nội dung người dùng.
-
-Ghi nhận đồng bộ của lượt trước: 32 files sửa/tạo được copy có chủ đích; cả hai cây có 33 files và nội dung tương ứng trùng nhau, không xóa file. Git HEAD/dirty state giữ đúng baseline, không commit/push hoặc sửa tracked product files. Links cuối vẫn 75 hợp lệ; acceptance là đối soát nội dung/logic và kiểm tra local nêu trên, không độc lập forward-test agent trên product.
+Native --test was not run; exact CLI ID/path/start.line comparison was used. Parsing/smoke did not establish semantics of all 85 rules/imports/frameworks/taint engines. No product/browser/traffic/secret-validity/remote-rule/upload/dependency work occurred. Earlier 32 changed/new files were copied intentionally into 33-file trees with matching corresponding content and no deletes; HEAD/product state and history were preserved, without commits/pushes. Historical acceptance concerned instruction logic/local checks rather than independent product forward testing.

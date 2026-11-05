@@ -8,13 +8,12 @@ import signal
 import threading
 import time
 from urllib.parse import urlsplit
-from jsonschema import Draft202012Validator
 from .anonymous import validate_plan,expected_response,validate_exports
 from .discovery import canonical_hash,verify_local_sources
 from .anonymous_product import save
 from .anonymous_runtime import AnonymousRuntime,inspect_binding
 from .journal import Journal
-from .transport import MCP,field
+from .transport import MCP, TOOLS,field
 from .evidence import read_report
 from .runtime import docker
 
@@ -31,18 +30,22 @@ def baseline_key(label):
 
 
 class RecordedMCP(MCP):
-    def __init__(self,rt,out):super().__init__(rt.request);self.out=out;self.index=0
+    ALLOWED_TOOLS=TOOLS | {'zap_findings_snapshot','zap_auth_session_prepare','zap_auth_session_validate',
+                         'zap_findings_details'}
+
+    def __init__(self,rt,out):
+        super().__init__(rt.request,allowed_tools=self.ALLOWED_TOOLS,required_tools=())
+        self.out=out;self.index=0
+
     def record_response(self,prefix,result):save(self.out,prefix+'-response.json',result)
-    def call(self,name,args):
-        if name not in self.contracts:raise ValueError('missing MCP capability '+name)
-        Draft202012Validator(self.contracts[name]).validate(args)
+
+    def exchange_call(self,name,args):
         self.index+=1;prefix=f'tools/{self.index:04d}-{name}'
         save(self.out,prefix+'-request.json',{'tool':name,'arguments':args})
-        result=self.rpc('tools/call',{'name':name,'arguments':args});self.record_response(prefix,result)
-        if result.get('isError'):raise RuntimeError('native MCP tool failed '+name)
-        text='\n'.join(x['text'] for x in result['content'] if x.get('type')=='text')
-        if text.startswith('"'):text=json.loads(text)
-        return text
+        result=super().exchange_call(name,args)
+        if isinstance(result,dict):
+            self.record_response(prefix,result)
+        return result
 
 
 class AnonymousRun:
@@ -267,10 +270,20 @@ V.setGlobalVar(KEY,JSON.stringify({historyId:history.getHistoryId(),method:node.
                 if sha:args['expectedSha256']=sha
                 page=json.loads(self.mcp.call('zap_report_read_chunk',args));pages.append({k:v for k,v in page.items() if k!='content'});return page
             data=read_report(reader,path,32*1024**2);save(self.out,'reports/backend.'+fmt,data);save(self.out,'reports/'+fmt+'-readback.json',{'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'pages':pages,'endOfFile':True})
-        for tool,name in [('zap_findings_summary','findings-summary.md'),('zap_findings_snapshot','snapshot.json')]:
-            if tool in self.mcp.contracts:
-                try:save(self.out,name,self.mcp.call(tool,{'baseUrl':self.p['origin']}).encode())
-                except Exception as exc:self.report_errors.append({'tool':tool,'supplemental':True,'reason':'Native explicit POST operations have no guided history entry; keep tool failure, use native alert/message/report reconciliation','errorType':type(exc).__name__})
+        supplemental = (
+            ('zap_findings_summary', 'findings-summary.md', {}),
+            ('zap_findings_snapshot', 'snapshot.json', {}),
+            ('zap_findings_details', 'findings-sample.md', {'includeInstances':True,'limit':20}),
+        )
+        for tool,name,options in supplemental:
+            if tool not in self.mcp.contracts:
+                continue
+            try:
+                save(self.out,name,self.mcp.call(tool,{'baseUrl':self.p['origin'],**options}).encode())
+            except Exception as exc:
+                self.report_errors.append({'tool':tool,'supplemental':True,
+                    'reason':'Supplemental findings unavailable; retain native alert/message/report reconciliation',
+                    'errorType':type(exc).__name__})
         # Full page export after producers stopped/passive settled. Snapshot-only remains explicit in synthesis.
         count=int(self.engine('core','view','numberOfMessages')['numberOfMessages']);messages=[]
         cursor=0
@@ -281,12 +294,8 @@ V.setGlobalVar(KEY,JSON.stringify({historyId:history.getHistoryId(),method:node.
             messages.extend(page);cursor=len(messages)+1
         if len({m['id'] for m in messages})!=count or int(self.engine('core','view','numberOfMessages')['numberOfMessages'])!=count:raise ValueError('message export drift or duplicate')
         save(self.out,'messages.json',{'messages':messages,'count':count,'complete':True})
-        alerts=[];expected=int(self.engine('core','view','numberOfAlerts',{'baseurl':self.p['origin']})['numberOfAlerts'])
-        for start in range(0,expected,50):
-            page=self.engine('alert','view','alerts',{'baseurl':self.p['origin'],'start':start,'count':min(50,expected-start)})['alerts']
-            if len(page)!=min(50,expected-start):raise ValueError('missing alert page')
-            alerts.extend(page)
-        if len({str(a['id']) for a in alerts})!=expected:raise ValueError('duplicate alert page')
+        from .result_readers import read_native_alerts
+        alerts=read_native_alerts(self.engine,self.p['origin'],page_size=50);expected=len(alerts)
         save(self.out,'alerts-native.json',{'alerts':alerts,'count':expected,'complete':True})
         mids={str(m['id']) for m in messages};missing=[str(a['id']) for a in alerts if str(a.get('messageId')) not in mids]
         save(self.out,'ALERT_MESSAGE_RECONCILIATION.json',{'alertCount':expected,'messageCount':count,'missingMessageRefs':missing,'detailStatus':'complete' if not missing else 'partial'})

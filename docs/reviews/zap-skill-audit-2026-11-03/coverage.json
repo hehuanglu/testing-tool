@@ -1,0 +1,5562 @@
+{
+  "limits": "Every file inventoried; review depths differ. Companion reviews preserve exact worker source coverage. No full every-line semantic/runtime claim.",
+  "files": [
+    {
+      "path": ".DS_Store",
+      "bytes": 6148,
+      "sha256": "cd562badbccaffc6dd0d196212ee97d3fea795fda8c6ff78f8cac91664922c3e",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-structural-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 11845,
+      "sha256": "a6587c6cef8b448c51637918418f8d0d4cdbc694b79958887a0cea5848608a7c",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "agents/openai.yaml",
+      "bytes": 520,
+      "sha256": "bcc30176c5c9b920594972670901c827fec74dbe18d2534888c58fa7f8a0a84e",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "assets/assessment-sheet-reference.png",
+      "bytes": 1776973,
+      "sha256": "c5205ca9a0ccfb90c6084e11a3b4283cde23ee62de6148ad21266ea8109a5493",
+      "changedSinceBaseline": false,
+      "review": [
+        "image-viewed-layout-contract-compared"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/mcp-zap-server/.github/actions/zap-security-gate/mcp_zap_gate.py",
+      "bytes": 75529,
+      "sha256": "f7bd042ed8cd951b00e5229e8a138f7b170a784d6854998d0eb8e1c5f5b4255e",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/mcp-zap-server/.github/actions/zap-security-gate/run-assessment-regression.sh",
+      "bytes": 247,
+      "sha256": "a612c0bad5489b32c86ac7949450dea6e79ced380e498b6196fc9effad6547a4",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/mcp-zap-server/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/vendor-provenance.json",
+      "bytes": 713,
+      "sha256": "be408d63fc2ab2bac60987c295e184e8f53266fdd74cd4001485d74667ea0e9b",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-deep-read"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/.gitignore",
+      "bytes": 182,
+      "sha256": "07e29a891b713529aa526acc151b58bf5715c785c5d870918f2593d17561b769",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/PRODUCT_DISCOVERY.md",
+      "bytes": 4859,
+      "sha256": "e3742d62f26e10df3d3e0918669d97fb361394c27de2a9674c968b75a3c90fbe",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/README.md",
+      "bytes": 3460,
+      "sha256": "2728a164ac5f90651a6c524d1aaae0e273b2ce29a284582fd457f8c8f1dd2c67",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/bola-research-runbook.md",
+      "bytes": 7449,
+      "sha256": "dbd0d31ec85a3810fbac7041c82156c6adc3c3a94d5aae545a6163ac06aead7c",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/capability-matrix.md",
+      "bytes": 6940,
+      "sha256": "a374f21e7a38387a3d54cd6e861ff1c9618ca0f2f579a367e07a81d4b8d1bed2",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-history-review",
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/decisions.md",
+      "bytes": 8555,
+      "sha256": "2f38f4d6a92e855b3e2cdde7733a04e472403df8793a48e6a7ac0508ad7bb4c1",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-history-review",
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/existing-target-runbook.md",
+      "bytes": 8044,
+      "sha256": "067149ba1db07173af88bb149b2a98577d50a16a871ccd86f568f56b74af6ce4",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/fe-anonymous-research.md",
+      "bytes": 9235,
+      "sha256": "021624ac9b83a2e3fd1992f355e6ed0b0cd73819b58219ecca25ac250fdab32f",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/fe-authenticated-research.md",
+      "bytes": 9740,
+      "sha256": "a9ac9590357f835b913b0d582d5bc8b76fa4bc1cf07944595e618123779564d8",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/multi-product-backend.md",
+      "bytes": 7839,
+      "sha256": "12ca78d2be530c6671f279b20e3d3458e9b099a95d3392379e2eff004d9d6e7a",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/operator-quickstart.md",
+      "bytes": 5146,
+      "sha256": "5e43c02da51ef06a94b0c667acd04399b9447117caadce4e4f5e12ab9512325b",
+      "changedSinceBaseline": true,
+      "review": [
+        "entry-guide-reviewed-with-legacy-classification"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "bytes": 7964,
+      "sha256": "2bbf8a7f75554c4d052c3318d69bef61f3da2838838bd44ac6473ba445d772e5",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/CAPABILITIES_GENERATED.md",
+      "bytes": 7933,
+      "sha256": "d4ae171d7198cc490ffd8e96b96d05cd5a1a046a1c5c4885a2cc0fae5e08f559",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/DELEGATED_DAST_CANDIDATE_VI.md",
+      "bytes": 10694,
+      "sha256": "bf419f1e1894ad034e587ddfa506d30e1b2036aba0ba93ef4831b69195fb8a28",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W0_CONTRACT_DECISION_VI.md",
+      "bytes": 10182,
+      "sha256": "7b3f3d54baaa8cdae853865787c18f5d7d5e6bc31ff2c9f7b6d36711e62b195d",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W10_REGRESSION_VI.md",
+      "bytes": 6789,
+      "sha256": "619e8787ba7b4d218234aa82d8cbb345a1826e05d5b860fbcf31343853203ac5",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W11_ACCEPTANCE_VI.md",
+      "bytes": 7601,
+      "sha256": "bd9fd1131aac49afc0919e155bd2e70f68273609efd107c083a1705c79fcc6ae",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W1_COVERAGE_VI.md",
+      "bytes": 7719,
+      "sha256": "509913034e57c5ecfcefe376c5a07ddca35af4c06cf9ee2246994b37a9437530",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W2_VERIFIER_VI.md",
+      "bytes": 8993,
+      "sha256": "bdf32957ce4f51e63f1b53f5e4b612080459605a2d16f46a5b862d41e8045f92",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W3_REGISTRY_VI.md",
+      "bytes": 8058,
+      "sha256": "cabd449f2464d984bdc476ecd3391b7c7131f7600f091e403cb67202d9fafb65",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W4_COMPLETION_VI.md",
+      "bytes": 8220,
+      "sha256": "f97e6c9f1b22c99703a24c85e80635d56f502f3e0491a35893feae512295e797",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W4_CONFORMANCE_VI.md",
+      "bytes": 7418,
+      "sha256": "c444b8d6671923ebd5b338e06f79bc669371abd016eb2584ea1002d731aef655",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W4_RUNTIME_VI.md",
+      "bytes": 11187,
+      "sha256": "e3c9a05ca235e6e30fe19b3e73e692358422ee7822e22819440e81de5f28a4b4",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W5_AUTH_LIFECYCLE_VI.md",
+      "bytes": 8472,
+      "sha256": "eed2ed8df7fde1b90d400ddc06547a50ab1b39b2c511fdadffaa7d99afc3b0a2",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W5_RESOURCE_AND_OPAQUE_SOURCE_VI.md",
+      "bytes": 7409,
+      "sha256": "c070626a6f3a52edc582637e840cd1dff81084028def8f2d675653c491473e74",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W6_BUSINESS_VI.md",
+      "bytes": 5252,
+      "sha256": "d5b9cc2be4913648657784f555e5a8135a5221c4033a7a3f2b44cae2f5c37cf3",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W7_UI_VI.md",
+      "bytes": 8593,
+      "sha256": "eb8ca088cb75db84e13a9d52f94ca78543e474bc980b5d1a32458140c65d61bd",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W8_ACTIVE_VI.md",
+      "bytes": 7666,
+      "sha256": "1f59ed9ea20f0dd5d8c8447e2e646498e4884f2ba7b20c7e4723a75b1b2b5a11",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W9_UNIFIED_VI.md",
+      "bytes": 9402,
+      "sha256": "909ea35eb9ed1f7d1421ecb86d2c448647b21882b9f5b1cb8a10dabe3845a516",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "historical-record-classified-structurally-no-semantic-rewrite"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/examples/question_adapter.py",
+      "bytes": 4582,
+      "sha256": "e915d6de9f05ddb5414249a4da0e58d66036394fe1723d6c5fd12669a3ead84f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/capability-registry.json",
+      "bytes": 13895,
+      "sha256": "8d062c23e586fae7ef038154e013731002b5a37f528cb6139cdd9b0e27ccfe01",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/example-existing.authority.template.json",
+      "bytes": 789,
+      "sha256": "2a153e7c2f2faa020018818a7b947c0fc6491c0066aacf2f8e055b1fb3ab9ac3",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/example-existing.draft.json",
+      "bytes": 1481,
+      "sha256": "75a0cb12bcdc7d485606b36dfea69fe97179dd36a7f37369d8cfef69fd621040",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/example-existing.public.openapi.json",
+      "bytes": 300,
+      "sha256": "266fad304cd6b7a4838f2069f64b299663036aedc1504adfacfd15349d3d8649",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/finalsource-synthetic.bola.json",
+      "bytes": 809,
+      "sha256": "99c73e0a025b03d94ae9b93b6c4ad7c741ac52f6ff431b83e203d83d05dd5537",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/runtime-baseline.json",
+      "bytes": 508,
+      "sha256": "e909c8c411e29565072df7e6239ea7003067b65e3a824fdb359f631eebc4e192",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/secret-sink-inventory.json",
+      "bytes": 11084,
+      "sha256": "2381697991206ae3a13830f223e8dbf3f020864099824b742447f29794df929f",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/profiles/v1-exploratory.json",
+      "bytes": 569,
+      "sha256": "8255db808f3d2da6d5d5903899a030962d472abd0a21c9f7461da7e848a6bf5e",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/pyproject.toml",
+      "bytes": 332,
+      "sha256": "e0eb15469fafc4f275a48ac6102d54bb5a2e8d1043ecc936a3c5dbfa9c639e8c",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/requirements.lock",
+      "bytes": 140,
+      "sha256": "2f1ee731f0e308b8633060fb0164cfd1854dd96b0a39cb7ed752b65c046b755b",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/authorization.schema.json",
+      "bytes": 2281,
+      "sha256": "caa0ad0f2361de040ae73d1109f404f22fb453cb6a23c273eec46590ec424a3f",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/be-anonymous-research-plan-v1.schema.json",
+      "bytes": 10176,
+      "sha256": "56d140769aaa1ac062bbbc208156485ffa0217a7291b3630ba5544d59356d562",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/be-authenticated-research-plan-v1.schema.json",
+      "bytes": 1889,
+      "sha256": "92f85519805e0cc71ae519eb09aa136d18d7a7a50a24ec12b10ba03c9c5a90db",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/be-authenticated-research-plan-v2.1.schema.json",
+      "bytes": 11593,
+      "sha256": "860868ecf905d38930a2fd0c5ae502aa42be70d890809790352ec8f2b3a88386",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/be-authenticated-research-plan-v2.schema.json",
+      "bytes": 9533,
+      "sha256": "16f4226b41ff952aa0f41fee63cc6d4746a725487785deec237a4d43b11c08e3",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/fe-anonymous-journeys-v1.schema.json",
+      "bytes": 4881,
+      "sha256": "659afbd67b23cd79589dc9a4af8158943a6ebdb9b908449ad0b94f9278425129",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/fe-anonymous-plan-v1.schema.json",
+      "bytes": 7368,
+      "sha256": "406a6f124ac8911451dd69170d10472862f7ac7433c4d134933b0bec720ae210",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/fe-authenticated-evidence-v1.schema.json",
+      "bytes": 1033,
+      "sha256": "87e5a6fe3523927718c199622f8d4c7befcaca14f4fea0cdb5790221dad06d48",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/fe-authenticated-journeys-v1.schema.json",
+      "bytes": 22800,
+      "sha256": "ee09a2732a5fbd1cc495ee452fa9539d2624cb3e9cba9609440b58fdcd118f49",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/fe-authenticated-plan-v1.schema.json",
+      "bytes": 34552,
+      "sha256": "764975d11b3f28dacb5612fff89823ed46a644e2d69dd5149a7f418dab04626f",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/manifest.schema.json",
+      "bytes": 7426,
+      "sha256": "d821d0881e4cc2d509411d0f4446e740245f7789c577deb4bc684956dc561f60",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/normalized-plan.schema.json",
+      "bytes": 12292,
+      "sha256": "12dc969aca93256bf6b503c0777f0acf585cd64c35409e9996a15b4d9985a464",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/product-discovery-v1.1.schema.json",
+      "bytes": 17134,
+      "sha256": "00aca64747eb027b91bf7a0df2a069f456519ad3b9bc229e1e638205a8ed23c3",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/product-discovery-v1.schema.json",
+      "bytes": 15598,
+      "sha256": "54a82f5ed811fc76893e91da02ea93f512dfe9ed0c892cc0e7e11bffc2d7d1a5",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/product-source-candidate-v1.schema.json",
+      "bytes": 10020,
+      "sha256": "fd79fc79a7b9be27cccff988bc4194c897c57cfee98672f1217b99631c712daa",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/product.schema.json",
+      "bytes": 3518,
+      "sha256": "f3e3b415f502ca950f59b2359b4a54cb9db78bd44cb46be331bcc75da1bd792a",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/auth-campaign.schema.json",
+      "bytes": 2138,
+      "sha256": "870fb9cb9ccb7abfc317c95cec30febde71dcc6b32e9a0697505da9277161526",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/business-fixture.schema.json",
+      "bytes": 4760,
+      "sha256": "61638f148a301988612ad69f02378ebd161bd11b968a79d93ef891f226a74ced",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/capability-registry.schema.json",
+      "bytes": 3751,
+      "sha256": "b371e8b200e213dc894353a3c648698c0525d53575f807db79b68da8ff80fa72",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/runtime-safety.schema.json",
+      "bytes": 4107,
+      "sha256": "6870576d166677e26d9e46a8dc0cfae92a81b13242bdbb9f2d4862e494cccd04",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/secret-sink-inventory.schema.json",
+      "bytes": 3910,
+      "sha256": "50f4a3b514b12e205e32e06b2482da00146168a0e025f51325420cb2d4c41808",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/ui-plan.schema.json",
+      "bytes": 4202,
+      "sha256": "ba1cf4a76363ceb20b71dd9bd56e463512ac1b60cebcbe103aeff9d7248cec68",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/remediation/w0-plan.schema.json",
+      "bytes": 2926,
+      "sha256": "5cd6a23cea75d4e09e9d6c8064f5746dc2a780fee49e6ad4f9eff3b606f7fda8",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/review-record.schema.json",
+      "bytes": 767,
+      "sha256": "c3ac912381497fbdef57521be387965c0b8d9541d7479f17cc31184d29339d9f",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/track-result.schema.json",
+      "bytes": 2825,
+      "sha256": "ce73a3e9511ed9c85d7179082cb2fb44ec7c01afec8e656936b5bc700a5e5d59",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.1/authorization.schema.json",
+      "bytes": 2784,
+      "sha256": "b6034a8a0c178ce9db662ab31786375d780282a4802805bca7dbf0a61059e62f",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.1/manifest.schema.json",
+      "bytes": 7426,
+      "sha256": "d34eb77d8c3967b6976c0c15996cb7532a8d607c08d1a3c3ef4b63c7013f77a9",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.1/normalized-plan.schema.json",
+      "bytes": 16403,
+      "sha256": "9384d1424c26ba57bdac2c28fac5917de382e0468a4f56d5d99e9b50365c5f51",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.1/product.schema.json",
+      "bytes": 5224,
+      "sha256": "045cf1f713f23dcab2da4ab33859a3f84907ade57674c9c946ab2c5fbd26c85a",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.2/bola-authority.schema.json",
+      "bytes": 1252,
+      "sha256": "c620c3d0de928edd323e7eae31f05375775b9615687a4fd9f4de78d659fba9bb",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.2/bola-config.schema.json",
+      "bytes": 4394,
+      "sha256": "8ad167aea27de8c169e77f18522688d8c308fbbffd73de84bddcd29ca6ca1256",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.2/bola-plan.schema.json",
+      "bytes": 7010,
+      "sha256": "961a3ddc5df160aacb459501ac4164414b305693e844d711a83846c4f989cdf5",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.2/manifest.schema.json",
+      "bytes": 9180,
+      "sha256": "3640f0f2565b1a65a54bb2c85ca1a28021a96498b92833dde219b3faa0fc7609",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.2/track-result.schema.json",
+      "bytes": 4248,
+      "sha256": "be657f006fb0f7fd05b91b05fd4349439814ae0a6befa9e702e5731c571425aa",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.3/bola-authority.schema.json",
+      "bytes": 1356,
+      "sha256": "85874e48f20cdda73198ab4daff7c34bdb8cae207f1f5e911ea835e9c2b84ee9",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.3/bola-config.schema.json",
+      "bytes": 4524,
+      "sha256": "9dd20af2cd55e05280a5a88619c514e65b2a8f9b92350ccde2308701d6fbabdb",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.3/bola-plan.schema.json",
+      "bytes": 7406,
+      "sha256": "acb8f3459562de4a9e95b18e16348c0b3ce3d575035b8913df653817fca24097",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.3/bola-profile.schema.json",
+      "bytes": 2564,
+      "sha256": "bb04824cfbe3e3edd8c2e375ea970a4967e0ebb4fcbc2f11bf7f242a4282ca76",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.3/manifest.schema.json",
+      "bytes": 9278,
+      "sha256": "2b38819a8177ab9a05615c04c5ac7a85af62cda1d2845aeef412fc609ef8b060",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.3/track-result.schema.json",
+      "bytes": 4322,
+      "sha256": "50e9b5ab36ae3cc4d4577e2e39bd1bb090d0ab5e426538614dc5706bc2dd5905",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.4/bola-authority.schema.json",
+      "bytes": 1705,
+      "sha256": "e3fe68bd44e2a86c22f9c096d22f3a3b4ee20d2d477e67152eb6e0010f17b783",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.4/bola-config.schema.json",
+      "bytes": 5161,
+      "sha256": "467e527f277481462006741dda8fc2dd862f8e88e4e9e721b68f9db00d851bdc",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.4/bola-plan.schema.json",
+      "bytes": 8620,
+      "sha256": "36eba68c60043abc695af4ab597a3ede3fc353652e40af8a33eb952f386265d2",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.4/manifest.schema.json",
+      "bytes": 9278,
+      "sha256": "bdebf30e29d8fc0826e12a911c61a02c0b71fd1b1b3611ee647fdac66ce55c7a",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v1.4/track-result.schema.json",
+      "bytes": 4322,
+      "sha256": "50e9b5ab36ae3cc4d4577e2e39bd1bb090d0ab5e426538614dc5706bc2dd5905",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/v2.0/bundle.schema.json",
+      "bytes": 28429,
+      "sha256": "c749df10701834301a68ea155dbc6c9ed8a8c144a83360cba14aa3827ed7f961",
+      "changedSinceBaseline": false,
+      "review": [
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/schemas/workflow.schema.json",
+      "bytes": 2586,
+      "sha256": "4069cce8a381228ac2aff841f4a2966242f240034406cf73f78834565d610d1a",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-workflow",
+        "json-schema-metaschema-validated"
+      ],
+      "checks": [
+        "JSON-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/Dockerfile.boundary",
+      "bytes": 138,
+      "sha256": "b8c3960af09b21ea1b9edd0b289b1577bd78642a52b4b2ca0d06bb35ed2493e2",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/actual_zap_sink_control.py",
+      "bytes": 23573,
+      "sha256": "00a733822294a3eeabf38467f7718f1fefc9b2293ae64358f3c2972f46cab2d4",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/be_anonymous_research.py",
+      "bytes": 7834,
+      "sha256": "2a92cff501889d28d96e2a852b87f7391b75199eed038122ebba9619afb60c93",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/be_authenticated_preflight.py",
+      "bytes": 7876,
+      "sha256": "a5424adf36596770d3179e6c22d9b3f43699c092bd96b3f58c54c7f0d00196a7",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/be_authenticated_research.py",
+      "bytes": 480,
+      "sha256": "90fda4f8ba5df7a2aede893dfc5da103d52f0e4118995d2a08d82c5a39a750c6",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/binding_campaign.py",
+      "bytes": 9196,
+      "sha256": "064b8919fac951f7d1fb583ded16da4457cd9b65989093614632a51eea51545f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/bola_continuation.py",
+      "bytes": 909,
+      "sha256": "a879bc9dc600077978f5c41b737d8b664f411d58612fe845f3634cfd0d55257e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/bola_research.py",
+      "bytes": 2259,
+      "sha256": "59796398443889b0a3ae09f9feb6569c4fbc6426b720491b45f29fd1e81e351b",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/cleanup_research_accounts.py",
+      "bytes": 3417,
+      "sha256": "6c331c74a9d3fc1825e37ee846158e6f4729d03a5236c2ce6197f1e99220beef",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/fault_campaign.py",
+      "bytes": 2603,
+      "sha256": "d89994eb3ac3d83cc8aaa43a2de8baa9c836bec1b7559bfdd409e3b5f64a4bff",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/fe_anonymous_research.py",
+      "bytes": 306,
+      "sha256": "dc20e2f13804741878d3fd089987650bfd8408713bc2110b6da166a0e7dc9736",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/fe_authenticated_research.py",
+      "bytes": 125,
+      "sha256": "3a560ec760d76b41e7510b84aae22ad59dc0ededb3bb20f02d6aede5a1437e57",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/finalsource_p0.py",
+      "bytes": 41684,
+      "sha256": "5cf020d9351e4596cea3e2ed7c1c4fc3a36e2a833e9b80d1ea3d8800b8728fd1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/finalsource_p0_coverage.py",
+      "bytes": 12430,
+      "sha256": "8cdd2f5671647aa3e570836b75b25d778aaef3ad65a0a20d2cc9144ca169122b",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/finalsource_p0_guard.py",
+      "bytes": 12662,
+      "sha256": "3d7aa566d1c9a06c8fe6a687f7cdf56ddf3a1b886a8c528973798497e83777e2",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/integration_campaign.py",
+      "bytes": 4198,
+      "sha256": "c3bd75ac60c6f9f4770cb1a3b881ca0209ba1f875bb6c7ef386b9d6ca0dd8889",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/prepare_finalsource_category_fixture.py",
+      "bytes": 7245,
+      "sha256": "3a02f711f648cb5960f67904be5e2d24274d6abf2f8540ca3168cc9396a35868",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/private_source_control.py",
+      "bytes": 15589,
+      "sha256": "d653ff22ff839e71c0b132cf930c0a15490cc5f7c53015ce5bd283736ddc9aaa",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/product_assessment.py",
+      "bytes": 306,
+      "sha256": "d47cb65fc42efbdeedfb900892212d80cf42f2511fcee94a1fa7bdb9ec4c3ed2",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/product_discovery.py",
+      "bytes": 1026,
+      "sha256": "69615d9fd7f35f59a497568200ed75c381fd869391764ebdbe7003cae7e8c59c",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/remediation_w0.py",
+      "bytes": 7903,
+      "sha256": "f58066d3e869bba61ae85854cbf0ae7f11dfeb84fa9ad26767ebb48c04b84fcf",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/remediation_w4_conformance.py",
+      "bytes": 16844,
+      "sha256": "6cbbf4b5c449fc76202651c1364c2077a24572f392c71391dab4e8a115c56ce8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/remediation_w4_runtime.py",
+      "bytes": 10732,
+      "sha256": "ea3150e17967e7dc6a0240be93832daf92ae7ae05ccf9cfd869792eabf5c4b93",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/remediation_w5_campaign.py",
+      "bytes": 13710,
+      "sha256": "4e399e804648b791b03d7b626e68c96bfd7a8fac564dbbeeea40c60b381e8969",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/remediation_w5_scanner.py",
+      "bytes": 76862,
+      "sha256": "4987dd7980597f8042a0143eaad15a29826314e9d759290fa6df7b62d750f00e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w10_regression.py",
+      "bytes": 3824,
+      "sha256": "fe515869a751cc53bcd1aa22a2d2ccd723b4510695eee1f848f2463354d9cd15",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w11_acceptance.py",
+      "bytes": 12704,
+      "sha256": "83fd53219a38f051aae699e138f33de775e5162f2a83191bf9d0218c7f52af52",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w6_business_campaign.py",
+      "bytes": 8168,
+      "sha256": "9bf0409c707f76c4c38d33ad5f13f2741c6189a9f887caa0a0ca15994a88cca1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w7_ui_campaign.py",
+      "bytes": 14420,
+      "sha256": "1a2c24fce1c7a23912a5e4fb2e4d519634145eea7ce59589afda640ace5d8d70",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w8_active_campaign.py",
+      "bytes": 10537,
+      "sha256": "47c368af2fcc6d97dd7f5dec55c97972209b5c4fa6b124b096daaeeaaa3949ca",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w9_unified_campaign.py",
+      "bytes": 17961,
+      "sha256": "b007bb59ac42a721b9907a7e9c14d6e117b1197d3375bf0b9db23d106d43b162",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/scripts/w9_unified_controls.py",
+      "bytes": 8266,
+      "sha256": "387e08dc026015284a54e21b110d7e8e139e15e6493a2c36f9bc3bbb5fa787f3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/__init__.py",
+      "bytes": 81,
+      "sha256": "e7d0c768b0edeccee698c908478929875cb3c04417260df6a395efbd4ac99b31",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/active_fixture.py",
+      "bytes": 4320,
+      "sha256": "ba76a5cc73aa26d853e0bb9e7f724d7e07152779726594bc0ebd1df8552cab85",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/active_questions.py",
+      "bytes": 2160,
+      "sha256": "d7fe519a3a82f061a3dbc82dfa1fbdd1a500797afe203f669912f30eceb9080f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/active_verification.py",
+      "bytes": 17067,
+      "sha256": "d0b9c9619313377264748fca3b379730d22681fa9c1a9ffa38a0145dc6813888",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/active_worker.py",
+      "bytes": 13981,
+      "sha256": "95e628bf62aedb4fec26622847f0b72919f50f4e045460f2d238563b59c85095",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/adapters.py",
+      "bytes": 1096,
+      "sha256": "3276d54625a5e0abdeb6eb906b051499ca7b741824dd7c4e4ea0b65d80c195d1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous.py",
+      "bytes": 13221,
+      "sha256": "b37d0c08e035c3a14db8226ad9ab6cc9443f802d2bcdfbc36c0cf48428da450d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-entrychain-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_control_fixture.py",
+      "bytes": 2088,
+      "sha256": "75c993b63cb91fe41aa2f8e24407901777ccd401246d2d4a19e7e64467ad10f8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_controls.py",
+      "bytes": 6399,
+      "sha256": "2a0e889e44be8df7be39b80d6411e47af944efe1beb824139c32256d5ca0d353",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_guard.py",
+      "bytes": 14723,
+      "sha256": "7f281c91dbdd8b3d0c2b8722581289c2141fb76b0564daa9f8b80e9a5b5c62f2",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_handoff.py",
+      "bytes": 12659,
+      "sha256": "eb73240033ce6d39a4486d3b42fe8786ac423992db980f70481898dc8532e1a1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_private_body.py",
+      "bytes": 3432,
+      "sha256": "3f01581883b16e6a94d763c3a201c171b8b1d4929463baa58331bf418b583dbd",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_product.py",
+      "bytes": 19956,
+      "sha256": "9a50aba14beb7a01019455230eb669a0e01804bf2ab28b7e3fe1e265cd5ce8f2",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_runner.py",
+      "bytes": 31177,
+      "sha256": "77c912a5d6055c4ef05f8afe3f62c0ec8b472d5a5747c51db887f8d002c7de59",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-entrychain-review",
+        "root-reviewed-final-change",
+        "selected-sections-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/anonymous_runtime.py",
+      "bytes": 7595,
+      "sha256": "b917cda1f5697356795630544f426f6b496a156194b5f203d7df65d83e2c846a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/archive_control.py",
+      "bytes": 11603,
+      "sha256": "9b4142831e54a7280a83af9d31b8023a2c0ca6ead31eddd68038c1c6cc51dd56",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/auth_lifecycle.py",
+      "bytes": 13560,
+      "sha256": "a28285776871eb658aa5d767ca714a1e766d1a7ef7882d61fd0ae6c7f67cdd89",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/binding.py",
+      "bytes": 3289,
+      "sha256": "10fb0091ce77bdc88cbc48da510e0953a3ed6498b47cf1655a0d06b76ec7d429",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola.py",
+      "bytes": 38737,
+      "sha256": "1d6efee53e5a9bf7653bae4978c2184fdd8dc703089cbd93fa862a4faf62c4f0",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_borrowed.py",
+      "bytes": 22717,
+      "sha256": "a92938a272893a8eb1f1deb50d63576fd97e842b07de9acaa43233764bf8f5e5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_fixture.py",
+      "bytes": 7786,
+      "sha256": "0d0ca5a00e066275870542563f1c972ed9d4662e89f56f4f10bc929c698d28b9",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_http.py",
+      "bytes": 5027,
+      "sha256": "ca0187caa5506a20de797a95bafcece00a468cfe5b10638482dc207ed67106be",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_operational.py",
+      "bytes": 11289,
+      "sha256": "5aad4ee63782f9c10a2b4d15d4a931b3c5220b0321ca4937e13e543cb51a2a85",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research.py",
+      "bytes": 50677,
+      "sha256": "902b948dc6f3eaa49e40a21b04c1f499b66e7f4fc251ed7ec6b71e9bc6326ca8",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_branches.py",
+      "bytes": 2775,
+      "sha256": "7ceba003b39a2f51cb6ff7e3746bed6d76b283c97078d269321a2397bbec1a87",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_check.py",
+      "bytes": 13326,
+      "sha256": "b2f5ff4faf24959815931eeec8bdceff7d67fe5812076c1b97949746ed69a195",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_db.py",
+      "bytes": 7695,
+      "sha256": "405e1f913949094563257a6d38d207d3bd8d5a8e18ad4a3f0bdee8495f58e55d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_expanded.py",
+      "bytes": 37619,
+      "sha256": "42b6912d08900fc6eae9d90ceb3a502b29b5749522fec6691d16ae79a5ec9399",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_faults.py",
+      "bytes": 6371,
+      "sha256": "80694d1913719c1994fc385a1e85b3696a7775b206be3308a2f60c0deb890195",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_fixture.py",
+      "bytes": 4560,
+      "sha256": "6b9bb95436601a891b1a2096f0b722f184463ca31b69d66ab9fc70c9990cf700",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/bola_research_product.py",
+      "bytes": 24156,
+      "sha256": "988c011c2cce6e5aeb1d963d42ff08c0ee99242fbfabce51b1c4db7a6238f1e8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/business.py",
+      "bytes": 8085,
+      "sha256": "6964e5603f29c0fb490abaa4d59e92c45e060e59c7691ae369ab9f4bb78355ff",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/business_discovery.py",
+      "bytes": 10980,
+      "sha256": "429c0e2a8d52b2bfc91cf98cbe6845564de2d64ee553f0d8c0b45090cd6927d5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/business_fixture.py",
+      "bytes": 14554,
+      "sha256": "b51f6959e520c6420d6eb988294706b1dc9e8ecccbd0c0f96f803e5dd2be68aa",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/business_verification.py",
+      "bytes": 9346,
+      "sha256": "29111821a1bd68c98fe8b2ea2f6a5d9c66dee63d08bccb05f5094e3877a153d1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/business_worker.py",
+      "bytes": 1480,
+      "sha256": "e258db71fa0549e2808781cf6aaf8c00a2f6d70e7783f6182a8bf6681b726560",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/capabilities.py",
+      "bytes": 10317,
+      "sha256": "4776e4ea22ee2658e3fd067c2b6c313550467ae0a8df06df1fe62c008e8914cf",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/cli.py",
+      "bytes": 4922,
+      "sha256": "413937cfee09993e2182c6c301cb2107aad0d68b052c6252e71be43f1f12332f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/contracts.py",
+      "bytes": 12544,
+      "sha256": "d3506763ba7f21eb90f49ee13efa1e5108d2b7a35ea834ce6228a66554e814ef",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-entrychain-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/coverage.py",
+      "bytes": 18330,
+      "sha256": "ce756067570e8bcfc65df74caad8022ef9a4c6ac60ef795d8df81dc82458523f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/coverage_presentation.py",
+      "bytes": 11789,
+      "sha256": "e12d579f9163cec7738847d2b49b94d5f97cf89040b5eb6a1b51826294450782",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/credential_broker.py",
+      "bytes": 14477,
+      "sha256": "da494f7575c6d96ff4f1088b39045bed7517ecaa2d5c3d2f402138681d188190",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+      "bytes": 23016,
+      "sha256": "c0aa392f44cffe03fb8d31c56c772763e4432804025a75a390e129fba8e3befe",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/criteria_reporting.py",
+      "bytes": 18211,
+      "sha256": "104361239beb0948ae62de2070025a089ac749d9b077f50479116e3afa0957cf",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py",
+      "bytes": 24429,
+      "sha256": "dbcd0deadc78e090bbeb8e0879aa863677272685dec0d8ba6002dd54085ae3f8",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/delegated_attestation.py",
+      "bytes": 9919,
+      "sha256": "9f2da45b5834bf99c610dc54e9c50c60c478366e940444b7b2ed57e19ae3a312",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/delegated_holder.py",
+      "bytes": 3252,
+      "sha256": "12531a81e5750e015a13633d005ba018a101045483f88036cbac896899e81a08",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/delegated_scanner.py",
+      "bytes": 4026,
+      "sha256": "8393635cabd60469cd9c060693613446e1d659cad802f2ae10c57c67cccb7c48",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/discovery.py",
+      "bytes": 16411,
+      "sha256": "b8f32c47088de98c539eb5e25ad758f887f49f75fef8706fc61e9d94030c3016",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/discovery_handoff.py",
+      "bytes": 5912,
+      "sha256": "e2814bdca6d0183fda62a00b665914d800239c61c4590974708f7468407c6f12",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "selected-sections-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/egress.py",
+      "bytes": 4663,
+      "sha256": "6901d421b75d9ba55671184c0b9e051625d8612ef31e76eba64d068bc44cb1e1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/errors.py",
+      "bytes": 232,
+      "sha256": "28fc1c99b12fb394645960327c5576683eef0843b93838ee9915cd3ada48f74a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/evidence.py",
+      "bytes": 20264,
+      "sha256": "72975872c04401ad6f5b933b1c90975bb414a7404e0687a0df16f70d2e8f28cc",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-entrychain-review",
+        "selected-sections-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/executor.py",
+      "bytes": 20648,
+      "sha256": "1c6ad75f5486ebc763e2e5ed5962394e337ad4ff5ac13e1e4ba2a28b7b675499",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-entrychain-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/executor_routing.py",
+      "bytes": 11554,
+      "sha256": "9f723bcbc3714890894709b06e0b9e89ad9a0c11e3d1b0508538d20f60462bb2",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/existing.py",
+      "bytes": 13553,
+      "sha256": "db4229d58d268b5489a9fc7d6511a9a259813b8cf78dd57b2ab668a22831864e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_analysis.py",
+      "bytes": 8624,
+      "sha256": "e65370d5d65393114f3f770cd40c4d7ec6f094209865941a8bb57066d1e86917",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_binding.py",
+      "bytes": 2533,
+      "sha256": "c9675236a34373db0150ac58ede4b6ac3ffd72f5dc389b58b6fc667b9bf87ace",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_browser.py",
+      "bytes": 10133,
+      "sha256": "2f67ef17626b4d0cfe9f6de6ad0f3b2736e56443bd2a92509a8a60ff65fb799c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_cli.py",
+      "bytes": 4127,
+      "sha256": "54be33bb26c188d8372e25e7d6a09d7be241341dbcf0e455efe9bd73386eea2c",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_contract.py",
+      "bytes": 9908,
+      "sha256": "3a5d958a4d1f69672bbff11c5f38531c7305f15bec0afe44e4542e1c1ead5cf1",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_control_fixture.py",
+      "bytes": 3781,
+      "sha256": "a71853c8e0c50e9a62825e3c8eb23a70550cc61998038fd75a95c792b4d6e34a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_controls.py",
+      "bytes": 18083,
+      "sha256": "d36176d239eecc2baa860658d58ef3f2aef556e4f6bba86be2dfe4825326c86b",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_discovery.py",
+      "bytes": 889,
+      "sha256": "4f709264a50c832f9dbe48cccda48e24e451701956f491a3c5a219272d79ea7c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_fixtures.py",
+      "bytes": 1876,
+      "sha256": "99d12886e470664731b4a73e252563d77137789b314a82af2b194ea177caa70d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_geckodriver.py",
+      "bytes": 6606,
+      "sha256": "a4096fdb8b52c06e3bc073a160b9f2aba02a77985088f328cf7f482c7d08579a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_handoff.py",
+      "bytes": 7937,
+      "sha256": "1eeabeadceea1ae5be1db2a0ba69572d803de6986e19c8c0a57015771105488d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_recipe_finalsource.py",
+      "bytes": 18603,
+      "sha256": "eaef49767ce23aeb7bdb3f5b2000a60412a57b46b957476eadc014139e0cb95c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_recipes.py",
+      "bytes": 380,
+      "sha256": "c92c756269cde491cdddd2316b75edffac2961b01ee04d610b2880c7525ceac8",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_runner.py",
+      "bytes": 27969,
+      "sha256": "9b76126cb302488b1ad967d19bb113c99d1d7aff5bc5aafbce06d25f3014f612",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_runtime.py",
+      "bytes": 11578,
+      "sha256": "70bb9c2ffd04258a5f0736a187ee8b92d3d6500fd11d353fe044dc7bffdf181c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_semantics.py",
+      "bytes": 4757,
+      "sha256": "62f45d59ec2061f3f39cef71a1fd09c65fea10c02a1116f3e96d252979ae2c0d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_transport.py",
+      "bytes": 14902,
+      "sha256": "259031386762b396c1fcf0ba66f98e4b4de0b3fdd0735e99a73d36f227957127",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_anonymous_verify.py",
+      "bytes": 11991,
+      "sha256": "93534c4ce612fd686aa34dababe3baa576b90f3513a554558c6d3c6df2949544",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_auth.py",
+      "bytes": 2240,
+      "sha256": "710e952db643632c5244a79ac584c88878f8764f04299381def5e825d619a1fb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_binding.py",
+      "bytes": 593,
+      "sha256": "286904ebb77afb18b0223b24496fb54e4f13360a3b9dff352c59b2a36cd490c3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_browser.py",
+      "bytes": 14712,
+      "sha256": "b2b4730255ce563157e54103f14033e4ee9c4e116a8348e48c2cb830b9a1105d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_campaigns.py",
+      "bytes": 519,
+      "sha256": "ea6a414220eb57a76c7748097a4e8e606713f3b600b38f5c7c3749a4ee4c6be8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_cleanup_finalsource.py",
+      "bytes": 3023,
+      "sha256": "613c9d65c285affbea044c579641cafea4ca64cebc105295a3a53c12211b33c3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_cli.py",
+      "bytes": 4726,
+      "sha256": "213f2929771ebb899bd5adffa73b587e01f8034108a2d568dba0f86a97ca702d",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_contract.py",
+      "bytes": 11850,
+      "sha256": "74fa59fe34009a191a01444786a2fe5676738186c7b825d00f6fb39c87a88150",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_control_fixture.py",
+      "bytes": 7886,
+      "sha256": "9bf57e192be3003999fa4f7fc6162d3f881804e2f7e9d764388525c4ff94bcc0",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_controls.py",
+      "bytes": 14904,
+      "sha256": "ed3e54f423c6afdcc9a40d3283f479bc731f7c0317a16598b90119b00cc9e39c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_discovery.py",
+      "bytes": 1201,
+      "sha256": "08e857c13d7ed1b21339fb726eaaac3e3bebb2db6aa53dfb43312534c756bffb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_evidence_finalsource.py",
+      "bytes": 9375,
+      "sha256": "ef145f0ac3e12de2fdc8e552600f3fd2491985a67a79ada5367dfb0fbb25b1ba",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_faults.py",
+      "bytes": 11829,
+      "sha256": "56028bcfdd60531b19706a4f48ca808dfe31cc477da475104a78a2aa8e965e47",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_fixture_finalsource.py",
+      "bytes": 18500,
+      "sha256": "90fa4e2622bc0e0cce0f142c7af111e0be1d531a988bc5e21e0bc20ed139d5bb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_handoff.py",
+      "bytes": 8298,
+      "sha256": "78dda66809d606ed5f1f7556a961240a2d72e9e2f6042a42c5810253998dc7d6",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_mcp.py",
+      "bytes": 1084,
+      "sha256": "9fafd8fd18d4d680f88618f2c82241a29ba96d5c04bdedd87daeea75474eda6a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_native_inventory.py",
+      "bytes": 2504,
+      "sha256": "7f1e9169a2dd884b9fe385c60de9a7e1345815aaa535e12cc381e40d0acb322f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_qualification.py",
+      "bytes": 9350,
+      "sha256": "c072f9d80f3d78a72a5cdeaa3fbd38f394098111151c98de65742e98ec4e648f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_recipe_finalsource.py",
+      "bytes": 35809,
+      "sha256": "87d4081b6facc3a4b88d0d747aec99cb25d6b778f65defadc31e804524b2cd01",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_recipes.py",
+      "bytes": 2220,
+      "sha256": "b08184ef0b012624b3dea00093789eec509bcfb6edb3655061a03a04a272f162",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_recovery.py",
+      "bytes": 4508,
+      "sha256": "c2d58ab04ddb273e398730cf451da23331af98095ecba9019d1466fcacd69feb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_runner.py",
+      "bytes": 31538,
+      "sha256": "06b0a658cdff00dde5dc105101dd3489cddfdb04cddbb1c8c87dcd20cc0a5fac",
+      "changedSinceBaseline": false,
+      "review": [
+        "selected-sections-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_runtime.py",
+      "bytes": 2156,
+      "sha256": "6eca54f18e2e95dee1dd736ea4c0e8aea6f9df13489042e9b7952ebc237baada",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_semantics.py",
+      "bytes": 24311,
+      "sha256": "5896538ad42e4f18aa90e67c5bd3fc8af46cb41ae1c64478f614a1b5d8549712",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_transport.py",
+      "bytes": 13013,
+      "sha256": "56ba65c659cb362a669cc1ba732a8d7eb8cb49940fbdad5bd2492f5430246af4",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fe_authenticated_verify.py",
+      "bytes": 7317,
+      "sha256": "a90cb7ec6e00ac059d1b21ca15e361215e7ca7eb86bbd089b3ff7f767b576cee",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/finalsource_delegated.py",
+      "bytes": 9093,
+      "sha256": "d68c0ae801a5e452cd53d1d87257d533a3fb5c310ea0ceb435822c5bc54c84d5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/fixture.py",
+      "bytes": 3821,
+      "sha256": "36d7d4669cc85e1c01a4bccade59c0ded68eceeaa0667d0ae30507f93dcfd294",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/guard_server.py",
+      "bytes": 3126,
+      "sha256": "c033fdeb745e7e0589acd04d163d96c96e971ce1d2311fb068efcf1f99d422fb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/journal.py",
+      "bytes": 5476,
+      "sha256": "b5e650e6d97849f7937ae26ce6f0f5b6abe0728af5ca74f45a6f5030fe89b994",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/live_sink_pair.py",
+      "bytes": 6912,
+      "sha256": "07fe7405368d6d37a64ed2606466294fc9f56a40fa618a6a5759b9480a05bf92",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/live_sink_probe.py",
+      "bytes": 10627,
+      "sha256": "a4429ef4e6f398bbe91a83301d1a93b96892c7d14c1486586e4f92a94ac994ad",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/native_secret_gate.py",
+      "bytes": 13599,
+      "sha256": "ef451f7891c683a5d1dc45f81268d3fb179acb09520c6f7b1696ab5926add69f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/observed.py",
+      "bytes": 15323,
+      "sha256": "a5d2ab9a0babe365dd591569ee6e513eb9bd630afb7c0768f2972636df0d0d2c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/opaque_canary.py",
+      "bytes": 5160,
+      "sha256": "764b281605fb3cd9fd6714aa9b43567844f37b1ba6797fbb2329d19bdf838fbb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/oracle_verification.py",
+      "bytes": 18670,
+      "sha256": "d0bb4f4bbdc0ff7fe56023e321c0d48ea230367441b86a8538b98d667dff17c9",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/pilot.py",
+      "bytes": 3858,
+      "sha256": "e551236c47d02d9eba1728e305110d54d25f76dc109f0204c655e24f50bef148",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/private_db.py",
+      "bytes": 18555,
+      "sha256": "4404ccc09c14558a9667c1196a8a9171aa8d6dc04d8c21dd3eaddad62f283009",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/private_db_bridge.py",
+      "bytes": 7030,
+      "sha256": "559d7227579ef0df71a2aaf428afe4f1e958d4fe282082899a4bc522b05e2bf8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/private_source.py",
+      "bytes": 6685,
+      "sha256": "6afb18549d05152bef05d6425d5937da3a37d526173d0ccf18c974133c392004",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/private_source_broker.py",
+      "bytes": 11055,
+      "sha256": "d32eb7c990ca21cf7944b1b7f5e6abe630f164c367507fa8d19b32d2bbeb4e6a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/probes/SessionDbReadback.java",
+      "bytes": 6638,
+      "sha256": "9ab119cc8cd76eac704d999cc7260b169f050ec8da6fbd7f6984212c84ffe247",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/probes/TrafficProbe.java",
+      "bytes": 12081,
+      "sha256": "ab2def2313d4299e37acff3fc39eca518c107c23cb8b92abc213c3ee28cbae28",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_adapter.py",
+      "bytes": 10592,
+      "sha256": "87194c1712baec435a2aa3dd9545d29d088718c8a59868e37c69b33b3128244a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_binding.py",
+      "bytes": 2705,
+      "sha256": "4a0ce3870ba202085ef09e698bc72d3832be397e4a7026c5d6ae508919695c8a",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_bola.py",
+      "bytes": 20559,
+      "sha256": "7f2a3714ad0a3e5adfeb2845752a6bf1fef65c2b3fbb59804e2bee06a5a0c13f",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_checks.py",
+      "bytes": 5717,
+      "sha256": "079fed94005966815c1fe69999ce0a88ad1d79fee6c1630ea77f575aae889e9e",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_cli.py",
+      "bytes": 12555,
+      "sha256": "06d8499cbbc354c9185554f62d04e43873ab4592919629e2dc073aa102c10533",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_handoff.py",
+      "bytes": 18629,
+      "sha256": "2ac8e2fc7003c8e19e34a98786670af60800f1eb17b207d6f38e5486429f177c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_identity.py",
+      "bytes": 8561,
+      "sha256": "56a9c0b541b1e8bd013ef8674e88727ec3edcd9ead91d5b9f920e2e424e39f37",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-entrychain-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_native.py",
+      "bytes": 36990,
+      "sha256": "e50768dd67a01afe8e6b247a5cfc7a41c58559097be35e550dd1c5f6270bf214",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-entrychain-review",
+        "root-reviewed-final-change",
+        "selected-sections-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_prepare.py",
+      "bytes": 6056,
+      "sha256": "9743598a676ec28879f3abd411fa573eb4989a641238873d94650a069463d989",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-entrychain-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_resources.py",
+      "bytes": 1859,
+      "sha256": "01c115f03eff0bafe6bc6739ba2a9c49e771d54a7bdd6f92073936594c1bbf05",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_scope.py",
+      "bytes": 41871,
+      "sha256": "bfa2ac0d1afc02161d45f99de86c4e5c96e2d7ed2dcfe0274e7319f3b8b0bddc",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_scope_cli.py",
+      "bytes": 44889,
+      "sha256": "1bcff853c08cf6513423e9a07ea95cfc985a1025dbef2a548f14fceadff90e94",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_source.py",
+      "bytes": 5664,
+      "sha256": "62ead3c00397ec2151dd17420bef774c62b8a26023e3acd8726babdf144a9110",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/product_workflow.py",
+      "bytes": 28411,
+      "sha256": "592ad9497f9ed1151fe05d59c93b7a8b7fae473a772bcd2da38fe57a0e7f21bb",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-entrychain-review",
+        "selected-sections-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/question_evidence.py",
+      "bytes": 15962,
+      "sha256": "dfc41858f6c644528c64d7fd676d3cb5e9362c2bd6e92db59e292e3f3423dc13",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/readiness.py",
+      "bytes": 5900,
+      "sha256": "45dc2690ac9ca19342907e7b019576527366cc7d49a0ca8ffff9e98a148be84f",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/recipe_mapping.py",
+      "bytes": 984,
+      "sha256": "6229eb3e2a08946a4779df394a3908e4d30e5d05813399cf8de7d247f696063a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/recipes/README.md",
+      "bytes": 476,
+      "sha256": "15366102dc890e37350146175863a5f0df453b25335756285933977b34a6f36d",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-history-review",
+        "inventory-content-structure-only",
+        "root-reviewed-final-change"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/recipes/__init__.py",
+      "bytes": 295,
+      "sha256": "7fe1c769b291b3b568003f773a8aa4d5a00587eb311ad221fe1c1c1893132fe8",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/recipes/archive.py",
+      "bytes": 2758,
+      "sha256": "c357f4895ebdafe345ba071eaa592755d76349f27c2501ca51561e0012c8522e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/recipes/ledger.py",
+      "bytes": 2207,
+      "sha256": "3230bb14384cf7f2be6a806626443276f15c1e20fc97cf1fcda43f26a678e65a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/regression.py",
+      "bytes": 14539,
+      "sha256": "bc3f004b0087aa0c25dbcd25aab89e39b685e84e167742377e10383b72101d66",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/report_reconciliation.py",
+      "bytes": 7749,
+      "sha256": "13ebe1461cacbd1bf486b5f9c0be35429a0b46885deedfe2555e4c5016f1ff32",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/research.py",
+      "bytes": 15161,
+      "sha256": "594492af1b3a95f285816d9122c35875568663dd80a568507c5d2f2f43a06550",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/research_comparison.py",
+      "bytes": 3437,
+      "sha256": "23589afd6c076114938dee3612558803014eef7144d55aaf6c47801e1ed2dea3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/research_product.py",
+      "bytes": 58851,
+      "sha256": "de036235187a0d40dd82eb539c572794265505080780903ce21ead3e384c271a",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-entrychain-review",
+        "selected-sections-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/residual_review.py",
+      "bytes": 16903,
+      "sha256": "6a579cd25dbb4d3b9278a57d71d5024927a0f167450ebcf79736e09801ec6b20",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/result_readers.py",
+      "bytes": 3793,
+      "sha256": "798da557a055c8d0505d5e70496be3bde9e146b23c86be2015e1a3f669700555",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-entrychain-review",
+        "root-deep-read",
+        "root-reviewed-final-change"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/round_closure.py",
+      "bytes": 26807,
+      "sha256": "4c212b2ac66338e798961764fccad0d95787b9926c1c39f94303286aea130776",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/runtime.py",
+      "bytes": 22412,
+      "sha256": "9f6cc6d392d45354276e699b7e98f8c8e4548edf24db460de8c435ef90b932c4",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/runtime_safety.py",
+      "bytes": 18689,
+      "sha256": "8c6be144e822527f9a91b2a99e831485e8967f5c1f2d9ef1dbc84ace9f47f7b8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/safety_io.py",
+      "bytes": 3977,
+      "sha256": "d942c7823c02d99ffb10c7c8cf0865bc3c1600a4c71c0625221665076e0beb20",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/scanner_secret_audit.py",
+      "bytes": 18594,
+      "sha256": "32a3d2d91293c62ae82d68718fbd352b724eceb35337d71980402d0aef24128d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/secret_audit.py",
+      "bytes": 6738,
+      "sha256": "66c880f6fde92028098a67963aa3ef8e861910ac506bcafcf3816fe7f7c0a5f3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/secret_inventory.py",
+      "bytes": 561,
+      "sha256": "e1df498a7c3d605b7f8c79b9a392dac0f68b735843637ef1b15c2ba179618a0c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/security_scope.py",
+      "bytes": 34141,
+      "sha256": "db90750cdfcfd1b629c85a2641bb5bb3ab1a9f8b3ebfc6844fcea6a654c6e8f7",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/signed_identity.py",
+      "bytes": 5505,
+      "sha256": "6b925f8a8b17ae725849e335023ad24b92276b54793e8ce9ba1ed5f4c37259e6",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/source_broker_fixture.py",
+      "bytes": 9428,
+      "sha256": "ae44e1b57bfd2a2f64f70a6a50dbedcae751aed6323931cc7d5818781d5d2984",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/traffic.py",
+      "bytes": 16300,
+      "sha256": "8d6d2e79d324deeaa9e985f0bc5de6ce18f66f688897fd57d2a75d1642b21653",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/transport.py",
+      "bytes": 8413,
+      "sha256": "62f407e53d3af8fcb9184e9c68076cbe2cceef424c6b7045218ad37b77cfac23",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/ui_browser_worker.py",
+      "bytes": 10786,
+      "sha256": "58d70a8f142a86c94d464b14cc05c0a0bc320876416738e1af0c627add4b5e63",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/ui_contract.py",
+      "bytes": 15724,
+      "sha256": "1cae79ff93dcf1cbed882f2f51f20481b6377fd82b72ddb5f46e2577c5fcc06a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/ui_fixture.py",
+      "bytes": 12244,
+      "sha256": "1011cef21cac36a7e879467af635725a967f160aa1d7765a2239590875eb62e8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/ui_verification.py",
+      "bytes": 3216,
+      "sha256": "4ef07693fef501ce245d370fc9c6600fa6696b2d7d4f204043dfcacd7e769da5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/ui_webdriver.py",
+      "bytes": 5981,
+      "sha256": "2cae6e12bbb073376b019caf0df9203db74b2800b33b9979bbe9577e9f56d9a8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/unified_binding.py",
+      "bytes": 1269,
+      "sha256": "1698d9f79387e5c1693ffbc2ed94ab23aa1626fb31a2d7ef83dac614cd98bd93",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/unified_contract.py",
+      "bytes": 7576,
+      "sha256": "ddcb5c8e99fa4ed7f3fe8ca23b750d2a54f8a4abdd2a50285692c2f0652a78cc",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/unified_verification.py",
+      "bytes": 9446,
+      "sha256": "3ef5c6ed99b9f0939fe0b50b86b872f5b38ffa7ab13e7eb02d69c0c8660f8714",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/verification.py",
+      "bytes": 13293,
+      "sha256": "481f58e9a155a8dec04fd94282994025b1e6840fcd944171f1d75c26ae8b10aa",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/w4_fixture.py",
+      "bytes": 1853,
+      "sha256": "7613db5b3b11d90e8ddc4ad7aceb9a0e55c909d5b164157e4d19ad9bb673e368",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/w5_fixture.py",
+      "bytes": 11109,
+      "sha256": "286f0c866c8de10d46943857c40d95cd63ffa2bab50334c988a520b5da4c06c6",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/w5_resources.py",
+      "bytes": 10999,
+      "sha256": "6802eb8e2706454b912d975fecef0d358453a7129d8500acaca96118c2d3c3d8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/w5_scanner_fixture.py",
+      "bytes": 18619,
+      "sha256": "55eb19e2d3883bcc42bb891afbe1637765059a0d4226b86966e7ee86737f16ec",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/src/zap_assessment/work_selection.py",
+      "bytes": 6300,
+      "sha256": "9612af5cf8d3c216b5d1980c1182a93d50733208ae066b6996a3753b56a818ab",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/PolicyFaultInstallCheck.java",
+      "bytes": 1089,
+      "sha256": "f76dce062657061877876e7c2cc640bc3c265a009e6287481de8369515ddbde9",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/PolicyFaultProbe.java",
+      "bytes": 2448,
+      "sha256": "52b4dfb462dea52dfa404638785128a7ea34e9a7954eadf5f24bbc144b45ce92",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/TrafficFailureCheck.java",
+      "bytes": 4706,
+      "sha256": "47df33d7c8d1c8f5ea0d94086d19ed8f1d38733394334b2973eed4362515138f",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/TrafficProbeCheck.java",
+      "bytes": 1995,
+      "sha256": "432c4a2554a355ce1c7004321aac43458d6a3b6239e84fe4ac9b4736d9212d78",
+      "changedSinceBaseline": false,
+      "review": [
+        "inventory-content-structure-only"
+      ],
+      "checks": []
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/borrowed_bola_server.py",
+      "bytes": 4283,
+      "sha256": "acf35e7fdea3baf262b7c77972d347546863fbc85db86040881bdfe8094f2e6b",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/borrowed_target.py",
+      "bytes": 4177,
+      "sha256": "ee080536df0baeca4748f353275f4a7037c11c07c97f39090daaedfb3da95151",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/borrowed_target_app.py",
+      "bytes": 1759,
+      "sha256": "942babd24ce5d876c6f860b2515db2ccac06cab9145390d99787293140e744fe",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/broker_reference_holder.py",
+      "bytes": 7697,
+      "sha256": "67650510f14526e4dd6c1307b75757432bb9081f66ea1815ac5af67b8fb5203e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/coverage_fixture.py",
+      "bytes": 12243,
+      "sha256": "4bd2e84ff5b272e2473bb973f1c281f4e7e5818a67cef0e397acc2e507faa9a2",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/private_db_controls.py",
+      "bytes": 3552,
+      "sha256": "47accf9f8f8a635ac7f8f144af578c506307062c2d7854eb161962f1a16162f9",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/ui_fixture.py",
+      "bytes": 5776,
+      "sha256": "0e07b4cd44887691b090a65105f4de5ec2c886c6ef664ed3e610a5d0e10d7887",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/verification_corpus.py",
+      "bytes": 13978,
+      "sha256": "d5d75044f79df8f9b60fd36a05dc3536a53740658789df17d7079279ded6d74b",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/support/verification_fixture.py",
+      "bytes": 15241,
+      "sha256": "bb3755c9725923e6dfcdf531d18f62d3f7d53da8b9e3653ca1baf608f453b926",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_acceptance.py",
+      "bytes": 4327,
+      "sha256": "eda42497088db6df2af4a000c5f60363974be389fded7f21bb1ff0c8a82ba559",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_active.py",
+      "bytes": 7305,
+      "sha256": "17d4de899e2fe97cbfb39ca0440c00d5994e3896c81c986ea034466b88a3bd8e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_actual_sink_runner.py",
+      "bytes": 3937,
+      "sha256": "65029c9d9b18c4cef0635abd4fe74bd06ba51d88d4ad30f6a5a48f377fb722bb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_aggregate_closure.py",
+      "bytes": 8819,
+      "sha256": "9ab11f84030bea60a13ea343ff0adc0aa864b0867a0e1fb5baa60162e0d9b851",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_anonymous.py",
+      "bytes": 18538,
+      "sha256": "b26bcd849564841ac2662a1f1701ce31e005be1f416a91a2b5f69421f2173811",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_anonymous_baseline_binding.py",
+      "bytes": 3092,
+      "sha256": "a2b4864dd1b7a54e9ba733c366d6fcb4b0641c6ab39dbfeab2f3e7ad12670254",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_anonymous_framework.py",
+      "bytes": 1490,
+      "sha256": "debd68937680407529c1e91997479c8e0b8e3b8cbbd1413de42dce8857d99403",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_anonymous_private_body.py",
+      "bytes": 3426,
+      "sha256": "fee8b6f097b91e9182ca6d3e94230725bac1ddf87bf115857ada4a8ec4a57ee9",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_anonymous_query.py",
+      "bytes": 4636,
+      "sha256": "59f9ef5ff4db1bb2907ce4c9db5ac1da84aaec35eddc99d5f9dbf9bc45d8e37d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_assessment.py",
+      "bytes": 19650,
+      "sha256": "df0d3744faabe10a8b8cc2e3b72bfde4d309cb1e5c55ed77fd522dc153604cfb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_auth_lifecycle.py",
+      "bytes": 18192,
+      "sha256": "3ce85372a89c900589f4abcce0e7050613fc1bf664c9f4d61de06e06d17440d1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_authenticated_path.py",
+      "bytes": 3712,
+      "sha256": "9cd4a2e424a39c446feb607679e8ea4fb60c83eeeeb7fa522394d0d52a4e51a4",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_be_authenticated_preflight.py",
+      "bytes": 3611,
+      "sha256": "fadd9b156bbf08b7aca4e000591eddd39123027b12c19979ab706da9459ba46e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_binding.py",
+      "bytes": 10930,
+      "sha256": "3ac694522781ec42a6dd67361361ba97b0abdf519a0eb72f6abb561f6f6792e5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_bola.py",
+      "bytes": 10054,
+      "sha256": "c61e2de1f017b106f95cef7f358342afad36d9b27599eb2fa49cc215ab757bdb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_bola_borrowed.py",
+      "bytes": 8262,
+      "sha256": "8acc093555cbce90453e4d39b515b636decbc791ca312d76165025e470df92fe",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_bola_continuation.py",
+      "bytes": 8420,
+      "sha256": "336110865e3b3ba3a8e1a8de54cc86683614402140296689fe1d2ac1aedc11cf",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_bola_operational.py",
+      "bytes": 4680,
+      "sha256": "39270428fb95706495be2a901c577da1a2921aa454d481aad865769582738371",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_bola_research.py",
+      "bytes": 19821,
+      "sha256": "acca021565e03bbde014fd901f760244644ccc95929ce4b950bf51e1faca9e43",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_bola_research_branches.py",
+      "bytes": 1906,
+      "sha256": "ecaed9b7fd116fdd4e8b4678b624394b4f8f5aa6e6b97ff1d59f2e181dd2486d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_business.py",
+      "bytes": 13153,
+      "sha256": "0855cd7ddbdf3ea4c13be46d02fe689efa4d01ad072aea932f5a8ec30263d831",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_business_discovery.py",
+      "bytes": 6181,
+      "sha256": "f75cb463a2e4519c451e1834ab9d971dbe7b5420557fdc1d906b0b56035bac24",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_capabilities.py",
+      "bytes": 8496,
+      "sha256": "b6b3be3920505bf663c7ac6198c71ae9206e1c97ee624a76b6e7342342ccbe00",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_coverage.py",
+      "bytes": 7244,
+      "sha256": "3c732eaa43494373f433ee024726d42a7c82724ea86e03e29b904405ad4cbb18",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_coverage_presentation.py",
+      "bytes": 8695,
+      "sha256": "996e003466a6c7ec5f5b697d62b933e0924e5b88ee83057528f9dadb28aa7256",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_credential_broker.py",
+      "bytes": 10957,
+      "sha256": "90746e5da0460b09c5f5f9122323c2c65dcda6a0e2681c7161b634ad068f5f5e",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_criteria_cli_boundary.py",
+      "bytes": 12215,
+      "sha256": "8e692ee5dd59846fd89151a129ced39815caaec0fa0b45972a18f20f9289ae04",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_criteria_integration.py",
+      "bytes": 7351,
+      "sha256": "225b002366b188cef42da0e5c856f3763af96a0deaeb0b5495f24f633f92943f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_criteria_reporting_boundary.py",
+      "bytes": 14392,
+      "sha256": "e3b00ade476f3e7a29b934896eaaf147cee084d9b49a55950e50fdb80685793e",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_criteria_workflow.py",
+      "bytes": 32066,
+      "sha256": "27f0b394032236648f4b1b90d4d35cc3a9dac481a56fd055794ee78e7b709f3d",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_delegated_attestation.py",
+      "bytes": 6220,
+      "sha256": "a478d0f24733be7f117782598d134e117d336079b5fa079df547c2301a2b4bfb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_delegated_scanner.py",
+      "bytes": 4183,
+      "sha256": "f945afa8dd7003a96067d1313d1aa66b74f57a9c4c3737dd917198cc04dee5ef",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_discovery.py",
+      "bytes": 11957,
+      "sha256": "3c59a552efb1a22a8d6b797ca109cbc9d583a012f2581d4dcbd884480a7cb112",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_discovery_transport.py",
+      "bytes": 12685,
+      "sha256": "69c83908305c54dcee1b81785d51e0f45ea75dcf50f4577baf255292de633c10",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_egress.py",
+      "bytes": 4295,
+      "sha256": "0495d497d55806748adf76a1787e7615b2c8b548f142a00141a98e215293cab8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_executor_routing.py",
+      "bytes": 6498,
+      "sha256": "921c5849d9186c352a56b3aba858cb60b670860de0efe4026b1e811cf414e3ba",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_admission.py",
+      "bytes": 4766,
+      "sha256": "0b2d2641f84d2fc111e47c88e0cd17ad4a3fccc5778dad4238eb3e803ff84fcb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_analysis.py",
+      "bytes": 2447,
+      "sha256": "0e9bc109efcfa1c230b90d24f4bd5675b77328845b2e3101b18ba3599239cfb5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_contract.py",
+      "bytes": 2634,
+      "sha256": "4e1edcd0cea5f28516647e825bfefe1bebeafc5d5fee9bfbeb03100f57722f1d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_delivery.py",
+      "bytes": 4510,
+      "sha256": "363f5a597a1a5e61476386c108366fc50c30a954c9da62861d2914a5a1132a41",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_driver.py",
+      "bytes": 3505,
+      "sha256": "e89c46c7244b9202872102f1fd77b14f8e295062aae980456d87190271abb306",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_evidence.py",
+      "bytes": 5839,
+      "sha256": "a906fc6831e5ee0eccf07dd68cb05ba6e938ca8f7551012c7f016b93dc492c03",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_lifecycle.py",
+      "bytes": 3156,
+      "sha256": "c6d37cc6e941cb786bc02cc490cf1a9e6ce4ff34390bb48ee3abd8249254ddfa",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_tls.py",
+      "bytes": 4039,
+      "sha256": "ffa142a5091aafeeba6711afe8bfc1086a71de123bf5d784b441ed3825b3f390",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_unknown.py",
+      "bytes": 4430,
+      "sha256": "36a7f6de77e4e25f63b345162419942b9d804b920fbee126ef37fff54009a8ae",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_anonymous_workflow.py",
+      "bytes": 4820,
+      "sha256": "8a5903a9dfd7629633f92abe35c8a368b784993561b82904e47870ae120c4ff7",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_authenticated_policy.py",
+      "bytes": 6689,
+      "sha256": "8d23a91f66db94bd8a013c5997a04a567f111465265535c0cf8c782167336d48",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_authenticated_readback.py",
+      "bytes": 11578,
+      "sha256": "1000676ede351c8fc5e39c8828f29b1b752cf784783b05f395cbdd18fb563497",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_fe_authenticated_workflow.py",
+      "bytes": 2764,
+      "sha256": "bd41cd5bdf5a5729a33560a5bada02b06d224f90cc7c7bcc56f19515b4beed01",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_finalsource_delegated.py",
+      "bytes": 9656,
+      "sha256": "1848a228cb6e30c13415cc94175970ee18c9e5eee1b7c93d1a67b171f29e2db1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_finalsource_p0_coverage.py",
+      "bytes": 7653,
+      "sha256": "d81a22fb4e1406db4e0455eecde24c56be2601e3b03bf4a217424b581eb34399",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_finalsource_p0_guard.py",
+      "bytes": 4406,
+      "sha256": "2350f6e9a7e4813501248111f8dee1aa362ee226ab594daa90809242cb2005ba",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_live_sink_probe.py",
+      "bytes": 2334,
+      "sha256": "5c185f9eb0e431f6cffe0d997009abedb7de86493a4a56f13678c585bc9878a9",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_multi_product.py",
+      "bytes": 17197,
+      "sha256": "a911069f29a669273be62dba6e8436fbc22b55892353bd8df2ca90fcc64257cd",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_multi_product_edges.py",
+      "bytes": 10481,
+      "sha256": "38cc15235630ba97a87a2e79146dcb83a82344eaafc564cfa1d12ab2eeb15355",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_native_admission_boundary.py",
+      "bytes": 3279,
+      "sha256": "daa1cc3067065f1c0797d64900aa94e967022e98f5ddf158561c6f0532efff2f",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_native_finalization.py",
+      "bytes": 3555,
+      "sha256": "92302c651633a877024c0d3fc55a9a6550c6f95dcbf2c8d49085a59346ee3a33",
+      "changedSinceBaseline": true,
+      "review": [
+        "authored-fault-tests-verified",
+        "root-deep-read",
+        "root-reviewed-final-change"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_native_history_cursor.py",
+      "bytes": 1892,
+      "sha256": "3640c91c20bf0a4b003049d0a45f3ba0813a26d078972909213c4543286c0b55",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_native_secret_gate.py",
+      "bytes": 7934,
+      "sha256": "ff31a97a8325062324199c6afdd2b0f5a60ca765a668eef6c254951dfbea2cbb",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_observed_closure.py",
+      "bytes": 1586,
+      "sha256": "65a373250bb75fac7bb652499463014242454de1d7382a4040bf07cefed25ba8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_observed_health.py",
+      "bytes": 1940,
+      "sha256": "8c67c4f448e5c7e1ef852f9d415fb107a1193dbc55a098417f5a3a596d0fa57c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_observed_resource.py",
+      "bytes": 2903,
+      "sha256": "f3ef0ce8fac990ebf8ceaecf0e4aea9521cdc568370dc13c2764931fc0c6a2e6",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_opaque_canary.py",
+      "bytes": 4553,
+      "sha256": "86cf2f98f58b677f727c69ae9a492d2f782b7b12cffda355e7a1fd52db2600ba",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_operating_loop_bola.py",
+      "bytes": 8081,
+      "sha256": "52fcdad85408960c3592b1bd8f6810e0f8729c168adf9078d9d1d6483005a25c",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_operating_loop_contracts.py",
+      "bytes": 4226,
+      "sha256": "f22d5ac0a4fcee75cbe28c4e7b488f7a5f74cf9dff6e29e26e0239421415db6a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_operating_loop_path.py",
+      "bytes": 2016,
+      "sha256": "5837bf49fcbb994cdeaa05f8ce0b798cdbd3ea2b7c602cd02185e3727585ee8a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_operational_readback.py",
+      "bytes": 8077,
+      "sha256": "67b41ebf6c5518cc3799511e8d6906c146ee128013e49e841ce0e04d79782473",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_paired_sink_runner.py",
+      "bytes": 3499,
+      "sha256": "858683dc77289817113d1962a9ce1aa10d7e9373093f050778dbda3982505105",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_pm_scope.py",
+      "bytes": 37751,
+      "sha256": "6b8599e5d6ff9efd9f823ec205c25cb35685b1637fa7b0387ec3f6a64a681c3d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_portability.py",
+      "bytes": 1668,
+      "sha256": "9fbe0594458b0de194ddb4b102d3078d14dfc619da9daf7223ffb5426b7da7f3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_private_db.py",
+      "bytes": 11447,
+      "sha256": "662f718e6adf1e0143924b68cab168044b88fa87c3f6988b0fa0e92e579383c1",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_private_db_contract.py",
+      "bytes": 11244,
+      "sha256": "c02916375f2ec5ed36f1e681d17245579771193c81d32c3b062c66230d7f6bb8",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_private_source.py",
+      "bytes": 11086,
+      "sha256": "6b3df22998461a134f6fe22c6320f79638cce861ef6ac4a032744a8f4049671a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_private_source_broker.py",
+      "bytes": 6948,
+      "sha256": "0356007f12a37225e9960af52266b4903360b9562f130c5b1de6a0d4086d95ef",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_private_source_control.py",
+      "bytes": 3286,
+      "sha256": "054c5723e0830785cfac81bc5406dda015046e365e866a66187fec00a0d96ba6",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_product_continuation.py",
+      "bytes": 3511,
+      "sha256": "06aa19eedee40aefb5adc709236562836ce18f59434741358ccccca21a4efeda",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_product_handoff_lineage.py",
+      "bytes": 4416,
+      "sha256": "d001bd751cbf960666e7903253d5b6b73635b096cebe6a4ee06d803e3c67d3b5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_product_native_body.py",
+      "bytes": 8132,
+      "sha256": "4cd8e8b04364b817b1f707679fae0c17c1c11e0a7bc01e81afa700eda3bd8b1a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_product_native_guard.py",
+      "bytes": 4584,
+      "sha256": "9656ac2d80a3ca7634506d988a9ccb025739fefe47777eb0b3638335347e7079",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_question_adapter.py",
+      "bytes": 7270,
+      "sha256": "1c437261e814831d82e3acb5aa720b0d35ad81bbe37b7b73332c95abad392599",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_question_evidence.py",
+      "bytes": 13245,
+      "sha256": "ca2e57d9838a79f794f2ccf49755ce792bab1a25a1415d4ffa2cf482b170dc1d",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_readiness.py",
+      "bytes": 7086,
+      "sha256": "d7eb8a6eef420061cdfcaf0abb9266d63f4f920830bbe9dd3c7ac549ab7aabc0",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_regression.py",
+      "bytes": 8787,
+      "sha256": "58371983c244e9cf328080862c145e67336a1b6c5c5c3bde0cc4999078b0dd46",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_remediation_w0.py",
+      "bytes": 6092,
+      "sha256": "62397c7128b0ea96a9b81b2f559ca51ee4dd447d4263510b4b38bf191ab50849",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_report_collection.py",
+      "bytes": 8516,
+      "sha256": "9bf6fd41b055e58f486ac700719f25cf048ec973520a6b49d082faba9f1c4bca",
+      "changedSinceBaseline": true,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "root-deep-read",
+        "root-reviewed-final-change"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_report_reconciliation.py",
+      "bytes": 3145,
+      "sha256": "75558dcd0ec9e2728dac21eca8c3b41c01c2560f2cf939740b214a39cec02353",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_research.py",
+      "bytes": 10558,
+      "sha256": "38bbbfa5617b9c3c88c88ff648115bad1f6759fc4725e0049cb56e2a2de95334",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-contract-traced"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_research_comparison.py",
+      "bytes": 2950,
+      "sha256": "2c08829a4a57451a1dea4fdfa45c3684b09f41643177ce5de95d04c6e189b819",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_residual_review.py",
+      "bytes": 13867,
+      "sha256": "13b8505f6cb923309e0a9a126514b59cb930755d6c01aac00bf7d80276dff180",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_resume_inputs.py",
+      "bytes": 9556,
+      "sha256": "dd94d84f5f95e2cd053f1fe1c96d8c5a0258eb36a829c06351bb82357ffa52db",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_round_closure.py",
+      "bytes": 20545,
+      "sha256": "32adec6d3cfcd1f42901e6914af04de3bbc7d167099284c4098d99880a7ff4d0",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_runtime_safety.py",
+      "bytes": 18477,
+      "sha256": "634fd027abb3483dae299882cb0b731c2358001686f0c36ba5c326ccf912c6d4",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_scanner_secret_audit.py",
+      "bytes": 7391,
+      "sha256": "1cf485306606ccfa4757ecd1576fb0e5689b27c176e9f53fc7319d3eee738348",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_secret_audit.py",
+      "bytes": 6063,
+      "sha256": "ba8b0e4bd79b235f8e36411503bd684957db0f6532b269d5fe1efbb9fa1febd2",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_security_scope.py",
+      "bytes": 23935,
+      "sha256": "f063a05f06fca88ab5d35cac57de6fabfb14702dad80bbcd54aff84547ebb9c5",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_signed_identity.py",
+      "bytes": 5881,
+      "sha256": "91b368a6eb680002efff4e74db4645887e3f22ca163178b7ff66c1ee95deeaa7",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_traffic.py",
+      "bytes": 10767,
+      "sha256": "5e04de1784b3e748788e8fb8aca94cbb8a51b9a0010a7aac308e9dfe97cbb599",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_transport_sse.py",
+      "bytes": 1349,
+      "sha256": "b5656525c952fcf549b15c770cdad0dc6d5303e59cf33f1f450a4a5044f57d63",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_ui.py",
+      "bytes": 14305,
+      "sha256": "e6010a9707f1564e3426d92fb615ce7db4753b073c2ba2992ac8b7de857dc441",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_unified.py",
+      "bytes": 12410,
+      "sha256": "02484424f9877249fa2ccdc7b9fe4322fc1ecfd8192ede2db68b2ddaac710d85",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_verification_v2.py",
+      "bytes": 9308,
+      "sha256": "b7fea19dd37a73a05f4b443949e0f061858b6c2036a46966fac22d534c4b447a",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_w4_completion.py",
+      "bytes": 3586,
+      "sha256": "d6b61c97ac891fec6f4b4792332480d884c9eb8ffe3569d43bc10ce70c392032",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_w4_guard.py",
+      "bytes": 2491,
+      "sha256": "de2b5f6e6ca40bb06e05caf24f8a42c5e746820a1ce897c08d1f0a59f8d42c14",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_w5_campaign.py",
+      "bytes": 4348,
+      "sha256": "c2e881d02e4f55dc20d33d5ac30d4571cfb96b3dd890d873ee52b0ac247049e9",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_w5_monitors.py",
+      "bytes": 5059,
+      "sha256": "d585ce38c5327dd43f683a790aa6fc8907f3c40af33e710768e2540bc21765f6",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_w5_resources.py",
+      "bytes": 5142,
+      "sha256": "d88351625c58e3c286a321fc351f17fbdecec25d421170b1daa4036a19b39334",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_w5_scanner_campaign.py",
+      "bytes": 7329,
+      "sha256": "bae3327ca44f38fe3b6299fbeb31155d53cc032026ac03554050295ba6dfabad",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_work_selection.py",
+      "bytes": 14809,
+      "sha256": "d15da5b1c2d36434ffe564c094d56855c5fbf3928373c224f1177d22d4412194",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/test_work_session_checkpoint.py",
+      "bytes": 27356,
+      "sha256": "3902dc99aca261bf3d381c84435ab5436571da7a8010ec4de89cf0ff7fa29ea4",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "lib/zap-product-assessment/tests/workflow_fixtures.py",
+      "bytes": 2861,
+      "sha256": "d3e3ed6c960afd43276f9c9545cc262ecfa478ee8872d85034341319717e04f3",
+      "changedSinceBaseline": false,
+      "review": [
+        "ast-parsed-symbols-imports-inventoried-not-full-semantic-review",
+        "deep-read-workflow"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "references/alert-triage.md",
+      "bytes": 3694,
+      "sha256": "290535908f69e2b6dc971ad2bf8a9231537fbfe5bc3ab956933a5f3534fee7bb",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/assessment-policy.md",
+      "bytes": 8792,
+      "sha256": "d35de2c113b913ed0be6ad1b4ddb107545a9e75978b7ad8f95f93af249850a61",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/assessment-scope-and-completion.md",
+      "bytes": 21766,
+      "sha256": "a12311f698a0be24b4d90ca4784ce9107e9301988bed6bf93e16254118ad3dc5",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/auth-capability-discovery.md",
+      "bytes": 2121,
+      "sha256": "372dfb220312cc49d13022668c72ff29f968d037873e0f009ec63c598aa3c4f9",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/auth-lifecycle-and-bola-depth.md",
+      "bytes": 7397,
+      "sha256": "c75f667d84eab4d7cef93a85ee17b7cf56ce55be73c4c49c4a1dffaa660745ec",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/authenticated-dast-goal.md",
+      "bytes": 2870,
+      "sha256": "124900d615dae7b9813b22cf65c19823e9892aefb3f28e63bc4fe49fb548f490",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/be-anonymous-research.md",
+      "bytes": 2663,
+      "sha256": "5df28b585b66142376791a4cdaa6cdf68d3d58ca20fedd8b815f0325c5af0914",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/be-authenticated-research.md",
+      "bytes": 3261,
+      "sha256": "df62505b9d64b872f59bd83744c60d208648e71f13f162f7d1fa79135285b038",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/be-authenticated.md",
+      "bytes": 2009,
+      "sha256": "e73423dd26b22474f87f701fdd157dfdcf584f600c96c05f0d58dfeeb0f4bb63",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/bola-research.md",
+      "bytes": 3640,
+      "sha256": "1f2353fc5cb0321cf558fc5987b4cf6d271968582be323ac673fb817e5c19fb3",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/criteria-driven-workflow.md",
+      "bytes": 24764,
+      "sha256": "40e43c7e71d8c97727ebbcb63e80af38d30732183bd128e454f2a97fdc09043d",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-workflow",
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/delegation-policy.md",
+      "bytes": 9665,
+      "sha256": "8a6afb935f7490b680bd6aa4c3bb8f78a115e33e7795faa994dc460a8bb507b9",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-workflow",
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/discovery-origin-selection.md",
+      "bytes": 1759,
+      "sha256": "d5df802a3bb04e52fb2e8dbeec026d0be80e45c97cffc90cf0d637e970cba2c8",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/fe-anonymous-research.md",
+      "bytes": 9100,
+      "sha256": "66707de16b099661d48acf151f60e805c25cf55042df1b89fc58869325b28024",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/fe-authenticated-research.md",
+      "bytes": 4136,
+      "sha256": "b53d3b0dbe571bfb80d24bc3cd637593923d45f8d86d3083fe630301c7a2a99b",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/helper-contract-map.md",
+      "bytes": 6780,
+      "sha256": "9eb8bcd971b09806cdda2b8d86a63a7b49928201eb64e204e3068c926e49d1cb",
+      "changedSinceBaseline": true,
+      "review": [
+        "root-deep-read"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/knowledge/engine-and-recovery.md",
+      "bytes": 7697,
+      "sha256": "c6ee57c07bbd01045eef96652e7bc207a46a76e870dfd5c72486d337dff4a218",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/local-remediation-and-continuation.md",
+      "bytes": 11716,
+      "sha256": "5113da6739d82aa77733799430908ba7d82cc525e0752e3aa55df83fd1ad3e8f",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/local-runtime.md",
+      "bytes": 2843,
+      "sha256": "d956c647d4c478073f597811d2451f8cc0d6f2247798a7f7c07f0bac743aa712",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/multi-product-backend.md",
+      "bytes": 3928,
+      "sha256": "b04027a4ebddde04c79ea74173f05575b2890a02d07a17fcd378e13b434d67be",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/native-operation-routing.md",
+      "bytes": 11453,
+      "sha256": "684ce5c445af3bcc27f0ddad9d47fea357d33a1b6f574f46d397ef67264b4b28",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/operation-dispatch.md",
+      "bytes": 14651,
+      "sha256": "fd4b90f9d719047a3f5c0c5aa3a64160b363b2d1131d5bdfd20cb82ebf77afd8",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/operational-knowledge.md",
+      "bytes": 7708,
+      "sha256": "5d46a1188b276082b8362939197d5be94342ccee867abe2fd89eb5459297e53f",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/operational-readback.md",
+      "bytes": 10914,
+      "sha256": "87ee914e95d997df61882636b6dad3c4afc7734518e58a57961e9d2c8c0adad2",
+      "changedSinceBaseline": true,
+      "review": [
+        "deep-read-workflow",
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/operational-validation-history.md",
+      "bytes": 16889,
+      "sha256": "2564ca46d86d9dbc5abe3a46f3182e9bccf373e938943857f2e942a4f3025a5a",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-deep-read"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/operational-validation.md",
+      "bytes": 14449,
+      "sha256": "e3a1e78c37cbb1af846c8eb94f4035478df1b992e5dd6472c90fdf6e77db30b6",
+      "changedSinceBaseline": true,
+      "review": [
+        "root-deep-read"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/operations-and-results.md",
+      "bytes": 10554,
+      "sha256": "efb8cf8c401eb0ade57102bc09ab91f9811058e8042dcaba8efa11a70083483a",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/product-assessment-handoff.md",
+      "bytes": 7688,
+      "sha256": "67f1aa1ab432be79018b011ee5c6ce6d5eca9eff09c671f17a49d43a506d1538",
+      "changedSinceBaseline": false,
+      "review": [
+        "deep-read-workflow",
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/product-discovery.md",
+      "bytes": 8322,
+      "sha256": "1f373d18788608963d282fe9bbf807b2db8ba39d19026f1f2bfed43add06815c",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/product-extension-planning.md",
+      "bytes": 2710,
+      "sha256": "1a50ed5d1a1fce304dff5bd3eb39fcd00f84e5b4b630efcb6a79d6ec78b23ee3",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/repo-map.md",
+      "bytes": 6099,
+      "sha256": "552d07dd198109de4b997fa2c3fda9c6bc6edc0b70b707354c4226b8f8480014",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/resource-preflight.md",
+      "bytes": 6516,
+      "sha256": "e4936ded37237d2c747eff9bbc8fe6fc26f322f29e30966d103c7c3c5fc6d82e",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/responsibility-loop.md",
+      "bytes": 20426,
+      "sha256": "d613774f84328b8433534653b84894882401ba5278e5161d901fc6eb2ff82a69",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/retention-stop-and-recovery.md",
+      "bytes": 26082,
+      "sha256": "3eeb6f9c3eccea15f5b7e11d2b652a50ea6fe741e62a5f19b2aa03395f605cf1",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/retest-and-version-comparison.md",
+      "bytes": 2248,
+      "sha256": "6f0b17ec2a12cd251e299096bfbb6db48d7c70795d466bf5c03ac4867e6d9cc4",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/runner-routing.md",
+      "bytes": 11425,
+      "sha256": "83853b03d09807613610ab9e64c905b702022d60bcd650d125ce81409eb686c8",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/setup.md",
+      "bytes": 3761,
+      "sha256": "36b82128941935fdda17c623228a92b414d98d17ff0270c574e4921c219c671f",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/single-table-drive-output.md",
+      "bytes": 13373,
+      "sha256": "44d921ceae8eb575c83dbef8f2b0b032329169cbdc43588ee2c5b918c7a31ff4",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/tester-context.md",
+      "bytes": 6575,
+      "sha256": "b337e0ee80bf58b034de55ee99499e52619a848b97ece465eb64b6c076fea394",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/track-intents.md",
+      "bytes": 6978,
+      "sha256": "cde007d6914632e2982dbb427b3055f220b018ac318e17a3a58622d28c9755a5",
+      "changedSinceBaseline": true,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/user-security-scope.md",
+      "bytes": 32133,
+      "sha256": "4d17f949851d54d52ad8910f7f3505ca5288c271a6eef14626adb18466f0851c",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "references/zap-result-boundary.md",
+      "bytes": 9047,
+      "sha256": "6ee75c52da42e276a597e5cd13f1db3e0484d6763ad76eea068682e7d73ab90a",
+      "changedSinceBaseline": false,
+      "review": [
+        "read-and-cross-reviewed"
+      ],
+      "checks": []
+    },
+    {
+      "path": "scripts/inspect_operations.py",
+      "bytes": 11734,
+      "sha256": "540761f53a404269f04dd7f210c32b318b5a3768615c3178acd22564702e74bc",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/install_skill.py",
+      "bytes": 4245,
+      "sha256": "1c0047d13d51790b1302960052f0b25d81b8c062efeaa726459e9042c372d376",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/prepare_finalsource_fixture.py",
+      "bytes": 12163,
+      "sha256": "85c8cccc9179130903c7909cc9e68e4c322cc4ebe4330f9f99e4efb2de82e9f8",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/probe_finalsource_auth.py",
+      "bytes": 7786,
+      "sha256": "826104b54e23ed13fee87465a3afc8f227d3e6c06c4ce27694518ffd0558f504",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/review_open_work.py",
+      "bytes": 16775,
+      "sha256": "3bd7133e57e7d0ad3c622c3cfa646b2b1cae31f1feb94b89c9b10aa6cce8b3af",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/run_finalsource_native.py",
+      "bytes": 25742,
+      "sha256": "a99dc23b8592c4b16bb6367fb3264a6bf4e99d901400f03615e382714147fc79",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/verify_finalsource_delivery.py",
+      "bytes": 7493,
+      "sha256": "cb31134a949784d0ecc4b23358114ce847432da63a46b9bfb4e688e3f763d08e",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    },
+    {
+      "path": "scripts/verify_saved_evidence.py",
+      "bytes": 7697,
+      "sha256": "43894c419c2281e5c7c048594595015afb06c8c5d399b7f6708c57f56f13f10b",
+      "changedSinceBaseline": false,
+      "review": [
+        "root-full-read-interface-contract"
+      ],
+      "checks": [
+        "AST-parse"
+      ]
+    }
+  ],
+  "summary": {
+    "files": 470,
+    "changed": 43
+  }
+}

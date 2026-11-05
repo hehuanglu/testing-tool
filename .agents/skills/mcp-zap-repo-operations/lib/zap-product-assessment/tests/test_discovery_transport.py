@@ -109,7 +109,7 @@ class TransportTests(unittest.TestCase):
                     return {'data':{'accessToken':'synthetic-unit-fixture'}} if method=='POST' else {'data':{'user_id':12,'accounts':[]}}
             argv=['cleanup','--evidence-root',str(root/'evidence'),'--output',str(root/'cleanup')]
             with patch.object(sys,'argv',argv),patch.object(rp,'binding',return_value=BIND),patch.object(rp,'admit_adapter') as admit,patch.object(rp,'observe_transport',return_value=proof(d)),patch.object(rp,'Product',return_value=Product()) as factory,patch.object(research,'verify_manifest'),patch.object(research,'manifest'),contextlib.redirect_stdout(io.StringIO()):
-                runpy.run_path(str(rp.WORKSPACE/'zap-product-assessment/scripts/cleanup_research_accounts.py'),run_name='__main__')
+                runpy.run_path(str(rp.PACKAGE_ROOT/'scripts/cleanup_research_accounts.py'),run_name='__main__')
             self.assertEqual(factory.call_args.kwargs['discovery'],d);admit.assert_called_once()
     def test_scope_guard_executes_alias_and_rejects_wrong_host_or_method(self):
         with tempfile.TemporaryDirectory() as tmp:

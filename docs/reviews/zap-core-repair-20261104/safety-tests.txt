@@ -1,0 +1,10 @@
+test_atomic_short_write_never_exposes_final_name (test_runtime_safety.SafetyTests.test_atomic_short_write_never_exposes_final_name) ... ok
+test_truncated_journal_recovery_preserves_original (test_runtime_safety.SafetyTests.test_truncated_journal_recovery_preserves_original) ... ok
+test_journal_middle_corruption_never_recovered_as_partial_tail (test_runtime_safety.SafetyTests.test_journal_middle_corruption_never_recovered_as_partial_tail) ... ok
+test_permanent_journal_fault_still_stops_and_records_out_of_band (test_runtime_safety.SafetyTests.test_permanent_journal_fault_still_stops_and_records_out_of_band) ... ok
+test_reserved_channel_survives_writer_fault_and_rejects_torn_slot (test_runtime_safety.SafetyTests.test_reserved_channel_survives_writer_fault_and_rejects_torn_slot) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.235s
+
+OK

@@ -1,32 +1,17 @@
-# BOLA: đủ role và quyền trên object
+# BOLA: roles and object authorization
 
-Điểm xuất phát nghiệp vụ và scope ở [track intents](track-intents.md); chọn operations/executor theo [dispatcher](operation-dispatch.md). Reference này bổ sung chi tiết của entry hiện có, không mở rộng nhiệm vụ hoặc bắt chạy qualification.
+Use this technique only within the approved [criteria-driven plan](criteria-driven-workflow.md); it adds no track-wide assignment or alternative workflow. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-BOLA là nhánh riêng khi được user giao/chọn; không thay hai track DAST BE. Dùng [discovery](product-discovery.md), [multi-product](multi-product-backend.md) và [scope](assessment-scope-and-completion.md); output [ALERTS/RUN](product-assessment-handoff.md).
+Apply the [ZAP result boundary](zap-result-boundary.md): native alerts and ZAP-derived observations are distinct; external-tool/source-only findings do not enter this skill’s ALERTS output.
 
-## Chọn ownership cases và đọc kết quả
+Start from [track intents](track-intents.md) and select operations/executors through [dispatch](operation-dispatch.md). Entry-specific details do not expand scope or require an additional qualification campaign. Deliver the [Drive assessment table](product-assessment-handoff.md); retain RUN/ALERTS/SCOPE_ALERTS internally, without evidence sections/folders.
 
-Lập matrix tất cả endpoint–role thuộc scope; xét đủ role đã discovery, role đặc quyền và anonymous khi liên quan. Với từng mục, xác định object/action, owner/relation/state, ID ở path/query/body và kết quả kỳ vọng từ policy/spec/source hiện có. Không hardcode role/route/ID/state/số ca của product mẫu.
+BOLA is separately assigned and does not replace either BE DAST track. Read [discovery](product-discovery.md), [multi-product](multi-product-backend.md), and [scope](criteria-driven-workflow.md).
 
-- Object có owner: owner-positive, non-owner/cross-owner và role được cấp quyền hoặc bị cấm; dữ liệu trả về và thay đổi trạng thái liên quan.
-- Create/update/delete và business action: kiểm kết quả thực tế, object/owner và side effect cần thiết; ID tài nguyên mới lấy từ ACK/readback, không chọn ID để pass.
-- List/filter/pagination: kiểm isolation và role scope; không dùng collection rỗng thay populated case khi cần kiểm dữ liệu.
-- Role có quyền xử lý object của nhiều owner khác shared/public catalog; tách function-level access với object ownership.
+Inventory every endpoint/role including discovered privileged/anonymous cases where relevant. Establish object/action/owner/relation/state, path/query/body IDs, and pre-operation expectations from confirmed policy/spec or labeled source assumptions. Do not hardcode sample roles/routes/IDs/states/counts.
 
-Thiếu tài khoản/fixture/policy là mục còn mở theo endpoint–role, không N/A. Không bắt mọi tổ hợp tenant/race/state vô hạn; giữ những relation/state làm thay đổi quyền. Không chỉ làm owner-positive hoặc một role rồi gọi track complete. Xem [ownership sâu](auth-lifecycle-and-bola-depth.md#chọn-câu-hỏi-ownership-sâu) khi nhiệm vụ cần.
+Check owner-positive/non-owner/cross-owner and meaningful role differences; actual creation/update/deletion/business outcomes/side effects; populated list/filter/pagination isolation; and relation/state changes. Obtain new IDs through ACK/readback rather than convenient passing choices. Privileged cross-owner access differs from shared catalogs and function-level permission. Missing accounts/fixtures/policy stay open, not N/A. Do not require infinite combinations or close after one role/positive case. See [deeper ownership](auth-lifecycle-and-bola-depth.md#select-deeper-ownership-questions) when relevant.
 
-## Đường thực thi policy, identity và state
+Use native Access Control Testing when the deployed add-on, context/users/access rules and authorization detection fit the selected question. Otherwise send bounded owner/non-owner/relation cases via ZAP sendRequest or the ZAP proxy and inspect response/post-state. Record native alerts only when actually raised by a ZAP detector; record tester comparisons as ZAP-derived observations. Direct clients bypassing ZAP support fixture setup only, not reportable ZAP observations. Common compile_cases/execute/checker and legacy borrowed v1.4 read-only have distinct contracts. Verify actual identity/capabilities; do not swap old adapter origins. Never forge authority, treat owner as caller, or change expected behavior to match responses. Source-derived policy matches do not certify business-policy correctness.
 
-Direct-client đúng scope được dùng; ghi nguồn direct, không giả native ZAP alert. Common CLI có compile_cases/execute/checker; borrowed legacy v1.4 read-only vẫn read-only. Kiểm capability thực trước chọn entry và không đổi origin của adapter cũ cho product khác.
-
-Xác minh account/role từ nguồn hợp lệ, không forge quyền hoặc lấy owner làm caller. Expected được xác định trước thao tác từ policy/spec hoặc giả định source đã nêu, không sửa theo observed response để khớp. Policy suy từ chính source chưa là xác nhận policy nghiệp vụ đúng; kết quả matched phải diễn giải trong giới hạn đó.
-
-## Thực thi theo entry đã chọn
-
-Chuẩn bị fixture hợp lệ trong scope, ghi object/owner/state cần dùng, chạy case, đọc response và trạng thái liên quan, đối soát matrix rồi tiếp tục phần thiếu. Unknown mutation cần xác minh trước retry; không replay để sửa checkpoint. Dùng lại identity/transport/journal/checker có sẵn, sửa mapping/orchestration tối thiểu nếu cần, không tạo engine mới hoặc checker trả pass cố định.
-
-Không bắt bộ policy receipts, source archive, manifest/hash, independent checker campaign hoặc report ZAP cho BOLA direct. Gate đang có trong entry vẫn thực hiện; đó không là lý do để thêm các gate assurance của skill cho toàn nhiệm vụ. Đọc help/source của `scripts/product_assessment.py` hoặc `scripts/bola_research.py` trước chọn đường legacy; không bịa flags.
-
-## Kết quả và tiếp tục
-
-RUN chứa matrix endpoint–role đầy đủ, cases/thao tác thực tế và response/state/kết quả, giả định policy, hạn chế và phần chưa làm. ALERTS chứa discrepancy/finding nguồn direct với mức độ xác nhận trung thực; không biến no discrepancy thành product an toàn. Không có phần/folder evidence trong bộ kết quả. Còn role/API quan trọng chưa chạy thì nhiệm vụ partial; tự tiếp tục phần đủ điều kiện.
+Prepare legitimate fixtures, execute, inspect responses/post-state, reconcile the matrix, and continue gaps. Unknown mutations need reconciliation before retry. Reuse identity/transport/journal/checkers and minimally repair mappings rather than adding a new engine or fixed-pass checker. Inspect common/bola_research.py help/source without invented flags. Existing entry gates remain, but ordinary direct BOLA needs no policy-receipt/source-archive/hash/independent-checker/ZAP-report campaign. RUN preserves full matrix/results/assumptions/gaps; ALERTS preserves only concrete observed security issues or credible suspicions separately from native alerts; matched controls and inconclusive results without a security signal remain in RUN. No discrepancy does not establish safety; missing important APIs/roles means partial.

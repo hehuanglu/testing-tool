@@ -1,8 +1,10 @@
 # Shared discovery and research-plan/2.1
 
+This describes a technical discovery/compiler contract. Read the [documentation boundaries](README.md): research-plan versions are distinct from criteriaWorkflow v2, which owns new assessment approvals, scope and completion.
+
 This contract represents discovery for five tracks. Backend authenticated, backend anonymous and [BOLA research](bola-research-runbook.md) now consume it through separate compilers and explicitly selected test adapters. The original authenticated-plan contract below remains historical context; a BOLA direct plan never fabricates scanner/auth-session requirements. Synthetic metadata tests do not prove another live product or track.
 
-Agent workflow is in the personal operations skill's
+Agent workflow is in the loaded operations skill's
 [product-discovery reference](../../../references/product-discovery.md).
 The manifest schema is `schemas/product-discovery-v1.1.schema.json`; the plan schema
 is `schemas/be-authenticated-research-plan-v2.1.schema.json`. `research.admit` dispatches
@@ -10,9 +12,11 @@ on the new plan version; schema/admission v1 semantics remain intact. The assura
 profile remains `be-authenticated-research/1.0`, with private local native retention.
 Strict P0, shared defaults and upstream Java are unchanged.
 
+With `ASSESSMENT_ROOT`, `ZAP_PYTHON` and `PYTHONPATH` set as in the skill setup:
+
 ```sh
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/product_discovery.py validate --manifest /absolute/PRODUCT_DISCOVERY.json --executable
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/be_authenticated_research.py run --adapter finalsource --discovery /absolute/PRODUCT_DISCOVERY.json --output /absolute/new-private-run --jar /absolute/mcp-zap-server/build/libs/mcp-zap-server-0.16.0.jar
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/product_discovery.py" validate --manifest /absolute/PRODUCT_DISCOVERY.json --executable
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/be_authenticated_research.py" run --adapter finalsource --discovery /absolute/PRODUCT_DISCOVERY.json --output /absolute/new-private-run --jar /absolute/mcp-zap-server/build/libs/mcp-zap-server-0.16.0.jar
 ```
 
 Validate discovery first; confirm live ownership/binding/resources before running.

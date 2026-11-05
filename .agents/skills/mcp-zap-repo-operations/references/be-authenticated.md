@@ -1,23 +1,13 @@
-# Khả năng backend authenticated
+# Authenticated backend capabilities
 
-Với assessment thường, chọn đường theo [dispatcher](operation-dispatch.md) và [workflow theo mục tiêu](authenticated-dast-goal.md); chỉ dùng [authenticated research](be-authenticated-research.md) khi contract phù hợp. Đích là ZAP DAST thật trên toàn protected API thuộc scope, đúng actor/role và kiểm trạng thái phiên; đầu ra chỉ ALERTS/RUN theo [handoff](product-assessment-handoff.md).
+Use this technique only within the approved [criteria-driven plan](criteria-driven-workflow.md); it adds no track-wide assignment or alternative workflow. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-## Phân biệt các lớp
+Choose through [dispatch](operation-dispatch.md)/[goal workflow](authenticated-dast-goal.md), using [research](be-authenticated-research.md) only when its contract fits. Actual protected ZAP DAST requires correct actors/roles and session monitoring, with [three-file reporting](product-assessment-handoff.md).
 
-- Client→MCP API key/JWT khác ZAP→target authentication.
-- Native prepared auth session khác delegated/header injection; không đổi tên hai cách để báo coverage.
-- Guided/expert là registration, direct/queue là execution mode.
-- Browser auth dùng Client Spider; browser/AJAX crawl không tự là active authenticated DAST.
-- JSON-bearer provider mặc định tắt; chỉ bật deployment/profile được chọn trong quyền. Queue rejection và gate code giữ nguyên.
+Client→MCP auth differs from ZAP→target auth. Native prepared sessions differ from delegated/header injection. Guided/expert controls registration; direct/queue controls execution. Browser authentication supports Client Spider but does not establish authenticated active DAST. JSON bearer is disabled by default and may be enabled only for authorized suitable deployments; queue/gates remain enforced.
 
-## Chọn khả năng thực sự dùng được
+Inspect actual entry/deployment schemas/help/source. Root method/postData support does not establish wrapper admission for every body/mutation. Prefer existing operations/configuration/orchestration/minimal adapters. Missing wrapper support is not a global ZAP limitation.
 
-Đọc help/schema/source của entry và deployment thực khi cần. Root hỗ trợ method/postData không có nghĩa wrapper admit mọi mutation/body. Ưu tiên operation có sẵn, phối hợp/config và adapter tối thiểu trước làm hệ thống mới. Một capability chưa có ở wrapper không là toàn ZAP thiếu.
+Verify legitimate actors/roles and protected behavior rather than forged credentials/owner-as-caller/401 coverage. Retain necessary secrets privately with notification and omit them from shared outputs.
 
-Xác minh actor/role từ nguồn hợp lệ và protected behavior/strategy phù hợp. Không forge credential, dùng owner field làm caller hoặc coi 401 là đã kiểm authenticated. Giữ token/private raw ngoài hai file chia sẻ; skill cho phép lưu credential/token cần thiết local private, chỉ thông báo và không xin lại.
-
-## Giới hạn assurance
-
-Skill không yêu cầu secret-sink/platform attestation, zero-secret persistence proof, full archive/hash/readback, repeatability/fault campaigns hoặc independent sign-off cho scan thường. Gate đã enforce trong executor vẫn giữ; nếu chọn runner strict thì phải tuân contract của runner đó, nhưng không kéo nó thành dependency mặc định của mọi product.
-
-Chỉ khi user giao qualification/strict audit cụ thể mới tra runbook và implementation-status tương ứng trong assessment hoặc repo gốc. Không dùng kết quả research để đổi verdict strict lịch sử. Với task thông thường, ghi trung thực operations/kết quả/hạn chế và tiếp tục phần scope còn thiếu.
+Routine scans need no secret-sink/platform attestation, zero-secret persistence proof, full archives/hashes/readback, fault/repeatability campaigns, or independent sign-off added by this skill. Selected strict executors still require their actual gates, without becoming every product's default. For assigned strict qualification, inspect relevant runbooks/implementation status and preserve historical strict verdicts. Otherwise report actual results/limits and continue scope gaps.

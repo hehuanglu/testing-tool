@@ -1,5 +1,7 @@
 # W4 admission update
 
+Historical milestone index: read the [documentation boundaries](README.md). “Current”, “v2” and qualification claims below refer to their recorded milestone, not automatically the criteria workflow v2 or the selected deployment today.
+
 The [W4 runtime contract](remediation/W4_RUNTIME_VI.md) adds mandatory pinned
 safety/calibration preflight at the anonymous live entry. Missing proof blocks
 before provisioning; incomplete egress attribution blocks before producer work.

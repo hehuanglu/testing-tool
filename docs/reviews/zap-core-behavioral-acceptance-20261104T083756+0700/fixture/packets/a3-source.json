@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "taskId": "a3-source",
+  "workerId": "coordinator",
+  "assessmentId": "synthetic-zap-core-behavioral-acceptance-20261104T083756+0700",
+  "criteriaRevision": "synthetic-catalog-1",
+  "planRevision": "synthetic-plan-1",
+  "criteriaDigest": "a27f32ab3bec2f7915de4517df0aa9eb24353374c35d383e494c19245436cfcd",
+  "planDigest": "962e33611ab3278b77cd36ed3e2a8be4ef245a9d719d35a0a10fbed60210ad2b",
+  "criterionIds": [
+    "C-SOURCE"
+  ],
+  "caseIds": [
+    "T-SOURCE"
+  ],
+  "cases": [
+    {
+      "id": "T-SOURCE",
+      "criterionIds": [
+        "C-SOURCE"
+      ],
+      "objective": "The fixture configuration denies cross-account access",
+      "expectedBehavior": "The fixture configuration denies cross-account access",
+      "expectationBasis": "Predeclared synthetic fixture oracle",
+      "requiredEvidence": [
+        "config-access-rule"
+      ],
+      "coverageContext": {
+        "environment": "offline",
+        "objectRef": "T-SOURCE",
+        "objective": "The fixture configuration denies cross-account access",
+        "product": "synthetic-fixture"
+      },
+      "effects": [
+        "read"
+      ],
+      "actions": []
+    }
+  ],
+  "authority": {
+    "allowedEffects": [
+      "read",
+      "mutation"
+    ],
+    "source": "synthetic fixture-only approval",
+    "target": "https://fixture.invalid"
+  },
+  "resourceIds": [
+    "target:7f125b53f573da553d5eaefa17678d5ca6179570157bdf199c7b80d539f09a91"
+  ],
+  "refs": {},
+  "packetDigest": "990270de08013860f5aa3b8c9c4d88381dbd794278ab3be14ec376ab963b933e"
+}

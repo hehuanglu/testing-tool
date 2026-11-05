@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "taskId": "b-ttl",
+  "workerId": "coordinator",
+  "assessmentId": "synthetic-zap-core-behavioral-acceptance-20261104T083756+0700",
+  "criteriaRevision": "synthetic-catalog-1",
+  "planRevision": "synthetic-plan-1",
+  "criteriaDigest": "a27f32ab3bec2f7915de4517df0aa9eb24353374c35d383e494c19245436cfcd",
+  "planDigest": "962e33611ab3278b77cd36ed3e2a8be4ef245a9d719d35a0a10fbed60210ad2b",
+  "criterionIds": [
+    "C-TTL"
+  ],
+  "caseIds": [
+    "T-TTL"
+  ],
+  "cases": [
+    {
+      "id": "T-TTL",
+      "criterionIds": [
+        "C-TTL"
+      ],
+      "objective": "The fake subject expires at its deadline while its control remains usable",
+      "expectedBehavior": "The fake subject expires at its deadline while its control remains usable",
+      "expectationBasis": "Predeclared synthetic fixture oracle",
+      "requiredEvidence": [
+        "ttl-subject-control"
+      ],
+      "coverageContext": {
+        "environment": "offline",
+        "objectRef": "synthetic-ttl-subject",
+        "objective": "The fake subject expires at its deadline while its control remains usable",
+        "product": "synthetic-fixture"
+      },
+      "effects": [
+        "read"
+      ],
+      "actions": [
+        {
+          "caseId": "T-TTL",
+          "effect": "read",
+          "id": "read-ttl"
+        }
+      ]
+    }
+  ],
+  "authority": {
+    "allowedEffects": [
+      "read",
+      "mutation"
+    ],
+    "source": "synthetic fixture-only approval",
+    "target": "https://fixture.invalid"
+  },
+  "resourceIds": [
+    "synthetic-clock-resource"
+  ],
+  "refs": {},
+  "packetDigest": "bc01ca97d058563d10b3a252ff0c2a080f605745d23c0696855eb84ace8d0029"
+}

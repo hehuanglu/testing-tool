@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-04",
+  "files": [
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/operation_selection.py",
+      "sha256": "135cbbf20b1899f82943a475f4b7ed5a4c709272d872840a8fb81733561e34a2"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/operator_state.py",
+      "sha256": "6bf9559aaf538227f4d4c2a9185bc62a04aea4d68ac8a835df9a7f3eabfb7ad3"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/assessment_store.py",
+      "sha256": "a950152bcce8be450c6926ce1dc44755d74e5d0c05402ec1ffc0eeba92c2d0ab"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/assessment_state_cli.py",
+      "sha256": "b6aacf8493024e00bfeefb3747656537fdd577f9d694561817b36d773b98a811"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+      "sha256": "4a8c5aace14de527737e34332000b578f5f7036f129ff8d6fd09cd189fa7424e"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py",
+      "sha256": "aa20a2bf79d0ba406dbef58ecbd3d80d7686198aff6169bcad3c791ff2110631"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_resume.py",
+      "sha256": "2fa346ab8103e0646d41dffbff86d8a3cdd43b5c0fbc1146cf1ef9f810359c9f"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/question_evidence.py",
+      "sha256": "bbc02b0d9d046f5a99add3299860685f5259ea353606ced39929af0e1dd06e77"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/journal.py",
+      "sha256": "d77fbd829136edc544bd7125899ea64e2f3540ddae688de76cfe2d9c044911e8"
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/product_scope_cli.py",
+      "sha256": "56daf2d241877618acd8711660977ef70e9bddf12f7b3c0ee4601f10570d0e50"
+    }
+  ]
+}

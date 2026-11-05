@@ -54,3 +54,77 @@ def collect_alerts(fetch, total, *, page_size=100, max_pages=1000):
             raise ValueError('alert page made no progress; collection incomplete')
         start += len(batch)
     raise ValueError('alert page limit; collection incomplete')
+
+
+def read_native_alerts(engine, origin, *, page_size=100):
+    """Export native IDs with stable pre/post totals, including zero.
+
+    engine(component, category, name, arguments) is an admitted read transport.
+    Producers must already be stopped and passive analysis settled by the caller.
+    Equal totals cannot prove absence of same-count concurrent replacement.
+    """
+    if type(page_size) is not int or page_size < 1:
+        raise ValueError('invalid native alert page size')
+    def total():
+        count = int(engine('core', 'view', 'numberOfAlerts', {'baseurl': origin})['numberOfAlerts'])
+        if count < 0:
+            raise ValueError('negative native alert total')
+        return count
+    expected = total()
+    # ZAP can repeat the boundary record at a positive start offset. Request
+    # full bounded pages and let the existing identity/content-aware collector
+    # advance by actual returned rows. Truncating the last request to the unique
+    # remainder can omit its final record when that page contains an overlap.
+    alerts = collect_alerts(lambda start, count: engine('alert', 'view', 'alerts',
+        {'baseurl': origin, 'start': start, 'count': count})['alerts'],
+        expected, page_size=page_size)
+    if total() != expected:
+        raise ValueError('native alert total changed during export')
+    return alerts
+
+
+def bind_zap_message(operation, fetch_message, *, scanner_resource, session, message_id, request_sha256, response_sha256):
+    """Read one native message from an already-admitted, session-bound reader.
+
+    The caller derives the expected digest from the verified actor's exact wire
+    request. The reader returns scannerResourceId, sessionId and the raw message
+    from the bound scanner session. No HTTP
+    headers, cookies, or body bytes are copied into the operation.
+    """
+    import copy
+    import hashlib
+
+    if operation.get('provenance', {}).get('transport') not in ('zap-proxy', 'zap-sendRequest', 'zap-native'):
+        raise ValueError('ZAP transport required')
+    message_id = str(message_id)
+    if not message_id.isascii() or not message_id.isdecimal():
+        raise ValueError('native message ID required')
+    captured = fetch_message(message_id)
+    if (not isinstance(captured, dict) or captured.get('scannerResourceId') != scanner_resource
+            or captured.get('sessionId') != session or not isinstance(captured.get('message'), dict)):
+        raise ValueError('native message scanner/session mismatch')
+    message = captured['message']
+    if str(message.get('id')) != message_id:
+        raise ValueError('native message ID mismatch')
+    digests = {}
+    for kind, expected in (('request', request_sha256), ('response', response_sha256)):
+        header, body = message.get(kind + 'Header'), message.get(kind + 'Body')
+        if not isinstance(header, str) or not header or not isinstance(body, str):
+            raise ValueError('native message ' + kind + ' incomplete')
+        observed = hashlib.sha256(json.dumps([header, body], ensure_ascii=False,
+                                             separators=(',', ':')).encode()).hexdigest()
+        if observed != expected:
+            raise ValueError('native message differs from verified ' + kind)
+        digests[kind + 'Sha256'] = observed
+    result = copy.deepcopy(operation)
+    identity = {'scannerResourceId': scanner_resource, 'sessionId': session, 'messageId': message_id}
+    result['provenance'].update(identity)
+    result['zapCapture'] = {**identity, **digests}
+    context = result.get('coverageContext', {})
+    result['zapMessageReceipt'] = {**identity, 'caseId': result.get('caseId'), 'resultPath': '/zapCapture',
+                                  **{key: context.get(key) for key in ('actorRef', 'fixtureRef', 'requestRef')},
+                                  **digests}
+    from .question_evidence import verified_zap_message
+    if not verified_zap_message(result):
+        raise ValueError('native message receipt lacks case or session binding')
+    return result

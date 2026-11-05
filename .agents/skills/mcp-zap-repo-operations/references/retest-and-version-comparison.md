@@ -1,19 +1,15 @@
-# Retest và so phiên bản
+# Retest and compare versions
 
-Chỉ dùng khi user cần retest finding hoặc so các lượt/build. Không bắt hai fresh runs, fixed build hoặc source/image attestation cho assessment thường. Output vẫn [ALERTS/RUN](product-assessment-handoff.md).
+Use this technique only within the approved [criteria-driven plan](criteria-driven-workflow.md); it adds no track-wide assignment or alternative workflow. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-## Chọn phạm vi so sánh
+Use when assigned finding retests/build comparisons, rather than requiring two fresh runs/fixed builds/source-image attestations for routine assessments. Deliver the [Drive assessment table](product-assessment-handoff.md); retain RUN/ALERTS/SCOPE_ALERTS internally.
 
-Xác định finding/API/role/input/kỹ thuật cần retest, version/môi trường và thay đổi đã biết. Cùng route nhưng khác role/state/build có thể khác nghĩa; ghi rõ điều chưa biết. Source review hay đọc report cũ không là runtime retest. Không gọi report delta là đã sửa lỗ hổng khi chưa kiểm hành vi phù hợp.
+Identify findings/APIs/roles/inputs/techniques, environments/versions, and known changes. Same routes with different roles/states/builds may differ; state unknowns. Source/old-report review is not runtime retesting and report deltas do not establish fixes.
 
-## Thực hiện
+Default to local repair and selective continuation under the [agreed policy](assessment-policy.md#flexible-execution-within-the-approved-assignment). Determine which observations/dependencies actually became incompatible; reuse unaffected facts, fixtures and results, revalidate the next action's live prerequisites and execute missing/affected cases only. Do not automatically run the whole catalog or rebuild all actors after a parser/adapter failure, new chat or build change. A full retest needs a concrete scope/dependency reason or explicit new assignment; a local repair remains the same run and Drive table.
 
-Tái dùng operation, fixture và workload phù hợp scope hiện tại; chạy kiểm tra có giá trị để xác định finding còn, không thấy lại hay chưa kết luận. Giữ native severity/confidence; không sửa suppression/expected/raw để alert biến mất. Không phát lại mutation cũ nếu outcome chưa rõ.
+Execute suitable scoped operations/fixtures/workloads to determine present/not-reobserved/inconclusive outcomes. Preserve native severity/confidence without changing suppressions/expectations/raw to remove alerts. Reconcile unknown prior mutations before replay.
 
-## Tổng hợp và retry
+Record actual retest work/times/builds in RUN and honest current findings in ALERTS. Historical unretested issues remain labeled. Narrow retests do not replace whole baselines; retries do not create new bugs or require claim/hash/lineage packages.
 
-Ghi thao tác/kết quả retest trong RUN, cập nhật ALERTS với trạng thái nhận định trung thực và thời điểm/build khi biết. Finding chưa retest giữ lịch sử/chưa xác minh lại. Lượt hẹp không thay toàn baseline; retry cùng finding không thành bug mới. Không cần file claim mapping/hash/lineage hoặc gói chuyển máy riêng.
-
-## Công cụ hiện có và giới hạn
-
-`compare_research_runs.py`, `bola_research.py compare` và các regression entry chỉ hiểu loại input/contract cụ thể; đọc help/source trước dùng. Không bịa flag hoặc coi comparator same-build là product A→B retest. So sánh thủ công được gọi đúng là review thủ công; checksum/test pass không là security approval.
+`compare_research_runs.py`, `bola_research.py compare`, and regression entries accept specific contracts: inspect help/source. Same-build comparison is not automatically an A→B retest. Label manual comparison honestly; checksums/test success are not security approval.

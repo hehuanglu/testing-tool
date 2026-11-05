@@ -1,0 +1,630 @@
+[
+  {
+    "id": "F01",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Lịch sử + hiện trạng",
+    "title": "Không có điểm vào duy nhất để tìm RUN chính thức",
+    "evidence": "H1 trả ba checklist rồi mới đối soát. Hiện hai thư mục .zap-20261103-4qUdAo và .zap-skill-acceptance-20261103-w1 cùng assessmentId và planRevision nhưng có 145 và 175 operations.",
+    "impact": "Chat mới phải tự đoán lineage trước khi làm việc; chọn bản cũ dễ bỏ sót kết quả hoặc diễn giải sai bước tiếp theo.",
+    "fix": "Một registry theo assessmentId trỏ tới working directory và generation chính thức; bản sao phải ghi rõ read-only/superseded và predecessor.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 66
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 167
+      }
+    ]
+  },
+  {
+    "id": "F02",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Lịch sử + thiết kế",
+    "title": "Checkpoint gồm nhiều bản trạng thái phải cập nhật thủ công",
+    "evidence": "H1 ghi nhận checklist cũ hơn RUN; resumeNextReadback trỏ Z-07-A01-03 trong khi currentFocus đã sang bước khác. Skill giao checklist, RUN, journal, packet và continuation các phần của trạng thái.",
+    "impact": "Một save thành công không xác lập bộ checkpoint nhất quán. Agent phải dựng lại trạng thái khi bị ngắt giữa các lần ghi.",
+    "fix": "Một committed generation; checklist, next action và prompt là projection sinh từ state/journal, không là nguồn chân lý độc lập.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 19
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/business-work-blocks.md",
+        "line": 12
+      }
+    ]
+  },
+  {
+    "id": "F03",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Tái hiện offline",
+    "title": "Acquire lease không nguyên tử với journal",
+    "evidence": "Ghi từng file lease trước journal leased. Crash trong khoảng này tạo lease không có task binding trong journal; reviewer/reacquire/release bình thường không phục hồi được. Xem recovery-repro.py. Ngoài ra, nếu journal đã ghi nhưng báo lỗi, rollback xóa lease vẫn để lại record leased; ca R3 tái hiện cùng dạng bế tắc.",
+    "impact": "Có thể bế tắc toàn coordinator ngay cả khi chưa phát effect.",
+    "fix": "Ghi transaction intent có đủ binding trước, rồi commit lease; cung cấp recovery có kiểm chứng, không xóa lease mù.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+        "line": 308
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+        "line": 230
+      }
+    ]
+  },
+  {
+    "id": "F04",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Tái hiện offline",
+    "title": "Release nhiều lease không tiếp tục được sau gián đoạn",
+    "evidence": "Journal released được ghi trước vòng unlink. Ngắt sau unlink đầu tiên để lại lease mồ côi; retry cần đủ lease cũ nên thất bại.",
+    "impact": "Đã xong effect nhưng không thể đóng tài nguyên hoặc tiếp tục run bằng API bình thường.",
+    "fix": "Release phải idempotent, lưu release-intent/commit và tiếp tục xóa đúng các lease còn lại sau xác minh binding.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+        "line": 461
+      }
+    ]
+  },
+  {
+    "id": "F05",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Tái hiện offline",
+    "title": "Journal bị ghi dở khóa luôn đường chẩn đoán bình thường",
+    "evidence": "Journal có allow_partial_tail nhưng Coordinator luôn mở ở chế độ strict; một record cuối thiếu newline làm status/reviewer/recovery không đọc được.",
+    "impact": "Fail-closed ngăn replay là đúng, nhưng thiếu chế độ phục hồi an toàn để đọc prefix hợp lệ và cô lập phần chưa xác định.",
+    "fix": "Read-only salvage giữ nguyên raw, báo tail chưa xác định và khóa effect liên quan; recovery riêng có audit trail.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/journal.py",
+        "line": 28
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+        "line": 226
+      }
+    ]
+  },
+  {
+    "id": "F06",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Tái hiện offline",
+    "title": "Đầu việc resume không xét dependency đã khai báo",
+    "evidence": "Với plan hợp lệ T1.dependsOnCases=[T2], cả hai chưa xong, resume_next vẫn trả T1 do sắp thứ tự ID. Hàm chỉ là candidate, đúng như tài liệu thừa nhận.",
+    "impact": "Không thể dùng selector như scheduler; agent dễ quay lại ca chưa đủ điều kiện hoặc phải tự làm lại dependency graph sau mỗi ngắt. Chưa chứng minh dispatch trái phép.",
+    "fix": "Selector trả ready/deferred/needs-readback có lý do từ dependency graph, block và mốc thời gian; giữ admission riêng.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_resume.py",
+        "line": 47
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py",
+        "line": 123
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 33
+      }
+    ]
+  },
+  {
+    "id": "F07",
+    "group": "Khôi phục",
+    "severity": "P1",
+    "status": "Thiết kế + lịch sử",
+    "title": "Khôi phục trạng thái không đồng nghĩa tiếp tục thực thi",
+    "evidence": "H3 agent thừa nhận bài thử chỉ chứng minh process mới đọc receipt và tìm việc tiếp theo, không chứng minh agent thực hiện tiếp. Skill cũng xác nhận hard stop cần lượt mới hoặc external wake-up.",
+    "impact": "Người dùng tiếp tục đóng vai bộ lập lịch; checkpoint không tự đánh thức chat sau usage limit.",
+    "fix": "Tách rõ recoverable state, autonomous within-turn execution và external resumption. Nếu được giao tự vận hành qua hard stop, cần cơ chế wake-up được cấp quyền riêng.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 42
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-validation.md",
+        "line": 44
+      }
+    ]
+  },
+  {
+    "id": "F08",
+    "group": "Điều phối",
+    "severity": "P1",
+    "status": "Đã xảy ra; sửa prose chưa đủ nghiệm thu",
+    "title": "Dừng tự nguyện khi vẫn có việc khả thi",
+    "evidence": "H3: agent nói rõ không bị usage limit nhưng vẫn dừng; lượt sau tiếp tục thừa nhận kết thúc khi còn việc. H5 lặp lại sau khi user hỏi 'thế sao dừng?'.",
+    "impact": "Không đạt mục tiêu làm hết workflow; tăng số lần người dùng can thiệp, mất context và lãng phí setup.",
+    "fix": "Exit decision phải đối chiếu remaining ready work và lý do dừng; acceptance đo hành vi thực hiện liên tiếp qua nhiều block, không chỉ lưu next action.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/SKILL.md",
+        "line": 30
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 38
+      }
+    ]
+  },
+  {
+    "id": "F09",
+    "group": "Điều phối",
+    "severity": "P1",
+    "status": "Lịch sử; tài liệu hiện đã sửa",
+    "title": "Prompt nối tiếp tự thu hẹp nhiệm vụ còn lại",
+    "evidence": "H4 final tạo prompt 'Kết thúc phần kế khi lane đã chọn được kiểm chứng hoặc có dependency tái hiện được'. User copy prompt, khiến giới hạn do agent tạo trở thành chỉ dẫn cho lượt sau. H1 xác nhận nguyên nhân.",
+    "impact": "Chuỗi chat bị chia thành các lượt nhỏ bắt người dùng nhắn tiếp dù assessment vẫn còn quyền và việc.",
+    "fix": "Không kế thừa tự động giới hạn do generated prompt đặt ra. Prompt chỉ chứa locator và ưu tiên; stopping rule lấy từ yêu cầu thật và canonical state. Dòng 140 hiện đã thêm yêu cầu này, chưa đủ chứng minh hành vi đã hết lỗi.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 138
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 140
+      }
+    ]
+  },
+  {
+    "id": "F10",
+    "group": "Điều phối",
+    "severity": "P2",
+    "status": "Thiết kế + lịch sử",
+    "title": "Lỗi một lane dễ trở thành điểm dừng cả lượt",
+    "evidence": "H3 guard UI lỗi nhưng SOURCE-A02-03 còn làm được; H5 scan sai phạm vi nhưng source/DOM vẫn khả thi. Skill hiện nói tiếp tục độc lập, còn selector và checklist không tự thực hiện chuyển nhánh.",
+    "impact": "Một blocker cục bộ gây ngừng toàn cục và lặp chẩn đoán ở chat kế.",
+    "fix": "Lưu dependency theo resource/case và hàng ready độc lập; ghi decision trace khi không chuyển được nhánh.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/local-remediation-and-continuation.md",
+        "line": 25
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_resume.py",
+        "line": 34
+      }
+    ]
+  },
+  {
+    "id": "F11",
+    "group": "Điều phối",
+    "severity": "P2",
+    "status": "Thiết kế + hiện trạng",
+    "title": "Lịch block không phải trạng thái thực thi có schema chung",
+    "evidence": "H2 có 12 block ngoài plan, 13 work unit, 82 case. business-work-blocks chỉ yêu cầu agent ghi và đối chiếu; selector không nhận lịch block.",
+    "impact": "Chat khác phải hiểu lại quan hệ block/case/work unit và tự quyết ưu tiên; metadata có thể đúng riêng lẻ nhưng lệch nhau.",
+    "fix": "Định nghĩa schema lịch nhẹ gắn plan digest, case IDs, trạng thái và thứ tự phụ thuộc; validator kiểm tra mapping và projection.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+        "line": 31
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/business-work-blocks.md",
+        "line": 3
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_resume.py",
+        "line": 6
+      }
+    ]
+  },
+  {
+    "id": "F12",
+    "group": "Điều phối",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "TTL đặt cuối nhưng không có lịch thức dậy hay phục hồi control tự động",
+    "evidence": "Skill nói rõ deadline không tạo background monitor. Nếu chat ngắt lâu, same token/fixture/control có thể thay đổi; deadline đơn lẻ không đủ dùng lại.",
+    "impact": "Bài expiry có thể mất điều kiện đối chứng và phải tạo attempt mới; user phải nhớ mốc giờ.",
+    "fix": "Lưu subject/control lifecycle và deadline riêng, revalidation hữu hạn, trạng thái expired-invalidated/ready. Chỉ thêm wake-up khi được user giao.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/business-work-blocks.md",
+        "line": 16
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 34
+      }
+    ]
+  },
+  {
+    "id": "F13",
+    "group": "Bằng chứng & phạm vi",
+    "severity": "P1",
+    "status": "Lịch sử; có sửa nhưng chưa qualified mọi lane",
+    "title": "Thu nhiều traffic trước khi chứng minh đường đóng evidence hoạt động",
+    "evidence": "H7 ghi 121 Requester messages, 32 browser responses, nhưng alias Docker khác localhost của từng case khiến reviewer không nhận nhiều evidence. Lỗi lẽ ra lộ ngay message đầu.",
+    "impact": "Chi phí runtime đã phát sinh nhưng tiến độ verdict thấp; resume phải sửa adapter và linking thay vì hoàn tất testing.",
+    "fix": "Giữ lane canary capture→receipt→semantic→reviewer và qualify từng kiểu actor/context cần thiết trước mở rộng; quy tắc mới đã có, cần kiểm chứng thực thi.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/business-work-blocks.md",
+        "line": 6
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-readback.md",
+        "line": 23
+      }
+    ]
+  },
+  {
+    "id": "F14",
+    "group": "Bằng chứng & phạm vi",
+    "severity": "P1",
+    "status": "Lịch sử; sửa từng phần",
+    "title": "Hợp đồng context chưa biểu diễn đủ bài kiểm tra so sánh",
+    "evidence": "H4 helper từng chỉ nhận cặp cùng actor; owner/non-owner BOLA và cặp route directory bị chặn. Sau đó phải thêm finite allocation/role-object matrix.",
+    "impact": "Reviewer chặn evidence đúng không phải lỗi bảo mật sản phẩm; agent dễ mắc vòng sửa cơ chế giữa assessment.",
+    "fix": "Qualification bằng các câu hỏi chuẩn: hai actor/cùng object, hai route, alias deployment, same-token expiry; giữ từng native context, không nới blanket equality.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-readback.md",
+        "line": 19
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-readback.md",
+        "line": 25
+      }
+    ]
+  },
+  {
+    "id": "F15",
+    "group": "Bằng chứng & phạm vi",
+    "severity": "P1",
+    "status": "Lịch sử vận hành, chưa retest tại audit này",
+    "title": "Cấu hình scan không bảo đảm phạm vi thực thi mong đợi",
+    "evidence": "H5 final ghi scan tắt đệ quy vẫn có 25/32 request tới path khác trên cùng Local Compose. Đây là lời báo cáo từ chat, chưa xác minh lại raw trong audit này.",
+    "impact": "Không thể coi chọn URL/rule là guard. Nguy hiểm hơn với route có trạng thái; loại evidence sau chạy không hoàn tác traffic.",
+    "fix": "Egress/method/path guard có khả năng cưỡng chế và telemetry tất cả request; thử guard trong sandbox phù hợp trước lane có effect.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+        "line": 11
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/native-operation-routing.md",
+        "line": 1
+      }
+    ]
+  },
+  {
+    "id": "F16",
+    "group": "Bằng chứng & phạm vi",
+    "severity": "P1",
+    "status": "Lịch sử + giới hạn thiết kế",
+    "title": "Plan có đủ hàng catalog nhưng chưa chứng minh bao phủ sản phẩm",
+    "evidence": "H8 v3 có đủ 50 tiêu chí nhưng agent thừa nhận thiếu discovery Client Spider/OpenAPI và đối chiếu bề mặt. Quy trình coordinator audit được sửa sau khi user hỏi.",
+    "impact": "Có thể hoàn thành tất cả ca do mình nghĩ ra mà bỏ sót endpoint/role/state thuộc tiêu chí universal.",
+    "fix": "Giữ mapping hai chiều inventory↔cases, nguồn inventory độc lập và coverage delta sau discovery. Kiểm tra chất lượng trên sản phẩm khác, không chỉ v5.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+        "line": 17
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/delegation-policy.md",
+        "line": 54
+      }
+    ]
+  },
+  {
+    "id": "F17",
+    "group": "Bằng chứng & phạm vi",
+    "severity": "P2",
+    "status": "Giới hạn thiết kế được thừa nhận",
+    "title": "Reviewer kiểm tra khai báo, không tự chứng minh ngữ nghĩa",
+    "evidence": "Skill nói helpers không chứng minh raw-to-semantic accuracy; người điều phối vẫn gán unit, outcome và basis. Một label đúng cấu trúc không chứng minh quan sát đủ.",
+    "impact": "'Reviewer accepted' dễ bị hiểu thành kiểm chứng độc lập của kết luận; audit recovery thuần fixture không phát hiện oracle sai.",
+    "fix": "Evidence adapters kiểm tra predicate cụ thể, nguồn raw bất biến, controls âm/dương; review độc lập tập trung vào ca rủi ro thay vì đặt thêm chữ ký cho mọi ca.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+        "line": 38
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-validation.md",
+        "line": 65
+      }
+    ]
+  },
+  {
+    "id": "F18",
+    "group": "Runtime & công cụ",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "Không có đường end-to-end v2 chung từ plan tới executor",
+    "evidence": "Runner-routing nói v2 dùng Python callback registry, không phải CLI live chung; discovery không tự tạo admitted executor. Native read CLI chỉ hỗ trợ nhánh hữu hạn.",
+    "impact": "Mỗi lần đổi sản phẩm/capability hoặc fresh context agent phải ghép nhiều API, tăng lỗi interface và code tạm.",
+    "fix": "Một entrypoint có inspect/plan/readback/resume thống nhất, adapter interface versioned; khai báo phần chưa hỗ trợ trước Gate 2.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+        "line": 32
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+        "line": 59
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/helper-contract-map.md",
+        "line": 3
+      }
+    ]
+  },
+  {
+    "id": "F19",
+    "group": "Runtime & công cụ",
+    "severity": "P2",
+    "status": "Giới hạn nguồn đã công bố",
+    "title": "Tính product-neutral của workflow lớn hơn khả năng runner thực tế",
+    "evidence": "Anonymous/auth lane chủ yếu rules 40012/40018; fixture authenticated FE còn finalsource-specific; native read bind endpoint loopback cố định. BOLA common direct-http không tự thành ZAP-derived.",
+    "impact": "Người vận hành dễ tưởng có runner cho mọi câu hỏi; mất nhiều thời gian xây adapter mới hoặc chọn sai provenance.",
+    "fix": "Capability matrix theo operation/auth/protocol/body/fixture/readback/deployment, hiển thị unsupported ngay khi lập plan; không quảng bá workflow như universal executor.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+        "line": 21
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+        "line": 39
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+        "line": 63
+      }
+    ]
+  },
+  {
+    "id": "F20",
+    "group": "Runtime & công cụ",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "Cold start thiếu preflight một lệnh cho toàn bộ phụ thuộc đã dùng",
+    "evidence": "Setup yêu cầu Python 3.13 + lockfile, environment riêng; connector/browser/scanner phụ thuộc executor. Resume example dùng 'python' thay vì ZAP_PYTHON đã xác định.",
+    "impact": "Chat mới có thể dùng sai interpreter, cwd, skill copy hoặc tool surface; lỗi vặt xảy ra trước khi đọc được checkpoint.",
+    "fix": "Persist runtime manifest với executable/version/dependency lock/skill digest; doctor read-only kiểm tra đúng những phụ thuộc của next action.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/setup.md",
+        "line": 18
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 25
+      }
+    ]
+  },
+  {
+    "id": "F21",
+    "group": "Runtime & công cụ",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "Sửa helper ngay trong run làm tăng rủi ro lệch pin và contract",
+    "evidence": "Skill cho phép repair và cảnh báo shared pins gồm recipes khác; nhiều file hiện dirty/untracked nên HEAD đơn lẻ không xác định bytes đang chạy.",
+    "impact": "Chat mới có thể dùng code khác code tạo evidence; sửa một lane làm hỏng allocation khác, hoặc lại cần dựng binding.",
+    "fix": "Ghim digest thực tế của executor/reader cho mỗi attempt, có migration/compatibility và smoke hồi quy trọng điểm; giữ sửa độc lập với raw history.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+        "line": 17
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/local-remediation-and-continuation.md",
+        "line": 11
+      }
+    ]
+  },
+  {
+    "id": "F22",
+    "group": "Delegation",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "Preparation subagent là phụ thuộc bắt buộc không có fallback coordinator",
+    "evidence": "Delegation-policy yêu cầu giữ dependency nếu preparation worker unavailable, không được coordinator thay vai dù có đủ dữ liệu.",
+    "impact": "Host không có worker hoặc hết slot/model có thể chặn intake/planning vì cơ chế tổ chức, không vì nghiệp vụ hay evidence.",
+    "fix": "Cho phép fallback được ghi nhận khi host không hỗ trợ; giữ chuẩn review chất lượng thay vì buộc một topology thực thi.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/delegation-policy.md",
+        "line": 64
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/delegation-policy.md",
+        "line": 128
+      }
+    ]
+  },
+  {
+    "id": "F23",
+    "group": "Delegation",
+    "severity": "P1",
+    "status": "Lịch sử + rủi ro thiết kế",
+    "title": "Coordinator có thể kết thúc khi worker và công việc còn hoạt động",
+    "evidence": "H7 user phải hỏi '3 sub agent đang chạy sao ko tiếp tục?'; agent sau đó nhận kết thúc quá sớm. Skill nói worker không đồng nghĩa monitor.",
+    "impact": "Draft/result không được merge kịp; worker/producer và lease có thể còn cần người giám sát trong lúc root đã dừng.",
+    "fix": "Checkpoint bao gồm active worker tasks, outputs, resource supervision; root exit kiểm tra toàn bộ worker và cơ chế nhận kết quả, không chỉ ca hiện tại.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/delegation-policy.md",
+        "line": 118
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 177
+      }
+    ]
+  },
+  {
+    "id": "F24",
+    "group": "Tài liệu & khả năng bảo trì",
+    "severity": "P2",
+    "status": "Hiện trạng",
+    "title": "Lớp v1/v2 và nhiều khái niệm trạng thái làm cold resume nặng",
+    "evidence": "Các reference gốc cộng với criteria modules đang gần 4.000 dòng; recovery hướng dẫn inspect-resume legacy cạnh resume-next v2. RUN đang dùng có 46.559 dòng / 2.782.613 bytes.",
+    "impact": "Agent phải đọc nhiều để tránh chọn nhầm helper; context loãng và lặp inspection là chi phí có thể thấy, dù số dòng tự nó không phải bug.",
+    "fix": "Tách current operating path khỏi archive; một trang route theo phase/version, typed checkpoint nhỏ và truy vấn theo case thay vì đọc toàn RUN.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 5
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/helper-contract-map.md",
+        "line": 5
+      }
+    ]
+  },
+  {
+    "id": "F25",
+    "group": "Tài liệu & khả năng bảo trì",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "Resume template có thể loại source evidence dù plan cho phép",
+    "evidence": "Template recovery dòng 142 nói 'exclude external-tool/source-only findings'; workflow lại cho source/config và catalog static review theo authority. Không nói rõ chỉ loại khỏi ZAP-derived ALERTS.",
+    "impact": "Fresh chat có thể hiểu sai thành bỏ source work hợp lệ, nhất là run v5 có nhiều SOURCE cases.",
+    "fix": "Ghi rõ phân loại provenance: source-only được dùng cho criterion có method đã duyệt; không đưa vào native/ZAP-derived alert counts.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 142
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/SKILL.md",
+        "line": 20
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+        "line": 11
+      }
+    ]
+  },
+  {
+    "id": "F26",
+    "group": "Nghiệm thu",
+    "severity": "P1",
+    "status": "Lịch sử + hiện trạng test",
+    "title": "Acceptance chủ yếu chứng minh helper, chưa chứng minh agent vận hành liên tục",
+    "evidence": "test_criteria_resume có 4 unit tests: restore JSON, candidate, dependency, approval. H3 thừa nhận test recovery không chứng minh agent tiếp tục làm việc. Các chat lặp lại lỗi dừng sau nhiều lần sửa prose.",
+    "impact": "Có test xanh nhưng trải nghiệm vận hành vẫn thất bại. Fault windows lease/journal chưa được những test selector này bao phủ.",
+    "fix": "Nghiệm thu tách 3 tầng: durability fault injection, cold-start replay/readback, agent nhiều block với can thiệp user được đếm; không biến số tests thành chứng nhận toàn workflow.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/tests/test_criteria_resume.py",
+        "line": 11
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-validation.md",
+        "line": 42
+      }
+    ]
+  },
+  {
+    "id": "F27",
+    "group": "Bàn giao & vòng đời",
+    "severity": "P2",
+    "status": "Thiết kế; lựa chọn user cần giữ",
+    "title": "Final-only publishing kết hợp pending vô hạn dễ làm user không có bản mới dùng được",
+    "evidence": "H7 user chủ động yêu cầu chỉ sync lượt cuối; H2/H3 còn 39 pending và sheet tạm. V2 cấm complete khi còn criterion applicable thiếu evidence, kể cả hết feasible actions.",
+    "impact": "Không được sửa bằng cách tự sync thường xuyên hoặc gán N/A. Nhưng 'final delivery turn' cần tách khỏi evidence completion để tránh treo báo cáo vô hạn.",
+    "fix": "Giữ final-only; định nghĩa bàn giao partial tại user stop hoặc dependency thật, source revision và trạng thái delivery rõ. Chốt cách bàn giao giới hạn theo yêu cầu user, không nới verdict.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/single-table-drive-output.md",
+        "line": 50
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+        "line": 86
+      }
+    ]
+  },
+  {
+    "id": "F28",
+    "group": "Bàn giao & vòng đời",
+    "severity": "P2",
+    "status": "Thiết kế",
+    "title": "Delivery state được agent quản lý, không nằm trong completion reviewer",
+    "evidence": "Skill tách assessment completed khỏi delivery; driveOutput và verified snapshot là agent-maintained. resume_next trả verify-final-delivery kể cả workflow đã completed mà không xét driveOutput.",
+    "impact": "Dễ lặp bước verify hoặc kết thúc với bảng cũ nếu chỉ nhìn assessmentStatus; chưa có kết thúc workflow hợp nhất bằng máy.",
+    "fix": "State machine riêng cho projection/write/readback/verified với source digest; resume trả done chỉ khi cả assessment và delivery tương ứng đã khép.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_resume.py",
+        "line": 75
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/single-table-drive-output.md",
+        "line": 48
+      }
+    ]
+  },
+  {
+    "id": "F29",
+    "group": "Khôi phục",
+    "severity": "P2",
+    "status": "Giới hạn triển khai",
+    "title": "Merge CLI không tự promote canonical RUN và không idempotent cùng output",
+    "evidence": "criteria-merge ghi output mới qua atomic_bytes; canonical input và pointer do agent cập nhật ngoài lệnh. Gọi lại với output tồn tại thất bại, không trả receipt của lần thành công trước.",
+    "impact": "Ngắt sau ghi file nhưng trước thông báo/promotion làm chat sau không biết bản nào được nhận; thêm một bước đối soát thủ công.",
+    "fix": "Output có transaction ID/input revision và receipt bền vững; retry đọc kết quả cũ khi digest trùng, canonical promotion bằng compare-and-swap.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/product_scope_cli.py",
+        "line": 117
+      }
+    ]
+  },
+  {
+    "id": "F30",
+    "group": "Gián đoạn nền tảng",
+    "severity": "P2",
+    "status": "Lịch sử; không quy sai nguyên nhân",
+    "title": "Không phân biệt rõ host interruption với lỗi vận hành khi đánh giá recovery",
+    "evidence": "H4 có failed usage limit; H6 có failed cybersecurity-risk ở cả lượt 'tiếp tục' và 'hey'. H3/H5 lại là completed voluntary stop.",
+    "impact": "Nếu gộp tất cả thành lỗi checkpoint sẽ sửa sai chỗ; skill không thể tự vượt hạn mức hoặc kiểm soát nền tảng.",
+    "fix": "Lưu stop cause theo host/user/dependency/voluntary, trạng thái effects trước ngắt, đường phục hồi được phép. Không suy đoán nguyên nhân policy flag và không tìm cách né kiểm soát.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+        "line": 42
+      },
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-validation.md",
+        "line": 46
+      }
+    ]
+  },
+  {
+    "id": "F31",
+    "group": "Khôi phục",
+    "severity": "P2",
+    "status": "Rủi ro nguồn, chưa tái hiện hang",
+    "title": "Giữ coordinator lock trong lúc chạy callback bên ngoài",
+    "evidence": "dispatch giữ lock assessment trong khi gọi admitted executor; timeout tùy callback, coordinator không tự chặn thời gian. Không khẳng định executor thực tế đang treo.",
+    "impact": "Một callback treo có thể chặn status, resume và việc độc lập cần cùng lock; recovery phải chờ hoặc can thiệp process.",
+    "fix": "Tách claim/intent dưới lock khỏi I/O dài; executor deadline và cancellation có journal; reacquire lock để commit ACK. Không giải phóng lease chỉ vì timeout.",
+    "refs": [
+      {
+        "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+        "line": 390
+      }
+    ]
+  }
+]

@@ -1,60 +1,49 @@
-# Bản đồ repo và runner
+# Scanner repository and runner map
 
-Mọi path dưới đây tính từ checkout mcp-zap-server, trừ mục assessment. Đọc file thực trước khi dùng; đây là bản đồ nguồn, không phải bằng chứng tất cả mode đã chạy trên máy.
+Paths below are relative to the verified external `mcp-zap-server` checkout, except assessment paths. Inspect current files before use: this is a source map, rather than proof every mode has run.
 
-## Source, build và tests
+## Source, build, and tests
 
-- Java/Spring Boot: `src/main/java/mcp/server/zap/core/`, cấu hình `src/main/resources/application.yml`, dependency/task contract `build.gradle`, `gradle.properties`, `settings.gradle`. Java25; Gradle wrapper9.8.1 ở snapshot.
-- Gateway adapters nối ZAP; `service/*McpToolsService.java` công bố tool, `GuidedScanWorkflowService.java` định tuyến; `service/authz/` scope; `service/policy/` policy; `configuration/` startup/security; `service/queue/`, `service/jobstore/`, `history/` quản lý execution/evidence. Không thay gateway dependencies hoặc scan engine để giải quyết setup.
-- `./gradlew test`: unit/Spring integration không mang tag docker. `./gradlew dockerTest`: chỉ tag docker, có Testcontainers/fixture runtime riêng. `build` không tự chạy dockerTest.
-- Trên máy này PATH java từng là11; chọn JDK25 theo lệnh chuẩn macOS trong shell của lệnh build:
+Java/Spring source: `src/main/java/mcp/server/zap/core/`; configuration: `src/main/resources/application.yml`; build contracts: `build.gradle`, `gradle.properties`, `settings.gradle`. The inspected snapshot requires JDK25 and Gradle wrapper 9.8.1. Gateway adapters connect ZAP; `service/*McpToolsService.java` exposes tools, `GuidedScanWorkflowService.java` routes workflows, and authz/policy/configuration/queue/jobstore/history handle scope, execution, and records. Do not replace gateway dependencies or engines merely for setup.
+
+`./gradlew test` excludes docker-tagged tests. `./gradlew dockerTest` runs Docker/Testcontainers fixtures; build does not automatically run dockerTest. On macOS, after verifying the installed JDK:
 
 ```sh
 JAVA_HOME="$(/usr/libexec/java_home -v 25)" ./gradlew test --no-daemon
 ```
 
-Đổi task thành `build`, `dockerTest --tests 'fully.qualified.TestClass'`, `jacocoTestReport` tùy việc. Xác minh JDK path trước; không sửa shell profile. Tránh `clean` trước khi bảo toàn evidence cũ; không thêm `--scan`/Sonar upload vào local check.
+Choose build/dockerTest/jacoco tasks as needed without changing shell profiles, blindly cleaning history, or adding build scans/Sonar uploads. Results are under `build/test-results/{test,dockerTest}` and `build/reports/tests/`. Record actual command/time/source/image/tests/failures/errors/skips; XML reflects the latest task rather than all current source. Preserve prior results where history matters.
 
-Kết quả ở `build/test-results/{test,dockerTest}` và `build/reports/tests/`. XML là kết quả lần chạy gần nhất của task được chọn, không phải chứng nhận toàn bộ source hiện tại. Ghi tests/failures/errors/skipped, thời điểm, command, source/image pin. Trước run mới lưu bản cũ nếu cần giữ lịch sử.
+`python3 -m unittest discover -s tests/python -p 'test_*.py'` covers CI/webhooks/contracts/Compose/Helm. Groups require actual PyYAML (historical CI pin 6.0.3), Compose, or Helm; missing tools may skip tests and do not establish full pass. Do not install dependencies just to inspect this map.
 
-- `python3 -m unittest discover -s tests/python -p 'test_*.py'`: CI gate/webhook/contracts/Compose/Helm tests. Cần PyYAML (CI pin6.0.3), Docker Compose và Helm cho từng nhóm. Helm thiếu thì tests skip; không báo full pass khi có skip. Không cài dependency chỉ để mở bản đồ.
-- `tools/healthcheck/`: Go healthcheck nhúng trong image distroless; không phải scan runner. `Dockerfile` và `scripts/verify-distroless-signature.sh` quản lý build/signature. Signature của base image không chứng minh toàn bộ app image/source.
-- `.github/workflows/ci.yml`: Python, MCPB, Gradle build và dockerTest theo event; coverage/report upload. Workflow tồn tại không chứng minh CI remote đã pass. Không publish/dispatch pipeline nếu chỉ được yêu cầu kiểm tra local.
+`tools/healthcheck/` is the embedded Go healthcheck, not a scan runner. Dockerfile/signature verification qualifies its stated base/image scope, rather than the entire app/source. `.github/workflows/ci.yml` defines remote checks/uploads; existence does not prove remote CI success or authorize publishing/dispatch.
 
-## Các runner có side effect
+## Runners with side effects
 
-- `bin/bootstrap-local.sh`, `bin/self-serve-doctor.sh`, `dev.sh`: xem local-runtime reference.
-- `.github/actions/zap-security-gate/mcp_zap_gate.py`: runner Python MCP→crawl/optional attack→settle→findings/report/diff. Đọc `--help`, action input contract và `docs/integrations/GITHUB_ACTIONS_INTEGRATION.md` trước chọn tham số.
-- `.github/actions/zap-security-gate/run-gate.sh`: wrapper môi trường GitHub Actions; tạo Compose project, có cleanup `down --remove-orphans`, workspace permissions. Không chạy thẳng trên project scanner đang dùng. Shell dùng cú pháp Bash mới như `${value,,}`; Bash3.2 mặc định macOS không đủ. Chọn Bash phù hợp và workspace/project riêng khi chạy local có chủ đích.
-- `examples/gitlab/run-zap-security-gate.sh` dùng chung Python runner với biến GitLab; đọc `docs/integrations/GITLAB_CI_INTEGRATION.md`. GitHub/GitLab wrappers cần project name, output/workspace và target riêng.
-- Webhook: `.github/actions/zap-webhook-callback/send_zap_webhook.py`, wrapper và `examples/gitlab/send-zap-webhook.sh`; xem `docs/integrations/WEBHOOK_CALLBACKS.md`. Gửi callback là giao tiếp ra ngoài, không phải một kiểm tra local tự động được phép.
-- Automation Framework: `ExpertAutomationMcpToolsService.java`, `AutomationPlanService.java`, `AutomationPlanTargetPolicy.java`, docs scanning/automation-framework. Plan có thể gửi traffic/chạy scan; import/review không đồng nghĩa cho phép execute.
-- AWS smoke `examples/aws-ec2/smoke-api.py`, cloudformation/setup-host/firewall và EKS starter là deployment riêng, không thuộc local audit mặc định.
+Read [local runtime](local-runtime.md) for bootstrap/doctor/dev scripts. `.github/actions/zap-security-gate/mcp_zap_gate.py` implements MCP crawl/optional active/passive/findings/report/diff; inspect help/action contracts and `docs/integrations/GITHUB_ACTIONS_INTEGRATION.md`. `run-gate.sh` provisions/cleans Compose, adjusts workspace permissions, and requires modern Bash (`${value,,}` is unsupported by macOS Bash 3.2). Use isolated projects/workspaces for intentional local runs rather than an active shared scanner.
 
-## Contracts CI và evidence gốc
+GitLab wrappers reuse the Python runner under their integration contract. Webhook scripts send external communications and are not automatically authorized local checks; read WEBHOOK_CALLBACKS guidance. AutomationPlanService/AutomationPlanTargetPolicy may execute traffic/scans: importing/reviewing plans does not authorize execution. AWS EC2/EKS/firewall/cloudformation examples are separate deployment work.
 
-Nguồn chuẩn `docs/scanning/CI_GATE_CONTRACTS.md`, `SEEDED_API_GATE_PLAYBOOK.md`.
-Result v2, snapshot/diff v3, seed/manifest/suppressions v1. v3 ghi ZAP version và full add-on inventory; `different/unknown` không được coi resolved/new comparable. Seed mode tạo candidate, không chấp nhận baseline thay reviewer. Root gate main trả0/1; không áp exit0/1/2/3 của assessment phụ vào nó.
+## CI contracts
 
-Root `artifact-manifest.json` không bắt buộc SHA cho copied native report theo contract hiện tại; khác bundle verifier của assessment bắt buộc full byte/hash readback. Report generator có artifact không đồng nghĩa bundle độc lập có đủ coverage/provenance.
+Read `docs/scanning/CI_GATE_CONTRACTS.md` and `SEEDED_API_GATE_PLAYBOOK.md`. Inspected versions: result v2, snapshot/diff v3, seed/manifest/suppressions v1. v3 records ZAP/add-ons; different/unknown compatibility cannot establish new/resolved comparisons. Seed mode creates candidates rather than accepting baselines for reviewers. Root gate main exits 0/1; separate assessment 0/1/2/3 semantics do not apply.
 
-## Docs, packages và extension
+The root artifact manifest does not universally require copied-native-report hashes; separate strict assessment verifiers may require full readback/hashes. Generated reports do not establish independent coverage/provenance.
 
-- `docs/README.md`, `docs/package.json`: Astro/Starlight; từ docs chạy `npm ci`, `npm run check`, `npm run build` khi cần sửa/kiểm tra docs. `docs/scripts/sync-docs.mjs` sinh các trang từ Markdown chuẩn, không sửa bản generated. Public docs không chứa private rollout notes; audit máy để ngoài repo.
-- `packaging/claude-desktop/`: Node>=20.18.1; `npm ci --ignore-scripts --no-audit --no-fund`, `npm test`, `npm run build` theo README. Build tải/đóng gói distribution, không là status-only. `verify:status` là kiểm tra connector Node, không thay native Claude session proof.
-- `packaging/macos/`: build-package.py, launcher `mcp-zap`, tunnel helper, source/distribution notices. Đọc README và `docs/getting-started/MACOS_PACKAGE.md`; build từ bootJar đúng version và verify source manifest/licensing. Tunnel thay đổi reachability, không bật mặc định.
-- `plugins/mcp-zap-connect/`: skill-only onboarding; ba marketplace manifests cho clients. Không có full-repo operations skill trong snapshot upstream.
-- Extension contracts `src/main/java/mcp/server/zap/extension/api/`; `extensionApiJar`, `samplePolicyMetadataExtensionJar`, `standalonePolicyMetadataExtensionJar`. Đọc `docs/extensions/{README,BUILD_YOUR_OWN_EXTENSION,EXTENSION_API_COMPATIBILITY,EXTENSION_API_RELEASE_POLICY}.md`. Trạng thái `experimental-local`; standalone task stage local Maven rồi compile. Không hứa Maven Central/stable binary/runtime plugin loading/multi-engine chỉ vì JAR build được.
+## Documentation, packages, and extensions
 
-## Shared service / vận hành nâng cao
+`docs/` uses Astro/Starlight with npm ci/check/build when needed. `docs/scripts/sync-docs.mjs` generates pages from maintained Markdown: edit canonical source. Keep private machine/rollout notes outside public docs.
 
-- `helm/mcp-zap-server/`: deploy, migration job, storage, NetworkPolicy, HPA/PDB, values variants. `src/main/resources/db/migration/` và chart migration copies cần giữ tương ứng. Helm render tests khác live cluster acceptance.
-- `docs/src/content/docs/operations/`: observability, structured logging, abuse protection, runtime policies, queue retry/coordinator, scan history, production checklist, release handoff.
-- `ops/observability/`: Grafana dashboard, Prometheus alerts; cung cấp cấu hình, chưa chứng minh metrics/alerts đã nối trên máy.
-- `docs/operator/runbooks/`: auth bootstrap failure, CI pilot install, production simulation, EC2. HA cần shared jobs, node IDs/leases, session affinity, revocation/history và ZAP recovery; không suy từ MCP replica count. Public repo không có HA Compose runnable.
+`packaging/claude-desktop/` requires Node >=20.18.1; follow its README for npm ci --ignore-scripts --no-audit --no-fund, test, and build. Builds may fetch/package distributions and are not status-only. verify:status checks the Node connector rather than native client-session proof.
 
-## Assessment phụ
+`packaging/macos/` contains package/launcher/tunnel/notices; inspect its README and MACOS_PACKAGE guidance, actual bootJar/source-manifest/licensing. Tunnels change reachability and are not default. `plugins/mcp-zap-connect/` provides onboarding and marketplace manifests rather than this full operations skill.
 
-`$ASSESSMENT_ROOT/` không phải upstream runner. `cli.py` anonymous planner/pilot/recover/verify; `bola.py` adapter cơ bản; `bola_operational.py` owned synthetic login+read; `bola_borrowed.py` borrowed Docker prepare/plan/preflight/run/verify/cleanup. Python3.13 và `.venv` riêng.
+Extension API lives under `src/main/java/mcp/server/zap/extension/api/`; inspect extensionApiJar/samplePolicyMetadataExtensionJar/standalonePolicyMetadataExtensionJar and `docs/extensions/` contracts. The inspected status is experimental-local; standalone builds stage local Maven. A built JAR does not establish Maven Central/stable binaries/runtime loading/multi-engine support.
 
-Campaign scripts: integration, binding, fault, bola_campaign, bola_operational_pilot, bola_borrowed_pilot. Fault dùng fake transport không chứng minh ZAP. Các campaign tạo traffic/fixtures, không chạy để làm status. Schema builders có thể ghi file; `verify_m2_evidence.py` từ chối output đã có, `verify_m3_evidence.py` ghi đè verification.json, borrowed verifier cũng có output mặc định lịch sử. Dùng helper readback của skill cho audit không rewrite.
+## Shared operations
+
+`helm/mcp-zap-server/` contains deployment/migrations/storage/network/HPA/PDB variants. Keep chart migration copies aligned with `src/main/resources/db/migration/`. Render tests do not establish live cluster acceptance. Operations docs/observability files/runbooks describe logging/policies/queues/history/production/EC2/HA; configuration existence does not prove metrics or deployment. HA needs shared jobs/leases/node IDs/affinity/revocation/history/ZAP recovery rather than replica counts. The inspected public repository has no runnable HA Compose.
+
+## Bundled assessment library
+
+`$ASSESSMENT_ROOT` is a separate bounded executor library using Python 3.13/dependencies. CLI anonymous planner/pilot/recover/verify, basic BOLA, owned synthetic login/read, and borrowed Docker lanes have distinct contracts. Integration/binding/fault/BOLA campaigns may create fixtures/traffic; fake fault transports do not prove ZAP. Do not run them for status. Some builders/verifiers write or overwrite outputs (including historical default paths); use read-only saved-data helpers for audits and inspect actual commands before invocation.

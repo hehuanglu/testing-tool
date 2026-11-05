@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "-m",
+    "zap_assessment.product_cli",
+    "scope",
+    "state-init",
+    "--state-dir",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-closure-repair-20261104T090352+0700/isolated-cli-fixture/state",
+    "--registry-dir",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-closure-repair-20261104T090352+0700/isolated-cli-fixture/registry",
+    "--registration-id",
+    "closure-repair",
+    "--run",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-closure-repair-20261104T090352+0700/isolated-cli-fixture/run-input.json",
+    "--operator",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-closure-repair-20261104T090352+0700/isolated-cli-fixture/operator-input.json"
+  ],
+  "exitCode": 0
+}

@@ -170,7 +170,7 @@
     },
     {
       "referenceId": "anonymous-http-source",
-      "path": "zap-product-assessment/src/zap_assessment/anonymous_runner.py",
+      "path": "zap-product-assessment/docs/remediation/source-snapshots/anonymous_runner.py.snapshot",
       "sha256": "629c9c49b29efba358f5f5335d2375975c5c58bddc887375ca4e2672db152dfa",
       "classification": "source-supported",
       "recordedAt": "2026-10-25T11:39:29.551148+00:00",
@@ -215,7 +215,7 @@
     },
     {
       "referenceId": "browser-e2e-source",
-      "path": "zap-product-assessment/src/zap_assessment/fe_authenticated_runner.py",
+      "path": "zap-product-assessment/docs/remediation/source-snapshots/fe_authenticated_runner.py.snapshot",
       "sha256": "06b0a658cdff00dde5dc105101dd3489cddfdb04cddbb1c8c87dcd20cc0a5fac",
       "classification": "source-supported",
       "recordedAt": "2026-10-25T11:39:29.551148+00:00",

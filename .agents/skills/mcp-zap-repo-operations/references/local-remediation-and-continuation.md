@@ -1,64 +1,76 @@
-# Khắc phục lỗi cục bộ để tiếp tục assessment
+# Repair local blockers and continue assessment
 
-Giữ vòng chẩn đoán → sửa tối thiểu → kiểm tra tập trung → tiếp tục. Ghi việc đã làm và kết quả trong RUN; không mở thêm yêu cầu đóng gói bằng chứng hoặc capability-proof campaign chỉ để bàn giao.
+Diagnose → minimal repair → focused verification → continuation. Record actual work/results in RUN without additional evidence packages or capability-proof campaigns.
 
-## Phạm vi sửa
+## Repair scope
 
-Bao gồm lỗi plan/orchestration, mapping, parser/capture/checker, adapter, runtime và phối hợp resource cản phần assessment đã giao. Không sửa lỗ hổng/nghiệp vụ product, mở target/quyền hoặc giả approval. Được sửa/version contract, mapping và primitive cần thiết trong quyền được giao, có kiểm tra tác động; gate của allocation đang chạy vẫn enforce. Không đóng băng giới hạn implementation thành nguyên tắc nghiệp vụ. Các thay đổi vượt sửa công cụ cần thiết phải được xác định là dependency phát triển riêng, không âm thầm mở rộng nhiệm vụ.
+Under the [agreed flexible execution policy](assessment-policy.md#flexible-execution-within-the-approved-assignment), the coordinator can adapt testing adapters/readers/fixtures/configuration to the business questions without arbitrary code-size thresholds or renewed approval for routine adjustments. Keep agreed objectives, targets, allowed effects and actual executor gates intact. Prefer local repair plus selective continuation over full retest; only new out-of-assignment effects/objectives require a changed approval scope.
 
-Runner phụ theo [dispatcher](operation-dispatch.md#d-hợp-đồng-tối-thiểu-khi-viết-runner-phụ) phải cô lập theo product/môi trường. Common implementation pins hiện bao gồm recipe khác; kiểm ảnh hưởng plan đang chạy trước sửa shared core, không regenerate hash để ép plan lịch sử pass.
+Repair assigned orchestration/plans/mappings/parsers/capture/checkers/adapters/runtime/resources. Do not repair product vulnerabilities/business logic, expand targets/permissions, or fabricate approval. Authorized contracts/mappings/primitives may be fixed/versioned with impact checks while current allocation gates remain enforced. Implementation limits are not immutable business principles; work genuinely outside the agreed testing objectives/authority becomes an explicit dependency; adapter size alone does not make it out of scope.
 
-Giữ dirty state và dữ liệu cũ. Không reset/stash, sửa raw status/expected/test chỉ để pass. Không prune/xóa DB hoặc dữ liệu người dùng để vượt preflight.
+Additional runners follow the [minimal contract](operation-dispatch.md#minimal-additional-runner-contract) and isolate product/environment. Shared implementation pins may include other recipes: inspect active-plan impact rather than regenerating hashes to pass historical plans. Preserve dirty state/history without reset/stash, fake expected/raw statuses, broad pruning, or database deletion.
 
-## Phân loại trước quyết định
+For an ongoing product assessment, reuse working runners/helpers and current verified recovery entry points. A skill wording change or a new block does not require refactoring them, adding a resume helper, migrating schemas, rebuilding images or regenerating pins. Change executable behavior only for a demonstrated defect or missing primitive needed by the selected question; isolate the repair and verify its effect on active callers and future allocations. Preserve existing snapshots and admitted history.
 
-- Chưa đến lượt nhưng đủ prerequisite: xếp lượt, không gọi blocked.
-- Plan/ledger/mapping sai: sửa từ trạng thái/ACK thực tế; chưa xác định kết quả mutation thì không replay.
-- Runtime chưa sẵn hoặc resource lỗi: kiểm ownership/readiness/tài nguyên và diagnostic phù hợp trước retry.
-- Thiếu capability ở wrapper: đọc operation/source thực; không suy ZAP thiếu capability nói chung.
-- Thiếu account/role/fixture/policy: tự tìm nguồn hợp lệ trong scope; hỏi đúng phần không thể xác minh, giữ các case phụ thuộc chưa kiểm.
-- Chỉ thiếu báo cáo/chứng minh phụ: dùng kết quả đang có; không yêu cầu hash/manifest/proof mới khi user chỉ cần thao tác và kết quả trung thực.
+## Existing authority, fixture regression and stopping proportionately
 
-## Thứ tự chọn giải pháp
+Separate safety invariants (target/auth binding, ownership, intent before effect, unknown readback, immutable history) from session-specific restrictions. Preserve the source/scope of existing permission in engagement authorityNotes; do not request routine approval again. Assigned fixture preparation or regression on a genuinely new owned fixture can proceed under the admitted path. That is distinct from replaying an unknown or ACKed mutation to improve an old attempt label. Source review in a skill implementation is not new scan authority.
 
-1. Dùng operation/entry sẵn có đúng scope/profile.
-2. Điều chỉnh cấu hình, workload, fixture hoặc phối hợp operations.
-3. Mở rộng runner/adapter hiện có ở phần còn thiếu.
-4. Runner mới chỉ khi có lý do, tái dùng transport/auth/journal/report/cleanup.
-5. Capability nền tối thiểu nếu operation gốc thực sự thiếu; thay đổi lớn thành dependency riêng.
+Choose a proportional repair that enables a concrete assigned question. A small missing reader/mapping can be useful next work; missing handlers remain `prepare-adapter` gaps. Do not diagnose an already answered historical failure indefinitely or build unrelated generic infrastructure solely to avoid an honest capability limit. Adapt the testing adapter as needed for the actual business question. If useful work remains feasible, continue it; if genuine access/policy/capability is unavailable, name the affected question and resumption condition. Honor the user's explicit stop/timebox without relabeling unfinished work complete.
 
-Không gọi API tầng thấp để né gate. Dữ liệu product thuộc discovery/recipe/workload, không trong điều kiện pass chung. Không hardcode route/role/ID/số ca/verdict của một product làm tiêu chí chung. Nếu code bắt proof/pin, giữ gate, chọn đường phù hợp hoặc xử lý dependency cụ thể; không biến mọi assessment thành qualification của toàn scanner.
+## Classify and select remedies
 
-## Vòng khắc phục và tiếp tục
+Eligible but unscheduled work is not blocked. Repair incorrect ledgers/mappings from actual ACK/state; unknown mutations cannot be replayed. Diagnose runtime/readiness/ownership/resources. Missing wrappers do not establish missing ZAP capability. Discover legitimate accounts/fixtures/policies within scope and ask only for unavailable material facts. Missing optional proof/reporting is not a reason to open a campaign.
 
-### Quyết định cho phần việc còn mở
+Prefer existing scoped operation → configuration/workload/fixture/orchestration → existing adapter extension → justified runner reusing transport/auth/journal/report/cleanup → minimal underlying capability when assigned. Never use lower-level APIs to bypass gates, hardcode product-specific pass rules, or turn all assessments into scanner qualification.
 
-Ghi ngắn ngay trong plan/RUN hiện có: phần việc bị ảnh hưởng, điều quan sát được, phương án đã đánh giá và bước được chọn. Không bắt schema, số lần thử hoặc file bằng chứng mới. Một lời ghi `not-operated`, `partial`, `unknown` hay “thiếu fixture” chỉ mô tả trạng thái, chưa giải quyết nó.
+### Decisions for open work
 
-- Còn đủ điều kiện → xếp và thực hiện lượt tiếp trong scope đã giao.
-- Input/config/adapter sai → chẩn đoán, sửa tối thiểu, kiểm tập trung rồi tiếp tục. Tool trả `isError:false` vẫn cần đọc auth/business outcome.
-- Thiếu fixture → tìm helper/flow setup và kiểm quyền, owner/relation/state, uniqueness cùng khả năng hiển thị UI. Giữ dữ liệu cũ không cấm tạo fixture test mới đúng quyền. Có helper không tự cấp quyền DB; nếu thiếu quyền thì nêu đúng thao tác/tác động cần làm rõ, tiếp tục nhánh khác.
-- Chưa biết outcome → reconcile ID/ACK/state trước mọi retry; diagnostic thiếu có thể bổ sung local đã lọc secret.
-- Dependency thật → ghi nguyên nhân và lựa chọn khả dụng đã đánh giá/thử, vì sao chưa thể xử lý trong quyền/tài nguyên hiện có và điều kiện tiếp tục. Không cần gọi đường đã biết không phù hợp chỉ để đủ số attempts.
-- Kỹ thuật không áp dụng hoặc phần ngoài giai đoạn user giao → giữ căn cứ nghiệp vụ/phạm vi đó; agent không tự giảm scope bằng cách chỉ chọn ca dễ.
+Record affected responsibility, observations, evaluated options, and selected action in existing plan/RUN. No extra schema, fixed attempt count, or evidence file is required. Labels such as not-operated/partial/unknown/missing fixture describe state rather than resolve it.
 
-Policy chưa được xác nhận là giới hạn nhận định riêng. Chỉ chặn ca khi thiếu kỳ vọng có nghĩa cho ca đó; không yêu cầu approval độc lập cho mọi BOLA workload đã có hypothesis được ghi trước traffic. Thiếu auth/fixture/capability cũng không được đổi thành N/A.
+- Eligible work: schedule and execute the next round autonomously, grouping related questions to reuse context/setup. Retain a concrete feasible action at a [session checkpoint](retention-stop-and-recovery.md#working-session-checkpoints) only when a stated handoff reason applies; a finished round alone is insufficient.
+- Input/config/adapter errors: diagnose, minimally repair, verify, continue. `isError:false` still requires auth/business-outcome inspection.
+- Missing fixtures: inspect actual setup helpers/permissions/owner/relation/state/uniqueness/UI visibility. Preserving old data does not forbid authorized new test fixtures. Helpers do not automatically authorize DB changes; clarify missing authority while continuing independent work.
+- Unknown outcomes: reconcile IDs/ACK/state before retry; add narrowly scoped sanitized diagnostics if necessary.
+- Real dependencies: record concrete causes, suitable evaluated/attempted options, current permission/resource constraints, and resumption conditions. Do not execute known-inappropriate paths merely to increase attempt counts.
+- Inapplicable techniques or work beyond the assigned stage: preserve grounded product/scope reasons without shrinking scope to easy cases.
 
-Trước dùng lại fixture hoặc khi lỗi lặp, tra [tri thức vận hành](operational-knowledge.md), kiểm hiện trạng thay vì chỉ đọc checkpoint. Sau recovery, cập nhật nơi tiếp tục chính thức và lưu bài học đã xác minh; không đổi lịch sử lỗi thành pass.
+Unconfirmed policy limits claims and blocks only questions lacking meaningful expectations. A pre-recorded source hypothesis does not require independent approval for every BOLA workload. Missing auth/fixtures/capabilities are not N/A. Before fixture reuse/recurring errors, inspect [knowledge](operational-knowledge.md) against current state; after recovery update official continuation and verified lessons without rewriting failures as passes.
 
-### Thực hiện recovery
+Missing adapter/fixture preparation may itself be the next useful work unit. Preserve the required mapping, verified setup facts and first repair/preparation step across contexts without claiming the options are exhausted. An unscheduled repair is not a technical impossibility; a real dependency still needs a cause, affected work, evaluated options and resumption conditions. One dependency blocks only its dependent questions.
 
-1. Xác định bước lỗi và request đã dispatch/ACK/terminal hay chưa; dừng producer bị ảnh hưởng khi cần. Không phát start lần hai vì ACK chưa rõ.
-2. Chẩn đoán bằng trạng thái/log/source sẵn có, chỉ lấy thông tin cần thiết và tránh secret. Không biết nguyên nhân thì ghi rõ, không giả căn nguyên từ exception type.
-3. Chuẩn bị bản sửa nhỏ, giữ scope và compatibility; gom thay đổi phụ thuộc trước khi chạy product để tránh sửa code giữa từng route.
-4. Kiểm tra tập trung theo thay đổi; không rerun mọi campaign. Kiểm output actual, không nới expected hoặc giả kết quả. Không cần bộ source archive/hash/independent review nếu không được yêu cầu.
-5. Theo [rollover allocation](responsibility-loop.md): giữ nguyên plan/pins/raw lịch sử, tạo allocation mới theo bytes hiện tại; không repin run cũ. Cập nhật plan mới khi thực sự đổi workload/binding hoặc contract code yêu cầu. Reconcile state/actor/fixture hiện tại, tiếp tục đúng nhánh, ghi kết quả vào RUN và giữ các mục chưa làm.
-6. Nếu hết cách hợp lệ trong quyền/tài nguyên hiện có, nêu blocker cụ thể và điều kiện tiếp tục; các nhánh độc lập đủ điều kiện vẫn chạy tiếp.
+Before handing a technical dependency to the user, separate unavailable information from investigation still possible within current authority. Read retained source/status/logs and evaluate authorized trace collection or existing service bindings where relevant, without changing ingress, targets or permissions. If a useful diagnostic is feasible, perform it; otherwise name the specific inaccessible resource or decision and what would permit progress. “Wait for new data” alone is not a next action. Business acceptance of capability delegation/revocation may need policy clarification; do not invent that decision or treat it as blocking independent technical work. Context handoffs may preserve unfinished investigation without calling it an external dependency.
 
-## Resource và prerequisite cục bộ
+### Recurring failures
 
-Theo [resource preflight](resource-preflight.md). Source discovery không phụ thuộc Docker. Thiếu disk/RAM cần đo đúng filesystem/Docker/app data và chẩn đoán; không hạ reserve hoặc xóa dữ liệu ngoài quyền. Stop/cleanup đúng resource thuộc run, không shared stop-all.
+Before another allocation dependent on a previously failing prerequisite, read the retained failure/readback and applicable verified lesson. Identify the failed layer and what changed: transport/callback dependency, fixture state, authentication, producer/recorder readiness, resource/rate budget, or an explicitly unknown cause. A fresh fixture alone does not fix a repeated coordination failure. Avoid starting a full campaign merely to rediscover it.
 
-## Đọc kết quả sửa
+For orchestration faults, check dependency order: a scanner callback waiting for a fixture cannot depend on support traffic queued behind that same scanner. Use compatible independent support transport only within existing authorization, preserving TLS and provenance; support bypassing ZAP earns no ZAP coverage. Verify the repaired prerequisite with a focused local/offline check or a necessary bounded baseline, then execute only genuinely missing work. Do not impose a tool-qualification campaign or replay an unknown mutation. If readiness remains uncertain, diagnose from saved telemetry/status and keep dependent work open while choosing independent questions.
 
-Báo sửa gì, kiểm tra nào đã chạy, kết quả và giới hạn. Test pass chỉ xác nhận phần đã kiểm; không thay scan product hoặc policy acceptance. Nếu chưa thực thi DAST/BOLA thì ghi chưa thực thi. Sau sửa tự tiếp tục nhiệm vụ còn mở, không kết thúc chỉ vì có đủ file.
+Carry the verified repair, conditions and remaining unknowns into existing operational knowledge and continuation so the next chat uses the repaired path. Distinguish suspected cause from verified cause; a 503 alone does not prove rate limiting. Retain earlier failures and their coverage limits. Product logic fixes still need separate scope.
+
+### Verify helper repairs before dependent dispatch
+
+After a helper fails, inspect the returned error and the failed interface before changing a label or running a renamed variant. Separate request submission from receipt parsing: a missing/undecodable result does not prove the script or mutation never ran. Read existing script status/result and ACK/state first. Change the demonstrated cause, then exercise the repaired boundary with saved output or a focused offline check before using it to start another allocation. A necessary current read-only baseline may verify binding; do not replay effects as a parser test.
+
+For example, a result reader must handle the actual documented/observed response shape (an already decoded JSON object versus a string requiring parsing), and identifier construction must respect the receiving runtime's length/type limits. Verify the generated value, not just a shorter suffix or successful import. Use the [engine lessons](knowledge/engine-and-recovery.md#get-native-input-and-script-result-pitfalls) only when the current deployment matches. A zero-payload terminal scan calls for configuration/seed diagnosis, not repeated full scans under new names. Reuse the repaired reader/binding path for adjacent work. Persist the cause, verified change and reuse conditions in existing knowledge; preserve failed attempts separately. This is focused fault repair, not a mandatory qualification suite for every assessment.
+
+### Recovery
+
+Identify failed step and dispatch/ACK/terminal state; stop only affected producers if needed. Inspect existing source/status/logs without secrets; unknown causes stay unknown. Prepare minimal compatible fixes, grouping dependent changes before product execution. Run focused checks of actual output without weakening expectations or full-campaign reruns. Preserve historical plans/pins/raw, create a new allocation against current bytes when required, and reconcile current actors/state/fixtures before continuation. Do not repin old runs. If valid options are exhausted, record blockers/resumption conditions while continuing independent branches.
+
+## Resources and verification limits
+
+Follow [preflight](resource-preflight.md). Source discovery is independent of Docker. Measure the correct host/Docker/app filesystem and RAM; do not lower reserves or delete unrelated data. Cleanup/stops target owned resources rather than shared stop-all. Report actual repairs/checks/results/limits; passing focused tests does not establish product DAST/BOLA execution or policy acceptance. After repair, persist the resulting knowledge and continue valuable feasible work; hand off only for a stated checkpoint reason; file generation alone never establishes assignment completion.
+
+## Managed repair lifecycle
+
+Open a repair through state-repair-open with affected work, reproduction, authority, allowed paths, prohibited effects and acceptance checks. Use state-repair-update with the expected generation and repair revision. Progress through open, reproducing, implementing, verifying and verified. Waiting retains a concrete dependency and the step to resume. Supersession names a replacement. Record changed-file refs, reproduction outcome, positive and negative check refs and verification level. Offline checks establish offline verification. On verification return to the original work, using retained readback when an effect already has intent or ACK.
+
+When an issue recurs after verification, submit a new occurrence ID through
+`state-repair-open` with fresh reproduction refs. A matching fingerprint reopens
+the repair, archives the previous verification and clears its current proof.
+Retries keep the original occurrence and commit IDs. Reverification needs new
+positive and negative check refs and a new verification record. Continue
+independent work while the repair blocks its affected work and return to the
+original readback under its existing authority.

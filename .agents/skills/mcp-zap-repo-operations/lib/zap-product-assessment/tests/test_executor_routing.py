@@ -26,6 +26,18 @@ class RoutingTests(unittest.TestCase):
   self.assertEqual(assess_executor(candidate(),'zap_attack_start',ARGS,auth_kind='browser-cookie')['reason'],'auth-kind-incompatible')
   a=candidate();a['sessionValidated']=False
   self.assertEqual(assess_executor(a,'zap_attack_start',ARGS,auth_kind='json-bearer')['reason'],'session-not-validated')
+ def test_declared_auth_requires_session_on_the_actual_attack(self):
+  # Validated candidate metadata does not attach authentication to a request.
+  args={'targetUrl':ARGS['targetUrl']}
+  for session in (None,''):
+   if session is not None:args['authSessionId']=session
+   result=assess_executor(candidate(),'zap_attack_start',args,auth_kind='json-bearer')
+   self.assertFalse(result['compatible'])
+   self.assertEqual(result['reason'],'prepared-auth-session-missing')
+  args['authSessionId']='prepared'
+  self.assertTrue(assess_executor(candidate(),'zap_attack_start',args,auth_kind='json-bearer')['compatible'])
+  del args['authSessionId']
+  self.assertTrue(assess_executor(candidate(),'zap_attack_start',args)['compatible'])
  def test_exact_body_needs_direct_auth_even_with_fields(self):
   a=candidate();a['semantics']['zap_attack_start']['executionMode']='queue'
   self.assertFalse(assess_executor(a,'zap_attack_start',ARGS,auth_kind='json-bearer')['compatible'])
@@ -63,5 +75,13 @@ class BodyTransitionTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'final state'):self.check(self.messages(),{'name':'changed','id':7})
  def test_only_baseline_or_guard_never_body_delivery(self):
   with self.assertRaisesRegex(ValueError,'payload absent'):self.check(self.messages()[1:],{'name':'baseline','id':7})
+
+class DirectBearerRoutingTests(unittest.TestCase):
+ def test_json_bearer_without_explicit_method_still_requires_direct(self):
+  queued=candidate()
+  queued['semantics']['zap_attack_start']['executionMode']='queue'
+  args={'targetUrl':'https://example.test','authSessionId':'session'}
+  self.assertEqual(assess_executor(queued,'zap_attack_start',args,auth_kind='json-bearer')['reason'],
+                   'json-bearer-needs-direct')
 
 if __name__=='__main__':unittest.main()

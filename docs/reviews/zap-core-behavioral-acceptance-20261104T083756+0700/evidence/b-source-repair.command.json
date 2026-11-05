@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "shasum",
+    "-a",
+    "256",
+    "-c",
+    "docs/reviews/zap-core-repair-20261104/final-source-sha256.txt"
+  ],
+  "exitCode": 0
+}

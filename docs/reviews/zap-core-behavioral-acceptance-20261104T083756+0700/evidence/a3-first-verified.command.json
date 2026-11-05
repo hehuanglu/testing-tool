@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "-m",
+    "zap_assessment.product_cli",
+    "scope",
+    "state-repair-update",
+    "--state-dir",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/state",
+    "--expected-generation",
+    "291c87bb7f4d9b3620f93df0166c7f6d53ff9785b1e1c02871af172d112169da",
+    "--commit-id",
+    "a3-first-verified",
+    "--repair",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/setup/a3-first-verified.json"
+  ],
+  "exitCode": 0
+}

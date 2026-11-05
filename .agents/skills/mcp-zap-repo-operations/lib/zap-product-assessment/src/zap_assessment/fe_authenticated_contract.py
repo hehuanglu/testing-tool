@@ -13,7 +13,8 @@ PREDICATES=('exists','absent','text','urlPath','invalid','disabled','attribute',
 def pins():
     paths=list(Path(__file__).parent.glob('fe_authenticated_*.py'))+list(Path(__file__).parent.glob('fe_anonymous_*.py'))
     paths += [Path(__file__).with_name(n) for n in ('ui_webdriver.py','runtime.py','transport.py','journal.py','evidence.py','anonymous_runner.py','product_cli.py','product_workflow.py','product_handoff.py','discovery_handoff.py','product_scope.py','product_scope_cli.py','executor_routing.py')]
-    paths += list((ROOT/'schemas').glob('fe-authenticated-*.json'))+[ROOT/'scripts/fe_authenticated_research.py',ROOT/'profiles/runtime-baseline.json']
+    paths += list((ROOT/'schemas').glob('fe-authenticated-*.json'))+[ROOT/'scripts/fe_authenticated_research.py',ROOT/'profiles/runtime-baseline.json',Path(__file__).with_name('security_scope.py')]
+    paths += [Path(__file__).with_name(n) for n in ('business_discovery.py','question_evidence.py','work_selection.py','readiness.py','coverage_presentation.py','residual_review.py')]
     return {str(p):digest(p) for p in sorted(paths) if p.exists()}
 
 def identifier(value):

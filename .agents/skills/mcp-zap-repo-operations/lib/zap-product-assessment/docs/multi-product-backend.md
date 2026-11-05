@@ -1,6 +1,8 @@
 # Explicit multi-product backend workflow
 
-The common entry is `scripts/product_assessment.py` (use the package `.venv/bin/python`). It accepts product location, discovery, explicit recipe and track; legacy CLIs retain their original finalsource scope. No product/deployment changes are needed to author/test a recipe. The scanner engine, native JSON bearer provider, queue, strict gates and historical readers have not been replaced.
+This describes finite technical runner contracts. Read the [documentation boundaries](README.md); new assessments use criteria workflow v2 around the selected admitted executor. Legacy reconcile/continue/handoff commands do not supply v2 completion or the user-facing Drive table.
+
+The common entry is `scripts/product_assessment.py`. Invoke it with the external `ZAP_PYTHON` and bundled-source `PYTHONPATH` from the [skill setup](../../../references/setup.md); no `.venv` is bundled. It accepts product location, discovery, explicit recipe and track; legacy CLIs retain their original finalsource scope. No product/deployment changes are needed to author/test a recipe. The scanner engine, native JSON bearer provider, queue, strict gates and historical readers have not been replaced.
 
 Source trees can use `--observations`: an agent reads source/spec and supplies pinned source facts; this is source-assisted discovery, not automatic multilingual parsing. `product_discovery.py validate` still only validates existing discovery. Candidate schema `product-source-candidate/1.0` intentionally has unresolved environment/binding/origins. `status` and `templates` require no network/deployment for this stage.
 
@@ -19,7 +21,7 @@ Recipe registry:
 
 Policy for BOLA observations is locked before traffic. The independent checker reads expected values and observations, never executor `evaluate` or its pass flags. Missing policy acceptance, unknown projection, incomplete pages and missing denial post-state remain inconclusive. Shared catalog references and employee reads are distinct from forbidden cross-owner access. New observation schema is `product-bola-observations/1.0`; legacy research/BOLA readers are unchanged.
 
-Runtime control runner: `scripts/multi_product_control.py --track be-authenticated|be-anonymous --kind fresh|interrupted --output NEW_DIR`. It creates an owned archive backend/network, uses the same plan/prepare/run CLI, retains private evidence, then removes only exact owned control/scanner resources. It never logs in to example/finalsource. Native artifact/resource gates use the existing bounded Docker HTTP research profile, with topology qualification still separate.
+Historical runtime control runner: `scripts/multi_product_control.py --track be-authenticated|be-anonymous --kind fresh|interrupted --output NEW_DIR`. This driver is not bundled, so this command is unavailable here. Its original campaign created an owned archive backend/network, used the same plan/prepare/run CLI, retained private evidence, then removed only exact owned control/scanner resources. That history does not qualify the current deployment. Native artifact/resource gates use the existing bounded Docker HTTP research profile, with topology qualification still separate.
 
 Source/compiler/control/runtime states are separate. No new product runtime qualification is implied. Handoff uses existing `pm-alerts/1.0`; raw native files remain private. Never manufacture product ALERTS.json when product traffic was not run.
 
@@ -28,8 +30,12 @@ The common native active boundary includes GET/query and conditional
 mutable scalar, fixed references, exact owned object and transition oracle. Product
 workloads must supply a current hashed controlled-native proof (`nativeBodyProof`).
 `nativeControl` requires fixture ownership independently observed from Docker labels;
-it is not an escape flag for a product. Nested/array shapes, active POST/DELETE,
-path/header, queue and strict remain separate boundaries. Native seeds and direct
+it is not an escape flag for a product. A separate conditional
+`native-numeric-path/1.0` lane admits GET/DELETE/POST on one numeric selector with
+no query/body; each selected method needs its own current controlled proof,
+successful exact baseline and, for mutations, an owned fixture and state oracle.
+This does not establish arbitrary active POST/DELETE, nested/array bodies, header,
+queue or strict support. Native seeds and direct
 oracles are not active body coverage. Read actual wire/rule attribution and accepted/
 rejected state evidence rather than interpreting enabled rules as exercise.
 

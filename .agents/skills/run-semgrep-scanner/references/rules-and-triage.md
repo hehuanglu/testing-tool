@@ -1,55 +1,42 @@
-# Chọn rules, bổ sung phép kiểm và triage
+# Select rules, extend checks, and triage
 
-## Thư viện local khởi đầu
+## Starting local library
 
-Đọc [catalog](rule-catalog.md): năm YAML bundled giữ IDs/severity/confidence và có giới hạn TypeScript/NestJS/TypeORM, React/browser, Docker/Compose/nginx/npm. Không đại diện thư viện đa ngôn ngữ hoặc policy mặc định. Ngưỡng bcrypt <10 và MinLength 0..7 là heuristic cần policy; regex tên field và path filters có blind spots.
+Read the [catalog](rule-catalog.md). Five bundled YAML files preserve IDs/severity/confidence and have TypeScript/NestJS/TypeORM, React/browser, Docker/Compose/nginx/npm limits. They are not a multilingual library or default policy. Bcrypt <10 and MinLength 0..7 are policy-dependent heuristics; name regexes and path filters have blind spots.
 
-Chọn theo [base nghiệp vụ](track-intents.md) và source thực, đọc languages/paths/pattern/taint/engine trước dùng. Không ép Python/Java/Go qua bộ TS rồi báo sạch: inspect repo/local rules → kiểm applicability → custom rule có fixtures khi hữu ích → manual source review phần khả thi → đối soát gaps. Thiếu rule không là N/A. Generic regex không có cùng ý nghĩa phân tích với structured language/taint rules.
+Select by [question bases](track-intents.md) and actual source. Inspect languages/paths/patterns/taint/engine. For other stacks, inspect repository/local rules → applicability → useful custom rules with fixtures → feasible manual review → remaining gaps. Missing rules do not imply N/A. Generic regex does not provide the same semantics as structured-language/taint analysis.
 
-## Chọn hoặc tạo rule theo câu hỏi
+## Select or create a question-specific rule
 
-1. Xem config/rules repo đã có và local library sẵn có; đọc remote references, autofix, engine requirements, filters và suppressions trước dùng.
-2. Chọn rule security cho giả thuyết cụ thể, hoặc search rule để inventory sinks/call sites. Inventory match không tự trở thành vulnerability alert; ghi mục đích riêng.
-3. Nếu abstraction product chưa được nhận diện, đọc implementation trước khi viết source/sink/sanitizer. Lưu mapping riêng của product ngoài core/thư viện chung. Không mang tên route/role/ID từ product trước sang.
-4. Với custom rule, dùng cấu trúc code/metavariables để diễn đạt điều cần tìm; regex có thể phù hợp config/text, nhưng không tự cho parser/semantic coverage như language rule. Không loại findings dựa trên tên biến “safe” hoặc hàm “sanitize” chưa đọc semantics.
-5. Thử rule mới/sửa trên ca positive và negative đại diện trước khi dùng để kết luận. Với taint, có ca dữ liệu không tin cậy tới sink và ca kiểm soát đúng ngữ cảnh; ca literal cũng cần nếu muốn phân biệt. Chạy lại trên source thật và triage; test synthetic chỉ kiểm hành vi rule trên các ca đó.
+1. Inspect available repository/local configuration and rules, including remote references, autofix, engine requirements, filters, and suppressions.
+2. Select a security detector for a specific hypothesis, or a search detector for sink/call-site inventory. Record inventory purposes separately from vulnerability claims.
+3. Read product abstractions before declaring sources/sinks/sanitizers. Keep product mappings outside the shared core; do not reuse another product's route/role/ID assumptions.
+4. Use code structure/metavariables where appropriate; regex can suit text/configuration but does not imply parser/semantic coverage. Uninspected names such as “safe”/“sanitize” do not justify exclusions.
+5. Test new/changed rules on representative positives and negatives. Taint tests include untrusted-to-sink and correctly controlled cases, plus literals when relevant. Then scan actual source and triage. Synthetic tests establish only those cases.
 
-Thư viện local có thể được mở rộng khi nhiệm vụ yêu cầu. Không tải Registry, dùng Playground với source private hoặc nâng engine tự động. Có thể nghiên cứu tài liệu/public rule khi phù hợp; tải rules vào assessment và thực thi remote config là hành động khác, phải nằm trong quyền đã giao. Khi được phép dùng nguồn bổ sung, ghi xuất xứ và engine, không gọi đó là bộ bundled đã kiểm.
+Extend the local library when assigned. Do not automatically fetch Registry rules, use private source in Playground, or upgrade engines. Public documentation/rule research differs from downloading/executing additional configurations; the latter requires authorization. Record additional rule provenance/engine rather than calling it the checked bundled set.
 
-## Triage một match
+## Triage a match
 
-Đọc vị trí finding, đoạn code đầy đủ và đường gọi đủ để giải quyết nghi vấn:
+Read full context and enough call paths to answer: who controls input; whether it is constant/server-generated; which SQL/shell/HTML/path/network/credential/persistence sink matters; whether validation/encoding/authz applies to the same data/path/context; where policy originates; whether global guards/repositories add constraints; whether another path bypasses them; whether source is actually relevant implementation; and which parts the engine versus tester observed. A missing caller in one search does not establish dead code.
 
-- Input thực đến từ đâu, ai kiểm soát, có hằng số hoặc server-generated value không?
-- Sink/context nào gây tác động: SQL, shell, HTML, path, outbound network, credential hoặc persistence?
-- Validation/sanitization/encoding/authz có áp dụng trên đúng đường gọi và dữ liệu không? Control đúng một ngữ cảnh chưa đủ cho ngữ cảnh khác.
-- Policy owner/tenant/role lấy từ đâu? Guards/global middleware/repository có thêm constraints không? Có đường gọi khác bypass không?
-- Source có phải implementation dùng cho chức năng trong scope, hay fixture/dead/generated/sample? Không kết luận dead chỉ vì không tìm thấy caller một lần.
-- Engine/rule theo được đoạn nào, tester đọc bổ sung đoạn nào, phần nào còn chưa biết?
+Retain native IDs/locations/severity/confidence and necessary messages. Redact sensitive interpolation without changing meaning. Do not include matched source or secrets by default.
 
-Giữ native ID/path/line/severity/confidence và thông điệp cần thiết. Nếu message chứa dữ liệu nhạy cảm thì redact ở bản bàn giao, không làm sai ý nghĩa finding. Không đưa matched source hoặc giá trị secret vào báo cáo theo mặc định.
+- `needs-review`: insufficient context or material uncertainty, with next steps.
+- `supported`: source supports the stated issue/risk, with verification level and assumptions; does not imply runtime exploitation.
+- `false-positive`: incorrect pattern or effective inspected control, with a concrete rationale.
+- `not-applicable`: grounded scope/feature applicability decision; preserve the record and reason.
 
-Dùng triage trạng thái có nghĩa:
+Accepted risk requires a supplied authoritative decision and differs from false-positive. Low severity does not authorize acceptance. Needs-review is valid but affects completion when assigned triage remains unfinished.
 
-- `needs-review`: chưa đọc đủ hoặc còn thông tin ảnh hưởng kết luận; nêu bước tiếp.
-- `supported`: có căn cứ từ source cho vấn đề/rủi ro đã mô tả; ghi mức xác nhận và giả định, không mặc định đã khai thác runtime.
-- `false-positive`: mẫu bắt sai hoặc kiểm soát có hiệu lực trên đường gọi đã được xác định; ghi lý do cụ thể.
-- `not-applicable`: có căn cứ không thuộc chức năng/phạm vi đang kiểm; giữ record cùng lý do, không xoá lặng lẽ.
+## Manual findings
 
-Rủi ro được chấp nhận khác false positive; chỉ ghi accepted risk khi có quyết định từ người có thẩm quyền đã được cung cấp. Không tự accept vì severity thấp. Không bắt xác định mọi alert thành supported/false-positive; needs-review hợp lệ nhưng phải phản ánh vào mức hoàn tất nếu nhiệm vụ bao gồm triage phần đó.
+Record supported manual discoveries as `manual-source-review`, with null rule ID/native severity/native confidence. Keep tester judgments separate; never invent native traces or inflate Semgrep coverage. When native/manual observations support one issue, link them and retain original occurrences rather than counting independent bugs.
 
-## Findings do đọc source thủ công
+## Counting and retesting
 
-Nếu phát hiện vấn đề khi đọc callers/controls mà Semgrep chưa báo, vẫn ghi finding nếu có cơ sở, với nguồn `manual-source-review`, rule_id null và native severity/confidence null. Nhận định tester đặt riêng; không bịa Semgrep trace/rule hoặc đổi nguồn để tăng scan coverage.
+Use `RUN.coverage.inventory_candidate_reviews` under the [contract](reporting-and-completion.md), including round/rule/location/index, questions/reviews, candidate kind, inspected context, disposition, and next step even without an ALERT. Collector grouping by location preserves every occurrence/native-message reference; tester review determines shared callers/controls and root causes. Same line/rule does not establish one issue, and receiver/path names do not automatically establish false-positive.
 
-Nếu Semgrep và manual review cùng hỗ trợ một vấn đề, liên kết hai observations thay vì đếm thành hai vấn đề độc lập. Giữ occurrences gốc để người nhận xem scanner thực sự báo ở đâu.
+Separate native matches/occurrences, aggregated observations, and unique issues. Multiple rules/rounds do not necessarily mean multiple vulnerabilities; document grouping and do not merge distinct root causes solely by rule. Preserve native severity; tester priority/impact needs separate rationale rather than arbitrary WARNING-to-CVSS conversion. A disappearing match caused by filtering/rule changes is not a verified fix.
 
-## Đếm và retest
-
-Inventory candidate reviews có một chỗ trong `RUN.coverage.inventory_candidate_reviews` theo [contract](reporting-and-completion.md). Ghi round/rule/location/index, question/manual review, candidate kind, context, disposition và next step cả khi không tạo ALERT. `record_round.py` có thể gợi ý nhóm theo native location, giữ từng occurrence và reference về native message; caller/control grouping sau đọc context do tester ghi. Không suy cùng issue/root cause từ cùng dòng/rule hoặc tự đổi false-positive theo receiver/path. Một control review có thể hỗ trợ nhiều candidates/observations.
-
-Tách native matches/occurrences, findings sau triage và nhóm vấn đề khi gộp. Một finding bị nhiều rules/lượt phát hiện không tự là nhiều vulnerability. Ghi cách gộp, không cộng lại tất cả results qua các lượt như số lỗi hiện hành. Không gộp chỉ vì cùng rule nếu có root cause khác.
-
-Giữ native severity; priority/impact của tester là field riêng và cần lý do. Không chuyển WARNING thành CVSS hoặc severity khác bằng mapping tuỳ ý. Retest chỉ ghi đã xử lý khi đã đối chiếu thay đổi và scan/readback phù hợp; alert biến mất do exclusions/rule change chưa là fixed.
-
-Evidence từng claim theo [evidence contract](evidence.md); output v2 theo [reporting](reporting-and-completion.md). Manual call-path là source-review, chỉ ghi native-dataflow khi native output thật có trace và đã đọc.
+Follow [evidence](evidence.md) and [v2 reporting](reporting-and-completion.md). Manual call paths remain source-review; native-dataflow requires an actual inspected native trace.

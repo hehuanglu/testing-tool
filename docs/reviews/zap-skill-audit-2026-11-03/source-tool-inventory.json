@@ -1,0 +1,958 @@
+{
+  "kind": "source-inventory",
+  "toolCount": 78,
+  "tools": [
+    {
+      "name": "zap_contexts_list",
+      "description": "List all ZAP contexts with context ID, scope state, and include/exclude regexes",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAuthMcpToolsService.java",
+      "line": 20,
+      "methodDeclaration": "public List<Map<String, Object>> listContexts()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_context_upsert",
+      "description": "Create or update a ZAP context with include/exclude regexes and optional in-scope flag",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAuthMcpToolsService.java",
+      "line": 28,
+      "methodDeclaration": "public Map<String, Object> upsertContext(\n            @ToolParam(description = \"Context name (e.g. shop-auth)\") String contextName,\n            @ToolParam(description = \"List of include URL regexes (max 20)\") List<String> includeRegexes,\n            @ToolParam(description = \"List of exclude URL regexes (max 20)\") List<String> excludeRegexes,\n            @ToolParam(required = false, description = \"Set context in scope (true/false). Optional.\") Boolean inScope\n    )",
+      "sourceParameterNames": [
+        "contextName",
+        "includeRegexes",
+        "excludeRegexes",
+        "inScope"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_users_list",
+      "description": "List users for a ZAP context ID",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAuthMcpToolsService.java",
+      "line": 41,
+      "methodDeclaration": "public List<Map<String, Object>> listUsers(@ToolParam(description = \"ZAP context ID\") String contextId)",
+      "sourceParameterNames": [
+        "contextId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_user_upsert",
+      "description": "Create or update a user in a ZAP context and optionally set credentials/enabled state",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAuthMcpToolsService.java",
+      "line": 49,
+      "methodDeclaration": "public Map<String, Object> upsertUser(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"User name\") String userName,\n            @ToolParam(required = false, description = \"Authentication credentials config params string. Optional.\") String authCredentialsConfigParams,\n            @ToolParam(required = false, description = \"Set user enabled state (true/false). Optional.\") Boolean enabled\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "userName",
+        "authCredentialsConfigParams",
+        "enabled"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_context_auth_configure",
+      "description": "Configure authentication method and login indicators for a ZAP context",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAuthMcpToolsService.java",
+      "line": 62,
+      "methodDeclaration": "public Map<String, Object> configureContextAuthentication(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"Authentication method name\") String authMethodName,\n            @ToolParam(required = false, description = \"Authentication method config params string. Optional.\") String authMethodConfigParams,\n            @ToolParam(required = false, description = \"Logged-in indicator regex. Optional.\") String loggedInIndicatorRegex,\n            @ToolParam(required = false, description = \"Logged-out indicator regex. Optional.\") String loggedOutIndicatorRegex\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "authMethodName",
+        "authMethodConfigParams",
+        "loggedInIndicatorRegex",
+        "loggedOutIndicatorRegex"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_auth_test_user",
+      "description": "Test authentication as a specific user and return authentication diagnostics",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAuthMcpToolsService.java",
+      "line": 77,
+      "methodDeclaration": "public Map<String, Object> testUserAuthentication(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"ZAP user ID\") String userId\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "userId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_automation_plan_run",
+      "description": "Run a supported ZAP Automation Framework plan from a workspace file or inline YAML. env.parameters.maxDuration is a capability-checked cooperative budget in seconds, not a guaranteed network cutoff. Literal context, requestor, scan, and login URLs must pass the configured destination policy. Script/import/browser jobs, proxy/config overrides, and variable-based destinations are unsupported.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAutomationMcpToolsService.java",
+      "line": 18,
+      "methodDeclaration": "public String runAutomationPlan(\n            @ToolParam(required = false, description = \"Existing plan file path under the automation workspace (optional; provide either this or planYaml)\") String planPath,\n            @ToolParam(required = false, description = \"Inline automation plan YAML content to materialize and run (optional; provide either this or planPath)\") String planYaml,\n            @ToolParam(required = false, description = \"Optional file name to use when planYaml is provided (default: automation-plan.yaml)\") String planFileName\n    )",
+      "sourceParameterNames": [
+        "planPath",
+        "planYaml",
+        "planFileName"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_automation_plan_status",
+      "description": "Get status for a previously launched ZAP Automation Framework plan. Completion does not establish scan success, stopped requests, or a drained passive backlog. Successful is pending while running, no on reported errors, and unknown otherwise; review messages and artifacts.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAutomationMcpToolsService.java",
+      "line": 33,
+      "methodDeclaration": "public String getAutomationPlanStatus(\n            @ToolParam(description = \"Automation plan ID returned by zap_automation_plan_run\") String planId,\n            @ToolParam(required = false, description = \"Optional maximum number of info/warn/error messages to render (default: 20, max: 100)\") Integer maxMessages\n    )",
+      "sourceParameterNames": [
+        "planId",
+        "maxMessages"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_automation_plan_artifacts",
+      "description": "List and preview files produced by a plan run under the automation workspace.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertAutomationMcpToolsService.java",
+      "line": 46,
+      "methodDeclaration": "public String getAutomationPlanArtifacts(\n            @ToolParam(description = \"Normalized plan file path returned by zap_automation_plan_run. Relative paths resolve under the automation workspace.\") String planPath,\n            @ToolParam(required = false, description = \"Optional maximum number of discovered artifact files to render (default: 20, max: 50)\") Integer maxArtifacts,\n            @ToolParam(required = false, description = \"Optional total preview character budget across text artifacts (default: 8000, max: 50000)\") Integer maxChars\n    )",
+      "sourceParameterNames": [
+        "planPath",
+        "maxArtifacts",
+        "maxChars"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_policies_list",
+      "description": "List available ZAP active-scan policy names before using the policy parameter on direct or queued active scans.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 27,
+      "methodDeclaration": "public String listScanPolicies()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_policy_view",
+      "description": "Inspect a named ZAP active-scan policy, including category defaults and scanner-rule IDs.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 35,
+      "methodDeclaration": "public String viewScanPolicy(\n            @ToolParam(description = \"Exact active-scan policy name from zap_scan_policies_list\") String scanPolicyName,\n            @ToolParam(required = false, description = \"Optional exact rule ID or case-insensitive name fragment to narrow the rule list\") String ruleFilter,\n            @ToolParam(required = false, description = \"Optional max number of rules to display (default: 25, max: 100)\") String limit\n    )",
+      "sourceParameterNames": [
+        "scanPolicyName",
+        "ruleFilter",
+        "limit"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_policy_rule_set",
+      "description": "Enable, disable, or tune specific scanner rules inside a named ZAP active-scan policy.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 47,
+      "methodDeclaration": "public String setScanPolicyRuleState(\n            @ToolParam(description = \"Exact active-scan policy name from zap_scan_policies_list\") String scanPolicyName,\n            @ToolParam(description = \"Comma, whitespace, or newline separated numeric scanner rule IDs to change\") String ruleIds,\n            @ToolParam(required = false, description = \"Optional true to enable or false to disable the listed rules\") String enabled,\n            @ToolParam(required = false, description = \"Optional attack strength override\") String attackStrength,\n            @ToolParam(required = false, description = \"Optional alert threshold override\") String alertThreshold\n    )",
+      "sourceParameterNames": [
+        "scanPolicyName",
+        "ruleIds",
+        "enabled",
+        "attackStrength",
+        "alertThreshold"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_active_scan_start",
+      "description": "Start a direct active scan for simple or single-replica workflows.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 61,
+      "methodDeclaration": "public String startActiveScan(\n            @ToolParam(description = \"Target URL to active scan\") String targetUrl,\n            @ToolParam(required = false, description = \"Recurse into sub-paths? (optional, default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Scan policy name (optional)\") String policy\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "recurse",
+        "policy"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_active_scan_as_user",
+      "description": "Start a direct authenticated active scan as a configured ZAP user.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 73,
+      "methodDeclaration": "public String startActiveScanAsUser(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"ZAP user ID\") String userId,\n            @ToolParam(description = \"Target URL to active scan\") String targetUrl,\n            @ToolParam(required = false, description = \"Recurse into sub-paths? (optional, default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Scan policy name (optional)\") String policy\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "userId",
+        "targetUrl",
+        "recurse",
+        "policy"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_active_scan_status",
+      "description": "Get progress for a direct active scan by ZAP scan ID.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 87,
+      "methodDeclaration": "public String getActiveScanStatus(\n            @ToolParam(description = \"ZAP active scan ID returned by zap_active_scan_start or zap_active_scan_as_user\") String scanId\n    )",
+      "sourceParameterNames": [
+        "scanId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_active_scan_stop",
+      "description": "Stop a running direct active scan by ZAP scan ID.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 97,
+      "methodDeclaration": "public String stopActiveScan(\n            @ToolParam(description = \"ZAP active scan ID returned by zap_active_scan_start or zap_active_scan_as_user\") String scanId\n    )",
+      "sourceParameterNames": [
+        "scanId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_spider_start",
+      "description": "Start a direct spider scan for simple or single-replica workflows.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 107,
+      "methodDeclaration": "public String startSpiderScan(\n            @ToolParam(description = \"Target URL to spider\") String targetUrl\n    )",
+      "sourceParameterNames": [
+        "targetUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_spider_as_user",
+      "description": "Start a direct authenticated spider scan as a configured ZAP user.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 117,
+      "methodDeclaration": "public String startSpiderScanAsUser(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"ZAP user ID\") String userId,\n            @ToolParam(description = \"Target URL to spider\") String targetUrl,\n            @ToolParam(required = false, description = \"Maximum children to crawl (optional)\") String maxChildren,\n            @ToolParam(required = false, description = \"Recurse into sub-paths? true/false (optional, default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Restrict to subtree only? true/false (optional, default: false)\") String subtreeOnly\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "userId",
+        "targetUrl",
+        "maxChildren",
+        "recurse",
+        "subtreeOnly"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_spider_status",
+      "description": "Get progress for a direct spider scan by ZAP scan ID.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 132,
+      "methodDeclaration": "public String getSpiderScanStatus(\n            @ToolParam(description = \"ZAP spider scan ID returned by zap_spider_start or zap_spider_as_user\") String scanId\n    )",
+      "sourceParameterNames": [
+        "scanId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_spider_stop",
+      "description": "Stop a running direct spider scan by ZAP scan ID.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 142,
+      "methodDeclaration": "public String stopSpiderScan(\n            @ToolParam(description = \"ZAP spider scan ID returned by zap_spider_start or zap_spider_as_user\") String scanId\n    )",
+      "sourceParameterNames": [
+        "scanId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_client_spider_start",
+      "description": "Start a direct Client Spider crawl for a JavaScript-driven app. Requires ZAP's Client Side Integration add-on and a headless Firefox browser. For authenticated crawling, supply both an existing ZAP context name and user name, with browser-based authentication configured in that context. Prepared HTTP form-login sessions do not authenticate the browser.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 152,
+      "methodDeclaration": "public String startClientSpider(\n            @ToolParam(description = \"Target URL to crawl\") String targetUrl,\n            @ToolParam(required = false, description = \"Maximum crawl depth; 0 means unlimited. Omit to use the server's spider depth setting.\") Integer maxDepth,\n            @ToolParam(required = false, description = \"Existing ZAP context name, not its numeric ID. Supply together with userName for authenticated crawling.\") String contextName,\n            @ToolParam(required = false, description = \"Existing ZAP user name within the context, not its numeric ID or login credentials. Supply together with contextName.\") String userName\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "maxDepth",
+        "contextName",
+        "userName"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_client_spider_status",
+      "description": "Get Client Spider progress by ZAP scan ID. A stopped crawl does not prove successful coverage; wait for passive scanning before reviewing findings.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 162,
+      "methodDeclaration": "public String getClientSpiderStatus(\n            @ToolParam(description = \"ZAP scan ID returned by zap_client_spider_start\") String scanId\n    )",
+      "sourceParameterNames": [
+        "scanId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_client_spider_stop",
+      "description": "Stop a direct Client Spider crawl by its ZAP scan ID.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 169,
+      "methodDeclaration": "public String stopClientSpider(\n            @ToolParam(description = \"ZAP scan ID returned by zap_client_spider_start\") String scanId\n    )",
+      "sourceParameterNames": [
+        "scanId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_ajax_spider",
+      "description": "Start an AJAX Spider scan using a real browser.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 176,
+      "methodDeclaration": "public String startAjaxSpider(\n            @ToolParam(description = \"Target URL to AJAX spider scan (e.g., http://example.com)\") String targetUrl\n    )",
+      "sourceParameterNames": [
+        "targetUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_ajax_spider_status",
+      "description": "Get the current status of the AJAX Spider scan",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 186,
+      "methodDeclaration": "public String getAjaxSpiderStatus()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_ajax_spider_stop",
+      "description": "Stop the currently running AJAX Spider scan",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 191,
+      "methodDeclaration": "public String stopAjaxSpider()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_ajax_spider_results",
+      "description": "Get full results from the AJAX Spider scan including all discovered URLs",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertDirectScanMcpToolsService.java",
+      "line": 196,
+      "methodDeclaration": "public String getAjaxSpiderResults()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_import_openapi_spec_url",
+      "description": "Import an OpenAPI/Swagger spec by URL into ZAP and return the importId",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertImportMcpToolsService.java",
+      "line": 18,
+      "methodDeclaration": "public String importOpenApiSpec(\n            @ToolParam(description = \"OpenAPI/Swagger spec URL\") String apiUrl,\n            @ToolParam(required = false, description = \"Optional full HTTP(S) target or authority/path override with an explicit host, allowed by server URL policy. Scheme-only and path-only overrides are rejected. Omit only for trusted definition-derived targets constrained by ZAP egress controls.\") String hostOverride\n    )",
+      "sourceParameterNames": [
+        "apiUrl",
+        "hostOverride"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_import_openapi_spec_file",
+      "description": "Import an OpenAPI/Swagger spec (JSON or YAML) from a local file into ZAP and return the importId",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertImportMcpToolsService.java",
+      "line": 29,
+      "methodDeclaration": "public String importOpenApiSpecFile(\n            @ToolParam(description = \"Path to the OpenAPI/Swagger spec file (JSON or YAML)\") String filePath,\n            @ToolParam(required = false, description = \"Optional full HTTP(S) target or authority/path override with an explicit host, allowed by server URL policy. Scheme-only and path-only overrides are rejected. Omit only for trusted definition-derived targets constrained by ZAP egress controls.\") String hostOverride\n    )",
+      "sourceParameterNames": [
+        "filePath",
+        "hostOverride"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_import_graphql_schema_url",
+      "description": "Import a GraphQL schema by URL into ZAP for a specific GraphQL endpoint and prepare it for scanning",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertImportMcpToolsService.java",
+      "line": 40,
+      "methodDeclaration": "public String importGraphqlSchemaUrl(\n            @ToolParam(description = \"GraphQL endpoint URL\") String endpointUrl,\n            @ToolParam(description = \"GraphQL schema URL to import\") String schemaUrl\n    )",
+      "sourceParameterNames": [
+        "endpointUrl",
+        "schemaUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_import_graphql_schema_file",
+      "description": "Import a GraphQL schema from a local file into ZAP for a specific GraphQL endpoint and prepare it for scanning",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertImportMcpToolsService.java",
+      "line": 51,
+      "methodDeclaration": "public String importGraphqlSchemaFile(\n            @ToolParam(description = \"GraphQL endpoint URL\") String endpointUrl,\n            @ToolParam(description = \"Path to a local GraphQL schema file\") String filePath\n    )",
+      "sourceParameterNames": [
+        "endpointUrl",
+        "filePath"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_import_soap_wsdl_url",
+      "description": "Import a SOAP/WSDL definition by URL into ZAP and prepare it for scanning",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertImportMcpToolsService.java",
+      "line": 62,
+      "methodDeclaration": "public String importSoapWsdlUrl(@ToolParam(description = \"SOAP/WSDL URL to import\") String wsdlUrl)",
+      "sourceParameterNames": [
+        "wsdlUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_import_soap_wsdl_file",
+      "description": "Import a SOAP/WSDL definition from a local file into ZAP and prepare it for scanning",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertImportMcpToolsService.java",
+      "line": 70,
+      "methodDeclaration": "public String importSoapWsdlFile(@ToolParam(description = \"Path to a local SOAP/WSDL file\") String filePath)",
+      "sourceParameterNames": [
+        "filePath"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_alerts",
+      "description": "Retrieve alerts for the given base URL",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertInventoryMcpToolsService.java",
+      "line": 19,
+      "methodDeclaration": "public List<String> getAlerts(@ToolParam(description = \"baseUrl\") String baseUrl)",
+      "sourceParameterNames": [
+        "baseUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_hosts",
+      "description": "Retrieve the list of hosts accessed through/by ZAP",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertInventoryMcpToolsService.java",
+      "line": 24,
+      "methodDeclaration": "public List<String> getHosts()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_sites",
+      "description": "Retrieve the list of sites accessed through/by ZAP",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertInventoryMcpToolsService.java",
+      "line": 29,
+      "methodDeclaration": "public List<String> getSites()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_urls",
+      "description": "Retrieve the list of URLs accessed through/by ZAP, optionally filtered by base URL",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertInventoryMcpToolsService.java",
+      "line": 34,
+      "methodDeclaration": "public List<String> getUrls(@ToolParam(required = false, description = \"Base URL to filter (optional)\") String baseUrl)",
+      "sourceParameterNames": [
+        "baseUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_policy_dry_run",
+      "description": "Dry-run a Policy Bundle v1 document against an exact MCP tool action, target host or URL, and evaluation time so rollout teams can preview allow or deny outcomes before enforcement.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertPolicyMcpToolsService.java",
+      "line": 20,
+      "methodDeclaration": "public Map<String, Object> dryRunPolicy(\n            @ToolParam(description = \"Policy Bundle v1 JSON document.\") String policyBundle,\n            @ToolParam(description = \"Exact MCP tool or action such as zap_attack_start or mcp:tools:list.\") String toolName,\n            @ToolParam(required = false, description = \"Target hostname or absolute URL to normalize for host-scoped rules. Optional.\") String target,\n            @ToolParam(required = false, description = \"ISO-8601 instant or offset datetime to evaluate in the bundle timezone. Optional; defaults to now.\") String evaluatedAt\n    )",
+      "sourceParameterNames": [
+        "policyBundle",
+        "toolName",
+        "target",
+        "evaluatedAt"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_queue_active_scan",
+      "description": "Queue an active scan job with lifecycle tracking, concurrency guardrails, and optional idempotent admission",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 18,
+      "methodDeclaration": "public String queueActiveScan(\n            @ToolParam(description = \"Target URL to scan\") String targetUrl,\n            @ToolParam(required = false, description = \"Recurse into sub-paths? (optional, default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Scan policy name (optional)\") String policy,\n            @ToolParam(required = false, description = \"Optional client-generated idempotency key for safe retry/deduplication\") String idempotencyKey\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "recurse",
+        "policy",
+        "idempotencyKey"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_queue_active_scan_as_user",
+      "description": "Queue an authenticated active scan job with lifecycle tracking, concurrency guardrails, and optional idempotent admission",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 31,
+      "methodDeclaration": "public String queueActiveScanAsUser(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"ZAP user ID\") String userId,\n            @ToolParam(description = \"Target URL to scan\") String targetUrl,\n            @ToolParam(required = false, description = \"Recurse into sub-paths? (optional, default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Scan policy name (optional)\") String policy,\n            @ToolParam(required = false, description = \"Optional client-generated idempotency key for safe retry/deduplication\") String idempotencyKey\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "userId",
+        "targetUrl",
+        "recurse",
+        "policy",
+        "idempotencyKey"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_queue_spider_scan",
+      "description": "Queue a spider scan job with lifecycle tracking, concurrency guardrails, and optional idempotent admission",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 46,
+      "methodDeclaration": "public String queueSpiderScan(\n            @ToolParam(description = \"Target URL to spider\") String targetUrl,\n            @ToolParam(required = false, description = \"Optional client-generated idempotency key for safe retry/deduplication\") String idempotencyKey\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "idempotencyKey"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_queue_ajax_spider",
+      "description": "Queue an AJAX Spider scan under the shared job lifecycle with HA-safe dispatch and optional idempotent admission",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 57,
+      "methodDeclaration": "public String queueAjaxSpiderScan(\n            @ToolParam(description = \"Target URL to crawl with AJAX Spider\") String targetUrl,\n            @ToolParam(required = false, description = \"Optional client-generated idempotency key for safe retry/deduplication\") String idempotencyKey\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "idempotencyKey"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_queue_client_spider_scan",
+      "description": "Queue a Client Spider browser crawl with scan-ID lifecycle tracking, shared spider concurrency guardrails, and optional idempotent admission. For authenticated crawling, supply a ZAP context and user with browser-based authentication configured; prepared HTTP form-login sessions do not authenticate the browser.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 68,
+      "methodDeclaration": "public String queueClientSpiderScan(\n            @ToolParam(description = \"Target URL to crawl with Client Spider\") String targetUrl,\n            @ToolParam(required = false, description = \"Maximum crawl depth (optional; 0 means unlimited)\") Integer maxDepth,\n            @ToolParam(required = false, description = \"Existing ZAP context name, not its numeric ID; provide together with userName\") String contextName,\n            @ToolParam(required = false, description = \"Existing ZAP user name within the context, not its numeric ID or login credentials; provide together with contextName\") String userName,\n            @ToolParam(required = false, description = \"Optional client-generated idempotency key for safe retry/deduplication\") String idempotencyKey\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "maxDepth",
+        "contextName",
+        "userName",
+        "idempotencyKey"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_queue_spider_scan_as_user",
+      "description": "Queue an authenticated spider scan job with lifecycle tracking, concurrency guardrails, and optional idempotent admission",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 82,
+      "methodDeclaration": "public String queueSpiderScanAsUser(\n            @ToolParam(description = \"ZAP context ID\") String contextId,\n            @ToolParam(description = \"ZAP user ID\") String userId,\n            @ToolParam(description = \"Target URL to spider\") String targetUrl,\n            @ToolParam(required = false, description = \"Maximum children to crawl (optional)\") String maxChildren,\n            @ToolParam(required = false, description = \"Recurse into sub-paths? true/false (optional, default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Restrict to subtree only? true/false (optional, default: false)\") String subtreeOnly,\n            @ToolParam(required = false, description = \"Optional client-generated idempotency key for safe retry/deduplication\") String idempotencyKey\n    )",
+      "sourceParameterNames": [
+        "contextId",
+        "userId",
+        "targetUrl",
+        "maxChildren",
+        "recurse",
+        "subtreeOnly",
+        "idempotencyKey"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_job_status",
+      "description": "Get status details for a queued/running/completed scan job",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 99,
+      "methodDeclaration": "public String getScanJobStatus(@ToolParam(description = \"Scan job ID\") String jobId)",
+      "sourceParameterNames": [
+        "jobId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_job_list",
+      "description": "List scan jobs and current queue state",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 107,
+      "methodDeclaration": "public String listScanJobs(\n            @ToolParam(required = false, description = \"Optional status filter: QUEUED, RUNNING, SUCCEEDED, FAILED, CANCELLED\") String statusFilter\n    )",
+      "sourceParameterNames": [
+        "statusFilter"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_job_cancel",
+      "description": "Cancel a queued or running scan job",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 117,
+      "methodDeclaration": "public String cancelScanJob(@ToolParam(description = \"Scan job ID\") String jobId)",
+      "sourceParameterNames": [
+        "jobId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_job_retry",
+      "description": "Retry a failed or cancelled scan job",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 125,
+      "methodDeclaration": "public String retryScanJob(@ToolParam(description = \"Scan job ID\") String jobId)",
+      "sourceParameterNames": [
+        "jobId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_job_dead_letter_list",
+      "description": "List dead-letter scan jobs (failed after exhausting retry budget)",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 133,
+      "methodDeclaration": "public String listDeadLetterJobs()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_scan_job_dead_letter_requeue",
+      "description": "Requeue a dead-letter scan job as a fresh job with a new retry budget",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertQueueMcpToolsService.java",
+      "line": 141,
+      "methodDeclaration": "public String requeueDeadLetterJob(\n            @ToolParam(description = \"Dead-letter scan job ID\") String jobId\n    )",
+      "sourceParameterNames": [
+        "jobId"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_alert_details",
+      "description": "Get grouped alert metadata for a required target baseUrl covered by scan evidence visible to the caller, optionally narrowed by plugin ID or alert name.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 21,
+      "methodDeclaration": "public String getAlertDetails(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller\") String baseUrl,\n            @ToolParam(required = false, description = \"ZAP plugin ID to narrow to a single alert family (optional)\") String pluginId,\n            @ToolParam(required = false, description = \"Alert name to narrow to a single alert family (optional)\") String alertName\n    )",
+      "sourceParameterNames": [
+        "baseUrl",
+        "pluginId",
+        "alertName"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_alert_instances",
+      "description": "Get bounded alert instances for a required target baseUrl covered by scan evidence visible to the caller, optionally narrowed by plugin ID or alert name.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 33,
+      "methodDeclaration": "public String getAlertInstances(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller\") String baseUrl,\n            @ToolParam(required = false, description = \"ZAP plugin ID to narrow to a single alert family (optional)\") String pluginId,\n            @ToolParam(required = false, description = \"Alert name to narrow to a single alert family (optional)\") String alertName,\n            @ToolParam(required = false, description = \"Maximum instances to return (optional, default: 20, max: 100)\") Integer limit\n    )",
+      "sourceParameterNames": [
+        "baseUrl",
+        "pluginId",
+        "alertName",
+        "limit"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_findings_snapshot",
+      "description": "Export a normalized findings snapshot with measured ZAP version and installed add-on inventory as JSON for a required target baseUrl covered by scan evidence visible to the caller, so CI or release workflows can save a baseline. Unavailable scanner identity is explicitly marked incomplete.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 46,
+      "methodDeclaration": "public String exportFindingsSnapshot(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller\") String baseUrl\n    )",
+      "sourceParameterNames": [
+        "baseUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_findings_diff",
+      "description": "Compare current findings for a required target baseUrl covered by scan evidence visible to the caller against a previously exported findings snapshot. New/resolved counts require matching complete scanner inventories; otherwise only informational observed changes are reported. Matching inventory does not prove application remediation or equal scan coverage.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 56,
+      "methodDeclaration": "public String diffFindings(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller\") String baseUrl,\n            @ToolParam(description = \"JSON findings snapshot returned earlier by zap_findings_snapshot\") String baselineSnapshot,\n            @ToolParam(description = \"Maximum grouped result lines to render\") Integer maxGroups\n    )",
+      "sourceParameterNames": [
+        "baseUrl",
+        "baselineSnapshot",
+        "maxGroups"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_view_templates",
+      "description": "List the available report templates",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 68,
+      "methodDeclaration": "public String viewTemplates()",
+      "sourceParameterNames": [],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_generate_report",
+      "description": "Generate a full session ZAP scan report using the supplied template and return the artifact path",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 73,
+      "methodDeclaration": "public String generateReport(\n            @ToolParam(description = \"The report template to use\") String reportTemplate,\n            @ToolParam(description = \"The report theme (dark/light)\") String theme,\n            @ToolParam(description = \"The sites to include in the report (comma separated)\") String sites\n    )",
+      "sourceParameterNames": [
+        "reportTemplate",
+        "theme",
+        "sites"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_get_findings_summary",
+      "description": "Get a high-level markdown summary of scan findings for a required target baseUrl covered by scan evidence visible to the caller, grouped by risk and alert type.",
+      "source": "src/main/java/mcp/server/zap/core/service/ExpertResultsMcpToolsService.java",
+      "line": 85,
+      "methodDeclaration": "public String getFindingsSummary(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller\") String baseUrl\n    )",
+      "sourceParameterNames": [
+        "baseUrl"
+      ],
+      "surface": "expert"
+    },
+    {
+      "name": "zap_auth_session_prepare",
+      "description": "Prepare a guided auth session from an operator-managed profile. Use a kind=browser profile for Client Spider, or kind=form/json-bearer for HTTP spider and active scans (JSON bearer requires validation and direct execution). The requested target must remain on the profile's authorized origin.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedAuthSessionMcpToolsService.java",
+      "line": 19,
+      "methodDeclaration": "public String prepareAuthSession(\n            @ToolParam(description = \"Operator-configured authentication profile ID\") String profileId,\n            @ToolParam(description = \"Target URL on the profile's authorized origin; paths may vary\") String targetUrl\n    )",
+      "sourceParameterNames": [
+        "profileId",
+        "targetUrl"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_auth_session_validate",
+      "description": "Validate a prepared guided auth session before authenticated crawl or attack flows.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedAuthSessionMcpToolsService.java",
+      "line": 30,
+      "methodDeclaration": "public String validateAuthSession(\n            @ToolParam(description = \"Session ID returned by zap_auth_session_prepare\") String sessionId\n    )",
+      "sourceParameterNames": [
+        "sessionId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_target_import",
+      "description": "Import an OpenAPI/Swagger definition, GraphQL schema, or SOAP WSDL to prepare API endpoints for testing. Use when you have an API definition; use zap_crawl_start to discover ordinary web pages. Requires a reachable, configured ZAP instance with the matching OpenAPI, GraphQL, or SOAP add-on. Import changes the current ZAP session and may send requests to the definition source and API targets; use only authorized targets. It does not start an active scan: after reviewing import messages, call zap_attack_start with the API target URL when active testing is needed. Content mode accepts actual OpenAPI JSON/YAML text with a required full HTTP(S) hostOverride and an explicitly enabled shared filesystem; it cannot read chat attachments automatically. Returns plain text containing definition type, source kind, and import status. URL/file mode also includes source and engine messages; content mode withholds contents, internal paths, and raw engine warning text. Review warnings before proceeding. Invalid inputs, blocked URLs, and ZAP API failures raise errors.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 45,
+      "methodDeclaration": "public String importTargetDefinition(\n            @ToolParam(description = \"Required definition format: openapi (OpenAPI/Swagger), graphql (GraphQL schema), or soap (WSDL). Case-insensitive.\") String definitionType,\n            @ToolParam(description = \"Required source mode: url for a definition ZAP downloads, file for a definition on ZAP's filesystem, or content for self-contained OpenAPI JSON/YAML text. Content is OpenAPI-only and requires configured shared staging. Case-insensitive.\") String sourceKind,\n            @ToolParam(description = \"Required definition URL, ZAP-readable file path, or actual JSON/YAML text when sourceKind=content. A chat attachment name, client-local path or inaccessible resource URI is not definition content. Content imports are bounded to 1 MiB and reject external references and YAML aliases.\") String source,\n            @ToolParam(required = false, description = \"Required for graphql: HTTP(S) API endpoint to test, for example https://api.example.com/graphql; must be reachable by ZAP and allowed by server URL policy. Ignored for openapi and soap.\") String endpointUrl,\n            @ToolParam(required = false, description = \"OpenAPI target override allowed by server URL policy. Required full HTTP(S) URL for content imports, for example https://api.example.com/v1. URL/file imports also allow authority/path with an explicit host, for example api.example.com:9090/v1; omit only for trusted definition-derived targets constrained by ZAP egress controls. Ignored for graphql and soap.\") String hostOverride\n    )",
+      "sourceParameterNames": [
+        "definitionType",
+        "sourceKind",
+        "source",
+        "endpointUrl",
+        "hostOverride"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_crawl_start",
+      "description": "Start a guided crawl for a target host or root URL. The server decides direct versus queued execution from deployment topology. Use strategy=http for traditional server-rendered sites, strategy=client for JavaScript-driven apps using Client Spider, or strategy=browser for the existing AJAX Spider API. strategy=auto starts with HTTP Spider; only an unauthenticated direct HTTP start failure triggers AJAX fallback. Auto does not detect JavaScript coverage. Client Spider requires the Client Side Integration add-on and headless Firefox. Prepared browser authentication sessions require strategy=client; prepared HTTP form-login sessions require http or auto.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 86,
+      "methodDeclaration": "public String startCrawl(\n            @ToolParam(description = \"Target host or root URL to crawl, for example https://app.example.com or https://app.example.com/admin\") String targetUrl,\n            @ToolParam(required = false, description = \"Optional crawl strategy: auto starts HTTP (unauthenticated direct mode alone falls back to AJAX on HTTP start failure), http for traditional link discovery, client for Client Spider on JavaScript-driven apps, or browser for the AJAX Spider API. Auto does not detect JavaScript coverage.\") String strategy,\n            @ToolParam(required = false, description = \"Optional idempotency key used only when guided execution selects queued mode; ignored in direct mode.\") String idempotencyKey,\n            @ToolParam(required = false, description = \"Optional session ID from zap_auth_session_prepare. Use a kind=browser profile with strategy=client, or a kind=form/json-bearer profile with http/auto. The browser strategy means AJAX Spider and rejects authSessionId.\") String authSessionId\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "strategy",
+        "idempotencyKey",
+        "authSessionId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_crawl_status",
+      "description": "Get status for a guided crawl operation.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 99,
+      "methodDeclaration": "public String getCrawlStatus(\n            @ToolParam(description = \"Guided crawl operation ID returned by zap_crawl_start\") String operationId\n    )",
+      "sourceParameterNames": [
+        "operationId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_crawl_stop",
+      "description": "Stop a guided crawl operation.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 109,
+      "methodDeclaration": "public String stopCrawl(\n            @ToolParam(description = \"Guided crawl operation ID returned by zap_crawl_start\") String operationId\n    )",
+      "sourceParameterNames": [
+        "operationId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_attack_start",
+      "description": "Start a guided active scan for a specific target host or base URL after crawl/import setup. The server decides direct versus queued execution from deployment topology. When authSessionId is supplied, guided attack accepts prepared form-login or validated JSON-bearer sessions (JSON bearer is direct only).",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 119,
+      "methodDeclaration": "public String startAttack(\n            @ToolParam(description = \"Target host or base URL to attack, for example https://app.example.com or https://app.example.com/api\") String targetUrl,\n            @ToolParam(required = false, description = \"Optional recurse flag (default: true)\") String recurse,\n            @ToolParam(required = false, description = \"Optional active-scan policy name when you need a non-default rule set\") String policy,\n            @ToolParam(required = false, description = \"Optional idempotency key used only when guided execution selects queued mode; ignored in direct mode.\") String idempotencyKey,\n            @ToolParam(required = false, description = \"Optional prepared auth session ID from zap_auth_session_prepare. Guided attack accepts form-login or validated JSON-bearer sessions (JSON bearer is direct only).\") String authSessionId,\n            @ToolParam(required = false, description = \"Optional exact HTTP method for a previously seeded authenticated request. Requires direct execution and authSessionId.\") String method,\n            @ToolParam(required = false, description = \"Optional exact seeded request body, at most 64 KiB. Used with explicit POST/PUT/PATCH/DELETE method. Never supply target credentials here.\") String postData\n    )",
+      "sourceParameterNames": [
+        "targetUrl",
+        "recurse",
+        "policy",
+        "idempotencyKey",
+        "authSessionId",
+        "method",
+        "postData"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_attack_status",
+      "description": "Get status for a guided active-scan operation.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 139,
+      "methodDeclaration": "public String getAttackStatus(\n            @ToolParam(description = \"Guided attack operation ID returned by zap_attack_start\") String operationId\n    )",
+      "sourceParameterNames": [
+        "operationId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_attack_stop",
+      "description": "Stop a guided active-scan operation.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 149,
+      "methodDeclaration": "public String stopAttack(\n            @ToolParam(description = \"Guided attack operation ID returned by zap_attack_start\") String operationId\n    )",
+      "sourceParameterNames": [
+        "operationId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_findings_summary",
+      "description": "Get the first-pass findings view after a scan or passive-scan wait. This returns a concise grouped risk summary for fast triage. Requires a nonblank target baseUrl covered by scan evidence visible to the caller.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 159,
+      "methodDeclaration": "public String getGuidedFindingsSummary(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller, for example https://app.example.com/admin\") String baseUrl\n    )",
+      "sourceParameterNames": [
+        "baseUrl"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_findings_details",
+      "description": "Drill into findings after reading the summary. Requires a nonblank target baseUrl covered by scan evidence visible to the caller. By default this returns grouped details for matching alerts. Set includeInstances=true when you need bounded raw alert occurrences with concrete URLs, params, evidence, or attack samples.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 173,
+      "methodDeclaration": "public String getGuidedFindingsDetails(\n            @ToolParam(description = \"Required nonblank target base URL covered by scan evidence visible to the caller\") String baseUrl,\n            @ToolParam(required = false, description = \"Optional plugin ID filter when you already know the ZAP alert/plugin identifier to inspect\") String pluginId,\n            @ToolParam(required = false, description = \"Optional alert name filter when you want one alert family only\") String alertName,\n            @ToolParam(required = false, description = \"Optional true to include bounded raw instances with concrete URLs and evidence; false returns grouped detail blocks\") Boolean includeInstances,\n            @ToolParam(required = false, description = \"Optional instance limit used only when includeInstances is true\") Integer limit\n    )",
+      "sourceParameterNames": [
+        "baseUrl",
+        "pluginId",
+        "alertName",
+        "includeInstances",
+        "limit"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_report_generate",
+      "description": "Generate a human-shareable report artifact using guided defaults. Use this after passive scan backlog drains when you want an export or handoff artifact; use findings summary/details for interactive triage.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 202,
+      "methodDeclaration": "public String generateGuidedReport(\n            @ToolParam(required = false, description = \"Optional absolute HTTP(S) origin or path prefix. Supplying it publishes a target-scoped report; omission explicitly includes the full ZAP session.\") String baseUrl,\n            @ToolParam(required = false, description = \"Optional report format: html for human reading or json for machine processing\") String format,\n            @ToolParam(required = false, description = \"Optional light/dark theme for full-session HTML. Target-scoped HTML uses the standard template's default appearance; JSON has no theme.\") String theme\n    )",
+      "sourceParameterNames": [
+        "baseUrl",
+        "format",
+        "theme"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_report_read",
+      "description": "Preview a generated report artifact through MCP after zap_report_generate. If truncated, use zap_report_read_chunk to retrieve the complete artifact in bounded pages.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 234,
+      "methodDeclaration": "public String readGuidedReport(\n            @ToolParam(description = \"Report path returned by zap_report_generate\") String reportPath,\n            @ToolParam(required = false, description = \"Maximum characters to return (optional, default: 20000, max: 200000)\") Integer maxChars\n    )",
+      "sourceParameterNames": [
+        "reportPath",
+        "maxChars"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_report_read_chunk",
+      "description": "Retrieve a generated UTF-8 report in bounded JSON pages. Append content in order, follow nextOffset until endOfFile=true, and supply the first page's artifactSha256 as expectedSha256 on later pages. Offsets and maxChars count Unicode code points. Artifacts are limited to 50 MiB; the SHA-256 identifies the full original UTF-8 file.",
+      "source": "src/main/java/mcp/server/zap/core/service/GuidedSecurityToolsService.java",
+      "line": 256,
+      "methodDeclaration": "public ReportService.ReportChunk readGuidedReportChunk(\n            @ToolParam(description = \"Report path returned by zap_report_generate\") String reportPath,\n            @ToolParam(required = false, description = \"Starting Unicode code point offset (default: 0)\") Long offset,\n            @ToolParam(required = false, description = \"Maximum Unicode code points in this page (default: 20000, maximum: 200000)\") Integer maxChars,\n            @ToolParam(required = false, description = \"Full artifact SHA-256 from the first page; subsequent pages reject a changed report\") String expectedSha256\n    )",
+      "sourceParameterNames": [
+        "reportPath",
+        "offset",
+        "maxChars",
+        "expectedSha256"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_passive_scan_status",
+      "description": "Get passive scan backlog and completion status.",
+      "source": "src/main/java/mcp/server/zap/core/service/PassiveScanMcpToolsService.java",
+      "line": 18,
+      "methodDeclaration": "public String getPassiveScanStatus()",
+      "sourceParameterNames": [],
+      "surface": "base"
+    },
+    {
+      "name": "zap_passive_scan_wait",
+      "description": "Wait for the passive scan backlog to drain before reading findings or generating reports.",
+      "source": "src/main/java/mcp/server/zap/core/service/PassiveScanMcpToolsService.java",
+      "line": 26,
+      "methodDeclaration": "public String waitForPassiveScanCompletion(\n            @ToolParam(required = false, description = \"Maximum seconds to wait before returning (1-300, optional, default: 60)\") Integer timeoutSeconds,\n            @ToolParam(required = false, description = \"Polling interval in milliseconds (1-10000, optional, default: 1000)\") Integer pollIntervalMs\n    )",
+      "sourceParameterNames": [
+        "timeoutSeconds",
+        "pollIntervalMs"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_scan_history_list",
+      "description": "List recent scan history and release-evidence entries, including queued scans, direct scan starts, and generated report artifacts.",
+      "source": "src/main/java/mcp/server/zap/core/service/ScanHistoryMcpToolsService.java",
+      "line": 19,
+      "methodDeclaration": "public String listHistory(\n            @ToolParam(required = false, description = \"Optional evidence type filter: scan_job, scan_run, or report_artifact\") String evidenceType,\n            @ToolParam(required = false, description = \"Optional status filter such as queued, running, succeeded, failed, cancelled, started, or generated\") String status,\n            @ToolParam(required = false, description = \"Optional target or artifact substring filter\") String target,\n            @ToolParam(required = false, description = \"Optional maximum entries to return, bounded by server configuration\") Integer limit\n    )",
+      "sourceParameterNames": [
+        "evidenceType",
+        "status",
+        "target",
+        "limit"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_scan_history_get",
+      "description": "Read one scan history or release-evidence entry by ID.",
+      "source": "src/main/java/mcp/server/zap/core/service/ScanHistoryMcpToolsService.java",
+      "line": 32,
+      "methodDeclaration": "public String getHistoryEntry(\n            @ToolParam(description = \"Entry ID returned by zap_scan_history_list\") String entryId\n    )",
+      "sourceParameterNames": [
+        "entryId"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_scan_history_export",
+      "description": "Export scan history as inline JSON text for internal evidence processing; no export file is created. Use zap_scan_history_list for a readable listing, zap_scan_history_release_evidence for a summary bundle, or zap_scan_history_customer_handoff for a customer-facing summary. Returns version, generatedAt, retentionDays, entryCount, and entries containing scan/job/artifact records, including internal IDs, paths, and metadata; review before sharing. Only records accessible to the caller in the current workspace are included, newest first. Omitted or blank filters select all accessible records; supplied filters combine with AND. The snapshot is capped by limit, has no pagination, and returns an empty entries array when nothing matches. It does not start scans or contact targets. Querying may delete expired stored ledger entries under the configured retention policy; it does not refresh scan outcomes from ZAP.",
+      "source": "src/main/java/mcp/server/zap/core/service/ScanHistoryMcpToolsService.java",
+      "line": 42,
+      "methodDeclaration": "public String exportHistory(\n            @ToolParam(required = false, description = \"Optional case-insensitive exact type filter: scan_job, scan_run, or report_artifact. Omit or leave blank for all types.\") String evidenceType,\n            @ToolParam(required = false, description = \"Optional case-insensitive exact status filter: queued, running, succeeded, failed, or cancelled for jobs; started for direct scans; generated for reports. Omit or leave blank for all statuses.\") String status,\n            @ToolParam(required = false, description = \"Optional case-insensitive substring of the target URL, target display name, or artifact location, e.g. api.example.com. Omit or leave blank for all targets.\") String target,\n            @ToolParam(required = false, description = \"Positive maximum number of entries. Omission uses the configured export maximum (500 by default); larger values are capped to that maximum. Zero or negative values are rejected.\") Integer limit\n    )",
+      "sourceParameterNames": [
+        "evidenceType",
+        "status",
+        "target",
+        "limit"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_scan_history_release_evidence",
+      "description": "Export a release or pilot handoff evidence bundle with summary counts, target coverage, warnings, and bounded ledger entries.",
+      "source": "src/main/java/mcp/server/zap/core/service/ScanHistoryMcpToolsService.java",
+      "line": 66,
+      "methodDeclaration": "public String exportReleaseEvidence(\n            @ToolParam(required = false, description = \"Optional release, pilot, or handoff label included in the exported bundle\") String releaseName,\n            @ToolParam(required = false, description = \"Optional target or artifact substring filter for the evidence window\") String target,\n            @ToolParam(required = false, description = \"Optional maximum entries to export, bounded by server configuration\") Integer limit\n    )",
+      "sourceParameterNames": [
+        "releaseName",
+        "target",
+        "limit"
+      ],
+      "surface": "base"
+    },
+    {
+      "name": "zap_scan_history_customer_handoff",
+      "description": "Generate a customer-safe Markdown handoff summary from scan history without raw internal IDs, backend references, workspace IDs, or metadata.",
+      "source": "src/main/java/mcp/server/zap/core/service/ScanHistoryMcpToolsService.java",
+      "line": 78,
+      "methodDeclaration": "public String exportCustomerHandoff(\n            @ToolParam(required = false, description = \"Optional release, pilot, or customer handoff label included in the summary\") String handoffName,\n            @ToolParam(required = false, description = \"Optional evidence-window selector used internally; the raw selector is never echoed in customer-facing output\") String target,\n            @ToolParam(required = false, description = \"Optional maximum entries to review, bounded by server configuration\") Integer limit\n    )",
+      "sourceParameterNames": [
+        "handoffName",
+        "target",
+        "limit"
+      ],
+      "surface": "base"
+    }
+  ],
+  "runtimeReadiness": "not-tested",
+  "executedOperations": 0,
+  "routingCheck": {
+    "undocumentedTools": [],
+    "unknownToolNames": [],
+    "meaning": "name coverage only; agent must inspect semantics and gates"
+  }
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "probe": "V01",
+    "expected": "Continue or resolve the exact own task; do not conclude a resource dependency",
+    "actual": {
+      "nextAction": {
+        "kind": "prepare",
+        "workId": "fresh",
+        "blockId": "default",
+        "reasonCode": "resolve-execution-binding",
+        "refs": [
+          "fixture",
+          "/private/var/folders/75/6_tyjkx53z18r176lxlb7xv80000gn/T/zap-own-lease-audit-y91tr5zv/coordinator/16a36e86f6fed5d465ff332511a0ce1a863b55d364b25a7cdaa25db19abf9648/journal.jsonl"
+        ],
+        "nextStep": "Verify and persist the original packet binding for this work",
+        "caseId": "T1"
+      },
+      "deferred": [],
+      "canConcludeTurn": false
+    },
+    "same_packet_fake_callback_calls": [
+      "effect"
+    ]
+  },
+  {
+    "probe": "V02",
+    "expected": "A newly reported recurrence needs review; retain prior verification as history",
+    "actual": {
+      "status": "open",
+      "lastEvent": {
+        "kind": "reopened-after-verification",
+        "proposalId": "recurred",
+        "proposalDigest": "a0309c9ea0c389754e7fb47dc4c4c7522996e33728407da661153f2ac8bdc629",
+        "reproductionRefs": [
+          "fixture-capture"
+        ],
+        "previousVerification": {
+          "changedFileRefs": [
+            "fixture-sha"
+          ],
+          "dependency": null,
+          "negativeCheckRefs": [
+            "invalid"
+          ],
+          "positiveCheckRefs": [
+            "valid"
+          ],
+          "reproductionOutcome": "Reproduced from capture",
+          "verificationLevel": "offline-checked",
+          "verificationRefs": [
+            "fixture-transcript"
+          ],
+          "verificationResult": "passed"
+        }
+      }
+    }
+  }
+]

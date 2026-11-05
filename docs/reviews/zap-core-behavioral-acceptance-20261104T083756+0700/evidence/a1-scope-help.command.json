@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "-m",
+    "zap_assessment.product_cli",
+    "scope",
+    "--help"
+  ],
+  "exitCode": 0
+}

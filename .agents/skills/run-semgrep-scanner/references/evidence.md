@@ -1,39 +1,39 @@
-# Evidence SAST nhúng trong ALERTS
+# SAST evidence embedded in ALERTS
 
-Evidence hỗ trợ claim cụ thể, không là proof campaign. Mặc định dùng locations và mô tả đã lọc; code ngắn chỉ khi cần, không nhạy cảm và trong quyền chia sẻ. Không copy source/secret vào reports, không bắt folder evidence, raw pointer, source snapshot hoặc hash manifest.
+Evidence supports a specific claim; it is not a proof campaign. Prefer locations and sanitized descriptions. Include short code only when necessary, non-sensitive, and authorized for sharing. Do not require copied source/secrets, evidence folders, raw pointers, snapshots, or hash manifests.
 
 ## Record
 
-Mỗi phần tử `findings[].evidence` có đủ fields sau; unknown nullable theo nghĩa, không invent:
+Each `findings[].evidence` includes these fields, with meaningful nulls for unknowns:
 
-- `id`: string duy nhất trong toàn assessment, kể cả giữa findings.
-- `kind`: `native-match`, `native-dataflow`, `source-review`, `control-review`, `policy-reference`, `config-review`.
-- `provenance`: `semgrep`, `manual-source-review` hoặc `provided-policy`.
-- `claim`: nhận định cụ thể evidence hỗ trợ; `observation`: fact đã thấy, tách hypotheses.
-- `locations`: mảng locations theo [reporting contract](reporting-and-completion.md); policy ngoài source có thể rỗng.
-- `source_state_id`: ID trong RUN.source_states khi dựa trên source, null nếu không áp dụng.
-- `round_id`, `manual_review_id`: nullable; thao tác phù hợp phải truy được trong RUN. Policy có `reference` thay thế.
-- `reference`: tài liệu/section hoặc mô tả policy đã có, nullable; không yêu cầu raw file/hash pointer.
-- `flow_steps`: mảng `{order, location, observation}` khi claim về dataflow/call-path, rỗng cho finding đơn giản. `order` tăng theo path đã đọc, location thật khi biết, không bịa vị trí.
-- `limitations`: mảng những gì chưa xác nhận hoặc giới hạn làm thay đổi claim.
+- `id`: unique across the assessment, including different findings.
+- `kind`: `native-match`, `native-dataflow`, `source-review`, `control-review`, `policy-reference`, or `config-review`.
+- `provenance`: `semgrep`, `manual-source-review`, or `provided-policy`.
+- `claim`: the supported claim; `observation`: observed facts separated from hypotheses.
+- `locations`: [reporting-contract](reporting-and-completion.md) locations; external policy may have none.
+- `source_state_id`: RUN source-state ID for source-based evidence, otherwise null.
+- `round_id`, `manual_review_id`: actual relevant RUN operations, nullable. Policy may use `reference` instead.
+- `reference`: existing document/section/policy description, nullable; no mandatory raw-file/hash pointer.
+- `flow_steps`: `{order, location, observation}` for actual inspected dataflow/call paths, otherwise `[]`. Order follows the path; do not invent locations.
+- `limitations`: uncertainties that materially limit the claim.
 
-## Ghép kind, provenance và thao tác
+## Kind, provenance, and operations
 
-`native-match` dùng provenance semgrep, source_state_id và round_id có thật; chỉ chứng minh rule match tại vị trí. `native-dataflow` cũng chỉ dùng khi tool thực xuất trace và đã đọc; trace có thể không đủ mọi caller/file. Manual call-path luôn `source-review`, provenance manual-source-review và manual_review_id, không đổi thành native trace. `control-review`/`config-review` ghi thao tác thực đã đọc; chỉ dùng provenance tool nếu đúng quan sát tool đã cung cấp. `policy-reference` có reference và nguồn policy rõ, thường provided-policy; policy suy từ source phải ghi manual-source-review và assumption, không gán provided-policy.
+`native-match` requires Semgrep provenance, actual source state, and round; it establishes a pattern match. `native-dataflow` additionally requires actual inspected native trace output, which may still omit callers/files. Manual call paths always use source-review/manual-source-review with a manual review ID. Control/configuration reviews retain their actual observation provenance. Provided-policy references identify their authority; expectations inferred from source use manual provenance and an assumption label.
 
-Tất cả evidence dựa source phải nối source state và round/manual review tương ứng cùng source state đó. Manual review có thể hỗ trợ finding nguồn semgrep; round_ids/occurrences vẫn giữ native provenance. Liên kết hai chiều manual_reviews.evidence_ids và findings/evidence để biết đã đọc gì. Một native-dataflow claim không tự được xác nhận chỉ vì bật flag trace.
+Source evidence must agree with its linked round/manual review's source state. Manual review may support a Semgrep finding while native rounds/occurrences retain their provenance. Maintain reciprocal manual-review/evidence/finding links. Enabling a trace flag alone does not establish native dataflow.
 
-## Claim và triage
+## Claims and triage
 
-1. `supported`: căn cứ đủ cho claim đã viết, controls và assumptions liên quan đã được xem xét. Native match một mình không đủ khi claim vượt pattern. Không bắt dynamic exploit.
-2. `false-positive`: có evidence cho pattern bắt sai hoặc control có hiệu lực trên đường đã đọc; tên sanitizer/guard không là căn cứ. Accepted risk không là false-positive.
-3. `not-applicable`: giữ record và rationale scope/applicability. Thiếu rule/timeout/policy không là N/A.
-4. `needs-review`: có thể chỉ có native-match; ghi evidence_gaps và next_step, không bịa trace/controls cho đầy fields. Nếu còn bước khả thi thì làm theo [responsibility loop](responsibility-loop.md).
+- `supported`: support fits the written claim and inspected controls/assumptions. Native matches alone cannot support claims beyond their patterns; dynamic exploitation is unnecessary.
+- `false-positive`: actual pattern error or effective control on the inspected path; names and accepted risk are insufficient.
+- `not-applicable`: retain scope/applicability rationale. Missing rules/timeouts/policy do not establish N/A.
+- `needs-review`: a native match may be the only evidence. Record gaps/next steps without fabricating controls/traces; execute feasible steps under the [responsibility loop](responsibility-loop.md).
 
-Không có native trace không làm finding invalid. Không tìm thấy control trong source nhỏ không chứng minh toàn hệ thống không có control. Static assumptions về deployment/runtime/policy phải nằm ở triage/evidence gaps/limitations phù hợp. Evidence không biến số files scanned thành coverage role/endpoint/runtime.
+Missing native traces do not invalidate findings. Missing controls in a small snippet do not establish system-wide absence. Record deployment/runtime/policy assumptions in the appropriate gaps/limitations. File counts do not establish role/endpoint/runtime coverage.
 
-## Ví dụ và kiểm tra
+## Review and examples
 
-Operator thực hiện phần [tự kiểm evidence theo track](sequential-track-workflow.md#evidence-đã-đủ-hỗ-trợ-danh-sách-observations-chưa) trước chuyển track. So native records với raw output, rồi đọc lại đúng source range/control và claim. File/line có thật, range trong bounds hoặc checker pass chưa chứng minh range chứa đoạn chứng minh nhận định. Giữ cả candidate không đưa vào ALERTS trong ledger RUN; không dùng giảm observation counts làm thước đo correctness hoặc recall.
+Before moving tracks, perform [evidence self-review](sequential-track-workflow.md#does-evidence-support-the-observations): compare native records to actual output, then re-read the source ranges/controls supporting claims. Existing files, in-bounds ranges, and a passing checker do not establish semantic support. Retain non-promoted candidates in RUN; fewer observations do not measure correctness or recall.
 
-[Cặp JSON synthetic](../examples/README.md) minh họa native-match + manual control review, needs-review, false-positive và manual finding. Đây là dữ liệu minh họa hợp đồng, không là output hay trace Semgrep thật. Kiểm IDs/locations/source states/thao tác và counts trước bàn giao; không rewrite báo cáo v1 để invent evidence thiếu.
+The [synthetic JSON pair](../examples/README.md) illustrates native-match/manual controls, needs-review, false-positive, and manual findings. It contains no real Semgrep output/trace. Check IDs, locations, source states, operations, and counts; never rewrite v1 history to invent missing evidence.

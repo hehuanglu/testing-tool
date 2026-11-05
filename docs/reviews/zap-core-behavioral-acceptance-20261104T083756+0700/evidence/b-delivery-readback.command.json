@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/setup/b-delivery-readback.py",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-reviewed-inspect.stdout",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-reviewed-source.stdout",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-synthetic-table.json"
+  ],
+  "exitCode": 0
+}

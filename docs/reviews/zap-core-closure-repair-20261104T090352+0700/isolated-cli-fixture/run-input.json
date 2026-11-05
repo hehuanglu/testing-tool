@@ -1,0 +1,84 @@
+{
+  "assessmentId": "synthetic-closure-selector-repair",
+  "criteriaWorkflow": {
+    "version": 2,
+    "context": {
+      "product": "synthetic-closure",
+      "environment": "offline"
+    },
+    "criteriaRevision": "C-1",
+    "planRevision": "P-1",
+    "criteria": [
+      {
+        "id": "C-FINAL",
+        "rawText": "Verify local fixture resource disposition before delivery",
+        "source": "expert-message",
+        "requirement": "Verify local fixture resource disposition before delivery",
+        "oracle": "Stopped",
+        "applicability": "applicable",
+        "caseIds": [
+          "T-FINAL"
+        ],
+        "stoppingRule": "all_cases"
+      }
+    ],
+    "plan": {
+      "cases": [
+        {
+          "id": "T-FINAL",
+          "criterionIds": [
+            "C-FINAL"
+          ],
+          "objective": "Verify local fixture resource disposition before delivery",
+          "expectedBehavior": "Stopped",
+          "expectationBasis": "Predeclared fixture oracle",
+          "requiredEvidence": [
+            "resource-disposition"
+          ],
+          "coverageContext": {
+            "product": "synthetic-closure",
+            "environment": "offline",
+            "objective": "Verify local fixture resource disposition before delivery"
+          },
+          "effects": [
+            "read"
+          ],
+          "resourceIds": [
+            "synthetic-resource"
+          ],
+          "allowedLimitations": [
+            "method_boundary",
+            "capability"
+          ]
+        }
+      ],
+      "authority": {
+        "source": "synthetic read-only plan",
+        "target": "https://fixture.invalid",
+        "allowedEffects": [
+          "read"
+        ]
+      }
+    },
+    "approvals": [
+      {
+        "kind": "criteria",
+        "revision": "C-1",
+        "digest": "708add4319eb43475ae60cab5948a9cdae0ff6a392b5dd932147209787f59258",
+        "source": "user-approved-criteria"
+      },
+      {
+        "kind": "plan",
+        "revision": "P-1",
+        "digest": "5c2a35e8436dcb12d7a62527e16dcd4bfc9ee21582d5d1c79f33097236b01c3b",
+        "source": "user-approved-plan"
+      }
+    ],
+    "caseResults": []
+  },
+  "operations": [],
+  "coordinatorState": {
+    "directory": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-closure-repair-20261104T090352+0700/isolated-cli-fixture/coordinator",
+    "assessmentId": "synthetic-closure-selector-repair"
+  }
+}

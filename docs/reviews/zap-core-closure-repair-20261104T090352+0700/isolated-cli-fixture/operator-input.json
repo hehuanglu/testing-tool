@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "assessmentId": "synthetic-closure-selector-repair",
+  "planDigest": "5c2a35e8436dcb12d7a62527e16dcd4bfc9ee21582d5d1c79f33097236b01c3b",
+  "activeBlockId": "default",
+  "blocks": [
+    {
+      "id": "default",
+      "caseIds": [
+        "T-FINAL"
+      ],
+      "order": 0,
+      "exitCondition": "Review assigned obligations"
+    }
+  ],
+  "workItems": [
+    {
+      "id": "final-resource-review",
+      "blockId": "default",
+      "caseIds": [
+        "T-FINAL"
+      ],
+      "kind": "resource-review",
+      "mode": "offline",
+      "phase": "closure",
+      "order": 0,
+      "dependsOnWorkIds": [],
+      "resourceIds": [],
+      "state": "ready",
+      "basisRefs": [
+        "fixture"
+      ],
+      "completionRefs": [],
+      "nextStep": "Review fixture",
+      "actionRef": null,
+      "readbackOf": null,
+      "notBefore": null,
+      "waiting": null
+    }
+  ],
+  "repairs": [],
+  "delivery": null,
+  "stopRecord": null
+}

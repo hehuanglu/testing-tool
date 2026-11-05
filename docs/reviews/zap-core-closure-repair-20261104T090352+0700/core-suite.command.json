@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "test_coordinator_recovery",
+    "test_assessment_store",
+    "test_operator_state",
+    "test_operation_selection",
+    "test_assessment_state_cli",
+    "-v"
+  ],
+  "exitCode": 0
+}

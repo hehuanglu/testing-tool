@@ -1,0 +1,11 @@
+usage: fixture_tool.py [-h] [--case {T-SOURCE,T-CONTROL}]
+                       {setup,validate-packet,interrupt-acquire,dispatch,observe-config,counter}
+
+Individual offline fixture primitives. The caller selects and persists work.
+
+positional arguments:
+  {setup,validate-packet,interrupt-acquire,dispatch,observe-config,counter}
+
+options:
+  -h, --help            show this help message and exit
+  --case {T-SOURCE,T-CONTROL}

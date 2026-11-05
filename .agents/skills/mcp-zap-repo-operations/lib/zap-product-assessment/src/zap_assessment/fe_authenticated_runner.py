@@ -180,9 +180,13 @@ class AuthenticatedRun:
         self.native_validate(actor)
         body=c.get('body',{});fixed={k:v for k,v in body.items() if k not in c['vectorFields']};query=c.get('query',{});fq={k:v for k,v in query.items() if k not in c['vectorFields']}
         self.rt.mode(label,actor=actor,group=group,slot='native',campaign=label,fixed=fixed,fixed_query=fq)
+        url=self.p['selection']['origin']+c['path']+('?' + urlencode(query) if query else '')
+        attack_args={'targetUrl':url,'recurse':'false','policy':policy,'authSessionId':sid,'method':c['method']}
+        if body:attack_args['postData']=json.dumps(body,separators=(',',':'))
+        self.mcp.require_tools(('zap_attack_status','zap_attack_stop'))
+        self.mcp.validate_call('zap_attack_start',attack_args)
         for name,args in [('setOptionTargetParamsInjectable',{'Integer':1 if c['vector']=='query' else 2}),('setOptionTargetParamsEnabledRPC',{'Integer':4}),('addScanPolicy',{'scanPolicyName':policy,'attackStrength':'LOW','alertThreshold':'MEDIUM'}),('disableAllScanners',{'scanPolicyName':policy}),('enableScanners',{'scanPolicyName':policy,'ids':','.join(map(str,c['ruleIds']))})]:self.engine('ascan','action',name,args)
         save(self.out,'policies/'+label+'.json',self.engine('ascan','view','scanners',{'scanPolicyName':policy}))
-        url=self.p['selection']['origin']+c['path']+('?' + urlencode(query) if query else '')
         if c['vector']=='json-body':
             # ZAP SiteNode can still point at a same-URL GET after UI reload. Bind the
             # actual reviewed UI exchange without sending the mutation again.
@@ -198,11 +202,9 @@ class AuthenticatedRun:
             if not candidates:raise ValueError('reviewed UI mutation baseline missing; no seed replay')
             from .anonymous_runner import AnonymousRun
             AnonymousRun.bind_baseline(self,candidates[-1],label,expected_method=c['method'])
-        args={'targetUrl':url,'recurse':'false','policy':policy,'authSessionId':sid,'method':c['method']}
-        if body:args['postData']=json.dumps(body,separators=(',',':'))
         known={str(x['id']) for x in self.engine('ascan','view','scans')['scans']}
         self.j.append('pending-start',{'action':'native-active','campaignId':label,'actorRef':actor,'targetUrl':url,'method':c['method'],'knownNativeIds':sorted(known),'replay':False})
-        try:text=self.mcp.call('zap_attack_start',args)
+        try:text=self.mcp.call('zap_attack_start',attack_args)
         except Exception:
             inventory=self.engine('ascan','view','scans')['scans'];new=[x for x in inventory if str(x['id']) not in known]
             save(self.out,'UNKNOWN_STARTS.json',{'campaignId':label,'knownNativeIds':sorted(known),'observedNewScans':new,'targetBindings':[],'replayed':False,'recovery':'stop/export only; target binding pending'})

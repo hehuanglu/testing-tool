@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
-from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[2]
 from .errors import Blocked
@@ -17,6 +16,8 @@ def canonical(value): return json.dumps(value,sort_keys=True,separators=(',',':'
 def digest(value): return hashlib.sha256(canonical(value)).hexdigest()
 def utcnow(): return datetime.now(timezone.utc)
 def validate(kind,value,*,schema_version=None):
+    from jsonschema import Draft202012Validator, FormatChecker
+
     version=schema_version if schema_version is not None else value.get('schemaVersion','1.0') if isinstance(value,dict) else '1.0'
     directories={'1.0':'','1.1':'v1.1','1.2':'v1.2','1.3':'v1.3','1.4':'v1.4','2.0':'v2.0'}
     if not isinstance(version,str) or version not in directories: raise Blocked('unsupported schema version')

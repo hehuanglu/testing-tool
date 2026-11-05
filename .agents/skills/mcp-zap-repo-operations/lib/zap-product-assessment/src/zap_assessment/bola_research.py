@@ -293,11 +293,11 @@ class DirectClient:
         try:
             status,body,size=exchange(self.origin,request['method'],request['path'],headers,payload,LIMITS['requestTimeoutSeconds'],self.deadline,ssl_context=self.ssl,allow_empty=self.allow_empty)
         except (OSError,ValueError,TimeoutError,http.client.HTTPException) as error:
-            save(self.out,'http/'+label+'.json',{'actionRef':'actions/'+label+'.json','startedAt':started,'endedAt':time.time(),'attribution':'client-transport-unknown','error':type(error).__name__,'retry':False})
+            save(self.out,'http/'+label+'.json',{'actionRef':'actions/'+label+'.json','startedAt':started,'endedAt':time.time(),'provenance':{'transport':'direct-http'},'attribution':'client-transport-unknown','error':type(error).__name__,'retry':False})
             self.j.append('unknown-outcome',{'actionRef':'actions/'+label+'.json','retry':False})
             raise
         projected,complete=project_response(body,self.capture_fields,self.secret_values) if self.capture_fields is not None else (sanitized(body,self.secret_values),True)
-        captured={'actionRef':'actions/'+label+'.json','startedAt':started,'endedAt':time.time(),'attribution':'direct-app-response-unattested','captureComplete':True if sensitive else complete,
+        captured={'actionRef':'actions/'+label+'.json','startedAt':started,'endedAt':time.time(),'provenance':{'transport':'direct-http'},'attribution':'direct-app-response-unattested','captureComplete':True if sensitive else complete,
                   'status':status,'bytes':size,'body':({'credentialResponseOmitted':True,'subject':pointer(body,sensitive['subjectPointer'])}
                      if isinstance(sensitive,dict) and status in (200,201) else {'credentialResponseOmitted':True}) if sensitive else projected}
         save(self.out,'http/'+label+'.json',captured);self.j.append('ack',{'actionRef':'actions/'+label+'.json','responseRef':'http/'+label+'.json','status':status})

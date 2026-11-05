@@ -92,8 +92,11 @@ def assess_executor(candidate, tool_name, arguments, *, auth_kind='none'):
         if exact and (semantics.get('executionMode')!='direct' or auth_kind=='none' or not arguments.get('authSessionId')):
             return reject('configuration-error','exact-request-needs-direct-prepared-auth')
         if auth_kind!='none':
+            if auth_kind=='json-bearer' and semantics.get('executionMode')!='direct':
+                return reject('configuration-error','json-bearer-needs-direct')
             if auth_kind not in semantics.get('activeAuthKinds',[]):return reject('configuration-error','auth-kind-incompatible',authKind=auth_kind)
             if auth_kind not in candidate.get('configuredAuthKinds',[]):return reject('configuration-error','auth-kind-not-configured',authKind=auth_kind)
+            if not arguments.get('authSessionId'):return reject('configuration-error','prepared-auth-session-missing',nextAction='bind the prepared session ID to this attack request')
             if candidate.get('sessionValidated') is not True:return reject('configuration-error','session-not-validated',nextAction='prepare/validate legitimate session before attack')
     return {**result,'compatible':True,'status':'compatible','reason':'actual-schema-and-auth-match',
             'acceptance':'compatibility only; baseline, delivery/response/readback and terminal execution remain required'}
@@ -117,3 +120,51 @@ def classify_workload(request,*,auth_kind,role=None):
     return {'authKind':auth_kind,'role':role,'nestedJson':nested,'contentType':content,
         'finiteLaneGaps':limitations,'responsibilityRetained':True,'runtimeQualified':False,
         'nextAction':'compare actual tools/list and configured auth semantics with choose_executor; use its compatible deployment under admission, or implement the classified mapping/primitive before a fresh allocation'}
+
+
+def map_question_capability(question, candidates):
+    """Review facts plus existing schema/auth routing; compatibility is not runtime proof.
+
+    question supplies toolName/arguments/authKind/request and requiredSupport (a
+    list from transport/auth/request/fixture/readback). Each candidate may declare
+    support={primitive: {verified: bool, basis: str}} and verificationLevel with
+    verificationBasis. No declaration bypasses choose_executor or admission.
+    """
+    required = question.get('requiredSupport', ['transport', 'auth', 'request', 'fixture', 'readback'])
+    if not isinstance(required, list) or set(required) - {'transport', 'auth', 'request', 'fixture', 'readback'}:
+        raise ValueError('invalid required capability support')
+    qid = question.get('id', question.get('caseId'))
+    auth = question.get('authKind', 'none')
+    classification = classify_workload(question.get('request', {}), auth_kind=auth, role=question.get('role'))
+    if not question.get('toolName'):
+        return dict(questionId=qid, selectedExecutor=None, support={}, missingPrimitive=['request-mapping'],
+            nextPreparation=['map-question-to-reviewed-tool-and-arguments'], verificationLevel='source-reviewed',
+            classification=classification, decisions=[])
+    routing = choose_executor(candidates, question['toolName'], question.get('arguments', {}), auth_kind=auth)
+    rows = []
+    for candidate, decision in zip(candidates, routing['decisions']):
+        support = {}
+        for key in required:
+            fact = candidate.get('support', {}).get(key, {})
+            support[key] = bool(isinstance(fact, dict) and fact.get('verified') is True and fact.get('basis'))
+        # Request/auth schema checks remain mandatory even when operator facts claim support.
+        if not decision['compatible']:
+            for key in ('request', 'auth'):
+                if key in support:support[key] = False
+        missing = [k for k, verified in support.items() if not verified]
+        level = candidate.get('verificationLevel', 'source-reviewed')
+        if level not in ('source-reviewed', 'offline-checked', 'runtime-observed'):
+            raise ValueError('invalid verificationLevel')
+        if not candidate.get('verificationBasis') or level == 'runtime-observed' and not candidate.get('deploymentContext'):
+            level = 'source-reviewed'
+        rows.append(dict(executor=candidate['id'], compatible=decision['compatible'], support=support,
+            missingPrimitive=missing, verificationLevel=level, deploymentContext=copy.deepcopy(candidate.get('deploymentContext'))))
+    selected = next((r for r in rows if r['compatible'] and not r['missingPrimitive']), None)
+    best = selected or next((r for r in rows if r['compatible']), rows[0] if rows else None)
+    missing = best['missingPrimitive'] if best else list(required)
+    return dict(questionId=qid, selectedExecutor=selected['executor'] if selected else None,
+        support=best['support'] if best else {}, missingPrimitive=missing,
+        nextPreparation=['prepare-' + k for k in missing] or (['resolve-schema-auth-routing'] if not selected else []),
+        verificationLevel=best['verificationLevel'] if best else 'source-reviewed',
+        deploymentContext=best.get('deploymentContext') if best else None, classification=classification,
+        decisions=routing['decisions'], candidates=rows, execution='not-operated')

@@ -1,71 +1,37 @@
-# be-input — Backend input và xử lý dữ liệu
+# be-input — Backend inputs and data processing
 
-## Ý định, applicability và discovery
+## Intent, applicability, and discovery
 
-Kiểm dữ liệu do bên không tin cậy kiểm soát đi tới xử lý/tiết lộ gì. Chọn public/protected HTTP/GraphQL/RPC entrypoints trong scope, cùng jobs/events/files/library input khi liên quan. Tìm routing/handlers, schemas, services, repository wrappers, sinks, responses và logs độc lập matches. Không tự mở authentication/authorization assessment chỉ vì đọc principal để hiểu flow.
+Discover public/protected HTTP/GraphQL/RPC, jobs/events/files/library inputs, handlers, schemas, services, repository wrappers, sinks, responses, and logs independently of matches. Reading principals to understand a flow does not open a separate authentication/authorization assessment.
 
-## BE-IN-01 — Input có tham gia SQL/query construction không an toàn không?
+## BE-IN-01 — Can input affect SQL/query construction unsafely?
 
-- **Áp dụng/discovery:** có persistence/query; tìm raw SQL, ORM builders, sort/filter/dynamic identifiers và wrappers gọi chúng.
-- **Kỳ vọng/nguồn:** tách bound values khỏi SQL text; identifiers theo mapping/allowlist phù hợp API. Đọc query contract, schema và coding policy; chưa có policy thì ghi giả định.
-- **Source/kỹ thuật:** theo handler/job → service → wrapper → query; bundled SQL taint/construction cho TS, search sinks và manual callers/bindings khi xuyên file.
-- **Control/giải thích khác:** hằng số/constant folding, SQL parameter placeholders, allowlist identifiers thực, ORM escaping. Có mảng parameters chưa chứng minh text an toàn; sort direction cũng cần đọc.
-- **Evidence/giới hạn:** locations nguồn, construction, sink và binding/control, source state/thao tác; manual path là source-review. Static không chứng minh DB runtime hoặc exploit.
-- **Khép/bước tiếp:** trả lời cho query paths trong scope sau đọc provenance và controls; thiếu wrapper thì tìm/đọc nó, thiếu source thì giữ gap cụ thể. Zero matches không khép inventory queries.
+Discover raw SQL, ORM builders, sorting/filtering/dynamic identifiers, and wrappers. Expect bound values separated from SQL text and appropriate identifier mappings/allowlists under the query/schema/policy contract. Trace handler/job → service → wrapper → query using bundled local TS detectors plus searches/manual caller/binding review. Inspect constants, placeholders, actual allowlists, ORM escaping, and sort directions: a parameters array alone does not establish safe SQL text. Record input/construction/sink/binding/control locations and manual provenance. Close only after relevant query paths and controls are understood; find missing wrappers or retain specific source gaps. No static database/exploit claim.
 
-## BE-IN-02 — Input tới shell/process/eval/template execution như thế nào?
+## BE-IN-02 — How does input reach process, shell, code, or template execution?
 
-- **Áp dụng/discovery:** tìm process launch, eval/new Function, template compile/render hoặc expression interpreter trong flow được giao.
-- **Kỳ vọng/nguồn:** command/code và template trust theo feature contract; input không thành cú pháp thực thi ngoài ý định. Tìm job spec, command mapping và template policy.
-- **Source/kỹ thuật:** đọc imports/API, command/argv/options, caller và engine; shell/eval bundled, search template wrappers, manual execution path.
-- **Control/giải thích khác:** argv không qua shell khác command string; `shell:true`, shell interpreter argv, quoting, fixed command mapping, trusted templates và sandbox semantics cần kiểm thật.
-- **Evidence/giới hạn:** ghi execution API/options, nguồn và transformations/controls đã đọc, không gọi mọi process use là injection. Không chạy payload hay process product để chứng minh.
-- **Khép/bước tiếp:** giải thích được cái gì thực được thực thi và input ảnh hưởng ra sao; đọc wrapper/options còn thiếu hoặc bổ sung local rule/fixture phù hợp.
+Discover process launches, eval/Function, template engines, and interpreters. Derive code/command/template trust from feature/job contracts and policy. Inspect imports, APIs, command/argv/options, callers, and engines. Distinguish argv from shell strings, shell:true, interpreter arguments, quoting, fixed mappings, trusted templates, and sandbox semantics. Record actual execution options, input transformations, and controls. Explain what executes and how input affects it; inspect missing wrappers/options or add useful local fixtures. Process usage alone is not injection; do not execute product processes/payloads to prove it.
 
-## BE-IN-03 — Input tới filesystem/upload/archive có giữ đúng boundary không?
+## BE-IN-03 — Do filesystem, upload, and archive operations preserve boundaries?
 
-- **Áp dụng/discovery:** tìm upload/download, extract/archive, path từ request/job và mọi điểm đọc/ghi/rename/copy/link.
-- **Kỳ vọng/nguồn:** thao tác trong base directory/tài nguyên được phép; tên file, archive entries và symlinks theo storage/feature policy.
-- **Source/kỹ thuật:** bundled filesystem usage/taint cho API TS được nhận diện; search upload/archive libs, đọc normalization → containment → actual read/write và callers.
-- **Control/giải thích khác:** `join`/normalize không tự containment; kiểm canonicalization, separator/prefix, symlink/TOCTOU và generated filename. Với copy/rename đọc cả source/destination.
-- **Evidence/giới hạn:** locations input/base/check/sink, hướng đọc/ghi và giả định filesystem/runtime; không invent effective permissions.
-- **Khép/bước tiếp:** đã đối chiếu paths/entries và controls liên quan câu hỏi; thư viện extract hoặc storage wrapper chưa đọc thì đọc tiếp, không lấy không match làm safe.
+Discover upload/download/extract/archive and request/job-controlled read/write/rename/copy/link paths. Expect authorized base directories/resources, entry names, and symlink behavior under storage policy. Trace normalization → containment → actual operations and callers, using filesystem candidates plus library review. join/normalize does not establish containment; inspect canonicalization, separators/prefixes, symlinks/TOCTOU, generated names, and both source/destination for copies/renames. Record input/base/check/sink and read/write direction without inventing runtime permissions. Read missing extraction/storage wrappers; zero matches do not close file inventory.
 
-## BE-IN-04 — Input điều khiển outbound network destination ra sao?
+## BE-IN-04 — How does input control outbound destinations?
 
-- **Áp dụng/discovery:** callback/webhook/import/proxy/fetch từ input; tìm HTTP clients, URL/options/baseURL và redirects.
-- **Kỳ vọng/nguồn:** destination/protocol/redirect policy theo chức năng; đọc integration spec, allowlists, proxy/egress config được cung cấp.
-- **Source/kỹ thuật:** bundled HTTP usage/request taint cho local TS, search client factories; manual URL assembly, parser và redirect/caller options.
-- **Control/giải thích khác:** fixed server destinations, host/scheme allowlist áp dụng sau parsing, redirect validation và effective consumer. URL parsing không tự chống SSRF; network runtime có thể hạn chế nhưng chưa biết phải ghi rõ.
-- **Evidence/giới hạn:** nguồn, destination fields, checks và redirect/config locations; không khẳng định reachability/DNS behavior chưa quan sát.
-- **Khép/bước tiếp:** kết luận ở mức source cho destinations thuộc scope; config/egress chưa cung cấp giữ limitation, tiếp tục review không phụ thuộc runtime.
+Discover callbacks/webhooks/import/proxy/fetch, HTTP clients, URL/options/baseURL, and redirects. Derive destination/protocol/redirect requirements from integrations/allowlists/provided egress policy. Inspect client factories, URL construction/parsing, redirect settings, and callers with local taint/search/manual review. Fixed destinations, post-parse scheme/host allowlists, and redirect controls matter; parsing alone does not prevent SSRF. Record input/destination/check/config locations. Limit conclusions to inspected source, without unobserved DNS/reachability claims; missing runtime egress configuration does not block independent review.
 
-## BE-IN-05 — Binding/deserialization/mass assignment có cho sửa protected fields không?
+## BE-IN-05 — Can binding/deserialization/mass assignment modify protected fields?
 
-- **Áp dụng/discovery:** DTO/entity binding, deserialize, object spread/assign/merge/create/save; tìm fields user được phép sửa và fields server quản lý.
-- **Kỳ vọng/nguồn:** field allowlist và validation theo API/schema/policy; tenant/owner/role/state có authoritative source rõ.
-- **Source/kỹ thuật:** bundled body/ValidationPipe candidates; search serializers/binders và manual validation invocation, merge order tới điểm persistence.
-- **Control/giải thích khác:** TS types không là runtime filter; DTO declarations chưa chứng minh pipe chạy; create/merge có thể chưa ghi DB. Đọc hooks, wrappers, overwrite order và caller trust.
-- **Evidence/giới hạn:** locations binding/validator/write, fields mô tả đã lọc và policy/control đã đọc; không copy sensitive payload hoặc suy mọi field writable.
-- **Khép/bước tiếp:** xác định fields thực tới write và control có hiệu lực; thiếu policy giữ expectation giả định/open phần phụ thuộc, vẫn đọc path khả thi.
+Discover DTO/entity binding, deserialization, spread/assign/merge/create/save, editable fields, and server-managed owner/tenant/role/state. Derive field allowlists/validation/authority from APIs/schemas/policy. Review actual validation invocation and merge order through persistence, using body/ValidationPipe candidates and binder searches. TS types are not runtime filters; declarations do not establish active pipes; create/merge may not write. Inspect hooks/wrappers/overwrites/caller trust. Record binding/validator/writer/control locations without sensitive payloads or blanket writability claims. Explain actual fields reaching writes; retain labeled assumptions/policy dependencies while completing feasible paths.
 
-## BE-IN-06 — Sensitive data có tới response/log/error ngoài ý định không?
+## BE-IN-06 — Can sensitive data reach unintended responses, logs, or errors?
 
-- **Áp dụng/discovery:** tìm dữ liệu cá nhân/credential/tài sản theo chức năng, serializers, error envelope và logger sinks.
-- **Kỳ vọng/nguồn:** disclosure/redaction theo API/data classification/logging policy; implementation chỉ là hypothesis nếu policy chưa có.
-- **Source/kỹ thuật:** bundled sensitive names/logger/error/HTTP candidates, search actual models và manual flow tới response/log handler, serialization và config.
-- **Control/giải thích khác:** tên token có thể là public identifier; hashing/redaction, disabled log level, serializer exclusion và internal return cần đọc. Không tin tên `redact` trước implementation.
-- **Evidence/giới hạn:** ghi vị trí/loại dữ liệu, sink và control, không ghi secret values. Static chưa chứng minh log access, response runtime hay dữ liệu thật.
-- **Khép/bước tiếp:** đã hiểu data representation/exposure trên paths chọn; đọc logger/serializer/caller còn thiếu; needs-review giữ gaps nếu chưa thể phân định.
+Discover feature-specific personal/credential/asset data, serializers, error envelopes, and loggers. Derive disclosure/redaction requirements from API/classification/logging policy, labeling source assumptions. Combine naming/logger/error/HTTP candidates with actual model/serializer/caller/config review. Token names may be public IDs; inspect hashing, real redaction implementations, disabled levels, serializer exclusions, and internal returns. Record locations/data types/sinks/controls without values. Explain representation/exposure on selected paths, retain specific gaps, and avoid unobserved log-access/response/runtime-data claims.
 
-## Mẫu ghi đường dữ liệu theo nhánh
+## Review ledger and completion
 
-Trong `questions[].result` hoặc manual review, ghi `{entrypoint_input, trust_source, transform_validator, sink, control, response_or_write, callers, locations, limitations}`. Mỗi giá trị là facts đã đọc; chưa biết để null. Ghi public/protected theo routing/guard source, không mô tả đã thử session runtime. Supporting library/module ghi vai trò hỗ trợ và callers, không gán là input entrypoint.
+Record `{entrypoint_input, trust_source, transform_validator, sink, control, response_or_write, callers, locations, limitations}` in `questions[].result` or manual-review observations. Values describe actually inspected facts; unknowns remain null with specific next steps.
 
-Ví dụ synthetic: create account dùng allowlist trước persistence nhưng update spread body rồi override owner; tách hai instances BE-IN-05 vì control/overwrite order khác. Ghi validation implementation, thứ tự transformations và writer thực cho từng nhánh. Không mở toàn AUTH/AUTHZ chỉ vì đọc principal. N/A filesystem cần discovery fact không có file operations trong scope, không từ zero matches.
+Public/protected comes from source routing/guards, rather than runtime sessions. Supporting libraries are not automatically entry points. Split create/update when controls or overwrite order differ; map shared callers without multiplying root causes. Filesystem N/A requires discovery facts. The 21 rules in be-public-static.yml are TS/Nest/Node/TypeORM and bundled-partial; templates/archive/deserialization may require local/custom/manual techniques. Close inventory/questions, rather than a rule count.
 
-## Mapping, thích nghi và khép track
-
-[Catalog](../rule-catalog.md) map `be-public-static.yml` (TS/Nest/Node/TypeORM, bundled-partial), cùng rules liên quan ở AUTH/ownership/config khi câu hỏi cần. Templates/archive/deserialization tùy stack thường manual-review hoặc custom-rule-needed. Không coi tên public là giới hạn chỉ anonymous source. Ngoài stack thì tìm repo/local rules, custom rule có fixtures khi hữu ích, manual review và giữ phần chưa làm.
-
-Khép theo inventory/questions đã chọn, không theo đủ 21 rules. Ví dụ export invoice được API và worker gọi: cùng helper nối filename chỉ thành một root cause, evidence liên kết cả callers khi đã đọc; runtime file access chưa được chứng minh.
+Consult the [catalog](../rule-catalog.md) and [rules/triage](../rules-and-triage.md). Missing detectors require applicable local/custom/manual work, rather than N/A or clean results. Close assigned inventory/questions with source-appropriate claims and explicit runtime/policy limitations.

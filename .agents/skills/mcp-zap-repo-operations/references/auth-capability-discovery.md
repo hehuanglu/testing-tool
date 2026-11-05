@@ -1,19 +1,13 @@
-# Khảo sát auth theo góc nhìn tester
+# Discover authentication as a tester
 
-Dùng khi chưa có contract nội bộ hoặc cần biết auth thực sự hỗ trợ gì. Tự đọc source/spec/UI/traffic được phép; không yêu cầu PM cung cấp tài liệu hoặc token field đã tìm được. Discovery source không cần chờ Docker/auth runtime.
+Use discovery to support the [criteria-driven intake and planning phases](criteria-driven-workflow.md#intake-and-the-two-approvals). Source-only inspection may precede either approval gate; live discovery needs existing target/effect authority, and active testing waits for plan approval. This reference adds no track-wide assignment. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-## Thu thập khả năng có thể quan sát
+Use this when internal contracts are absent or actual authentication capabilities are unclear. Inspect permitted source/spec/UI/traffic yourself; do not ask the requester for discoverable documentation/token fields. Source discovery does not wait for Docker/runtime authentication.
 
-Ghi method–route, loại thông tin source/spec/runtime và kết quả thật. Login/register, protected business request và account/role là cơ bản; expiry/refresh/logout/revoke/role change chỉ khảo sát sâu khi liên quan mục tiêu. Không lưu password/token trong báo cáo. Không cần hash/receipt hoặc field evidenceRefs cho từng capability ở output.
+Record method/route, source/spec/runtime provenance, and actual observations. Establish login/register, protected requests, and actor/role basics. Explore expiry/refresh/logout/revoke/role changes deeply only when relevant. Reports omit passwords/tokens and need no per-capability hashes/receipts/evidenceRefs.
 
-Chọn protected probe/strategy phù hợp để xác định đúng actor và role; login200 hay JWT claim chưa kiểm không tự là đủ. Không bắt mọi product có `whoami` hoặc cùng token pointer/issuer. Giữ các role chưa có account trong danh sách trách nhiệm, tiếp tục role đủ điều kiện.
+Select a suitable protected probe/strategy to establish actor/role. Login 200 and unverified JWT claims alone are insufficient. Products need not expose whoami or common token pointers/issuers. Keep unavailable roles in inventory while continuing eligible ones.
 
-## Quyết định coverage
+Distinguish source-supported but runtime-unverified features; actual actor/route/time-bound results; features not observed; tested incorrect behavior; and missing capability/permission/fixture dependencies. Missing prerequisites do not imply N/A or remove obligations. Do not convert failures to skips or source support to runtime pass.
 
-- Source/spec có tính năng nhưng chưa chạy: ghi chưa xác minh runtime và điều kiện cần.
-- Thao tác đã chạy: ghi kết quả đúng actor/route/thời điểm và giới hạn; không lấy source-supported thành pass.
-- Chưa thấy trong phạm vi khảo sát: ghi chưa quan sát, không khẳng định toàn product không có.
-- Đã kiểm và sai: ghi kết quả sai, không đổi thành skip.
-- Thiếu capability/quyền/fixture: ghi dependency đúng case, không tự N/A hoặc loại khỏi nhiệm vụ.
-
-Local logout không chứng minh server revoke; login mới khác refresh/resume. Đọc [lifecycle](auth-lifecycle-and-bola-depth.md) khi câu hỏi đó được giao, không đợi TTL hoặc mở campaign mới chỉ để bàn giao scan thường. Kết quả theo [ALERTS/RUN](product-assessment-handoff.md); hoàn tất khảo sát không nghĩa hoàn tất DAST.
+Local logout does not establish server revocation; new login differs from refresh/resume. Read [lifecycle depth](auth-lifecycle-and-bola-depth.md) for assigned lifecycle questions, rather than waiting for TTL or opening another campaign for routine handoff. Deliver the [Drive assessment table](product-assessment-handoff.md); retain RUN/ALERTS/SCOPE_ALERTS internally; discovery completion is not DAST completion.

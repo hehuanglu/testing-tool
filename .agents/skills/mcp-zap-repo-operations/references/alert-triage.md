@@ -1,25 +1,23 @@
-# Triage alert theo kết quả đã có
+# Triage alerts from available results
 
-Dùng khi alert cần giải nghĩa sâu hơn [triage cơ bản](product-assessment-handoff.md#triage-alert-theo-kết-quả). Đọc nội dung đã trả về, giữ native severity/confidence, ghi nhận định và giới hạn; không bắt lưu raw/HTTP archive/hash hay chứng minh exploit cho mọi alert. Không tự mở một campaign mới chỉ để bàn giao kết quả.
+Follow the [agreed tester policy](assessment-policy.md#tester-judgment-and-reported-alerts). Catalog/user business knowledge defines the required protection; the operating agent identifies observed alerts and assesses business risk from actual observations. No independent knowledge attestation, user-authored severity rubric or separate expert signature is required. Native alert content, grouping, severity/confidence and triage remain as ZAP reported, including informational/false-positive labels. Observed ratings are tester judgments with explicit basis, not native fields or invented CVSS scores. Reporting is consolidated; do not add severity-triggered immediate escalation.
 
-## Injection
+Apply the [ZAP result boundary](zap-result-boundary.md): native alerts and ZAP-derived observations are distinct; external-tool/source-only findings do not enter this skill’s ALERTS output.
 
-Đọc route/parameter/vector, baseline/input và phản hồi mà rule viện dẫn nếu có. Phân biệt payload bị validation/guard chặn, reflection và hành vi khai thác đã quan sát. Native alert có thể giữ nguyên cùng nhận định chưa xác nhận impact; HTTP200 hoặc không tái hiện một lần không đủ gọi false positive. Thiếu thông tin thì ghi rõ thay vì dựng proof.
+Read returned content with native severity/confidence, bounded interpretation, and limitations. Do not require raw/HTTP archives/hashes/new exploit proof or an additional campaign for every alert. See [handoff](product-assessment-handoff.md).
 
-## Security headers và cấu hình
+For injection, inspect route/parameter/vector/baseline and cited responses where available. Distinguish validation/guard rejection, reflection, and observed exploitation. Retain alerts with unconfirmed impact; HTTP 200 or one failed reproduction does not establish false-positive.
 
-Xác định response thuộc app, tài liệu hoặc proxy/guard nếu thông tin có sẵn; nhận xét theo context. Thiếu header không tự chứng minh exploit. Giữ severity native và mô tả điều quan sát, không áp kết luận một product mẫu cho product mới.
+For headers/configuration, identify application/document/proxy/guard context where possible. Missing headers do not establish exploitation. Preserve native severity without importing another product's conclusions.
 
-## Auth/session Informational
+Informational auth/session detection does not itself mean token leakage or broken sessions. Disclosure needs unauthorized receipt observations. Omit token values and do not open expiry/lifecycle campaigns merely to explain informational alerts.
 
-Công cụ nhận diện token/session mechanism không đồng nghĩa token leak hoặc lỗi phiên. Chỉ kết luận disclosure khi có kết quả cho thấy bên không được phép nhận được dữ liệu. Không copy giá trị token vào report; không đợi expiry hoặc mở lifecycle để giải thích Informational.
+For errors/disclosure, distinguish generic errors from actual stack/secret/meaningful data, bound impact, and protect shared outputs. Do not publish raw data on assumed sanitization.
 
-## Error/disclosure
+For observed BOLA/business alerts, inspect actual actor/role/object/owner/relation/state and policy/source expectations, response and available post-state. Separate policy uncertainty from observed failures. Denial status alone does not establish absent side effects; never change expectations to fit outcomes. Observed alerts count as alerts but are not native detector output; identify tester severity/confidence provenance. Supported observations do not close missing endpoint/role coverage under [scope](criteria-driven-workflow.md).
 
-Đọc nội dung lỗi/dữ liệu đã trả về; phân biệt generic error với stacktrace, secret hoặc dữ liệu có ảnh hưởng. Không gán impact vượt điều quan sát được. Bảo vệ dữ liệu nhạy cảm trong báo cáo chia sẻ, không publish raw theo suy đoán đã sanitize.
+## Separate an alert from an ordinary observation
 
-## Direct BOLA/business
+Include a native alert as reported with its native triage/ratings. Include an observed alert when actual ZAP traffic supports a concrete security issue or credible suspicion; record actor/object/policy basis, actual response/effects and remaining uncertainty. A confirmed exploit is not mandatory. Owner success plus non-owner denial is a normal control result in RUN; unauthorized non-owner access is a potential observed BOLA alert. Bare failure/timeout/unknown result without a security signal is RUN work, not an alert.
 
-Đọc actor/role, owner/object/relation/state và expected policy/spec/source hiện có; kết quả response và trạng thái sau thao tác nếu đã kiểm. Tách policy chưa rõ khỏi lỗi thực tế đã thấy. Status deny đơn lẻ không chứng minh mọi side effect; nêu giới hạn phần đã đọc. Không đổi expected theo observed để matched.
-
-Findings direct không phải ZAP alerts; severity do tester đánh giá phải ghi đúng nguồn và mức chắc chắn. Đủ bàn giao observation không đồng nghĩa đã kiểm đủ role/API: phần còn thiếu vẫn nằm trong RUN theo [scope](assessment-scope-and-completion.md).
+Triage legacy zap-derived-observation rows before counting. Keep healthy results, fixture errors and limits in RUN, preserve old raw/history, and do not assume every matched/suspected/inconclusive label identifies an alert. Apply the [canonical alert identity and counting rules](zap-result-boundary.md#alert-counts-and-identities), keeping occurrence and mapping counts separate. Map only semantically relevant original criteria; full criterion coverage is not the purpose of SCOPE_ALERTS.

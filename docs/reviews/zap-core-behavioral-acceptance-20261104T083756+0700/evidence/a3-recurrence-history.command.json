@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "-c",
+    "import json,sys; from zap_assessment.assessment_store import load_current; r,=load_current(sys.argv[1]).operator[\"repairs\"]; assert r[\"status\"]==\"open\" and r[\"history\"][-1][\"kind\"]==\"reopened-after-verification\" and r[\"history\"][-1][\"previousVerification\"][\"verificationResult\"]==\"passed\" and \"verificationResult\" not in r; print(json.dumps(r))",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/state"
+  ],
+  "exitCode": 0
+}

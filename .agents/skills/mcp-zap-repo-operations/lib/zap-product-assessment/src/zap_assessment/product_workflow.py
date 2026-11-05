@@ -14,7 +14,8 @@ FE_TRACKS=('fe-anonymous','fe-authenticated')  # separate research contract; com
 def implementation_pins():
     root=Path(__file__).parent
     files=[*root.glob('product_*.py'),*root.joinpath('recipes').glob('*.py'),*root.joinpath('recipes').glob('*.json'),*root.parent.parent.joinpath('schemas').glob('*.json'),root/'signed_identity.py',root/'recipe_mapping.py',root/'bola_research.py',root/'bola_http.py',root/'discovery.py',root/'research.py',root/'research_product.py',root/'anonymous.py',root/'anonymous_runner.py']
-    files.append(root/'archive_control.py')
+    files.extend([root/'archive_control.py',root/'security_scope.py'])
+    files.extend(root/n for n in ('business_discovery.py','question_evidence.py','work_selection.py','readiness.py','coverage_presentation.py','residual_review.py'))
     return {str(f):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(set(files))}
 
 def recipe_pin(recipe):

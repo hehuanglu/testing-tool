@@ -1,0 +1,3 @@
+Use the skill at "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/SKILL.md". Official state directory "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/state".
+Run scope state-inspect and scope state-next with that --state-dir. Use scope state-inspect-recovery to reconcile pending effects before starting conflicting work.
+First priority {"kind": "prepare", "reasonCode": "acquire-execution-lease", "workId": "effect-dispatch", "caseId": "T-EFFECT"}. Continue the whole remaining approved workflow. Revalidate executor admission, retain observations, and persist canonical updates before selecting again. Apply the workflow stopping rule and retain pending supervision at any handoff.

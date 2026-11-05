@@ -272,11 +272,9 @@ def execute(p,inspection,out,actor,jar,*,interrupt_after=None):
             save(out,'WIRE_IDENTITY.json',check_wire_history(history,q['origin'],q['identityPath'],actor['jwtTrust'],mapping,actor['subject'],actor['role']))
         protected=[m for m in history if protected_success(m)]
         if not protected:raise ValueError('protected ZAP traffic absent')
-        alerts=[];count=int(zap.call('core','view','numberOfAlerts',baseurl=q['origin'])['numberOfAlerts'])
-        for offset in range(0,count,100):
-            batch=zap.call('alert','view','alerts',baseurl=q['origin'],start=offset,count=min(100,count-offset))['alerts']
-            if len(batch)!=min(100,count-offset):raise ValueError('alert pagination incomplete')
-            alerts.extend(batch)
+        from .result_readers import read_native_alerts
+        alerts=read_native_alerts(lambda component,category,name,args:zap.call(component,category,name,**args),q['origin'])
+        count=len(alerts)
         from .anonymous import validate_exports
         validate_exports(history,alerts,len(history),count)
         save(out,'alerts-native.json',alerts);save(out,'ALERTS.json',{'alerts':alerts})
@@ -302,14 +300,20 @@ def execute(p,inspection,out,actor,jar,*,interrupt_after=None):
         save(out,'ERROR.json',{'type':type(e).__name__,'frames':[{'file':Path(f.filename).name,'line':f.lineno,'function':f.name} for f in traceback.extract_tb(e.__traceback__)]})
     finally:
         if run:
-            run.finish()
-            if not (out/'report.json').exists():
-                try:
-                    run.tool('zap_passive_scan_wait',{'timeoutSeconds':60,'pollIntervalMs':1000})
-                    report_readback(run,out)
-                    save(out,'PARTIAL_REPORT.json',{'status':'readback-complete','executionStatus':result['executionStatus'],'securityVerdict':'inconclusive'})
-                except Exception as partial:
-                    save(out,'PARTIAL_REPORT.json',{'status':'unavailable','errorType':type(partial).__name__,'securityVerdict':'inconclusive'})
+            try:
+                run.finish()
+                if not (out/'report.json').exists():
+                    try:
+                        run.tool('zap_passive_scan_wait',{'timeoutSeconds':60,'pollIntervalMs':1000})
+                        report_readback(run,out)
+                        save(out,'PARTIAL_REPORT.json',{'status':'readback-complete','executionStatus':result['executionStatus'],'securityVerdict':'inconclusive'})
+                    except Exception as partial:
+                        save(out,'PARTIAL_REPORT.json',{'status':'unavailable','errorType':type(partial).__name__,'securityVerdict':'inconclusive'})
+            except Exception as finalization:
+                # Journal/report IO failure must not prevent exact owned runtime
+                # cleanup. Keep the failure in memory until reporting is possible.
+                result.update(executionStatus='failed',evidenceStatus='incomplete',securityVerdict='inconclusive',
+                              gateDecision='block',finalizationError=type(finalization).__name__)
         if resources is None and (out/'resources.json').exists():resources=json.loads((out/'resources.json').read_text())
         if resources:
             try:

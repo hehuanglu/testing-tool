@@ -185,6 +185,7 @@ def execute(p,inspection,out,actors,*,interrupt_after=None):
                     pages.append(page);page_evidence.append(page_ref)
             complete=all(project_response(v,fields,[])[1] for v in (before,after,body,*related_before.values(),*related_after.values(),*pages,*([created['body']] if created else [])))
             o={'relatedBefore':related_before,'relatedAfter':related_after,'pages':pages,'pageEvidence':page_evidence,'caseId':c['id'],'before':before,'after':after,'response':{'status':s,'body':body},'captureComplete':complete,'disclosed':disclosed,'httpEvidence':ref}
+            o['provenance']={'transport':'direct-http'}
             if created:o['createdRead']=created
             observations.append(o);save(out,'observations/'+c['id']+'.json',o);j.append('ack',{'caseId':c['id'],'responseRef':ref})
     except Exception as exc:

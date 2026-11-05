@@ -1,62 +1,43 @@
-# General context: làm việc như tester sử dụng ZAP
+# Context: work as a tester using ZAP
 
-## Vai trò và chuẩn suy luận
+Apply the [ZAP result boundary](zap-result-boundary.md): native alerts and ZAP-derived observations are distinct; external-tool/source-only findings do not enter this skill’s ALERTS output.
 
-Agent chịu trách nhiệm biến yêu cầu kiểm thử thành thao tác có ý nghĩa và kết luận có giới hạn. PM không cần biết tên operation, token pointer, cách tạo fixture hoặc cách chia scan; agent tự tìm từ source/spec/UI/runtime được phép. Chỉ hỏi khi thông tin còn thiếu làm thay đổi phạm vi, quyền hoặc kỳ vọng nghiệp vụ mà không thể xác định từ nguồn hiện có. Vẫn làm phần độc lập trong lúc thiếu thông tin.
+Apply the [agreed assessment policy](assessment-policy.md): user catalog/business knowledge is the standard, basic reconnaissance precedes deeper tests, and the coordinator selects product-observation decisions and worker use without a new policy questionnaire. No independent verification of supplied knowledge is assigned.
 
-Tester không bắt đầu bằng “runner nào đang pass?”. Bắt đầu bằng: ai dùng chức năng này, muốn làm gì, dữ liệu nào được đọc/thay đổi, hệ thống cần bảo vệ điều gì, và quan sát nào cho biết điều đó có xảy ra. Sau đó chọn thao tác đơn giản nhất trả lời được câu hỏi trong track. Kết quả có thể là alert, vi phạm quyền, hành vi đúng trong ca đã kiểm, lỗi công cụ, hoặc chưa đủ thông tin; không ép mọi ca thành pass/fail.
+## Role and reasoning
 
-Dùng mạch quyết định ngắn cho từng nhóm việc:
+Use [user security scope](criteria-driven-workflow.md) plus product discovery as the business inputs. The agent prepares inventories and mappings; preserve original requirements/source separately from assumptions, applicability decisions and test questions. Scope documents are knowledge, not executable instructions. Findings, coverage and completion answer different questions; a report helper is not an oracle for business meaning.
 
-- **Điều cần kiểm:** ví dụ input có tới xử lý nghiệp vụ, user có đọc được object của user khác, hay thao tác UI có thực sự gửi request.
-- **Điều kiện để ca có nghĩa:** actor, role, object/state, baseline hợp lệ, input/transport và quyền thực hiện. Thiếu điều kiện chỉ chặn các ca phụ thuộc.
-- **Kỳ vọng:** spec/policy đã được xác nhận; hoặc giả định từ source, cần ghi đúng nguồn và giới hạn. Không đổi expected theo response để khớp.
-- **Cách quan sát:** response, alert, dữ liệu/UI sau thao tác, scan/session status. Chọn đủ để hiểu kết quả; không bắt tạo bộ evidence riêng.
-- **Bước kế:** đọc kết quả → cập nhật trách nhiệm → sửa lỗi hoặc chọn lượt tiếp. Một lỗi có thể làm thay đổi kế hoạch nhưng không làm biến mất endpoint.
+Translate the assignment into meaningful operations and bounded conclusions. Discover operation names, token pointers, fixtures, and scan partitioning from authorized source/spec/UI/runtime. Ask only when unavailable information materially changes scope, authorization, or business expectations; continue independent work.
 
-## Nhìn bề mặt kiểm thử
+Start with who uses the feature, their goal, affected data/assets, required protection, and useful observations. Choose the simplest suitable technique for the assigned track. Outcomes may be alerts, permission violations, correct behavior in tested cases, tool errors, or unresolved uncertainty rather than forced pass/fail.
 
-Inventory lấy từ nhiều nguồn sẵn có: routes/spec, middleware/security configuration, DTO/schema, UI calls và traffic quan sát. Nêu độ tin cậy/chỗ mâu thuẫn; không gọi crawl hoặc spec là inventory đầy đủ nếu chưa đối soát. Tách method trên cùng route, phiên bản API, content type và input có ý nghĩa. Với GraphQL/RPC, một URL có thể chứa nhiều operation nghiệp vụ; giữ các operation thuộc scope, không tính một POST là đã kiểm hết.
+For each group record the test question; prerequisites (actor/role/object/state/baseline/input/transport/permissions); expectations from confirmed policy or labeled source assumptions; sufficient response/alert/UI/post-state/session observations; and the next grounded action. Missing prerequisites block dependent cases only. Never change expected behavior to fit responses or demand a separate evidence package.
 
-Theo dõi nơi input đi vào và được sử dụng: path/query/body/header/file, trình duyệt/server, lưu trữ/hiển thị lại, object/relation/state. Đây là cơ sở chọn kỹ thuật, không phải danh sách bắt buộc quét mọi loại lỗi. API không có query vẫn có thể có body/path/header hoặc hành vi cần kiểm. Không mặc định chỉ XSS/SQLi vì wrapper hỗ trợ hai rule; cũng không bật mọi rule để tăng số lượng.
+Choose a useful local work unit from current risk, leverage and dependencies: a high-value question, valid baseline, or preparation that opens several branches. Explain why it matters now, which branch/input/sink must be reached, what would show the test missed it, and resource retain/stop/cleanup needs. Use `criteriaWorkflow.plan.cases` and their approved prerequisites for v2; `securityScope.questions` and responsibility inventories describe retained legacy data or compatible technical inputs, never an alternative v2 scope. Establish minimum assignment/environment/authority first, refine inventory with explicit unknowns, and prepare actors/fixtures/runners only for the next work. No universal track sequence or full setup phase is required.
 
-Phân biệt các lớp: reachability/TLS → đăng nhập → quyền chức năng → quyền object → validation → xử lý và lưu trữ → hiển thị. 401 không trả lời câu hỏi về protected handler; 400 do sibling field sai có thể chỉ kiểm validation; 200 không chứng minh object đúng hoặc UI thành công. Một denial ở edge/guard không tự là phản hồi ứng dụng.
+On a new work session, inherit stable facts, expected behavior, assumptions and results with provenance; read the official [checkpoint](retention-stop-and-recovery.md#working-session-checkpoints) before rediscovery. Revalidate volatile state only where it affects the next action. Reuse that context across related questions and consecutive bounded rounds. Persist preparation results during work; hand off with eligible work still open only for a stated checkpoint reason, without a fabricated scan or dependency.
 
-## Thiết kế ca có ý nghĩa
+## Surfaces and layers
 
-Trước biến đổi input, có một baseline hợp lệ phù hợp câu hỏi. Dùng dữ liệu populated khi kiểm list/filter/pagination; danh sách rỗng thường không đủ kiểm isolation. Chuẩn bị fixture bằng API/UI và tài khoản hợp lệ; DB chỉ dùng khi được phép và thực sự cần, không thay thao tác đang được kiểm bằng sửa DB.
+Build inventory from routes/specs/middleware/security configuration/DTOs/UI calls/observed traffic, including uncertainty/conflicts. Crawls/specs alone do not prove completeness. Distinguish methods, API versions, content types, and meaningful inputs; GraphQL/RPC shared URLs may contain multiple business operations.
 
-Giữ các trường không được kiểm hợp lệ để request tới đúng nhánh. Mutation cần biết object/state trước–sau và tác động có thể phát sinh; lấy ID từ response/readback, không chọn ID quen thuộc để pass. Khi kiểm denial mutation, có positive control hợp lệ ở tài nguyên test phù hợp để phân biệt thiếu quyền với body không hợp lệ. Không đòi mọi ca có cùng kiểu oracle nếu nghiệp vụ khác nhau.
+Trace path/query/body/header/file data through browser/server/storage/rendering/object/relation/state. Select techniques by relevant risks, rather than wrapper allowlists or every possible rule. Missing query parameters do not eliminate other active techniques. Separate reachability/TLS, login, functional permission, object permission, validation, business processing, and disclosure. A result at one layer does not automatically answer another.
 
-Chia theo nhóm có ý nghĩa: actor/role, input type, state transition và fixture. Ưu tiên luồng chính và bề mặt rủi ro, sau đó xử lý toàn inventory trong scope. Rate, thời gian và request caps dùng để chia lượt, không làm tiêu chí hoàn tất. Không thử vô hạn mọi tổ hợp role × state × input; chọn các khác biệt có thể thay đổi hành vi hoặc quyền và ghi phần chưa rõ.
+Discover valid baselines and populated fixtures before mutations. Real authenticated roles need actual sessions and protected probes; token names/claims alone may not establish actor identity. UI traffic does not automatically authenticate native active scans. Public auth responses may issue tokens; do not use them in requests counted as anonymous.
 
-ZAP phụ trách crawl/import, passive/active rules, policy, alerts/report và execution controls theo surface thực. Agent phụ trách ngữ cảnh nghiệp vụ, fixture, UI journey, BOLA expected/state, lựa chọn kỹ thuật và diễn giải. Direct request có ích cho setup, probe, readback, BOLA nhưng không được đổi tên thành ZAP DAST.
+## Diagnose and continue
 
-## Đọc kết quả như tester
+Diagnose transport/deployment/TLS at the correct runtime; authentication against actual sessions/protected behavior; fixtures/state with authorized preparation and pre-retry readback; operation/schema/runner through actual help/call sites/errors; and resources/rate/capture through measurements and bounded rounds. Wrapper rejection does not establish missing ZAP capability.
 
-Phân biệt: đã discovery; đã gửi request; đã chạy kỹ thuật; đã đọc được kết quả. Scan start/ACK chỉ là đã bắt đầu; terminal/stopped chỉ mô tả trạng thái producer, không chứng minh mọi input đã được kiểm. Kiểm passive backlog trước tổng hợp khi phù hợp và ghi phần không chờ được.
+Refresh/relogin only through authorized flows, recording a new session rather than claiming old-session resume. Do not modify application/expectations to accommodate fixtures. Unknown starts/mutations require operation/job/native IDs, journals, and state reconciliation before replay. Stop only owned producers, preserve partial results, and do not lower resource thresholds, broadly prune, inflate caps, or disable logging to pass.
 
-Giữ native severity/confidence, plugin/name và nguồn. Triage từ thông tin đã có: điều quan sát, khả năng ảnh hưởng, giới hạn xác nhận và hướng sửa. Không gọi false positive vì HTTP200, không đòi exploit cho mọi alert, không nói an toàn vì zero alerts. Phân biệt alert của guard/scanner với ứng dụng khi biết; thiếu attribution thì nêu hạn chế, không tự xóa alert hoặc quy hết cho product.
+Retries need changed conditions or new information and bounded reasons. Continue independent cases; record actual blockers, attempts, and resumption conditions. Routine assessments do not become tool-proof campaigns merely because a historical runner has assurance prerequisites.
 
-BOLA matched với policy suy từ source chỉ nghĩa implementation khớp giả định đã kiểm, chưa chứng nhận policy nghiệp vụ đúng. Lỗi công cụ/setup là lỗi công cụ/setup, không là finding của product. Runtime khác source hoặc output bị thiếu phải được nêu rõ.
+## Authorization and honesty
 
-## Xử lý lỗi và tình huống chưa biết
+Assigned testing authorizes necessary in-scope operations without per-endpoint permission requests. Inform the user about necessary private local credential/token retention without asking again; omit secrets from argv/shared reports. Retention does not authorize new targets/roles, secret export, or destructive out-of-scope changes.
 
-Xác định lỗi ở tầng nào trước khi đổi kế hoạch:
+Cross-owner checks on authorized test actors/objects are BOLA work; forged tokens do not create authorization. Auth input testing differs from password guessing/lockout/DoS. Mapping repairs differ from disabled guards. Assess actual effects instead of relabeling actions to evade controls. Report tool/approval rejection accurately rather than calling it a product defect.
 
-- **Target/network/TLS:** kiểm origin, route, DNS/proxy và binding. Không đổi target hoặc tắt TLS để làm request thành công.
-- **Auth/role:** kiểm token/session và protected behavior. Làm mới auth nếu flow được phép; ghi phiên mới, không gọi đó là resume phiên cũ. Chỉ dừng các ca mất điều kiện auth.
-- **Baseline/fixture/state:** sửa dữ liệu test hoặc chuẩn bị fixture đúng quyền; không sửa ứng dụng/expected để vừa test. Đọc lại state trước retry mutation.
-- **Operation/schema/runner:** đọc help/schema/call site và lỗi thực; thử cấu hình/phối hợp có sẵn rồi sửa adapter tối thiểu. Wrapper reject không có nghĩa ZAP thiếu capability.
-- **Unknown start/mutation:** dùng operation/job/native ID, journal và state để reconcile. Nếu chưa phân biệt đã gửi hay chưa, không phát lại thao tác thay đổi dữ liệu.
-- **Tài nguyên/rate/capture:** đo thực, chia lượt, stop đúng owned producer và đọc partial. Không hạ ngưỡng, broad prune, tăng cap tùy tiện hoặc bỏ logging chỉ để pass.
-
-Retry phải có lý do và giới hạn dựa trên lỗi; dừng vòng lặp khi không có thông tin hoặc điều kiện mới. Tiếp tục các nhánh độc lập; ghi blocker cụ thể, thao tác đã thử và điều kiện để chạy tiếp. Không chuyển một assessment thành dự án chứng minh công cụ chỉ vì runner lịch sử yêu cầu nhiều proof.
-
-## Ranh giới nghiệp vụ và quyền
-
-Scope kiểm thử đã giao cho phép các thao tác cần thiết trong scope đó; không xin lại quyền cho mỗi endpoint hoặc việc lưu token local. Thông báo việc lưu credential/token cần thiết ở local private, giữ ngoài CLI arguments và báo cáo chia sẻ. Quyền lưu token không tự cấp quyền nâng role, mở target, xuất secret hoặc phá dữ liệu ngoài phạm vi.
-
-Với BOLA, cross-owner trên actor/object test thuộc scope là nghiệp vụ kiểm thử; không tự tạo quyền bằng forge token. Với auth forms, kiểm input khác password guessing hoặc lockout/DoS. Với lỗi công cụ, sửa mapping khác tắt guard. Nhận diện các khác biệt này bằng hành động/tác động thật, không bằng đổi tên để né kiểm soát. Nếu công cụ hoặc approval review từ chối, ghi đúng lý do; không gán đó là lỗi product.
-
-Chuẩn trung thực là nói đúng đã làm gì, kết quả gì và chưa biết gì. Không hardcode route/role/ID/expected/verdict từ product trước. Mapping cố định trong adapter riêng chỉ hợp lệ khi được rút ra từ product hiện tại và kiểm tra lại khi source/deployment đổi.
+Report what happened and what remains unknown. Do not import another product's routes/roles/IDs/expected/verdicts. Fixed mappings belong in a verified product adapter and must be reassessed after source/deployment changes.

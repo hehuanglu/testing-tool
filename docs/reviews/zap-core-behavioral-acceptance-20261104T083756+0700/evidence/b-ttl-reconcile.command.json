@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "-m",
+    "zap_assessment.product_cli",
+    "scope",
+    "criteria-reconcile-action",
+    "--state-dir",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/state",
+    "--packet",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/packets/b-ttl.json",
+    "--action-id",
+    "read-ttl",
+    "--operation-id",
+    "observation-t-ttl",
+    "--release"
+  ],
+  "exitCode": 0
+}

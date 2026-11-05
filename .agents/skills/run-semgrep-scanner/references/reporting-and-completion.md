@@ -1,108 +1,80 @@
-# Hai file kết quả và completion
+# Two result files and completion
 
-## Trạng thái ở hai chiều
+## Separate status dimensions
 
-Round: `completed`, `partial`, `blocked`, `interrupted`. Completed khi output đọc được và không còn lỗi làm thiếu mục tiêu lượt; exit/counts/errors lưu riêng. Có findings vẫn completed được. Partial khi còn phần thiếu; blocked khi chưa thực hiện được phần kiểm có nghĩa; interrupted khi bị ngắt.
+Rounds use `completed`, `partial`, `blocked`, `interrupted`. Completed means readable valid output with no error preventing the round's objective; findings do not prevent completion. Partial means meaningful but incomplete work, blocked means no meaningful check could execute, and interrupted means execution was interrupted. Retain native exit/counts/errors separately.
 
-Assessment và track: `completed`, `partial`, `blocked`, `stopped`. Completed khi inventory/scope và mức triage được giao đã xử lý, không còn bước đủ điều kiện bỏ ngỏ. Supported issues không tự làm partial. Partial khi có phần có nghĩa nhưng còn câu hỏi/source/triage cần thiết; blocked khi chưa kiểm được phần có nghĩa; stopped khi user yêu cầu dừng. Lỗi một nhánh không ngăn phần độc lập.
+Assessments/tracks use `completed`, `partial`, `blocked`, `stopped`. Completion requires reconciled inventory/scope and assigned triage with no eligible unfinished step. Supported issues do not imply partial status. Required unresolved source/questions/triage mean partial; no meaningful assessment means blocked; user-requested termination means stopped. Continue independent branches.
 
-Questions: `resolved`, `open`, `blocked`, `not-applicable`. Resolved cần câu trả lời đủ căn cứ ở mức nhiệm vụ được giao, có thể là phát hiện issue. `needs-review` còn cần triage thì câu hỏi chưa resolved. Với candidates-only, có thể resolved ở mức phát hiện mẫu đã giao, nhưng phải nói triage ngoài yêu cầu; không gọi completed audit bảo mật. N/A cần căn cứ applicability, không từ thiếu rule.
+Questions use `resolved`, `open`, `blocked`, `not-applicable`. Resolution needs a supported answer at the assigned level and may identify an issue. Required needs-review triage keeps questions unresolved. Candidates-only tasks may resolve detector-search questions while explicitly excluding further triage; do not call them completed security audits. N/A needs applicability grounds, rather than missing rules.
 
-## Handoff và phiên bản
+## Handoff and versions
 
-Assessment mới mặc định dùng đúng **ALERTS.json** và **RUN.json cho mỗi track** ở `<assessment-root>/<track-id>/`, local ổn định ngoài source targets, không overwrite lịch sử. Theo [workflow tuần tự](sequential-track-workflow.md), lưu và tự kiểm cặp hiện tại trước execution track sau. Một track có thể có nhiều rounds; còn external dependency/blocker đã hết bước local khả thi thì bàn giao partial/blocked trung thực và tiếp tục track độc lập. User yêu cầu execution/report gộp thì giữ mapping từng track; mỗi cặp vẫn khép kín references cùng assessment.
+New assessments use exactly **ALERTS.json and RUN.json per track** at `<assessment-root>/<track-id>/`, in stable local storage outside targets, preserving history. Under the [sequential workflow](sequential-track-workflow.md), save/review the current pair before executing the next track. Tracks may contain multiple rounds. Exhausted local options with external dependencies permit an honest partial/blocked handoff and independent continuation. User-requested combined execution/reporting retains individual mappings and self-contained assessment references.
 
-Raw/log/rules/settings private riêng; không bắt folder evidence/archive/hash manifest hay EVALUATION file/canvas. Nhận định tự kiểm ở `tracks[].review` trong RUN; báo cáo đánh giá riêng chỉ tạo khi user giao. Evidence nhúng ALERTS theo [evidence contract](evidence.md). Audit/setup-only/sửa skill không sinh hai báo cáo assessment giả hoặc chạy lại product ngoài yêu cầu.
+Keep raw/log/rules/settings private; do not require evidence folders, archives, hash manifests, EVALUATION files, or canvases. Record self-review in RUN `tracks[].review`; produce a separate evaluation only when requested. Embed [evidence](evidence.md) in ALERTS. Setup/audit/skill maintenance does not authorize product assessments or fabricated result files.
 
-Schemas mới: `semgrep-tester-alerts-v2`, `semgrep-tester-run-v2`. Đây là contract ghi nhận, không schema framework/validator gate mới. Đọc v1 thì ghi evidence chưa có, không invent hoặc rewrite lịch sử.
+Schemas are `semgrep-tester-alerts-v2` and `semgrep-tester-run-v2`: recording contracts rather than new framework/approval gates. Read v1 as-is and identify missing evidence without inventing or rewriting history. Blocked-before-scan findings may be `[]`, but unknown native counts remain null and status states that no scan occurred. Preserve actual manual observations.
 
-Blocked trước scan: findings có thể `[]` nghĩa chưa có observations, nhưng native counts chưa biết để null; status/limitations nói chưa scan, không dùng 0 như kết quả sạch. Manual observations có thật vẫn giữ nguồn manual. Phân biệt empty array đã biết không có phần tử với null chưa có dữ liệu.
+## Shared types
 
-## Kiểu dữ liệu chung
+IDs are strings unique within their collections; references resolve to actual records in the same assessment. Evidence IDs are unique across findings. Use timezone-bearing ISO 8601 timestamps when known; null for unknown/unexecuted/synthetic times. Locations are `{path, start, end}`, product-relative with `{line, column}` positions, 1-based when known and null otherwise. Preserve native end positions without invented ranges. Multiple roots need explicit root mappings.
 
-IDs là string duy nhất trong collection, references phải trỏ record có thật cùng assessment. Timestamps ISO 8601 có timezone khi biết, null khi chưa biết/không thực thi (như ví dụ synthetic). Location là `{path, start, end}`: path product-relative, start/end là `{line, column}` với số 1-based khi biết, null khi chưa biết; không invent vị trí. End theo native output khi có, không suy thêm range. Inventory nhiều roots ghi root mapping trong product/source state để path không nhập nhằng.
-
-Các mảng được biết không có phần tử dùng `[]`; counts/fields chưa quan sát null. Free-text mô tả đã lọc, không token/password/raw headers/source nhạy cảm. Một kết luận chung không thay các liên kết hỏi–thao tác–finding/evidence.
+Use `[]` for known empty arrays and null for unobserved fields/counts. Sanitize text; omit tokens/passwords/raw headers/sensitive source. General conclusions do not replace question/operation/finding/evidence links.
 
 ## ALERTS.json
 
-Top-level: `schema`, `assessment_id`, `status`, `summary`, `findings`.
+Top-level fields: `schema`, `assessment_id`, `status`, `summary`, `findings`.
 
-`summary`:
+Summary fields:
 
-- `native_matches_by_round`: mỗi round ID → số native results thực đọc được hoặc null, kể cả inventory-only matches nếu có; không ép bằng số security findings.
-- `finding_records`: số records observations sau aggregation; không phải số vulnerabilities.
-- `unique_issues`: nullable nếu chưa dedup/triage đủ; chỉ tính issues được support theo phương pháp ghi, không cộng false-positive/needs-review thành vulnerabilities.
-- `by_source`, `by_native_severity`, `by_triage`: counts theo đơn vị finding records. Native severity chỉ Semgrep records có field thật; manual/null severity tách riêng bằng `native_severity_null_records`. Không ép manual vào ERROR/WARNING/INFO.
-- `counting_method`, `deduplication`: mô tả đơn vị/mapping, grouping occurrences và phần chưa xác định. Native matches qua các lượt khác current records/root causes.
+- `native_matches_by_round`: actual native result count per round, including inventory-only matches, or null. It need not equal security findings.
+- `finding_records`: aggregated observation records, rather than vulnerability count.
+- `unique_issues`: nullable until deduplication/triage supports a count; do not count false-positive/needs-review as supported vulnerabilities.
+- `by_source`, `by_native_severity`, `by_triage`: finding-record counts. Use real Semgrep severity only; separate manual/null records with `native_severity_null_records`.
+- `counting_method`, `deduplication`: units, occurrence grouping, many-to-many mappings, and uncertainty. Historical matches differ from current records/root causes.
 
-Mỗi finding có đủ:
+Each finding includes:
 
 - `id`, `source` (`semgrep`/`manual-source-review`), `track_ids`, `question_ids`, `round_ids`, `manual_review_ids`.
-- `rule_id`, `native_severity`, `native_confidence`, `message`: native fields null nếu manual hoặc tool không có. Manual claim nằm ở triage/evidence, không dựng native message. Native message có sensitive interpolation thì redact có ghi chú.
-- `locations`: source/config locations thực. `occurrences`: `{id, round_id, native_rule_id, location, native_identifier}`; native_identifier nullable khi không có. Manual không tạo native occurrence giả. Mỗi native occurrence liên kết đúng round; round_ids có thể nhiều lượt.
-- `related_finding_ids`: observations cùng root cause đã biết; không bắt gộp khi chưa đủ. Nếu aggregate nhiều rules, giữ occurrence native_rule_id; rule_id là ID chung nếu xác định được, nếu không null kèm giải thích.
-- `triage`: `{status, rationale, impact, assumptions, next_step}`. Status `needs-review`, `supported`, `false-positive`, `not-applicable`; impact nullable nếu chưa xác định, assumptions mảng, next_step nullable nếu không còn việc cho record. Evidence hỗ trợ rationale/control review.
-- `tester_priority`: null hoặc `{value, rationale}`, tách native severity; không map tuỳ ý WARNING thành CVSS.
-- `evidence`: mảng records theo [evidence](evidence.md); `evidence_gaps`: mảng thông tin thiếu ảnh hưởng nhận định, không bịa để đủ fields.
+- `rule_id`, `native_severity`, `native_confidence`, `message`: native facts or null when absent/manual. Put manual claims in triage/evidence, rather than fabricated native messages. Note sensitive-message redactions.
+- `locations`; `occurrences` containing `{id, round_id, native_rule_id, location, native_identifier}`. Identifier is nullable; manual findings have no fabricated native occurrence. Preserve actual per-round provenance.
+- `related_finding_ids`: known related observations without forced grouping. For multiple-rule aggregates retain per-occurrence IDs; common `rule_id` may be null with explanation.
+- `triage`: `{status, rationale, impact, assumptions, next_step}`. Status is `needs-review`, `supported`, `false-positive`, or `not-applicable`; impact/next_step may be null, assumptions an array. Support control rationales with evidence.
+- `tester_priority`: null or `{value, rationale}`, separate from native severity; no arbitrary CVSS mapping.
+- `evidence` under the [evidence contract](evidence.md), and `evidence_gaps` affecting claims.
 
 ## RUN.json
 
-Top-level fields phải hiện rõ:
+Include:
 
-- `schema`, `assessment_id`, `status`, `started_at`, `finished_at`, `product` (path/roots/languages/frameworks và thông tin revision có thật), `scope` (yêu cầu/nguồn, gồm mức triage và exclusions).
-- `source_states`: `{id, roots, observed_at, revision, dirty, notes}`; revision/dirty null nếu không biết/không có Git. Ghi change notes khi source đổi; không bắt snapshot/hash.
-- `tracks`: `{id, scope, selected_base_ids, applicability, status, remaining_question_ids, rationale, review}`. Applicability mô tả fact/nguồn/giới hạn (có thể object hoặc text), status theo assessment enum. Track không áp dụng có thể completed với rationale không có trách nhiệm áp dụng, không đặt status N/A ngoài enum. `review` ghi tự kiểm hai chiều như dưới; không default pass từ exit/checker.
-- `inventory`: `{id, kind, name, locations, discovery_source, certainty, track_ids, scope_decision}`. Kind surface/module/function/config phù hợp product; có protocol/entrypoint/input khi hữu ích. Không sinh inventory từ findings whitelist.
-- `questions`: `{id, question, base_question_id, track_id, surface_ids, expectation, expectation_source, techniques, round_ids, manual_review_ids, result, status, next_step}`. Base nullable cho phát sinh, surface_ids trỏ inventory. Expectation phân biệt provided policy với source hypothesis; techniques là những cách chọn/dùng có ghi mức thực thi.
-  Ghi thêm `closure_condition`, `recorded_at`, `introduced_after_round_id`, `changes` theo [checkpoint](tester-workflow.md). `result` có thể là text hoặc object để tách source fact/policy dependency/bước còn làm được; không default verdict. Đây là bổ sung v2, không rewrite báo cáo lịch sử thiếu các fields mới.
-- `rounds`: `{id, purpose, started_at, finished_at, command, cwd, targets, source_state_id, engine, version, rules_selection, exclusions, privacy, exit_code, errors, skips, timeouts, counts, status, finding_ids}`. Command/argv redacted. Rules selection ghi file/ID/origin và configured vs actual capability. Privacy ghi settings/metrics/version check/guard thực, không suy network blocked từ metrics off. Exclusions/suppressions và source paths bị thiếu phải hiện. Unknown errors/skips nếu output không đọc được để null.
-- Round counts: `native_matches`, `rules_configured`, `rules_loaded`, `rules_executed`, `candidate_files`, `scanned_files`, `skipped_files`, `excluded_binary_files`: số thực hoặc null. Không suy loaded/executed từ YAML hoặc time.rules, không suy counts bằng phép trừ inventory khác đơn vị.
-- `manual_reviews`: `{id, question_ids, source_state_id, locations, call_paths, observations, controls, expectation, finding_ids, evidence_ids}`. Ghi implementation đã đọc, tách native execution. Manual steps/locations đúng source state, không fake Semgrep trace.
-- `coverage`: mapping questions/source đã xử lý, skipped/unsupported/chưa đọc/chưa triage và ảnh hưởng; unit rõ, không đổi files scanned thành endpoint/role/runtime coverage.
-  Chỗ thống nhất cho inventory matches là `coverage.inventory_candidate_reviews`, mẫu dưới. Không tạo inventory surface mới chỉ để chứa mỗi match.
-- `limitations`, `unperformed`, `next_steps`: phần ảnh hưởng, lý do, việc đã thử và điều kiện tiếp tục. Giữ mọi remaining_question_ids; hành động còn khả thi phải làm trước handoff theo [vòng trách nhiệm](responsibility-loop.md).
+- `schema`, `assessment_id`, `status`, `started_at`, `finished_at`, `product` (paths/roots/languages/frameworks/known revision), `scope` (request/source, triage depth, exclusions).
+- `source_states`: `{id, roots, observed_at, revision, dirty, notes}`. Unknown/no-Git revision/dirty are null. Record changes without mandatory snapshots/hashes.
+- `tracks`: `{id, scope, selected_base_ids, applicability, status, remaining_question_ids, rationale, review}`. Applicability states facts/sources/limits. Inapplicable tracks may be completed with rationale, rather than inventing an N/A assessment status. Do not default review to pass from exit/checker results.
+- `inventory`: `{id, kind, name, locations, discovery_source, certainty, track_ids, scope_decision}`, adding protocol/entrypoint/input where useful. Findings/rule allowlists do not define inventory.
+- `questions`: `{id, question, base_question_id, track_id, surface_ids, expectation, expectation_source, techniques, round_ids, manual_review_ids, result, status, next_step}` plus `closure_condition`, `recorded_at`, `introduced_after_round_id`, `changes` under [checkpointing](tester-workflow.md). Base is nullable for new questions. Distinguish supplied policy from source hypotheses and planned from executed techniques. Results may be objects separating source facts, dependencies, and feasible steps. Do not backfill historical reports to imply prior observations.
+- `rounds`: `{id, purpose, started_at, finished_at, command, cwd, targets, source_state_id, engine, version, rules_selection, exclusions, privacy, exit_code, errors, skips, timeouts, counts, status, finding_ids}`. Redact argv. Record rule origin/files/IDs and configured versus actual capability. Privacy reflects actual settings/guard; metrics off does not establish blocked networking. Show exclusions/suppressions/missing source. Unreadable errors/skips remain null.
+- Round `counts`: `native_matches`, `rules_configured`, `rules_loaded`, `rules_executed`, `candidate_files`, `scanned_files`, `skipped_files`, `excluded_binary_files`, each actual or null. YAML/`time.rules` do not establish loaded/executed counts; do not subtract incompatible units.
+- `manual_reviews`: `{id, question_ids, source_state_id, locations, call_paths, observations, controls, expectation, finding_ids, evidence_ids}`. Record actual implementation reviews and source state separately from native execution.
+- `coverage`: answered questions/source, skips/unsupported/unread/untriaged scope and effects, with explicit units. Files scanned do not establish endpoint/role/runtime coverage. Use `coverage.inventory_candidate_reviews` for candidate accounting rather than inventing inventory surfaces for every match.
+- `limitations`, `unperformed`, `next_steps`: affected scope, reasons, attempted remedies, and resumption conditions. Preserve remaining question IDs and execute feasible steps before handoff.
 
-## Tự kiểm của operator trong RUN
+## Operator self-review
 
-Với assessment mới, mỗi `tracks[].review` ghi gọn:
+Each new `tracks[].review` records actual `reviewed_at` and `reviewer_mode` (`operator-self-review`, or the real requested reviewer), `process_assessment`, `evidence_assessment`, `remaining_dependencies`, and `next_steps`.
 
-- `reviewed_at`: thời điểm tự kiểm có thật; `reviewer_mode`: `operator-self-review`, hoặc mô tả reviewer thực nếu user có giao. Cùng operator tự đối soát không thành independent/senior approval.
-- `process_assessment`: nhận định quy trình đủ cho scope/claim/mức triage đã giao chưa, căn cứ inventory/question/round/manual review và gaps cụ thể. Có thể là object hoặc text với references rõ.
-- `evidence_assessment`: nhận định native accounting, triage/claim/control, source locations/provenance và coverage đã đủ hỗ trợ danh sách records hiện tại chưa; tách native/semantics khỏi bookkeeping checker.
-- `remaining_dependencies`, `next_steps`: external policy/runtime/source/capability còn thiếu và điều kiện tiếp tục, gắn question IDs liên quan. Không ghi source step còn làm được rồi chuyển track như đã xử lý. `[]` khi thực sự không còn phần tương ứng.
+Process assessment evaluates scope/claims/triage against inventory/questions/rounds/manual work and specific gaps. Evidence assessment evaluates native accounting, claims/controls, source locations/provenance, and support for current observations separately from bookkeeping checks. Link policy/runtime/source/capability dependencies to questions. Do not leave feasible source steps merely recorded before moving on. Empty arrays mean genuinely none.
 
-Hai nhận định độc lập với `status`: có supported issue không tự làm quy trình kém; evidence đủ cho một needs-review record không làm assessment completed khi triage cần policy còn mở. Không bắt numeric score, oracle, source hashes hoặc reviewer thứ hai. Không thêm review fields vào báo cáo lịch sử để giả đã tự kiểm tại thời điểm cũ; v2 hiện có vẫn đọc theo dữ liệu thật.
+These assessments differ from status: supported issues do not imply a poor process; evidence sufficient for a needs-review record does not resolve required triage. No numeric score, oracle, hashes, or second reviewer is required. Do not fabricate historical self-reviews.
 
-## Đối soát và retest
+## Candidate ledger and reconciliation
 
-### Inventory candidate ledger trong RUN
+Each `coverage.inventory_candidate_reviews` record contains `id`, `round_id`, `native_result_index` (0-based, null if unrecoverable), `rule_id`, `location`, `question_ids`, `manual_review_ids`, `candidate_kind`, `context_read`, `disposition`, `finding_ids`, `next_step`.
 
-```json
-{
-  "id": "C-01",
-  "round_id": "R-01",
-  "native_result_index": 0,
-  "rule_id": "detector-id-from-native",
-  "location": {"path": "relative/source.ts", "start": {"line": 10, "column": null}, "end": {"line": 10, "column": null}},
-  "question_ids": ["Q-01"],
-  "manual_review_ids": [],
-  "candidate_kind": "receiver-not-yet-established",
-  "context_read": [],
-  "disposition": null,
-  "finding_ids": [],
-  "next_step": "Read receiver import/constructor and callers."
-}
-```
+Account for every `(round_id, native_result_index)`, both inventory-only and security observations, retaining genuine many-to-many links. Missing output requires an accounting gap/status rather than fabricated rows. Tester dispositions may be open, inventory-only-closed, promoted-to-observation, or a specific description; they are not automated vulnerability verdicts. Non-promoted candidates retain context/responsibility. Native counts include **all** results. Shared-location detectors may share review while retaining each native index/rule/message; the tester determines common root causes.
 
-Ví dụ synthetic chưa có review. `native_result_index` là index 0-based trong results của đúng round; null nếu không khôi phục được, không invent. Trong workflow mới, dùng ledger này để đối soát mọi native result của round, gồm inventory-only và security-observation results: mỗi `(round_id, native_result_index)` có một disposition record, có thể nối nhiều findings khi mapping thực cần. Nếu output thiếu thì giữ phần biết được, ghi accounting gap/status thay vì invent đủ hàng. Disposition do tester ghi (open, inventory-only-closed, promoted-to-observation hoặc mô tả cụ thể), không phải vulnerability verdict tự động. Candidate không vào ALERTS vẫn giữ trách nhiệm, context và next step. Native counts giữ **mọi** results, không bằng số candidates/ALERTS. Nhiều detector tại một location có thể chia sẻ manual review nhưng giữ từng native index/rule/message gốc; chỉ tester quyết định chung issue/root cause.
+`report_records.py` creates drafts/questions without decisions; `record_round.py` collects private output without triage; `check_report_links.py RUN.json ALERTS.json` checks IDs/references/known counts/provenance without editing or certifying source evidence/verdicts. See [operations](semgrep-operations.md) and [tests](../tests/README.md). They create no third handoff file or approval gate.
 
-### Helpers nhẹ, không là approval gate
+Check assessment/status agreement, reciprocal IDs, occurrence→round, evidence→source state/operation, manual review→evidence/finding, question→inventory/base/track, remaining questions, and declared count units. Re-read/retest affected source changes or retain explicit limits. Retest against actual diff/rules/paths/ignores/engine; disappearing matches from suppressions/filter changes do not establish fixes. Preserve historical output/verdicts and identify unretested scope.
 
-`scripts/report_records.py` khởi tạo draft hoặc question null đúng nghĩa, không chọn status/verdict/policy/completion. `scripts/record_round.py` thu execution/output vào vùng private, không triage. `scripts/check_report_links.py RUN.json ALERTS.json` chỉ đọc/kiểm IDs, references, counts biết được và provenance. Lỗi chỉ rõ record/field, không tự sửa evidence/lịch sử. Xem cách dùng trong [operations](semgrep-operations.md) và [tests](../tests/README.md). Không kiểm evidence đúng với source, không chứng nhận verdict và không phát sinh file handoff thứ ba.
-
-Parse JSON, đối chiếu assessment/status/IDs hai chiều, occurrence→round, evidence→source_state/thao tác, manual_review→evidence/finding, questions→inventory/base/track và remaining questions. Counts theo đơn vị đã khai báo, không suy vulnerabilities từ tổng records. Round/source state phải tương ứng evidence; source thay đổi thì đọc/chạy lại phần ảnh hưởng hoặc giữ limitation rõ.
-
-Retest dùng source diff/rules/paths/ignore/engine thực; mất match do suppression/filter/rule change chưa là fixed. Không sửa native/history/verdict cũ. Kết quả hiện hành phải nói phần nào chưa retest.
-
-Xem [ví dụ synthetic nhất quán](../examples/README.md) và [validation](validation.md). Ví dụ không có trace/output runtime thật. Phản hồi cuối **Vận hành** (việc thật, kết quả, mức hoàn tất từng track, links hai file) và **Hạn chế** (phần chưa làm, đã thử, điều kiện tiếp tục, giới hạn nhận định); chỉ sửa skill thì báo thay đổi/validation, không tạo assessment product.
+Use [synthetic examples](../examples/README.md) and [validation](validation.md) with their limits. Final responses use **Operations** and **Limitations**, with actual work, per-track completion, both file links, unfinished work/remedies/resumption conditions, and claim limits. Skill maintenance reports changes/validation without fabricating product assessments.

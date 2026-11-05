@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/setup/b-observe.py",
+    "case",
+    "b-resource-merge",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/packets/b-resource.json",
+    "b-resource-observation",
+    "/resources",
+    "Observed a terminal disposition for all three fixture resources with exact release receipts and no active lease",
+    "matched"
+  ],
+  "exitCode": 0
+}

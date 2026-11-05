@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/Users/hahoangloc/Working/testing tool/zap-product-assessment/.venv/bin/python",
+    "-B",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/setup/b-observe.py",
+    "case",
+    "b-dependent-merge",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/packets/b-dependent.json",
+    "b-dependent-observation",
+    "/prerequisite",
+    "Verified prerequisite T-EFFECT has sufficient reviewed receipt evidence before dependent readback",
+    "matched"
+  ],
+  "exitCode": 0
+}

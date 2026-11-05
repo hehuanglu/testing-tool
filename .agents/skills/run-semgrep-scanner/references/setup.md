@@ -1,12 +1,12 @@
-# Cài và vận hành skill Semgrep độc lập
+# Install and operate the standalone Semgrep skill
 
-Nguồn chuẩn được version bằng Git là [toàn bộ cây run-semgrep-scanner](../SKILL.md). Cây này gồm hướng dẫn, năm bộ rules (85 IDs), catalog, bốn helper Python, examples synthetic và fixtures/tests. Không cần source, reports hoặc đường dẫn máy của người phát triển. Bản tại `~/.codex/skills/run-semgrep-scanner` là bản cài từ repo; sửa ở repo rồi đồng bộ để thay đổi được chia sẻ qua Git.
+The versioned source is the [complete skill tree](../SKILL.md): instructions, five rule files (85 IDs), catalog, Python helpers, synthetic examples, and fixtures/tests. No developer checkout, reports, or machine-specific paths are required. Maintain changes in the repository, then synchronize personal installations.
 
 ## Runtime
 
-Cần Python 3.10+ và Semgrep OSS/CE. Helpers chỉ dùng stdlib; không cần `zap-product-assessment/.venv`, MCP ZAP, Docker, tài khoản Semgrep hoặc API token. Version đã kiểm cho bộ fixtures là **1.176.0**; [requirements.txt](../requirements.txt) pin engine trực tiếp, không là lock toàn bộ dependencies. Nếu đã có CLI phù hợp thì dùng CLI đó và kiểm help/version thực.
+Use Python 3.10+ and Semgrep OSS/CE. Helpers use only the standard library; MCP ZAP, Docker, Semgrep accounts/tokens, and ZAP virtual environments are unnecessary. Fixtures were checked with **1.176.0**; [requirements.txt](../requirements.txt) pins the engine, rather than all transitive dependencies. Verify actual CLI help/version when reusing an installation.
 
-Người vận hành có thể chủ động cài runtime trong venv riêng từ thư mục skill:
+For operator-requested setup, from the skill directory:
 
 ```sh
 SEMGREP_VENV="$HOME/.local/share/security-testing/semgrep-venv"
@@ -15,27 +15,22 @@ python3 -m venv "$SEMGREP_VENV"
 export PATH="$SEMGREP_VENV/bin:$PATH"
 ```
 
-Bước pip cần mạng để tải package và dependencies, tách khỏi assessment local. Skill không tự cài runtime hoặc tải rules khi scan. Muốn máy hoàn toàn offline thì chuẩn bị runtime/package cache bằng quy trình riêng trước assessment. Không commit venv.
+Package installation requires network access and is separate from local assessment. Do not install runtimes/download rules automatically during scans. Prepare offline caches separately when needed; do not commit virtual environments.
 
-## Cài và đối soát skill cá nhân
+## Install and synchronize
 
-Từ chính thư mục skill, dùng Python stdlib:
+From the skill directory:
 
 ```sh
 python3 -B scripts/install_skill.py check
 python3 -B scripts/install_skill.py install
-```
-
-`check` exit 0 khi toàn bộ file khớp byte, exit 1 nếu thiếu/khác. `install` cài mới hoặc giữ bản đã trùng. Nếu bản đã cài khác repo, kiểm danh sách từ `check` rồi cập nhật:
-
-```sh
 python3 -B scripts/install_skill.py install --update
 python3 -B scripts/install_skill.py check
 ```
 
-Update sao lưu nguyên bản cũ vào `~/.codex/skill-backups/` trước khi thay cây skill; file riêng và file cũ được giữ trong backup, không trộn vào bản mới. Cache Python không tính là drift. Không chạy hai installer đồng thời trên cùng target. Dùng `--target /absolute/path/run-semgrep-scanner` để kiểm thử hoặc chọn nơi cài khác. Sau mỗi lần pull có thay đổi skill, chạy lại check/update. Có thể copy nguyên thư mục skill sang `.agents/skills/` ở project khác; helper không phụ thuộc scripts/docs nằm ngoài thư mục này. Bản project cũng dùng trực tiếp được; khi sửa hãy cập nhật nguồn bảo trì trong repo.
+`check` exits 0 for byte-identical files, 1 for missing/different files. `install` creates a new installation or preserves an identical one. Inspect drift before `--update`; update backs up the old tree under `~/.codex/skill-backups/` before replacement, preserving private/stale files in the backup rather than merging them. Python caches are not drift. Do not run concurrent installers against one target. Use `--target /absolute/path/run-semgrep-scanner` for another destination. Recheck after pulling changes. Copying the complete tree into another project's `.agents/skills/` also works; no root-level helpers/docs are needed.
 
-## Kiểm package và bắt đầu assessment
+## Validate the package
 
 ```sh
 export SKILL_DIR="$PWD"
@@ -46,20 +41,18 @@ python3 -B "$SKILL_DIR/scripts/check_report_links.py" \
 python3 -B "$SKILL_DIR/scripts/select_rules.py" --base BE-IN-01
 ```
 
-Các lệnh trên không scan product hoặc dùng mạng. Xem [fixtures](../tests/README.md) để kiểm engine/rules thật trên dữ liệu tổng hợp; kết quả không chứng nhận mọi rule/framework hoặc product.
+These commands do not scan a product or use the network. [Fixtures](../tests/README.md) exercise actual engine/rule behavior on synthetic data, without certifying every rule/framework/product.
 
-Giao cho agent: “Dùng $run-semgrep-scanner kiểm source tại `<product-path>`, phạm vi `<tracks/chức năng>`.” Agent discovery source thực, chọn câu hỏi và chạy tuần tự các track thuộc scope. Product không cần tên hoặc layout cố định. Bundled rules chủ yếu NestJS/TypeScript, React và config; stack khác cần local/custom rules hoặc đọc source phù hợp, không lấy zero matches làm clean.
+Assign: “Use $run-semgrep-scanner to assess source at `<product-path>`, scoped to `<tracks/features>`.” The agent discovers source, selects questions, and executes assigned tracks sequentially. Product names/layouts are unrestricted. Bundled rules mainly support NestJS/TypeScript, React, and configuration; other stacks need appropriate local/custom/manual checks.
 
-Đọc [operations](semgrep-operations.md) để chuẩn bị settings/log/raw private ngoài product, tắt metrics/version check và dùng rules local. Tắt metrics không chặn mạng: macOS dùng `sandbox-exec` khi có và kiểm đối chứng; Linux/Windows cần isolation đã xác minh nếu nhiệm vụ yêu cầu offline bắt buộc. Thiếu guard thì ghi giới hạn/blocker đúng điều kiện, không tự hạ yêu cầu hoặc sửa firewall toàn máy.
+Use [operations](semgrep-operations.md) for private settings/log/raw output outside the product and local rules with metrics/version checks disabled. These settings do not block networking. Mandatory offline work requires verified isolation; missing guards are a limitation/blocker according to the assignment, not a reason to weaken it or change system firewalls.
 
-Helper `select_rules.py` chiếu catalog từ rules thật; `record_round.py` thu process/native output; `report_records.py` tạo draft; `check_report_links.py` kiểm liên kết/provenance/counts. Chúng không tự chọn verdict hoặc hoàn tất assessment. Bàn giao mỗi track đúng `ALERTS.json` và `RUN.json`; raw/log/spec giữ private, không đưa Git.
+`select_rules.py` projects the actual catalog/rules; `record_round.py` collects execution/native output; `report_records.py` creates drafts; `check_report_links.py` checks references/provenance/known counts. None selects verdicts or establishes completion. Deliver one ALERTS/RUN pair per track; keep raw/log/spec private and out of Git.
 
-## Kiểm bản đóng gói — 26/10/2026
+## Historical packaging checks — 2026-10-26
 
-Sau khi gom toàn bộ tài nguyên vào skill: installer và requirements nằm trong cây này; 30 tests helper/installer đạt. Đã copy riêng thư mục sang project khác, cài từ bản copy vào target mới, kiểm byte và chạy lại tests/catalog từ cwd ngoài checkout dev. Không cần helper ở root repo. Các kết quả engine và giới hạn ở dưới thuộc lượt đóng gói trước; không chạy lại product để xác nhận việc chuyển file.
+The portable package passed 23 helper and 7 installer tests. A standalone copy was installed into a fresh target and checked byte-for-byte; tests/catalog ran from outside the developer checkout. A staged Git export was also installed and checked. No root helpers were required. The synthetic example checker, frontmatter/agent/rule parsing, 85 unique IDs, and 103 relative links were checked at that time. The 61 affected ZAP contract/binding tests also passed after replacing a snapshot profile with a synthetic example.
 
-Đã chạy 23 tests helpers Semgrep, 7 tests installer và 61 tests contract/binding ZAP chịu ảnh hưởng bởi việc thay snapshot profile bằng ví dụ synthetic: tất cả đạt. Checker cặp example đạt; 103 relative links trong skill hợp lệ; frontmatter, agent config và năm YAML rules parse được với 85 IDs duy nhất.
+Historical engine checks used Semgrep OSS 1.176.0 on macOS: 14 fixture cases, 59 positive and 23 negative positions; two cases were recorded as language/path capability limitations. Full-config smoke reported 59 matches across 13 files with no errors. The local autofix metacheck scanned five files with no matches/errors and checked only fix/fix-regex. All Semgrep commands used private settings and verified `sandbox-exec` network denial, with successful unguarded and denied guarded loopback probes.
 
-Semgrep OSS 1.176.0 trên macOS: 14 fixture cases đạt, gồm 59 vị trí positive và 23 vị trí negative; hai cases ngoài language/path được ghi là capability limitations. Full-config smoke có 59 matches/13 files scanned/errors rỗng. Offline metacheck quét đủ năm files, zero matches/errors; chỉ kiểm fix/fix-regex. Mọi lệnh Semgrep dùng settings private và `sandbox-exec` deny network; loopback probe thành công khi không guard và bị từ chối khi có guard.
-
-Đã export cây Git staged ra thư mục mới, cài sang target mới và chạy lại tests installer/helpers, example checker, catalog 85 IDs từ cwd ngoài checkout phát triển. Bản cài cá nhân đã đối soát byte với nguồn repo. Không cài dependency mới, không chạy lại product assessment; chưa kiểm trên Linux/Windows hoặc chứng nhận mọi rule/framework. Raw validation synthetic giữ ngoài repo. Adapter/test ZAP còn tên product là implementation/contract, không là báo cáo, credential hoặc authority của lượt chạy trước. Việc dọn dữ liệu áp dụng cho cây hiện hành; không rewrite Git history.
+These are historical checks, not new product assessments or certification of every rule/framework/platform. No new dependencies were installed, Linux/Windows were not checked, and synthetic raw validation remained outside the repository. Product-named ZAP adapters/tests are implementation contracts, not prior assessment authority or credentials. Cleanup affected the current tree without rewriting Git history.

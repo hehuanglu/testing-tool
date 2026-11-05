@@ -1,14 +1,14 @@
-# Runtime local hoặc connector đã cấu hình
+# Local runtime or configured connector
 
-Runtime được discovery tại lượt hiện hành, không lấy endpoint, ports, Compose project, profile hoặc image ID của máy dev làm mặc định. Đọc [setup skill](setup.md) để phân biệt tài nguyên bundled, runtime scanner và product.
+Discover the current runtime rather than assuming developer endpoints/ports/Compose projects/profiles/images. Read [setup](setup.md) to distinguish bundled resources, scanner, and product.
 
-## Kiểm tra hiện tại
+## Inspect current state
 
-Với connector MCP đang có, gọi native `zap_passive_scan_status` khi cần kiểm kết nối/backlog. Nó chỉ chứng minh connector và backlog tại thời điểm gọi; không chứng minh mọi producer đã dừng hoặc assessment đã hoàn tất. Client→MCP auth khác ZAP→product auth.
+Use native `zap_passive_scan_status` where appropriate to check the connector/backlog. This establishes current connectivity/backlog only, rather than stopped producers or completed assessment. Client→MCP auth differs from ZAP→product auth.
 
-Chỉ dùng preflight Docker khi deployment/executor được chọn phụ thuộc Docker. Daemon không sẵn vẫn cho phép source discovery; ghi nhánh runtime bị chặn và tiếp tục phần độc lập. Không đổi context/restart/rebuild để biến preflight thành pass.
+Use Docker preflight only when the selected executor/deployment needs Docker. An unavailable daemon blocks dependent traffic, rather than independent source discovery. Do not change context/restart/rebuild to pass preflight.
 
-Khi đã có quyền kiểm runtime local:
+For authorized local-runtime inspection:
 
 ```sh
 docker context show
@@ -17,22 +17,18 @@ docker compose version
 docker ps --format '{{.Names}} {{.Image}} {{.Status}} {{.Ports}}'
 ```
 
-Lấy riêng labels Compose working_dir/config_files/project, container ID, image ID, state và mount destinations của installation liên quan. Không xuất Config.Env/full inspect hoặc secrets. Product và scanner có ownership riêng; không stop product để lấy port hoặc vượt lỗi.
+Inspect only relevant Compose working_dir/config_files/project labels, container/image IDs, state, and mount destinations. Do not print Config.Env/full inspect/secrets. Scanner/product ownership differs; do not stop the product to obtain ports.
 
-Nếu có checkout scanner đã xác minh (`MCP_ZAP_REPO`), đọc help/source của `bin/self-serve-doctor.sh` rồi dùng doctor của checkout đó với endpoint/credential tương ứng. Doctor không start scan hoặc recreate stack; readiness không tự là capability qualification. Không truyền API key trong argv.
+With verified `MCP_ZAP_REPO`, inspect `bin/self-serve-doctor.sh` help/source and use the correct endpoint/credential without API keys on argv. Doctor does not start scans/recreate stacks; readiness is not capability qualification.
 
-## Start/stop đúng installation
+## Start/stop the correct installation
 
-Chỉ thay đổi runtime khi yêu cầu cần và ownership/config/ports đã xác minh. Dùng đúng Compose project, env file và toàn bộ file set lấy từ installation; không giả có dev/auth override. Chạy `config --quiet` để kiểm cấu hình mà không in secret. Trước stop/restart xác định run đang dùng scanner và xử lý đúng operation/job; backlog 0 không cho phép huỷ scan của người khác.
+Mutate runtime only when required and after verifying ownership/configuration/ports. Use the installation's exact Compose project, env file, and full file set; do not assume dev/auth overrides. `config --quiet` validates without printing secrets. Identify active runs/operations before stopping; zero backlog does not authorize canceling others' scans.
 
-Ưu tiên start container đã dừng bằng file set đã xác minh, stop giữ dữ liệu khi phù hợp. Build/up chỉ khi nhiệm vụ cần và đã đọc source/status/image trước/sau. Không mặc định force-recreate, bootstrap --force, down -v, đổi keys hoặc bật experimental auth. Release/dev/auth/OpenAPI-content là các topology khác nhau; đọc hướng dẫn của checkout scanner hiện hành trước chọn.
+Prefer starting existing stopped containers and data-preserving stops where suitable. Build/up requires task need and before/after source/status/image inspection. Do not default to force-recreate, bootstrap --force, down -v, key changes, or experimental auth. Release/dev/auth/OpenAPI-content topologies differ; inspect current scanner documentation.
 
-Docker/browser/images/JAR riêng của assessment được admission bởi executor tương ứng. Không sửa pins/gate hoặc lấy binary có sẵn làm bằng chứng source-to-image. Đo tài nguyên theo [preflight](resource-preflight.md) trước workload nặng; không prune/reset DB để vượt lỗi.
+Executors admit required Docker/browser/images/JARs. Do not alter pins/gates or treat an existing binary as source-to-image proof. Follow [resource preflight](resource-preflight.md); do not prune/reset databases to pass.
 
-## Chẩn đoán hữu hạn
+## Bounded diagnosis
 
-- Port trùng: xác định listener/container/project, không stop ứng dụng khác để lấy port.
-- Health/auth fail: kiểm state/transport/profile của đúng installation, lưu lỗi đã lọc; không đổi surface/keys khi chưa rõ nguyên nhân.
-- Tool không thấy: so runtime tools/schema và scopes, guided/expert; không giả engine thiếu chức năng chỉ từ registration.
-- Queue restart: kiểm backend, lease/fence và operation identity; in-memory không bảo đảm resume.
-- Không có source scanner: vẫn dùng connector hiện có khi đủ capability; chỉ các bước build/doctor/source bị thiếu dependency, không khẳng định chúng đã chạy.
+Identify port listener/container/project without stopping unrelated apps. Diagnose health/auth against the correct transport/profile without speculative key/surface changes. Compare actual tool schemas/scopes/guided/expert before inferring missing engine capability. For queue restarts inspect backend/lease/fence/operation identity; in-memory does not ensure resume. Missing scanner source blocks build/doctor/source checks only; an adequate connector remains usable.

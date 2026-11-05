@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-03",
+  "basis": "current working-tree bytes, not clean HEAD",
+  "files": [
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/SKILL.md",
+      "sha256": "dc78a74d44b48edcc0ba58ceb65a87edb07255b21c504cb4ea467639a9a841bd",
+      "bytes": 15491
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+      "sha256": "54907f64557ec48341f8c018f1a912937bb23edb35fc5db2f54ecd5824f8a868",
+      "bytes": 25053
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_resume.py",
+      "sha256": "a1609fd6af4fcd2e2d5fd91e169d964f92c2303e71e8041b18dab766076ada29",
+      "bytes": 3643
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py",
+      "sha256": "aa20a2bf79d0ba406dbef58ecbd3d80d7686198aff6169bcad3c791ff2110631",
+      "bytes": 25247
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/journal.py",
+      "sha256": "b5e650e6d97849f7937ae26ce6f0f5b6abe0728af5ca74f45a6f5030fe89b994",
+      "bytes": 5476
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src/zap_assessment/product_scope_cli.py",
+      "sha256": "950eaf2513c124ea207b321015bb4812dade26ba3e4fa74dda724ddd58867424",
+      "bytes": 47998
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/tests/test_criteria_resume.py",
+      "sha256": "71f05236b9fdeb32d203467aa107660e3d78597739d52031337a601a16d230c9",
+      "bytes": 2643
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/business-work-blocks.md",
+      "sha256": "cddc534f94e0c24391612141da9ad01517e25776f52500512b70b5b6a7cf5d41",
+      "bytes": 4259
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/criteria-driven-workflow.md",
+      "sha256": "e8b54532211f3dfa38cdf285128e1bfbb96092ca21469f4b005dd2d950fa183b",
+      "bytes": 28197
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/delegation-policy.md",
+      "sha256": "2229f367e6e9f8e2dcd2749a4531de14aa4366fb996bbf2379afb411a1a48150",
+      "bytes": 26440
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/helper-contract-map.md",
+      "sha256": "9eb8bcd971b09806cdda2b8d86a63a7b49928201eb64e204e3068c926e49d1cb",
+      "bytes": 6780
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/local-remediation-and-continuation.md",
+      "sha256": "5113da6739d82aa77733799430908ba7d82cc525e0752e3aa55df83fd1ad3e8f",
+      "bytes": 11716
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/native-operation-routing.md",
+      "sha256": "00c63d86e9f72e0118d6a420089e6fab971f1371f22262a6e7578a27b56f474c",
+      "bytes": 11488
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-readback.md",
+      "sha256": "779033bd7e12bc560ca2874e8c0ea4759b3c64a4bb5464342aa3ce7674f3a113",
+      "bytes": 14162
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/operational-validation.md",
+      "sha256": "8e7499ec169b045fafd1df88a7693c7b310e9d4b3b1d7e194c568e73ddb72c5a",
+      "bytes": 18450
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/retention-stop-and-recovery.md",
+      "sha256": "faf73e8ca74d38b2997d070f7960257b930fec0322094e4fdc62c3ef66828cd7",
+      "bytes": 34024
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/runner-routing.md",
+      "sha256": "baa29054b60b674a7e57584cdbcc836b227bd842a60c9d0e2d45fcfef23de9e2",
+      "bytes": 15251
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/setup.md",
+      "sha256": "36b82128941935fdda17c623228a92b414d98d17ff0270c574e4921c219c671f",
+      "bytes": 3761
+    },
+    {
+      "path": "/Users/hahoangloc/Working/testing tool/.agents/skills/mcp-zap-repo-operations/references/single-table-drive-output.md",
+      "sha256": "e9881da9195ea0b2045a3eb324305aa2b6c1f9f08a80a51d4182e33a43ae010c",
+      "bytes": 13891
+    }
+  ]
+}

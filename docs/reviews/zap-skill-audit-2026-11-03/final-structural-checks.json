@@ -1,0 +1,110 @@
+{
+  "counts": {
+    "markdown": 72,
+    "python": 327,
+    "json": 56
+  },
+  "brokenLocalLinks": [
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-db-20261020T083344Z/IMPLEMENTATION_NOTES_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-db-20261020T083344Z/PROGRESS_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-db-20261020T083344Z/REPRODUCE_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../QUY_TRINH_HOAN_THIEN_BE_AUTHENTICATED_2026-10-20.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-20261020T065558Z/PROGRESS_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-20261020T065558Z/work-items.json"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-20261020T065558Z/NATIVE_AND_PLATFORM_ADR_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-source-20261020T073718Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-source-20261020T073718Z/PROGRESS_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-source-20261020T073718Z/SOURCE_REFERENCE_CONTRACT_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "../../../test-artifacts/be-authenticated-source-20261020T073718Z/REMAINING_WORK_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/BE_AUTHENTICATED_VI.md",
+      "target": "W5_SCANNER_CONTINUATION_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/DELEGATED_DAST_CANDIDATE_VI.md",
+      "target": "../../../test-artifacts/delegated-g3-20261020T133635Z/PROGRESS_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/DELEGATED_DAST_CANDIDATE_VI.md",
+      "target": "../../../test-artifacts/delegated-dast-20261020T124540Z/PROGRESS_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W10_REGRESSION_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w10-regression-20261019T155107Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W11_ACCEPTANCE_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w11-acceptance-20261019T160915Z/sequence-command-receipts.json"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W11_ACCEPTANCE_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w11-acceptance-20261019T160915Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W3_REGISTRY_VI.md",
+      "target": "../implementation-status.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W4_RUNTIME_VI.md",
+      "target": "W4_LIVE_CONTINUATION_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W5_AUTH_LIFECYCLE_VI.md",
+      "target": "W5_SCANNER_CONTINUATION_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W5_RESOURCE_AND_OPAQUE_SOURCE_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w5-resource-20261019T084619Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W7_UI_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w7-runtime-20261019T130900Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W7_UI_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w7-ui-20261019T124203Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W8_ACTIVE_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w8-active-20261019T135325Z/HANDOFF_VI.md"
+    },
+    {
+      "path": "lib/zap-product-assessment/docs/remediation/W9_UNIFIED_VI.md",
+      "target": "../../../test-artifacts/mcp-zap-remediation/w9-unified-20261019T145432Z/HANDOFF_VI.md"
+    }
+  ],
+  "historicalOnly": true
+}

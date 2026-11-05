@@ -1,0 +1,1 @@
+{"changedFileRefs":["fixture-sha"],"id":"repair-reader","negativeCheckRefs":["invalid"],"positiveCheckRefs":["valid"],"reproductionOutcome":"Reproduced from capture","revision":4,"status":"verified","verificationLevel":"offline-checked","verificationRefs":["fixture-transcript"],"verificationResult":"passed"}

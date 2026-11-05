@@ -1,0 +1,153 @@
+{
+  "timeUTC": "2026-11-02T09:55:31.993670+00:00",
+  "product": "/Users/hahoangloc/Working/100ms-Video-Conferencing-and-Live-Streaming-sol-full/finalsource",
+  "catalogSource": "/Users/hahoangloc/Working/100ms-Video-Conferencing-and-Live-Streaming-sol-full/docs/00-context/security/OWASP-2025-SECURITY-CATALOG.json",
+  "catalogRetained": "/Users/hahoangloc/Working/testing tool/assessment-scopes/100ms/SECURITY_SCOPE.json",
+  "catalogSHA256": "fe820f17eb1b09b6920563846705227668afe82599c54c0343770f8db6871613",
+  "criteriaCount": 50,
+  "hostFreeBytesBefore": 4689731584,
+  "directories": [
+    "assessment-results/100ms-20261031-security-scope",
+    "assessment-results/100ms-20261031-zap-based",
+    "assessment-results/100ms-fresh-20261101",
+    "assessment-results/100ms-workflow-acceptance-20261102",
+    "assessment-results/100ms-alerts-reclassified-20261102",
+    ".local/100ms-security-20261031",
+    ".local/100ms-workflow-acceptance-20261102",
+    ".local/zap-workflow-phase2-preview-84f1dd0a78",
+    ".local/zap-workflow-phase3-closure-9e00ef861b",
+    ".local/zap-workflow-phase3-final-10912-20261102",
+    ".local/zap-alert-reclassification-20261102"
+  ],
+  "files": [
+    "assessment-results/100ms-20261031-working-session.md",
+    ".local/phase3-closure-path.txt",
+    ".local/zap-workflow-phase2-implementation-20261102/preview-path.txt",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/zap-report-3783a637-c4c7-4b7e-82c2-d7b824ab3451.json",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/100ms-more-key.js",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/100ms-key-renewal.js",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/100ms-conference-departure-reservation.json"
+  ],
+  "freshRunDirectory": ".local/100ms-fresh-20261101",
+  "keepOnlyProductRuntimeOverrides": [
+    "/Users/hahoangloc/Working/testing tool/.local/100ms-fresh-20261101/media-remediation-compose.override.json",
+    "/Users/hahoangloc/Working/testing tool/.local/100ms-fresh-20261101/fix-gateway-drain-deploy-override.json"
+  ],
+  "allocatedHostBytesPlanned": 3429347328,
+  "dockerContext": "desktop-linux",
+  "containers": [
+    {
+      "id": "ef27c0984309e624fcf1e86099fdde0ffc7b28cae43c354bd4cba73bab5b4934",
+      "name": "/100ms-fresh-20261101-internal-media",
+      "owner": "100ms-fresh-20261101",
+      "state": "exited"
+    },
+    {
+      "id": "2403ddc84c743700f5b0d16a13e91110971e13a1ad9ea47cd386c8027274fe6c",
+      "name": "/100ms-fresh-20261101-internal-recording",
+      "owner": "100ms-fresh-20261101",
+      "state": "exited"
+    },
+    {
+      "id": "6b03c86a9e43ba77fc6a3dbd7a82883b2d203c0b27257c9583954afc7bfe22c2",
+      "name": "/100ms-fresh-20261101-mcp",
+      "owner": "100ms-fresh-20261101",
+      "state": "exited"
+    },
+    {
+      "id": "85644958174a6a8270093fa23322b9f0ecccba9432ccf03c91bb1e04efca5a08",
+      "name": "/100ms-fresh-20261101-zap",
+      "owner": "100ms-fresh-20261101",
+      "state": "exited"
+    }
+  ],
+  "deleteVolumes": false,
+  "deleteImages": false,
+  "status": "verified-clean-assessment-state",
+  "deletedContainerIds": [
+    "ef27c0984309e624fcf1e86099fdde0ffc7b28cae43c354bd4cba73bab5b4934",
+    "2403ddc84c743700f5b0d16a13e91110971e13a1ad9ea47cd386c8027274fe6c",
+    "6b03c86a9e43ba77fc6a3dbd7a82883b2d203c0b27257c9583954afc7bfe22c2",
+    "85644958174a6a8270093fa23322b9f0ecccba9432ccf03c91bb1e04efca5a08"
+  ],
+  "deletedPaths": [
+    "assessment-results/100ms-20261031-security-scope",
+    "assessment-results/100ms-20261031-zap-based",
+    "assessment-results/100ms-fresh-20261101",
+    "assessment-results/100ms-workflow-acceptance-20261102",
+    "assessment-results/100ms-alerts-reclassified-20261102",
+    ".local/100ms-security-20261031",
+    ".local/100ms-workflow-acceptance-20261102",
+    ".local/zap-workflow-phase2-preview-84f1dd0a78",
+    ".local/zap-workflow-phase3-closure-9e00ef861b",
+    ".local/zap-workflow-phase3-final-10912-20261102",
+    ".local/zap-alert-reclassification-20261102",
+    "assessment-results/100ms-20261031-working-session.md",
+    ".local/phase3-closure-path.txt",
+    ".local/zap-workflow-phase2-implementation-20261102/preview-path.txt",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/zap-report-3783a637-c4c7-4b7e-82c2-d7b824ab3451.json",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/100ms-more-key.js",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/100ms-key-renewal.js",
+    "mcp-zap-server/zap-workplace/zap-wrk/workspaces/default-client/100ms-conference-departure-reservation.json",
+    ".local/100ms-fresh-20261101/* except two live deployment overrides",
+    ".local/criteria-first-verification-20261102/cleanup-duplicates.json"
+  ],
+  "hostFreeBytesAfterDeletion": 8124481536,
+  "finishedUTC": "2026-11-02T09:55:49.911796+00:00",
+  "verifiedUTC": "2026-11-02T09:57:39.120208+00:00",
+  "hostFreeBytesFinal": 23184707584,
+  "hostFreeDeltaBytes": 18494976000,
+  "retainedProductContainers": [
+    {
+      "id": "a831f684efb70823b0fa8237bbe7f43e36de4092f0ba7df57b02bbec11967f85",
+      "name": "/security-vibe-coding-database-1",
+      "status": "running",
+      "health": "healthy",
+      "image": "mysql:8.4"
+    },
+    {
+      "id": "e6639af9bec18739f0f9405af50ad68e0a4a4c7f6ab71fe173d13f6ddd107b45",
+      "name": "/security-vibe-coding-provider-adapter-1",
+      "status": "running",
+      "health": "healthy",
+      "image": "assessment-local/media-authorization-adapter:20261102-drain"
+    },
+    {
+      "id": "2cc3bd1d012d6d6c66377c7a4605aa876efa32cceb4f762fc59275efd47ad740",
+      "name": "/security-vibe-coding-frontend-1",
+      "status": "running",
+      "health": "healthy",
+      "image": "assessment-local/media-authorization-frontend:20261102"
+    },
+    {
+      "id": "956cbba3c9c289ab24cae8cfb9634a1edf12e97f46656659b5d4bd35887ef426",
+      "name": "/security-vibe-coding-backend-1",
+      "status": "running",
+      "health": "healthy",
+      "image": "assessment-local/media-authorization-backend:20261102"
+    },
+    {
+      "id": "6a92e41e2fd65e5139b9709239cc06e049d728fb36a7131673e10e30e0dd593d",
+      "name": "/security-vibe-coding-media-provider-1",
+      "status": "running",
+      "health": null,
+      "image": "bluenviron/mediamtx:1.21.3@sha256:59e43552f3be43695b70c19424dc2a42fcec18075f88d91561a24ac5d70a586c"
+    },
+    {
+      "id": "aae28c7b78eb3024bea05fdb4ece1068a4f1c2f13580da42cc9152966307055e",
+      "name": "/security-vibe-coding-material-init-1",
+      "status": "exited",
+      "health": null,
+      "image": "node:22-bookworm-slim"
+    }
+  ],
+  "sharedScanner": {
+    "sites": 0,
+    "contexts": 0,
+    "activeScans": 0,
+    "spiderScans": 0,
+    "matching100msHistoryEntries": 0
+  },
+  "databaseReset": false,
+  "newAssessmentStarted": false
+}

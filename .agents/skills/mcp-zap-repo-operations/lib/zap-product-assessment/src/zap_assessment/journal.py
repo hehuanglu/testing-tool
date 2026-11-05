@@ -13,39 +13,80 @@ class Journal:
         self.events=self.read(); self.state='REQUESTED'; self.emergency=False; self.io_failed=False
         for e in self.events:
             if e['kind']=='state': self.state=e['data']['state']
-    def read(self):
-        events=[]; prev='0'*64
-        if self.path.exists():
-            if self.path.is_symlink(): raise Blocked('journal symlink')
+    @staticmethod
+    def inspect(path, run_id, plan_hash):
+        """Verify the contiguous committed prefix without modifying the log."""
+        import hashlib
+
+        events = []
+        previous = '0' * 64
+        offset = 0
+        integrity = 'clean'
+        try:
+            fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        except FileNotFoundError:
+            raw = b''
+        else:
+            with os.fdopen(fd, 'rb') as stream:
+                info = os.fstat(stream.fileno())
+                if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size > 64 * 1024 * 1024:
+                    raise Blocked('journal file type or budget invalid')
+                raw = stream.read(64 * 1024 * 1024 + 1)
+                if len(raw) != info.st_size:
+                    raise Blocked('journal changed during read')
+
+        def unique(pairs):
+            result = {}
+            for key, value in pairs:
+                if key in result:
+                    raise ValueError('duplicate journal JSON key')
+                result[key] = value
+            return result
+
+        for line in raw.splitlines(keepends=True):
+            if not line.endswith(b'\n'):
+                integrity = 'incomplete-tail' if offset + len(line) == len(raw) else 'corrupt-record'
+                break
             try:
-                fd=os.open(self.path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
-                with os.fdopen(fd,'rb') as stream:
-                    info=os.fstat(stream.fileno())
-                    if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or info.st_size>64*1024*1024:raise Blocked('journal file type or budget invalid')
-                    raw=stream.read(64*1024*1024+1)
-                    if len(raw)!=info.st_size:raise Blocked('journal changed during read')
-                lines=raw.splitlines(keepends=True)
-                if lines and not lines[-1].endswith(b'\n'):
-                    if not self.allow_partial_tail:raise Blocked('journal incomplete trailing record')
-                    self.partial_tail=True;lines=lines[:-1]
-                for line in lines:
-                    def unique(pairs):
-                        result={}
-                        for key,value in pairs:
-                            if key in result:raise Blocked('duplicate journal JSON key')
-                            result[key]=value
-                        return result
-                    e=json.loads(line,object_pairs_hook=unique)
-                    if not isinstance(e,dict) or set(e)!={'seq','prev','runId','planHash','at','kind','data','hash'} or type(e['seq']) is not int:raise Blocked('journal envelope invalid')
-                    h=e.pop('hash')
-                    if e['prev']!=prev or digest(e)!=h or e['runId']!=self.run_id or e['planHash']!=self.plan_hash or e['seq']!=len(events): raise Blocked('journal integrity failure')
-                    e['hash']=h; events.append(e); prev=h
-            except (ValueError,KeyError) as e: raise Blocked('journal integrity failure') from e
-        return events
+                event = json.loads(line, object_pairs_hook=unique)
+                if (not isinstance(event, dict) or
+                    set(event) != {'seq', 'prev', 'runId', 'planHash', 'at', 'kind', 'data', 'hash'} or
+                    type(event['seq']) is not int or not isinstance(event['kind'], str) or
+                    not isinstance(event['data'], dict)):
+                    raise ValueError('journal envelope invalid')
+                checksum = event.pop('hash')
+                if event['prev'] != previous or digest(event) != checksum or event['seq'] != len(events):
+                    raise ValueError('journal chain invalid')
+                if event['runId'] != run_id or event['planHash'] != plan_hash:
+                    integrity = 'identity-mismatch'
+                    break
+                event['hash'] = checksum
+                events.append(event)
+                previous = checksum
+                offset += len(line)
+            except (ValueError, TypeError, UnicodeError):
+                integrity = 'corrupt-record'
+                break
+        tail = raw[offset:]
+        return dict(integrity=integrity, validEvents=events, validPrefixBytes=offset,
+                    lastValidHash=previous, tailBytes=len(tail),
+                    tailDigest=hashlib.sha256(tail).hexdigest() if tail else None,
+                    diagnostics=[] if integrity == 'clean' else [integrity])
+
+    def read(self):
+        result = self.inspect(self.path, self.run_id, self.plan_hash)
+        if result['integrity'] == 'incomplete-tail' and self.allow_partial_tail:
+            self.partial_tail = True
+        elif result['integrity'] != 'clean':
+            raise Blocked('journal integrity failure: ' + result['integrity'])
+        return result['validEvents']
+
     def append(self,kind,data):
         with self.mutex:
             return self._append(kind,data)
     def _append(self,kind,data):
+        if self.partial_tail:
+            raise Blocked('journal incomplete trailing record')
         if self.io_failed:
             if self.emergency:return None
             raise OSError('journal write previously failed')

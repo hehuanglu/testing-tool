@@ -1,87 +1,127 @@
-# Hợp đồng phạm vi nhiệm vụ và hoàn tất
+# Assignment scope and completion contract
 
-Áp dụng [đầu ra hai file](product-assessment-handoff.md). Trung thực thao tác và kết quả; không đòi bộ bằng chứng chặt để hoàn tất báo cáo. Quyền target, giới hạn resource và gate code của executor vẫn giữ nguyên.
+> Compatibility reference only. Use [criteria-driven workflow](criteria-driven-workflow.md) for all current assessment execution and [Drive table handoff](product-assessment-handoff.md) for delivery. Legacy schema, completion, CLI and three-report delivery descriptions below interpret retained history; they do not authorize a second operating workflow, new legacy dispatch, or extra mandatory user deliverables. Reuse compatible primitives without migrating historical evidence labels.
 
-## Bốn lớp cần giữ riêng
+Apply the [ZAP result boundary](zap-result-boundary.md): native alerts and ZAP-derived observations are distinct; external-tool/source-only findings do not enter this skill’s ALERTS output.
 
-1. Inventory đầy đủ từ source/spec/routes và runtime có sẵn: method–route, input, role, object/action/relation/state liên quan; chỗ chưa xác minh vẫn được ghi.
-2. Phạm vi từ user và discovery thuộc track được giao. User giao hẹp thì giữ hẹp; user giao cả track thì không tự thu hẹp theo recipe hoặc ca dễ chạy.
-3. Workload từng lượt hữu hạn trong quyền/capability/tài nguyên. Mục chưa chọn vẫn ở danh sách trách nhiệm, không tự thành ngoài scope.
-4. Kết quả: việc thực sự đã làm, kết quả/lỗi và phần chưa làm. Tool tồn tại, import thành công, test pass hoặc đủ output không đồng nghĩa đã scan hết.
+For retained v1 reports, use the legacy format notes in [internal state and handoff](product-assessment-handoff.md). For current delivery, use the [single Google Sheets table](single-table-drive-output.md). Honest operations/results suffice for reporting without an additional assurance package. Actual target authorization, resource limits, and executor gates remain in force.
 
-## Phạm vi backend và BOLA
+## Keep four layers separate
 
-- **BE anonymous:** ZAP DAST thật trên mọi API public trong scope, không token/danh tính đăng nhập. Login/register public vẫn thuộc phạm vi. Seed, validation và passive được ghi riêng; không dùng vài request hoặc passive-only thay mục tiêu active. Protected-denial là control bổ sung.
-- **BE authenticated:** ZAP DAST thật trên mọi API protected trong scope với đúng actor/role và phiên còn hiệu lực. Map từng API với role, fixture/input, kỹ thuật đã chạy và kết quả. Xét các role có hành vi khác; role còn thiếu phải giữ mục chưa thực hiện. Public API được đối soát ở track anonymous. 401 hoặc mất phiên không là authenticated coverage.
-- **BOLA:** mọi endpoint–role trong scope có applicability và kết quả/chưa kiểm cụ thể; phải xét đủ role đã discovery, gồm role đặc quyền và anonymous khi liên quan. Với object có owner, kiểm owner-positive, non-owner/cross-owner và quyền theo role; xét relation/state, collection/list/filter/pagination làm thay đổi quyền. Tách quyền chức năng và object ownership. Direct-client được dùng đúng scope, findings ghi nguồn direct, không thay DAST authenticated.
+For a supplied policy/catalog/text, use the [user criteria layer](user-security-scope.md) above track inventory. Applicability, execution coverage, security assessment and assignment completion are separate. Product-grounded N/A differs from missing actor/source/capability; supported violations may coexist with partial coverage. Scope completion cannot close new/unresolved criteria through old track completion or finding counts.
 
-“Toàn API” là không bỏ sót method–route thuộc scope, không là mọi input/rule/role/state kết hợp vô hạn. Một kỹ thuật không phù hợp có thể N/A ở chiều đó; API vẫn phải được xử lý. Thiếu token/fixture/capability là mục còn mở, không N/A. Không sửa expected theo response hoặc trả sẵn pass.
+1. Complete source/spec/route/available-runtime inventory: method/route/input/role/object/action/relation/state, including uncertainty.
+2. User-assigned scope and in-track discovery. Keep narrow assignments narrow; do not shrink whole-track assignments to recipes/easy cases.
+3. Bounded admitted workloads under actual capabilities/resources. Unselected items remain responsibilities.
+4. Actual operations/results/errors/unperformed work. Available tools, imports, tests, and output files do not establish full scanning.
 
-## Phạm vi FE
+## Assignment completion and security outcome
 
-Ý định và khảo sát ban đầu của cả năm track ở [track intents](track-intents.md); đây là base suy luận, không ép mọi product chạy tất cả case.
+At intake, use the user's existing request to state product/environment, assigned tracks or criteria, finite questions, sufficient observations, and known method limits in the existing plan/RUN. Prepare technical mappings yourself; ask only about material unresolved scope or expectations, without a routine approval gate. Refine discovery with reasons rather than moving closure conditions to fit results. Preserve requirements beyond ZAP as unassessed; completing the full catalog needs a suitable additional assignment/method or an explicit user scope revision.
 
-- **FE anonymous:** browser thật, public UI journeys/routes và public network surface liên quan scope; không login identity trong phần anonymous. Crawler/API-only không thay UI action.
-- **FE authenticated:** UI login và protected journeys đúng actor/role/session, UI/network/post-state phù hợp; API/DB setup chỉ bổ trợ. Browser session không tự chứng minh native active cùng actor.
+Keep round lifecycle separate from legacy obligation coverage: `taskCompletion:complete` means all assigned applicable questions have sufficient results/readback and discovery is reconciled; security outcome records compliance, violations or uncertainty; remediation completion concerns separately assigned product fixes and their acceptance/retests. A demonstrated violation can close its answered question while the finding remains open. Neither fixing every finding nor explaining every historical failure is a prerequisite unless the assignment requires it. Missing intended processing, unknown mutation outcomes or unresolved expectations still leave the affected question open.
 
-Đối soát UI responsibilities cùng câu hỏi bảo mật/kỹ thuật trên mọi API/input liên quan. Active đang áp dụng cần thực thi/readback riêng; UI/browser traffic/passive không thay thế. Mỗi chiều kỹ thuật N/A có căn cứ product; thiếu phương tiện giữ mở. Đối soát UI responsibilities cùng API liên quan; không tự kéo toàn backend ngoài scope FE. GraphQL/RPC cần giữ operation nghiệp vụ bên trong endpoint dùng chung khi liên quan scope.
+Use the reconciled inventory to decide what follows:
 
-## Kế hoạch hữu hạn và bốn mức bao phủ
+- All assigned duties are answered or grounded N/A, with no unresolved discovery/coverage duties: finish the assignment and report findings and limits. Do not add variants or require a repair merely to avoid ending with a violation.
+- A concrete unanswered duty has a useful authorized next action: execute it, including feasible preparation or local repair. A generic partial label alone does not select more traffic.
+- Remaining duties depend on actual unavailable access, policy, capability or conditions: hand off with the affected scope still partial and specific resumption conditions. Reporting the gaps does not complete them. Only the user may reduce scope; do not turn a blocked assessment into an unsolicited remediation/design or external-method campaign.
 
-Giữ riêng discovered → đã gửi request → đã chạy kỹ thuật phù hợp → kết quả đọc được. Không buộc manifest hoặc file chứng minh cho mỗi mức; ghi trung thực trong RUN.
+## Short charter and observation depth
 
-Vòng vận hành: intake → inventory → câu hỏi bảo mật/role/object → mapping operation → chia lượt → thực hiện → đọc kết quả → reconcile → sửa tối thiểu/kiểm tra → tiếp tục. Ưu tiên nghiệp vụ lõi và input có ý nghĩa; không lấy recipe mẫu làm toàn bộ nhiệm vụ.
+Keep the charter in the existing plan/RUN, not a fourth deliverable. `engagement` records `objective`, `scopeBasis`, `methodBoundary`, `authorityNotes:[{action,scope,basis}]` and genuine user/environment `limits`. Authority notes document existing permission and grant nothing. Infer routine details from the request and available context; ask only when a difference materially changes scope, authority or conclusions.
 
-### Chọn kỹ thuật trước khi đối chiếu capability
+Case/question fields `objectiveDepth`, `expectedBehavior`, `expectationBasis` and `coverageContext` describe the finite objective. Depth is a choice, not a mandatory ladder: `boundary` (rejection and relevant no-effect), `processing` (correct handler/consumer), `persistence` (same-object readback), `delivery` (consumer actually receives), or `recovery` (assigned revoke/stop/retry/reconnect). Invalid enum rejection may finish at boundary without media segments. A recording-stop question needs the named recording/downstream state. Boundary observations do not replace an assigned injection-processing question. When a compliance question requires a known expectation, retain unresolved policy or set `expectationRequired:true`; factual readback alone cannot establish compliance.
 
-Theo input/rủi ro thực: query/body/path/header/protocol có liên quan, kiểm validation và dữ liệu trả về. Không mặc định chỉ XSS/SQLi vì wrapper cho hai rule, cũng không bật mọi rule để tăng số lượng. Thiếu query/body không tự loại toàn bộ active. Phân biệt kỹ thuật đã chạy với kỹ thuật chỉ nằm trong kế hoạch.
+`completionSummary`, derived by the report composer, separates:
 
-## Trước execution: reconcile và lập lượt chạy
+- `assignment`: `complete|partial`, unresolved IDs and gaps, consistent with `taskCompletion`.
+- `dast`: `complete|partial|not-assigned`, reviewed assigned ZAP question IDs/gaps. Includes zap-dast, zap-ui and zap-business-observation without converting UI/BOLA to native-active credit. Unmapped methods remain gaps; outside-zap questions remain catalog work.
+- `discovery`: `reviewed|gaps|legacy-unreviewed` and reviewed scope.
+- `securityOutcome`: finding IDs, violated questions and uncertainty; native severity/confidence remain unchanged.
+- `remediation`: `not-assigned` here; product fixes require a separate assignment.
 
-Đối chiếu recipe và tool thực với inventory/role. Ưu tiên operation có sẵn → cấu hình/phối hợp → mở rộng runner/adapter cần thiết → runner mới có lý do → capability nền tối thiểu. Gắn prerequisite đúng case: deployment, actor/role, fixture, state, operation, kiểm kết quả sau mutation và cleanup liên quan. Không đòi mọi control/qualification cho nhánh không phụ thuộc.
+A missing assigned observation is a coverage gap. A limit on extrapolating beyond tested browsers/representative variants is a conclusion limit, not automatically another assigned test. Honor an explicit user timebox/stop-after-block and retain unperformed work. Do not invent a timebox, SLA or completion from max_actions. Do not repeat traffic for catalog criteria outside ZAP when the assigned dynamic subset is answered. A real unavailable access/policy/capability can end work with partial handoff; proportional helper repair does not require developing a large framework indefinitely.
 
-Không lấy thời gian làm bằng chứng task xong; caps chỉ chia lượt. Không tự dựng source archive/hash/proof campaign mới cho mỗi route. Nếu executor đang bắt pin/proof, đó là dependency implementation cụ thể; không giả pass, không bypass hoặc khái quát rejection thành ZAP không làm được.
+## Reviewed residual decisions
 
-## Dependency và semantics từng nhánh
+Before concluding no useful dynamic work remains, review the relevant residual universe using [the residual contract](user-security-scope.md#residual-review-and-finite-refinement). Partial prose can mix an answered finite question, missing processing readback, a policy dependency and limits on extrapolation; split atoms only when their next actions differ. Read existing outcomes first. Missing handlers with useful preparation do not establish external blockage. Unknown effects retain priority, and independent branches remain eligible.
 
-### Gắn dependency vào case cần nó
+`residualWork.decision` concerns only its explicit reviewExtent; selected-groups keeps outside/unreviewed refs visible. It changes neither taskCompletion nor applicability/evidence rules and accepts no residual risk. A stopped finite dynamic review can coexist with partial catalog coverage, real dependencies or outside-method requirements. Retained aggregate questions require full clause accounting; observed children alone cannot close an unmapped parent. A reviewed parent can be accounted with observed coverage or with explicitly unanswered method/access atoms. Do not demand another scan to make historical partial disappear, or use generalization-limit to remove an assigned “all APIs” duty.
 
-Thiếu deployment chỉ chặn traffic; source discovery vẫn tiếp tục. Thiếu actor một role chỉ chặn các case role đó. Object chưa tạo được cần tìm cách chuẩn bị hợp lệ và ghi bước tiếp, không loại nghiệp vụ lõi. Mutation cần kiểm kết quả/trạng thái liên quan ở mức đủ biết thao tác thành công hoặc bị từ chối; không đòi campaign chứng minh độc lập mới cho mỗi object.
+Use criterion `coverageView` to distinguish historical progress from current projection. DAST `workUnits` deduplicate case identity without relaxing any linked question's extra requirements. Discovery extent and trackSummary bound current work; a few delta observations cannot establish an entire FE/BE track retest.
 
-### Giữ riêng owner của object và quyền của actor
+## Backend and BOLA scope
 
-Role có quyền thao tác object của nhiều owner không làm object mất owner. Shared catalog/dữ liệu công khai khác object cá nhân. Xác định semantics từ nguồn có sẵn và kiểm thử thật; không gán role/route/state của product cũ cho product mới. Policy suy từ source phải được gọi đúng là giả định theo source, chưa tự là chuẩn nghiệp vụ được xác nhận.
+BE anonymous requires actual ZAP DAST across every in-scope public API without logged-in identity, including public login/register. Record seeding/validation/passive separately; sample requests/passive-only do not replace active objectives. Protected-denial is additional.
 
-### Đọc lại kết quả cuối
+BE authenticated requires actual ZAP DAST across every in-scope protected API with correct role/actor and valid session. Map fixtures/inputs/techniques/results and behaviorally different roles. Missing roles remain unexecuted; 401/auth loss is not authenticated coverage. Public APIs reconcile to anonymous scope.
 
-RUN phải giữ đúng nhánh nào đã chạy, role nào, kết quả nào và phần chưa làm; mô tả trong chat phải khớp file. Chưa có dữ liệu thì nói chưa có, không lấp bằng kết quả control hoặc số lượng kỳ vọng cố định.
+BOLA requires applicability/results or explicit untested status for every in-scope endpoint/role, including discovered privileged/anonymous roles where relevant. Check owner-positive/non-owner/cross-owner, functional versus ownership permission, meaningful relations/states/collections/filters/pagination. ZAP-proxied clients or ZAP sendRequest provide observation provenance and do not replace authenticated DAST.
 
-## Caps, quyết định phạm vi và tiếp tục
+“All APIs” means every in-scope method/route, rather than infinite input/rule/role/state combinations. A technique dimension may be grounded N/A while the API still needs handling. Missing token/fixture/capability is open work, not N/A. Never prefill pass or change expectations to match responses.
 
-Sau mỗi lượt cập nhật RUN/ALERTS rồi tự chọn lượt tiếp. Không đợi PM sau từng subset đủ điều kiện. Với lỗi cục bộ, chẩn đoán/sửa/kiểm tra tập trung rồi tiếp tục; không rerun tất cả chỉ vì sửa docs hoặc aggregation. Start/mutation chưa rõ kết quả thì đọc trạng thái trước retry. Chỉ user quyết định loại trừ hoặc giảm scope ban đầu.
+## Frontend scope
 
-## Đối chiếu kết thúc
+Use [track intents](track-intents.md). Anonymous FE needs real unauthenticated browser journeys/actions on public UI and related network surfaces; API/crawlers do not replace UI. Authenticated FE needs actual UI login/protected journeys with correct role/session and UI/network/post-state. API/DB setup is supplementary; browser authentication does not prove native active authentication.
 
-Dùng [vòng thực thi và readback](responsibility-loop.md). Join inventory/roles/journeys độc lập với workload và kết quả. `reconcile_responsibilities` chỉ kiểm cases được truyền vào; rỗng hoặc observed toàn selected cases không là whole-track complete. Thiếu inventory rõ ràng phải nêu discovery incomplete.
+Reconcile UI responsibilities and security questions for every related API/input. Applicable active testing needs separate execution/readback; UI/browser/passive traffic cannot replace it. Ground technique N/A in product facts and keep missing capabilities open. Do not expand to unrelated backend scope. Preserve meaningful GraphQL/RPC operations inside shared endpoints.
 
-### Ý nghĩa kết quả từng input
+## Bounded planning and coverage
 
-Với input/kỹ thuật được chọn theo product, xác định câu hỏi cần trả lời và điều kiện khép tương ứng: validation, lookup, tạo/lưu, phản hồi hoặc chuyển trạng thái khi liên quan. Đối soát ở mức này để traffic của input, role hay nhánh khác không che phần thiếu; không tạo mọi tổ hợp rule × input × role × state hoặc schema/bộ bằng chứng mới.
+Record discovered → request sent → appropriate technique executed → result read separately in RUN without mandatory evidence files/manifests. Operate intake → inventory → security/role/object questions → operation mapping → bounded rounds → execution → readback → reconciliation → focused remediation → continuation.
 
-Câu hỏi và điều kiện khép lấy từ chức năng/input/sink thuộc scope trước chọn workload, không suy ngược từ nhánh mà payload tình cờ chạm được. Nếu product tạo ra trách nhiệm kiểm xử lý/tạo/lưu thì không tự đổi mục tiêu thành chỉ validation/duplicate để khép track. Một baseline tạo mới và một campaign kiểm duplicate vẫn là hai quan sát khác nhau; chưa thay trách nhiệm active trên nhánh tạo mới khi nhánh đó áp dụng. Điều này không bắt mọi input phải tới lưu trữ: applicability theo loại input/kỹ thuật và product vẫn cần được đánh giá cụ thể.
+Choose techniques from actual input/risk before checking wrapper capabilities: relevant query/body/path/header/protocol, validation, and returned data. Do not restrict to XSS/SQLi because of an allowlist or enable every rule to inflate counts. Missing query/body does not eliminate all active work. Planned techniques are not executed techniques.
 
-- Input đã phân bổ cho active phải có biến đổi thực tới ứng dụng và kết quả được đọc theo câu hỏi đó. Baseline `null`, trường bị scanner bỏ qua hoặc campaign có traffic ở trường khác không khép input này. Chuẩn bị seed hợp lệ/kỹ thuật phù hợp hoặc quyết định applicability có căn cứ; một kỹ thuật N/A không khép mọi câu hỏi của input.
-- Phân loại phản hồi theo ý nghĩa thực: boundary validation đúng hợp đồng, denial dự kiến, mất auth, fixture/sibling chặn ngoài ý muốn hoặc đã tới bước xử lý cần kiểm. HTTP status, scan terminal và số request không tự xác định lớp này; dùng response/readback và source/spec sẵn có khi cần. Chưa xác định được thì giữ mục liên quan mở, không suy diễn đã tới handler/lưu trữ.
-- Boundary/denial có thể khép đúng câu hỏi đã chọn cho nó. Nếu câu hỏi là xử lý/tạo/lưu mà uniqueness, field liên quan hoặc state chặn trước đó, giữ riêng kết quả boundary đã có và tiếp tục phần mục tiêu còn thiếu. Không bắt mọi payload được chấp nhận, trả 2xx hoặc tới DB; không coi mọi 400/409 là thiếu coverage.
-- Baseline thành công trước scan chưa bảo đảm fixture còn hợp lệ trong active. Chuẩn bị uniqueness, cặp trường phụ thuộc và object/state phù hợp cho lượt tiếp trong quyền; kiểm phản hồi/trạng thái sau mutation ở mức cần thiết. Kết quả PUT không tự thay POST tạo mới hoặc nhánh nghiệp vụ khác. Reconcile ACK/state trước retry, không nới guard hay sửa product để payload đi qua.
+Before execution reconcile recipes/tools with independent inventory/roles. Prefer native operations → configuration/orchestration → minimal existing adapter extension → justified runner → minimal underlying capability. Attach deployment/actor/fixture/state/operation/post-mutation/cleanup prerequisites only where needed. Caps split rounds; elapsed time is not completion. Existing pin/proof gates are specific implementation dependencies, rather than ZAP impossibility or permission to bypass.
 
-Kết quả xử lý dựa vào hợp đồng và nội dung phản hồi, không chỉ HTTP 2xx: trang login, lỗi nghiệp vụ trong HTTP 200 hoặc phản hồi do guard sinh không thay kết quả handler cần kiểm. Với xử lý bất đồng bộ, HTTP 202/job ACK chỉ xác nhận tiếp nhận; câu hỏi yêu cầu kết quả xử lý còn cần trạng thái/kết quả của đúng job/object qua interface sẵn có. Pending/chưa biết thì đọc trạng thái và tiếp tục phần độc lập, không gửi lại mutation chỉ vì chưa có kết quả cuối. Không buộc mọi ca phải có DB trace hoặc một kiểu readback duy nhất.
+Missing deployment blocks traffic but not source discovery; missing one role blocks that role only. Prepare legitimate objects instead of dropping core features. Read enough post-mutation state to know success/denial without requiring independent proof campaigns. Object ownership persists even when a privileged actor can act across owners. Shared catalogs differ from personal objects. Derive semantics from current product/policy, labeling source assumptions.
 
-### Kết luận toàn track
+## Finite closure conditions
 
-- Mọi method–route thuộc track phải có thao tác/kết quả hoặc chưa thực hiện với lý do cụ thể. Hai track BE vẫn cần DAST ZAP thật; BOLA vẫn xét đủ endpoint–role, ownership và state quan trọng.
-- Còn API/role hoặc câu hỏi input/kỹ thuật thuộc trách nhiệm chưa được xử lý thì không gọi toàn nhiệm vụ hoàn tất. Lỗi ghi rõ không tự khép nghĩa vụ; tiếp tục nhánh đủ điều kiện và sửa lỗi cục bộ trong scope.
-- Khi đủ thao tác theo scope nhưng exploit/policy chưa được xác nhận, nêu giới hạn nhận định; không tự biến scan thành chương trình assurance mới.
-- Zero alerts không chứng minh an toàn. Technical pass, report có sẵn và hai file kết quả không là release sign-off.
+For each relevant question in the existing inventory, record the specific route/input/role/state or journey, expected behavior and basis, sufficient observations, and what would remain open. A closure condition answers a security question; it is not a target count of successful requests, alerts, rules or rounds. Define it before technique selection and retain it during readback. Refine newly discovered branches with a reason, without redefining the question to fit results or expanding user scope.
 
-Trước kết thúc hỏi: **Còn phần việc còn mở nào mà Agent chưa đưa tới một quyết định xử lý có căn cứ ?** Đối chiếu cả trách nhiệm chưa nằm trong workload. Có quyết định chạy/sửa/chuẩn bị không đồng nghĩa đã thực hiện; còn bước hợp lệ trong nhiệm vụ thì tiếp tục. Dependency có căn cứ cho phép bàn giao partial khi không còn nhánh đủ điều kiện, không biến thành scope complete. Giới hạn exploit/policy giữ riêng với execution và coverage. Chi tiết quyết định ở [khắc phục](local-remediation-and-continuation.md#quyết-định-cho-phần-việc-còn-mở).
+Reconcile actual results into: answered with sufficient observations (including observed violations), grounded N/A at the applicable dimension, not yet tested, tested but insufficient/unknown, or blocked by a real dependency. Keep execution coverage separate from security assessment: a tested violation can have complete coverage; an inconclusive policy interpretation can remain explicitly unresolved without repeating the same traffic. Missing actors/fixtures remain open. An answered subset closes only that subset, not its route or track.
+
+A route/role/journey closes when all its assigned applicable questions have sufficient results and readback, with grounded N/A dimensions accounted for and no unresolved discovery/coverage duties. Keep that closure visible when other routes remain partial. Do not mechanically mark every route partial forever, or promote it merely because a scanner ended. For broad assignments discovery must still reconcile the full in-scope inventory.
+
+For each open item, replace generic text such as “more role/input/state testing” with the unanswered question, why current observations are insufficient, and the next action plus its closure/resumption condition. Reuse existing question, remainingWork and nextActions fields; the additive workflow fields stay in existing reports; no extra file is required. If the same item stays open across sessions, use retained results to identify the missing observation, repair or actual policy/authority dependency before selecting more work. Do not keep adding vectors after the assigned questions are answered. New duties need a product/scope basis, not a desire for more coverage or context consumption.
+
+## Continuation and reconciliation
+
+Keep journals/pending state current; update RUN/ALERTS/SCOPE_ALERTS at meaningful milestones and autonomously continue eligible subsets across bounded rounds without per-subset permission requests. Save recovery state without ending the turn; [hand off for another work session](retention-stop-and-recovery.md#working-session-checkpoints) only for a stated checkpoint reason, never merely because a small round ended. A checkpoint with eligible work is partial, not blocked, and does not close the task. Diagnose/fix/test local issues purposefully; documentation/aggregation changes do not require full rescans. Unknown starts/mutations need state readback before retry. Only the user may exclude/reduce assigned scope.
+
+Join full inventory/roles/journeys with workloads/results under the [responsibility loop](responsibility-loop.md). `reconcile_responsibilities` checks only supplied cases; empty or fully observed selected cases do not establish whole-track completion. State incomplete discovery explicitly.
+
+### Per-input result meaning
+
+Derive the question and closure condition from the feature/input/sink before workload selection, rather than whichever branch a payload happened to reach. Distinguish validation/lookup/processing/create/store/response/state transitions when meaningful. Do not replace an assigned processing/create/store objective with duplicate/validation-only checks. A successful baseline and duplicate campaign are separate observations, rather than active coverage of the creation branch. Not every input must reach storage: assess technique/product applicability.
+
+- Allocated active input needs actual application-reaching variation and question-specific readback. Null baselines, skipped fields, or traffic on sibling inputs do not close it. Prepare valid seeds/techniques or ground dimension-specific N/A.
+- Classify actual responses: contractual boundary validation, expected denial, auth loss, unintended fixture/sibling blocking, or intended processing. Status/terminal scan/request counts alone cannot establish this; use content/readback/source/spec as needed. Unknown processing remains open.
+- Boundary/denial may close its own question. If uniqueness/siblings/state block an assigned processing/create/store question, retain the boundary observation and continue the unmet objective. Not every payload needs acceptance, 2xx, or DB access; 400/409 is not automatically missing coverage.
+- Baseline validity can change during active scanning. Prepare uniqueness/dependent fields/objects/state within authorization and inspect relevant mutation outcomes. PUT does not replace POST or another business branch. Reconcile ACK/state before retries without weakening guards or modifying the product.
+
+Login pages, HTTP-200 business errors, and guard responses do not substitute for intended handler results. For asynchronous work, HTTP 202/job ACK establishes acceptance only; processing questions may need the same job/object's state/result through available interfaces. Read pending status and continue independent work without replaying mutations. No universal DB trace/readback format is required.
+
+### Whole-track conclusion
+
+Every in-scope method/route needs actual work/results or explicit unperformed reasons. Both BE tracks still require real ZAP DAST; BOLA still requires endpoint/role/ownership/state reconciliation. Open API/role/input/technique responsibilities prevent full completion. Recorded errors alone do not close work; continue eligible branches and local remediation.
+
+When execution is sufficient but exploit/policy confirmation is absent, bound conclusions without opening an unassigned assurance campaign. Zero alerts, technical pass, existing reports, and three files are not safety/release approval.
+
+Before assignment closure, reconcile all obligations including those outside selected workloads. A decision to run/repair/prepare is unfinished work. At a session checkpoint, preserve useful progress, remaining obligations, unknowns and concrete next actions even if eligible work remains; no fabricated blocker or exhaustive diagnosis is required. An incomplete/emergency checkpoint records recovery needs rather than discarding state. Dependency-based assignment handoff still requires actual diagnosis/options/resumption conditions under [open-work decisions](local-remediation-and-continuation.md#decisions-for-open-work). Neither kind of handoff makes incomplete coverage complete.
+
+## Assessment-round lifecycle and closure
+
+`assessmentRound` version 1 stores `id`, `objective`, `scopeBasis`, `assessmentId`, `product`, `environment`, `scopeRevision`, `reviewUniverse` and `status`. Keep the ID stable across executor allocations and chats. Status is `in-progress|checkpointed|completed|completed-with-limitations|stopped-by-user`. A pause/context handoff is checkpointed; an explicit user stop has a `userRequest:{kind:"stop",source:...}`. A pause uses kind pause. Do not infer either request from a timestamp or a partial result.
+
+Closure requires the whole declared assignment universe reconciled with original requirements and all known inventories/residual sources, no unreviewed group affecting the decision, every backlog item answered/grounded N/A/limited with basis, no useful feasible readback/execution/preparation left, controlled effects/resources and a consistent handoff. Completed requires no applicable unanswered testing duty. Completed-with-limitations retains every unanswered duty, exact access/policy/method reason and concrete reopen condition. An observed violation is an answer, not a coverage deficit or mandatory remediation. Generalization beyond the assignment does not create a new testing duty.
+
+Keep `taskCompletion:complete|partial` and `handoffClosesTask` under their legacy assigned-obligation coverage meaning. All reports add `taskCompletionMeaning:assigned-obligation-coverage`, derived `roundClosed` and `roundOutcome` as the lifecycle headline. `completionSummary.round` contains id/status/closureReason/unansweredObligationIds. A closed round may have partial coverage and handoffClosesTask false. Legacy missing round definitions remain undefined, never automatically closed.
+
+Use [aggregate accounting](user-security-scope.md#aggregate-accounting-and-round-review) instead of the placeholder `remaining-assigned-requirement-resolved`. The parent's original question/required units remain historical; reviewed child obligations drive its current projection, without manufacturing evidence for the placeholder or duplicating child testing duties.
+
+If useful runtime work is feasible but outside an implementation-only turn, return continue with an exact ready-for-execution handoff. Offline implementation is not an external dependency. If an effect reader is available, reconcile first; independent cases stay eligible. Uncontained producers prohibit clean closure. For a truly unreadable effect, retain exact effect/last-known-state, unavailable-reader reason/options, unknown impact, no-replay rule, containment/resource readback and reopen condition; do not mark it resolved or invent a receiving owner.
+
+Finalize only from current inputs. Reopen on scope/build/result/known-duty/resource changes, new actor/policy, a capability/fixture resolving a named dependency, a newly found in-scope feature or an explicit new method/remediation assignment. Partial catalog coverage alone is not a reopen trigger. No reviewer signature, risk acceptance or routine permission to conclude is required.

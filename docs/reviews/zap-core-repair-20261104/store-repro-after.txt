@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-verification-20261104/store-repro.py", line 30, in <module>
+    assert not after['pendingEffects'] and after['eligibleForCompletion']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

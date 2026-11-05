@@ -1,0 +1,141 @@
+{
+  "task": "workflow helper source/document contract audit",
+  "scope": "Read-only source audit and authorized focused fixes; no product/scanner runtime",
+  "deeplyReadFiles": [
+    "lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py",
+    "lib/zap-product-assessment/src/zap_assessment/criteria_delegation.py",
+    "lib/zap-product-assessment/src/zap_assessment/criteria_reporting.py",
+    "lib/zap-product-assessment/src/zap_assessment/product_scope.py",
+    "lib/zap-product-assessment/src/zap_assessment/product_scope_cli.py",
+    "lib/zap-product-assessment/src/zap_assessment/security_scope.py",
+    "lib/zap-product-assessment/src/zap_assessment/business_discovery.py",
+    "lib/zap-product-assessment/src/zap_assessment/question_evidence.py",
+    "lib/zap-product-assessment/src/zap_assessment/work_selection.py",
+    "lib/zap-product-assessment/src/zap_assessment/readiness.py",
+    "lib/zap-product-assessment/src/zap_assessment/residual_review.py",
+    "lib/zap-product-assessment/src/zap_assessment/round_closure.py",
+    "lib/zap-product-assessment/src/zap_assessment/coverage_presentation.py",
+    "lib/zap-product-assessment/tests/test_criteria_workflow.py",
+    "lib/zap-product-assessment/tests/test_criteria_integration.py",
+    "lib/zap-product-assessment/tests/test_criteria_reporting_boundary.py",
+    "lib/zap-product-assessment/tests/test_criteria_cli_boundary.py",
+    "lib/zap-product-assessment/tests/test_business_discovery.py",
+    "lib/zap-product-assessment/tests/test_question_evidence.py",
+    "lib/zap-product-assessment/tests/test_work_selection.py",
+    "lib/zap-product-assessment/tests/test_readiness.py",
+    "lib/zap-product-assessment/tests/test_residual_review.py",
+    "lib/zap-product-assessment/tests/test_round_closure.py",
+    "lib/zap-product-assessment/tests/test_coverage_presentation.py",
+    "lib/zap-product-assessment/tests/test_security_scope.py",
+    "lib/zap-product-assessment/tests/test_pm_scope.py",
+    "lib/zap-product-assessment/tests/test_aggregate_closure.py",
+    "lib/zap-product-assessment/tests/test_resume_inputs.py",
+    "lib/zap-product-assessment/tests/workflow_fixtures.py",
+    "lib/zap-product-assessment/src/zap_assessment/safety_io.py",
+    "lib/zap-product-assessment/schemas/workflow.schema.json",
+    "lib/zap-product-assessment/scripts/product_assessment.py",
+    "references/criteria-driven-workflow.md",
+    "references/delegation-policy.md",
+    "references/operational-readback.md",
+    "references/product-assessment-handoff.md"
+  ],
+  "partiallyReadFiles": [
+    "lib/zap-product-assessment/src/zap_assessment/discovery_handoff.py"
+  ],
+  "structuralOnlyFiles": [],
+  "changedFiles": [
+    "lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py",
+    "lib/zap-product-assessment/src/zap_assessment/criteria_reporting.py",
+    "lib/zap-product-assessment/src/zap_assessment/product_scope_cli.py",
+    "lib/zap-product-assessment/src/zap_assessment/readiness.py",
+    "lib/zap-product-assessment/tests/test_criteria_workflow.py",
+    "lib/zap-product-assessment/tests/test_criteria_reporting_boundary.py",
+    "lib/zap-product-assessment/tests/test_criteria_cli_boundary.py",
+    "lib/zap-product-assessment/tests/test_readiness.py"
+  ],
+  "findings": [
+    {
+      "id": "WF-01",
+      "severity": "P2",
+      "status": "fixed",
+      "source": "lib/zap-product-assessment/src/zap_assessment/criteria_workflow.py:321",
+      "issue": "v2 review rejected reviewed retained-build compatibility after semantic resolver already accepted it",
+      "expected": "Explicit finite compatibility mapping may reuse actual observed context without inventing missing dimensions",
+      "actualBefore": "Post-resolver exact equality required old operation build to equal current case build",
+      "fix": "Keep exact workflow assessment identity (every cw.context key), require actual observed values for every planned dimension, and allow resolver-validated finite compatibility for other case-only dimensions such as retained build",
+      "tests": [
+        "test_retained_build_evidence_requires_explicit_compatibility",
+        "test_compatibility_cannot_invent_operation_context_or_change_origin",
+        "test_compatibility_cannot_replace_assessment_identity"
+      ],
+      "controls": [
+        "No mapping remains pending",
+        "Unknown/unresolved/product-defined mappings remain pending",
+        "Missing operation context rejected",
+        "Origin inheritance rejected",
+        "Retained operation not modified",
+        "Product/environment and assessment-wide build compatibility cannot replace workflow identity"
+      ]
+    },
+    {
+      "id": "WF-02",
+      "severity": "P1",
+      "status": "fixed",
+      "source": "lib/zap-product-assessment/src/zap_assessment/criteria_reporting.py:181;product_scope_cli.py:326;readiness.py:8",
+      "issue": "Opaque setupToken/sessionToken values escaped v2 report/CLI/readiness sanitization although legacy report already treated those keys as private",
+      "reproduction": "Synthetic opaque token strings passed as named nested fields were emitted unchanged before fix",
+      "fix": "Align normalized sensitive-key sets for credential fields; retain semantic IDs and ordinary prose",
+      "tests": [
+        "test_projection_redacts_opaque_setup_and_session_credentials",
+        "test_summary_redacts_opaque_fixture_credentials_and_keeps_semantic_ids",
+        "test_opaque_fixture_credentials_are_redacted_from_nested_facts"
+      ],
+      "limits": "No claim of actual credential exposure; only synthetic values used"
+    },
+    {
+      "id": "WF-03",
+      "severity": "P1",
+      "status": "fixed",
+      "source": "lib/zap-product-assessment/src/zap_assessment/criteria_reporting.py:249",
+      "issue": "Sanitized completed v2 reports could retain dangling resource, containment or resolution evidence pointers",
+      "reproduction": "Resource proof stored under /raw passed current review; publisher removed raw and still emitted completed /raw reference",
+      "fix": "Validate case evidence, workflow resolutions, resourceReview and containedEffects references after redaction in bundle validation, before writing",
+      "tests": [
+        "test_redaction_cannot_remove_resource_resolution_or_containment_proof"
+      ],
+      "controls": [
+        "Each removed raw proof blocks publication without creating destination",
+        "Same legitimate proof under sanitized /readback permits completed publication"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "command": "PYTHONPATH=<bundled src>:<bundled tests> zap-product-assessment/.venv/bin/python -B -m unittest test_criteria_workflow test_criteria_integration test_criteria_reporting_boundary test_criteria_cli_boundary test_readiness -v",
+      "environment": "Python 3.13.2 / jsonschema 4.26.0 existing environment; bundled source verified via module.__file__",
+      "result": "77 passed in 4.211s",
+      "log": "/tmp/zap-audit-workflow-tests.log"
+    },
+    {
+      "command": "Same environment unittest test_round_closure -q",
+      "result": "34 passed in 0.176s",
+      "note": "Before source fixes; unrelated legacy round module unchanged"
+    },
+    {
+      "command": "Initial unittest test_round_closure.CompactRoundTests -v",
+      "result": "Loader error: nonexistent test class; corrected to actual module invocation; not implementation failure"
+    }
+  ],
+  "contractObservations": [
+    "validate_workflow requires formed plan; canonical documentation explicitly distinguishes Gate1 authoring from structural reviewer (not new bug).",
+    "V2 helpers require admitted callback; no auto-discovery-to-live executor exists; documents correctly mark this boundary.",
+    "Packet allowlist and merge result fields match current documented API; discovery/review outputs require coordinator interpretation.",
+    "Legacy scope/round statuses stay independent of v2 and reject v2 entry where documented.",
+    "Source schemas/workflow.schema.json is legacy direct runner workflow schema, not v2 criteria schema; v2 validation is Python-based.",
+    "V2 retains exact workflow context identity even though generic v1 evidence resolver allows more compatibility dimensions; only case-only dimensions may use reviewed finite mappings."
+  ],
+  "limits": [
+    "No live runtime qualification, product traffic, real authentication, Drive delivery or independent semantic oracle was tested.",
+    "Deep review covered assigned workflow modules and associated test modules; this worker did not review other runner files or full schema/profile corpus."
+  ]
+}

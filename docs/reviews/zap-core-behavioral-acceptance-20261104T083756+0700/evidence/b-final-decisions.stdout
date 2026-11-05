@@ -1,0 +1,91 @@
+{
+  "status": "candidate-for-auditor-review",
+  "assessmentStatus": "completed",
+  "assessmentId": "synthetic-zap-core-behavioral-acceptance-20261104T083756+0700",
+  "checkpointGenerationId": "19ca1799d9b82ae2d25952658f27293a44b951cb772fd3130de5254b8c4b487a",
+  "finalGenerationId": "a17cac765e5350e2d15a7073f43d12f7405a3450cb3a7bd1d78b401b22f68e66",
+  "committedGenerationCount": 27,
+  "currentIntegrity": "clean",
+  "historyIntegrity": "clean",
+  "coordinatorIntegrity": "clean",
+  "finalSelector": "workflow-done",
+  "canConcludeTurn": true,
+  "criterionCounts": {
+    "met": 5,
+    "unmet": 1,
+    "not_evaluable": 0,
+    "pending": 0,
+    "notApplicable": 0
+  },
+  "caseOutcomes": {
+    "T-EFFECT": "matched",
+    "T-AFTER": "matched",
+    "T-SOURCE": "violated",
+    "T-CONTROL": "matched",
+    "T-TTL": "matched",
+    "T-FINAL": "matched"
+  },
+  "workItemsClosedInB": [
+    "effect-dispatch",
+    "effect-reader",
+    "dependent-review",
+    "ttl-review",
+    "final-resource-review"
+  ],
+  "workItemsExecutedInB": [
+    "effect-reader",
+    "dependent-review",
+    "ttl-review",
+    "final-resource-review"
+  ],
+  "totalWorkItemsDone": 7,
+  "effectCount": 1,
+  "pendingActionIds": [],
+  "activeLeases": {},
+  "openTransactions": [],
+  "resources": {
+    "synthetic-clock-resource": "stopped",
+    "synthetic-scanner": "stopped",
+    "synthetic-session": "stopped"
+  },
+  "delivery": {
+    "fileId": "synthetic-file-zap-core-behavioral-acceptance-20261104T083756+0700",
+    "readbackRefs": [
+      "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-delivery-readback.stdout"
+    ],
+    "sourceDigest": "987bc2f29246ac72a95099fccfc4a0cf70ac1b62b38c4669560afb4e26ed2299",
+    "status": "verified",
+    "verifiedAt": "2026-11-04T01:52:34.335777+00:00",
+    "worksheetId": "synthetic-worksheet-results"
+  },
+  "phaseBDecisionRange": [
+    22,
+    36
+  ],
+  "phaseBUserInterventions": {
+    "plannedResume": 1,
+    "unplannedContinuation": 0,
+    "corrections": 0,
+    "missingFacts": 0,
+    "hostStops": 0
+  },
+  "historicalLedgerPrefixSha256": "4295afba935f3e48f70ad677c44835b2c8170ec2b34c0434281946b91579f1e4",
+  "coreFinding": {
+    "id": "B-CORE-01",
+    "status": "reproduced",
+    "ref": "evidence/b-repro-closure-selector.stdout"
+  },
+  "evidenceRefs": {
+    "identity": "evidence/b-resolve.stdout",
+    "chats": "evidence/b-app-chats.json",
+    "cold": "evidence/b-cold-next.stdout",
+    "reviewer": "evidence/b-final-review.stdout",
+    "selector": "evidence/b-final-next.stdout",
+    "integrity": "evidence/b-final-inspect.stdout",
+    "recovery": "evidence/b-final-recovery.stdout",
+    "resource": "evidence/b-resource-observation.stdout",
+    "counter": "evidence/b-final-count.stdout",
+    "readback": "evidence/b-delivery-readback.stdout",
+    "decisions": "runbook-decisions.jsonl"
+  }
+}

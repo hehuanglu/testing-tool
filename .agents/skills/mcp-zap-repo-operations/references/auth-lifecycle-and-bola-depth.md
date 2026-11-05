@@ -1,139 +1,48 @@
-# Auth lifecycle và BOLA sâu theo mục tiêu
+# Goal-driven authentication lifecycle and deeper BOLA
 
-Quy ước hiện hành: [ALERTS/RUN](product-assessment-handoff.md) chỉ ghi thao tác và kết quả, không có phần/folder bằng chứng. Chi tiết proof/pin/qualification dưới đây chỉ áp dụng khi entry code thực sự enforce hoặc user giao qualification đó; không tự thêm chúng vào ordinary assessment hay output.
+Use this technique only within the approved [criteria-driven plan](criteria-driven-workflow.md); it adds no track-wide assignment or alternative workflow. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-Đọc phần liên quan theo mục tiêu và discovery. Với BOLA đã giao, object lõi và
-collection isolation có căn cứ là trách nhiệm cơ bản theo [hợp đồng phạm vi](assessment-scope-and-completion.md),
-không tự thành optional vì fixture khó. Lifecycle và kỹ thuật sâu khác có
-applicability riêng. Bàn giao alerts cục bộ theo [handoff](product-assessment-handoff.md#4-điều-kiện-kết-thúc-và-trả-kết-quả)
-mà không chạy module này. Đây là hướng dẫn, không là profile/CLI/schema mới hoặc
-quyền login, mutation, DB, fault hay automation. Thiếu proof không thành pass.
+Use relevant sections only. Deliver the [Drive assessment table](product-assessment-handoff.md); retain RUN/ALERTS/SCOPE_ALERTS internally without evidence sections/folders. Proof/pin/qualification requirements apply only when actual entry code enforces them or the user assigns qualification. Core objects/collection isolation remain assigned BOLA responsibilities under [scope](criteria-driven-workflow.md), rather than optional because fixtures are difficult. This reference adds no profile/CLI/schema or login/mutation/DB/fault/automation authority. Missing proof is not pass.
 
-Tra [auth lifecycle](#chọn-câu-hỏi-auth-lifecycle), [continuity và điểm dừng](#continuity-và-điểm-dừng),
-[ownership sâu](#chọn-câu-hỏi-ownership-sâu), [policy provenance](#policy-provenance-và-checker),
-[race/tenant](#race-concurrency-và-multi-tenant).
+## Select authentication lifecycle questions
 
-## Chọn câu hỏi auth lifecycle
+- **Same token after natural expiry:** establish a correct-actor protected request before actual expiry and observe the same token afterward on compatible target/binding. Record time/timezone/expiry source and private token references/digests, with sanitized observations. Decoded claims provide timing diagnostics, not signature/identity verification. Bound denial conclusions to tested conditions.
+- **Relogin:** observe a genuinely new authorized login and subsequent protected actor. Distinguish login, native auto-relogin, refresh, and epoch/session continuity. Direct relogin does not establish native scanner recovery.
+- **Refresh/revoke/logout:** discover real source/spec/UI/traffic semantics. Storage deletion is not server token rejection. Do not invent endpoints or infer runtime support from names. State which token/session should remain valid and inspect correct-actor before/after behavior.
+- **Auth-loss detection during scans:** when assigned, inspect protected subject samples/native session/operation/interruptions and actual monitor/stop behavior. Direct denial alone does not prove native detection or authorize fault injection.
 
-Chọn đúng câu hỏi thay vì chạy toàn bộ danh sách:
+Natural expiry requires real tokens passing their actual lifetime. Synthetic expired/invalid tokens, changed TTL/clocks, and injected loss controls have separate value without replacing natural product expiry. Skill edits and ordinary alert handoffs do not require waiting for TTL or creating automations.
 
-- **Token cũ sau natural expiry:** trước expiry có protected request đúng actor
-  với token đó; sau thời điểm expiry thực, quan sát cùng token trên target/binding
-  tương thích. Ghi timestamp/timezone, nguồn thời điểm expiry, token reference hoặc
-  digest trong vùng private và request/response refs đã giảm secret. JWT claims
-  tự decode chỉ là timing diagnostic, không là identity/signature verification.
-  Denial của token cũ chỉ hỗ trợ điều kiện đã kiểm; không suy toàn session lifecycle.
-- **Relogin:** quan sát login mới và protected subject đúng actor sau đó nếu được
-  phép; phân biệt hành động login mới với ZAP auto-relogin, refresh và epoch/session
-  continuity. Login success đơn lẻ không khép oracle, direct relogin không chứng
-  minh native scanner tự phục hồi phiên.
-- **Refresh/revoke/logout:** từ source/spec/UI/traffic trong scope, xác định API
-  và semantics thật; frontend xóa storage khác server từ chối token cũ. Không tự
-  tạo endpoint hoặc coi tên route là runtime support. Nếu chọn kiểm, nêu expected
-  token/session nào còn hoặc mất hiệu lực và quan sát đúng actor trước/sau.
-- **Phát hiện mất auth trong scan:** chọn khi cần kiểm monitor/stop của executor,
-  giữ protected subject samples, native session/operation refs và phần traffic bị
-  gián đoạn. Quan sát direct token bị từ chối không tự chứng minh monitor ZAP đã
-  phát hiện/dừng, cũng không là quyền fault injection.
+## Continuity and stopping
 
-Natural expiry cần phiên/token thật đi qua thời gian hiệu lực vốn có. Synthetic
-expired/invalid token, đổi TTL/clock hay owned auth-loss control có giá trị riêng,
-không thay natural expiry product. Không đợi TTL, đổi cấu hình hoặc tạo automation
-trong task sửa skill; ngay cả scan thường cũng không phải chờ để bàn giao alerts.
+Use existing discovery/notes for question/expectation, product/binding/actor/entry/profile, timed before/after observations, continuity/loss, token/relogin/restart changes, direct versus native work, supported/unsupported claims, and next steps. Do not add enums. Follow [auth discovery](auth-capability-discovery.md), preserving executor gates.
 
-## Continuity và điểm dừng
+Missing old tokens/positive baselines/compatible bindings means same-token/session questions remain unexecuted/unverified with actual continuity unknown/lost. Do not recover credentials from shared reports or call fresh logins old tokens. New authorized runs answer new questions, rather than retrospective same-session claims. A passed expiry appointment is not an observation.
 
-Ghi trong các trường discovery hiện có hoặc technical note: câu hỏi/expected;
-product/binding/actor/entry/profile; observation trước/sau với thời điểm/refs;
-continuity còn hay mất, có auto-relogin/đổi token/restart không; phần direct và
-native; điều đã chứng minh/chưa chứng minh và bước tiếp theo. Không thêm enum.
-Theo [auth discovery](auth-capability-discovery.md#quyết-định-coverage) để dùng đúng
-availability/verification/disposition; gate của executor vẫn giữ nguyên.
+Missing refresh/revoke in inspected inventory is `not_observed_in_scope` where appropriate, not runtime pass/fail or automatic executor unsupported. Known unsupported features identify the precise entry/vector. Auth loss stops dependent work and retains partial results; 401/anonymous traffic is not authenticated coverage. Samples do not establish zero-in-flight/all-time behavior. End deeper checks when continuity/budget/new information/authority/capability is exhausted, retaining routine handoff results.
 
-Không còn token hoặc thiếu positive trước đó/cùng binding: ghi không thể thực hiện
-cùng-token/same-session observation từ evidence hiện có; câu hỏi chưa kiểm là
-not-run/unverified với lý do, continuity chưa biết hoặc đã mất theo sự kiện thật.
-Không khôi phục credential từ report chia sẻ hoặc login mới rồi gọi là token cũ.
-Run mới có thể kiểm câu hỏi mới khi được giao, không khép retrospective same-session
-claim. Mốc hẹn expiry đã qua không là bằng chứng đã quan sát.
+### Historical source checkpoint — 2026-10-23
 
-Không thấy API revoke/refresh trong inventory chỉ là applicability fact có nguồn
-và phạm vi khảo sát; dùng `not_observed_in_scope` khi phù hợp, không runtime pass/
-fail. Nếu user muốn kiểm tính năng mà chưa xác định API, ghi câu hỏi/dependency
-chưa giải được; không gọi executor unsupported chỉ vì chưa tìm thấy API. Executor
-không thực thi được tính năng đã biết là unsupported của đúng entry/vector.
+research_product.main check-expiry constructs Product(output) with fixed finalsource origin and `/api/v1/accounts`, reads private actor A, compares exp, and sends direct GET. It bypasses run's discovery/adapter/binding path even if common parser flags exist, and neither prepares native sessions nor measures monitor reaction. Do not advertise it as generic expiry or use old credentials against current deployments. New-deployment/native-loss goals need current authority/binding and a compatible entry, otherwise an implementation/proof dependency. ResearchRun source supports periodic validation/loss latch/owned stops without proving product natural-expiry/runtime monitor behavior.
 
-Mất auth trong scan vẫn dừng nhánh phụ thuộc theo contract và giữ partial evidence;
-không tính 401/anonymous thành authenticated coverage. Giữ giới hạn sampling/stop
-đã quan sát; không suy zero-inflight hoặc chứng nhận mọi thời điểm từ vài samples.
-Dừng kiểm sâu khi thiếu token/continuity, budget hết, không thêm thông tin hoặc
-cần quyền/capability khác. Handoff thường vẫn trả kết quả đúng phần đã kiểm.
+## Select deeper ownership questions
 
-### Giới hạn entry hiện có tại source checkpoint 23/10/2026
+Preserve important object/action/relation/state obligations, then choose bounded [fixtures/workloads](product-extension-planning.md). Record actors/owners/references, before/after state, expected disclosure/side effects, executor, and cost without opening the whole case space.
 
-`research_product.main` có `check-expiry`, nhưng nhánh này dùng `Product(output)`
-với origin finalsource cố định và route `/api/v1/accounts`, đọc actor A từ private
-credentials, so thời gian `exp` rồi direct GET. Nhánh này không dùng discovery/
-adapter/binding admission của `run`, kể cả parser nhận các flags chung. Nó không
-prepare/validate native session hoặc đo monitor reaction. Không quảng bá thành
-lệnh expiry generic hay tự chạy với credential lịch sử trên deployment hiện tại.
+Populated relations differ from empty/null: another relation's success does not close a missing receipt/attachment case. Missing upload/link interfaces leave explicit fixture/entry dependencies rather than fabricated DB results/endpoints. Do not force population of every irrelevant relation.
 
-Nếu mục tiêu cần expiry trên deployment mới hoặc native loss/relogin, xác minh
-current authority/binding và executor phù hợp trước; thiếu entry nhận được scope
-thì ghi dependency implementation/proof riêng, không wrapper vượt admission.
-`ResearchRun` có periodic validate/loss latch/stop theo owned operations trong
-source; code support không là proof natural expiry/runtime monitor loss trên product.
+Collections/aggregates/pagination with owner-scoped data belong to ordinary assigned BOLA. Use distinguishable A/B data and record filters/windows/pages/checker completeness. Missing pages/projections remain claim-specific inconclusive; empty lists do not establish all-state isolation.
 
-## Chọn câu hỏi ownership sâu
+Role differences are ownership only when object-specific expectations differ. Object-independent administrative functions are BFLA questions, rather than forced BOLA. Shared/tenant cases require actual inventory/policy; do not invent grants/roles/tenants.
 
-Lập đủ object/action/relation/state quan trọng có căn cứ trong trách nhiệm, rồi chọn
-workload từng lượt; dùng
-[kế hoạch fixture theo case](product-extension-planning.md#fixture-chỉ-cho-case-đã-chọn).
-Ghi actor/owner/object/reference ở path/query/body, state cần trước/sau, expected
-disclosure/side effect và executor/chi phí. Không mở toàn bộ case space.
+## Policy provenance and checkers
 
-- **Populated relation:** empty/null khác có dữ liệu. Receipt null chưa chứng minh
-  populated receipt authorization; category/transaction populated proof không
-  đóng receipt gap. Nếu chưa có upload/link API trong inventory, ghi chưa kiểm và
-  dependency fixture/entry cụ thể; không chèn DB giả kết quả operation đang kiểm,
-  dựng endpoint hay ép populate mọi relation.
-- **Collection/aggregate/pagination:** giữ trong trách nhiệm BOLA khi contract/discovery
-  cho thấy dữ liệu theo owner (ví dụ order list); không đợi user nêu riêng từng list.
-  Dữ liệu A/B phải đủ phân biệt disclosure/aggregate theo owner; ghi filter/window/
-  pages đã kiểm và completeness theo checker hiện có. Thiếu trang/projection thì
-  giữ inconclusive đúng claim, không lấy một list rỗng chứng minh isolation mọi state.
-- **Role/object relation:** role chỉ liên quan ownership khi expectation phụ thuộc
-  object cụ thể. ADMIN có quyền quản trị chức năng là câu hỏi BFLA riêng nếu không
-  phụ thuộc object; không ép ADMIN để đủ BOLA. Shared/tenant chỉ khi có policy/
-  inventory thực; không tạo role, grant hay tenant giả để đủ checklist.
+Use the catalog and supplied user business knowledge as authoritative expectations under the [agreed policy](assessment-policy.md). Identify relevant action/state/actor relations from them; inspected source/spec may explain product behavior or support explicitly labeled assumptions only where the supplied requirements leave details open. Do not override an explicit catalog requirement with implementation behavior or add independent knowledge verification. Source supports case design without certifying correct business policy.
 
-## Policy provenance và checker
+Separate checker code/tamper controls may establish consistency against locked expectations but do not make policy independent if it comes from the same source. Separate policy confidence, capture/state completeness, integrity, and outcome while preserving actual gates. Nonempty policyAcceptanceRefs is not automatic sign-off; do not fabricate references, equate checker pass with approval, or edit locked plans after execution.
 
-Với từng expectation có ảnh hưởng kết luận, ghi nguồn: requirement/spec; hành vi
-đã thống nhất có reference thật; hoặc source-derived hypothesis. Ghi action/state/
-actor relation mà nguồn nói tới và mâu thuẫn còn lại. Source là căn cứ hữu ích để
-thiết kế case, nhưng không tự chứng minh đó là yêu cầu nghiệp vụ đúng.
+Read existing authorized policy first; ask only unavailable questions materially affecting conclusions, such as assigned-object versus all-object access or foreign relation permissions. Do not demand ceremonial sign-off or discard useful source assumptions. Report observations/unknowns at their actual level; matched is not approval and capture failures are not policy gaps.
 
-Checker tách code khỏi executor, không import evaluate hoặc có tamper controls
-chỉ củng cố tính nhất quán theo expected đã khóa. Nó không làm policy độc lập nếu
-expected vẫn lấy cùng source/artifact origin. Tách policy confidence, capture/
-state completeness, integrity và outcome; giữ verdict/gate thật của entry.
-`policyAcceptanceRefs` không rỗng trong common code không tự là sign-off: không
-điền reference giả, lấy checker pass làm acceptance hay đổi locked plan sau run.
+## Race, concurrency, and multi-tenancy
 
-Nếu policy chưa rõ, đọc requirement/spec/contract sẵn có trong scope rồi chỉ nêu
-câu hỏi thay đổi conclusion, ví dụ “EMPLOYEE được đọc mọi order hay chỉ order được
-giao?” hoặc “foreign category reference khi tạo transaction có được phép không?”.
-Chỉ hỏi phần không tự giải được khi nó thật sự ảnh hưởng kết luận; không bắt
-reviewer sign-off hình thức cho mọi case hoặc coi source vô giá trị. Trong lúc
-chưa giải, bàn giao observations và unknown/source-hypothesis đúng mức; không
-nâng matched thành security approval, không hạ capture failure thành policy gap.
-
-## Race, concurrency và multi-tenant
-
-Chỉ xem xét khi product/mục tiêu cần và executor có admission/fixture/oracle/proof
-tương ứng. Serial ownership cases, pagination và child-kill/lost-response proof
-không chứng minh race/concurrent isolation hoặc tenant boundary. Không có evidence
-hỗ trợ thì ghi chưa kiểm/unsupported đúng entry hoặc chưa quan sát applicability;
-không hứa capability chỉ vì tài liệu nêu candidate. Thêm executor/adapter hoặc
-concurrent dispatch là task code riêng, không nằm trong module documentation này.
+Use only when relevant and admitted fixtures/oracles/proofs exist. Serial ownership/pagination/child-kill/lost-response tests do not establish concurrent or tenant isolation. State untested/entry-specific unsupported/not-observed applicability accurately. Documentation candidates do not establish runtime capability. New concurrent adapters/dispatchers are separate assigned code work.

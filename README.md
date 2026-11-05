@@ -1,101 +1,89 @@
 # Security Testing Tool
 
-Hai skill kiểm thử bảo mật có thể dùng cho nhiều project. Mỗi skill đóng gói hướng dẫn, helpers và tài nguyên hỗ trợ trong chính thư mục của nó; source sản phẩm và runtime scanner được chuẩn bị riêng.
+Two portable security-testing skills for use across projects. Each directory includes its instructions, helpers, and supporting resources; product source and scanner runtimes are prepared separately.
 
-- **[run-semgrep-scanner](.agents/skills/run-semgrep-scanner/SKILL.md):** kiểm source bằng Semgrep OSS/CE kết hợp đọc code, triage và đối soát coverage. Có năm track: BE input, FE browser, authentication/session, authorization/ownership và configuration/build.
-- **[mcp-zap-repo-operations](.agents/skills/mcp-zap-repo-operations/SKILL.md):** vận hành ZAP qua MCP cho BE/FE anonymous, authenticated và BOLA ownership; discovery sản phẩm, chọn kỹ thuật, thực hiện và đọc kết quả theo phạm vi được giao.
+- **[run-semgrep-scanner](.agents/skills/run-semgrep-scanner/SKILL.md):** local Semgrep OSS/CE scans, source review, triage, and coverage reconciliation across backend input, browser, authentication/session, authorization/ownership, and configuration/build tracks.
+- **[mcp-zap-repo-operations](.agents/skills/mcp-zap-repo-operations/SKILL.md):** MCP/ZAP operations for anonymous/authenticated backend/frontend testing and BOLA ownership checks, from discovery through execution and result reconciliation.
 
-## Cấu trúc
+`main` maintains the English instructions. `vie-version` preserves the Vietnamese baseline.
+
+## Repository layout
 
 ```text
 .agents/skills/
 ├── run-semgrep-scanner/
 │   ├── SKILL.md
-│   ├── references/           # Workflow, catalog, setup và contract đầu ra
-│   ├── rules/                # Rules local đi kèm
-│   ├── scripts/              # Installer, thu round và kiểm báo cáo
-│   ├── tests/ và examples/   # Fixtures/tests và dữ liệu tổng hợp
-│   └── requirements.txt      # Version engine Semgrep đã kiểm
+│   ├── agents/              # UI metadata
+│   ├── references/          # Workflow, catalog, setup, reporting
+│   ├── rules/               # Bundled local rules
+│   ├── scripts/             # Installer, collection, report checks
+│   ├── tests/ and examples/ # Synthetic fixtures and contracts
+│   └── requirements.txt     # Tested Semgrep engine pin
 └── mcp-zap-repo-operations/
     ├── SKILL.md
-    ├── references/           # Workflow, operations, runtime và setup
-    ├── scripts/              # Installer và helpers vận hành
+    ├── agents/
+    ├── references/          # Workflow, operations, runtime, setup
+    ├── scripts/             # Installer and operations helpers
     └── lib/
-        ├── zap-product-assessment/  # Source, schemas, profiles, CLI và tests
-        └── mcp-zap-server/          # Helper transport/parser cùng license
-
-mcp-zap-server/               # Source scanner riêng, dùng khi cần build/setup
+        ├── zap-product-assessment/ # Source, schemas, profiles, CLI, tests
+        └── mcp-zap-server/         # Reused helpers and license
+mcp-zap-server/               # Separate scanner source for build/setup
 ```
 
-Để mang skill sang project khác, chỉ cần nguyên thư mục skill tương ứng. `lib/mcp-zap-server/` trong skill ZAP chứa helper được tái sử dụng, không phải một scanner server. Source scanner ở root repo không bắt buộc phải copy nếu đã có connector/runtime phù hợp.
+Copy the complete skill directory to another project. Bundled `lib/mcp-zap-server/` contains reused helpers, not a scanner server. External scanner source is unnecessary when a suitable connector/runtime already exists. Vendored implementation/runbooks and historical fixtures retain their original language and interfaces; maintained skill instructions and metadata are English.
 
-## 1. Lấy repository
+## 1. Clone the repository
 
 ```sh
 git clone https://github.com/hehuanglu/testing-tool.git
 cd testing-tool
 ```
 
-Các lệnh bên dưới bắt đầu từ root checkout này, trừ khi ghi khác. Installer chỉ dùng Python stdlib; nó không cài engine, cấu hình MCP hoặc chạy kiểm thử trên sản phẩm.
+Unless stated otherwise, commands start at this checkout root. Installers use Python stdlib and do not install engines, configure MCP, or scan products.
 
-## 2. Chọn cách dùng skill
+## 2. Install the skills
 
-### Dùng theo project
-
-Copy nguyên một hoặc cả hai thư mục vào `.agents/skills/` của project đích. Có thể dùng installer để copy đủ tài nguyên và phát hiện bản đã tồn tại:
+For a project-local copy, replace PROJECT_DIR with the actual destination:
 
 ```sh
 PROJECT_DIR='/absolute/path/to/your-project'
-
 python3 -B .agents/skills/run-semgrep-scanner/scripts/install_skill.py install \
   --target "$PROJECT_DIR/.agents/skills/run-semgrep-scanner"
-
 python3 -B .agents/skills/mcp-zap-repo-operations/scripts/install_skill.py install \
   --target "$PROJECT_DIR/.agents/skills/mcp-zap-repo-operations"
 ```
 
-Thay `PROJECT_DIR` bằng đường dẫn project thực. Không cần mang scripts hoặc thư viện từ root repo sang cùng. Giữ nguyên tên và toàn bộ nội dung thư mục skill, không chỉ copy `SKILL.md`.
-
-### Cài bản cá nhân
-
-Để dùng chung cho các project trên cùng máy, cài vào `~/.codex/skills/`:
+Keep the names and complete directories, rather than copying SKILL.md alone. Root-level libraries/scripts are not needed alongside them. For personal installations shared across projects, omit --target:
 
 ```sh
 python3 -B .agents/skills/run-semgrep-scanner/scripts/install_skill.py install
 python3 -B .agents/skills/mcp-zap-repo-operations/scripts/install_skill.py install
 ```
 
-Chỉ chọn những skill cần dùng. Khi có cả bản project và bản cá nhân, kiểm đúng đường dẫn skill agent đã nạp trước khi sửa hoặc vận hành.
+Install only needed skills and verify the loaded path when personal/project copies coexist. Maintain repository sources first, then synchronize installations.
 
-### Kiểm và cập nhật
-
-Sau khi pull thay đổi:
+After pulling changes:
 
 ```sh
 git pull --ff-only
-
 python3 -B .agents/skills/run-semgrep-scanner/scripts/install_skill.py check
 python3 -B .agents/skills/mcp-zap-repo-operations/scripts/install_skill.py check
 ```
 
-`check` exit 0 khi toàn bộ file khớp nguồn, exit 1 khi thiếu/khác. `install` cài mới hoặc giữ nguyên bản đã trùng; bản khác nguồn cần kiểm danh sách thay đổi rồi cập nhật bằng `install --update`. Với bản project, thêm đúng `--target` như lúc cài vào cả lệnh check và install.
+Check exits 0 for identical trees and 1 for missing/different files. Inspect drift, then update intentionally:
 
 ```sh
 python3 -B .agents/skills/run-semgrep-scanner/scripts/install_skill.py install --update
 python3 -B .agents/skills/mcp-zap-repo-operations/scripts/install_skill.py install --update
 ```
 
-Update giữ nguyên bản cũ trong thư mục backup ngoài `skills/` trước khi thay cây skill. Với target cá nhân mặc định, backup ở `~/.codex/skill-backups/`; với target khác, installer in đường dẫn backup thực. Cache Python và venv không được đóng gói. Không chạy hai installer đồng thời trên cùng target.
+For project copies use the same --target for checks/updates. Update backs up old content outside skills before replacement (`~/.codex/skill-backups/` for personal defaults; other destinations are printed). Python caches/virtual environments are excluded. Do not concurrently install to one target.
 
-Bảo trì nguồn trong `.agents/skills/` của repository rồi đồng bộ bản sử dụng; không chỉ sửa bản cá nhân nếu muốn chia sẻ thay đổi qua Git.
-
-## 3. Chuẩn bị runtime
+## 3. Prepare runtimes
 
 ### Semgrep
 
-Cần Python 3.10+ và Semgrep OSS/CE. Helpers chỉ dùng stdlib. Bộ fixtures đã kiểm với Semgrep **1.176.0**, được pin trong `requirements.txt`; đây không phải lock toàn bộ dependency bắc cầu.
-
-Nếu chưa có engine phù hợp, chủ động chuẩn bị venv ngoài skill và source sản phẩm:
+Use Python 3.10+ and Semgrep OSS/CE. Helpers use stdlib. Fixtures were checked with **1.176.0**, pinned directly in requirements.txt rather than a full transitive lock. If needed, explicitly prepare an environment outside skill/product:
 
 ```sh
 SEMGREP_VENV="$HOME/.local/share/security-testing/semgrep-venv"
@@ -105,56 +93,53 @@ python3 -m venv "$SEMGREP_VENV"
 export PATH="$SEMGREP_VENV/bin:$PATH"
 ```
 
-Pip cần mạng để tải package. Bước setup này tách khỏi assessment: scan dùng rules local, settings/log riêng, tắt metrics và version check. Những thiết lập đó không chặn mạng; tác vụ yêu cầu offline bắt buộc cần isolation đã xác minh. Xem [setup Semgrep](.agents/skills/run-semgrep-scanner/references/setup.md) và [operations](.agents/skills/run-semgrep-scanner/references/semgrep-operations.md).
+Package setup uses networking and is separate from assessment. Scans use inspected local rules, private settings/logs, and disabled metrics/version checks. These settings do not block networks: mandatory offline work requires verified isolation. Read [setup](.agents/skills/run-semgrep-scanner/references/setup.md) and [operations](.agents/skills/run-semgrep-scanner/references/semgrep-operations.md). Bundled rules mainly target NestJS/TypeScript, React, and configuration; other stacks require suitable local/custom rules or manual review. Zero matches does not establish safety or coverage.
 
-Rules đi kèm chủ yếu cho NestJS/TypeScript, React và config. Stack khác cần discovery, local/custom rules hoặc đọc source phù hợp; zero matches không chứng minh coverage hay an toàn.
+### ZAP through MCP
 
-### ZAP qua MCP
+Configure a connector to an authorized scanner, then verify actual tools/schemas/endpoints/auth profiles. For scanner builds/setup read its [README](mcp-zap-server/README.md). Reuse suitable isolated existing runtimes rather than rebuilding for every project.
 
-Chuẩn bị connector MCP trỏ tới scanner được phép sử dụng, rồi xác minh tools/schema, endpoint và auth profile thực. Nếu cần tự dựng hoặc build scanner, xem [hướng dẫn scanner](mcp-zap-server/README.md). Không cần dựng lại scanner cho mỗi project nếu runtime hiện có đáp ứng workload và cách ly phù hợp.
-
-Helpers stdlib có thể chạy riêng. Khi dùng thư viện assessment đi kèm, cần **Python 3.13** và dependencies trong lock file:
+Stdlib helpers can run independently. The bundled assessment library requires **Python 3.13** and locked dependencies:
 
 ```sh
 ZAP_SKILL="$PWD/.agents/skills/mcp-zap-repo-operations"
 ASSESSMENT_ROOT="$ZAP_SKILL/lib/zap-product-assessment"
 ZAP_VENV="$HOME/.local/share/security-testing/zap-assessment-venv"
-
 python3.13 -m venv "$ZAP_VENV"
 "$ZAP_VENV/bin/python" -m pip install -r "$ASSESSMENT_ROOT/requirements.lock"
-
 PYTHONPATH="$ASSESSMENT_ROOT/src" "$ZAP_VENV/bin/python" \
   "$ASSESSMENT_ROOT/scripts/product_assessment.py" --help
 ```
 
-Lệnh `--help` không gửi traffic. Docker, browser, pinned images hoặc JAR chỉ cần cho executor được chọn thực sự sử dụng chúng. Khi cần source/build/doctor scanner, xác minh checkout riêng qua `MCP_ZAP_REPO`; không suy đường dẫn từ cwd sản phẩm. Xem [setup ZAP](.agents/skills/mcp-zap-repo-operations/references/setup.md) và [runtime](.agents/skills/mcp-zap-repo-operations/references/local-runtime.md).
+Help sends no traffic. Docker/browsers/pinned images/JARs are required only by selected executors. Verify separate MCP_ZAP_REPO for scanner source/build/doctor rather than deriving it from product cwd. Read [setup](.agents/skills/mcp-zap-repo-operations/references/setup.md) and [runtime](.agents/skills/mcp-zap-repo-operations/references/local-runtime.md).
 
-## 4. Giao nhiệm vụ cho agent
+## 4. Assign an assessment
 
-Ví dụ cho Semgrep:
-
-```text
-Dùng $run-semgrep-scanner kiểm source tại /absolute/path/to/product.
-Phạm vi: BE input và authorization/ownership. Đọc code để triage các candidates
-và bàn giao ALERTS.json, RUN.json cho từng track.
-```
-
-Ví dụ cho ZAP:
+Example Semgrep request:
 
 ```text
-Dùng $mcp-zap-repo-operations kiểm BE anonymous của môi trường test tại
-<origin được phép>, với source tại /absolute/path/to/product.
-Discovery toàn bộ public API trong scope, dùng runtime MCP đã cấu hình,
-đọc kết quả và bàn giao ALERTS.json, RUN.json cùng phần chưa kiểm.
+Use $run-semgrep-scanner to assess source at /absolute/path/to/product.
+Scope: backend input and authorization/ownership. Review source to triage
+candidates and deliver ALERTS.json and RUN.json for each track.
 ```
 
-Nêu product/source hoặc deployment, mục tiêu, phạm vi và quyền kiểm thử. Agent discovery inventory và chọn kỹ thuật; bạn không cần cung cấp rule IDs hoặc tự lập command scan. Có thể giao targeted scan hoặc retest; không mặc định mở mọi track.
+Example ZAP request:
 
-Product không cần tên hay layout cố định. Các adapter legacy có contract riêng, không được dùng mapping của product trước làm mặc định cho product mới. ZAP authenticated cần actor/session thật; direct request hoặc BOLA không thay native authenticated DAST. FE cần browser/UI journey phù hợp, và UI/passive traffic không tự khép trách nhiệm active đang áp dụng.
+```text
+Use $mcp-zap-repo-operations to assess anonymous backend APIs at
+<authorized test origin>, with source at /absolute/path/to/product.
+Discover all in-scope public APIs, use the configured MCP runtime,
+read results, and deliver RUN.json, ALERTS.json and SCOPE_ALERTS.json
+with untested scope. Use my supplied security policy/catalog when provided.
+```
 
-## 5. Kiểm cài đặt mà không scan product
+Specify product/source/deployment, objectives, scope, and testing authority. The agent discovers inventory/techniques; rule IDs and hand-written scan commands are unnecessary. Targeted scans/retests do not automatically open every track. Responding in the user's language remains supported.
 
-Semgrep helpers và báo cáo tổng hợp mẫu:
+Products need no fixed names/layouts. Legacy adapters have specific contracts, rather than defaults for new products. Authenticated ZAP requires real actors/sessions; direct/BOLA requests do not replace native authenticated DAST. FE needs actual browser/UI journeys, and passive/UI traffic does not close applicable active duties.
+
+## 5. Check installation without scanning a product
+
+Semgrep helper tests and synthetic reports:
 
 ```sh
 SEMGREP_SKILL="$PWD/.agents/skills/run-semgrep-scanner"
@@ -164,22 +149,17 @@ python3 -B "$SEMGREP_SKILL/scripts/check_report_links.py" \
   "$SEMGREP_SKILL/examples/reporting/ALERTS.example.json"
 ```
 
-ZAP contract tests, sau khi chuẩn bị venv và các biến ở phần runtime:
+ZAP contract tests after preparing the runtime variables above:
 
 ```sh
 PYTHONPATH="$ASSESSMENT_ROOT/src:$ASSESSMENT_ROOT/tests" "$ZAP_VENV/bin/python" -B \
   -m unittest discover -s "$ASSESSMENT_ROOT/tests" -p test_assessment.py -v
 ```
 
-Đây là kiểm helper/contract trên dữ liệu tổng hợp, không phải kết quả assessment sản phẩm. Đọc [fixtures Semgrep](.agents/skills/run-semgrep-scanner/tests/README.md) nếu cần kiểm engine/rules thật. Không lấy help, tests pass hoặc exit 0 làm chứng nhận phạm vi sản phẩm đã hoàn tất.
+These test helpers/contracts against synthetic data rather than assess products. See [Semgrep fixtures](.agents/skills/run-semgrep-scanner/tests/README.md) for actual detector checks. Help/tests/exit 0 do not establish product-scope completion.
 
-## Đầu ra và dữ liệu local
+## Results and private data
 
-Bộ bàn giao cuối gồm hai file:
+Deliver `ALERTS.json` with actual findings/alerts, triage and native/manual/direct provenance; and `RUN.json` with scope/inventory, actual operations/results, coverage, limits, unfinished work, and completion. Semgrep uses one pair per sequential track. ZAP aggregates assigned scope/tracks and additionally delivers `SCOPE_ALERTS.json` with every assigned user criterion, applicability, questions, finding associations and gaps. The agent prepares internal mappings from supplied JSON/text and product discovery; see [user security scope and offline CLI](.agents/skills/mcp-zap-repo-operations/references/user-security-scope.md).
 
-- `ALERTS.json`: findings/alerts thực, triage và nguồn công cụ hoặc đọc source/direct; giữ severity/confidence phù hợp.
-- `RUN.json`: scope, inventory, thao tác và kết quả, coverage, hạn chế, việc chưa làm và trạng thái hoàn tất.
-
-Semgrep bàn giao một cặp cho mỗi track theo workflow tuần tự; ZAP tổng hợp theo scope/track được giao. Log/raw/spec/actor/session của executor giữ private ngoài skill và source sản phẩm. Không commit credential, token, cookie, raw response hoặc dữ liệu chạy vào thư mục skill để mang sang project sau.
-
-Zero alerts không đồng nghĩa sản phẩm an toàn. Chỉ khép phạm vi khi inventory và câu hỏi trong scope đã được đối soát, đồng thời ghi rõ phần chưa thực hiện hoặc bị chặn.
+Keep executor logs/raw/spec/actors/sessions private outside skill/product. Do not commit credentials/tokens/cookies/raw responses/run data into portable skill directories. Zero alerts does not establish safety. Close scope only after inventory/questions are reconciled and unexecuted/blocked work remains accurately represented.

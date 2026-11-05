@@ -1,0 +1,24 @@
+# Business work blocks across chats
+
+Reuse the same approved assessment, RUN, checklist, journals and evidence across chats. Each business work block groups compatible cases from the approved plan for execution and resumption. Record its case IDs and exit condition in the checklist. A block may span chats and may be executed by the coordinator or an assigned worker. Shared scanner and fixture resources still require ownership checks and sequential dispatch.
+
+1. **Prepare and approve.** Bind criteria, plan and operator. Group complementary cases by business journey or resource boundary, such as account/session, order ownership or recovery/mail. Keep shared facts, actors, fixtures and readback in one context window. Retain each criterion's oracle and separate incompatible effects or states into lanes.
+2. **Admit runtime evidence.** Verify actual origin, build, scanner, session, actor and guard. Pass the first eligible authorized native message through capture, receipt, semantic link and the same reviewer used for closure. Confirm acceptance of the representative evidence unit before expanding traffic in that lane. Other units may remain pending. An alias authorized for traffic needs an exact case evidence binding. Within an unchanged approved target/effects envelope, use a coordinator-reviewed [finite native evidence allocation](operational-readback.md#finite-native-evidence-allocations-under-an-unchanged-plan) with original authority/deployment references when needed; this bookkeeping grants no permission. Preserve the actual origin and approval history when resolving a mismatch. Independent source and admitted lanes can continue.
+3. **Execute one business block.** Carry its complementary cases from baseline through probe, semantic readback, effect reconciliation and reviewer result before opening another group where feasible. If blocked, retain the precise missing obligation and select an independent ready block. Schedule TTL readback as described below.
+4. **Deliver.** Consolidate reviewed results and reconciled resources, then write and verify the single Sheets table in the final delivery turn. Keep intermediate state private. See [Drive output](single-table-drive-output.md).
+
+## Resume a block in a fresh chat
+
+Record the block ID, case IDs, approval digest, artifact references, actor/fixture aliases, scanner identity, held resources, outstanding intent/ACK IDs, exit conditions and exact next action in the checklist and RUN continuation. Save incrementally before effects and immediately after ACK/readback so usage limits do not require a final turn to create the checkpoint.
+
+In a fresh chat, load the official RUN, selected checklist item and only its relevant references. Verify approval, reconcile unknown effects before retry and compare the resume selector candidate with the active block and any TTL deadline using the [checkpoint scheduling checks](retention-stop-and-recovery.md#operator-schedule-and-crash-checkpoint). Reuse compatible fixtures and evidence. Track the block as ready, in progress, waiting or reconciled separately from criterion verdicts. An interrupted turn or a worker finishing alone does not close a block. See [recovery](retention-stop-and-recovery.md).
+
+## Put TTL readback last
+
+If expiry applies, establish the exact token or object, authoritative deadline and pre-expiry positive early enough to let time elapse during independent work. Preserve the same-token reference and plan an independent control that remains valid at readback. Isolate the subject from other groups' password changes, rotation, revocation and writes.
+
+Schedule post-expiry readback in the last execution group before delivery. Notify the human of the earliest valid time in their timezone, with the date when needed, and persist that timestamp and basis for a fresh chat. Continue independent ready work before the deadline. If only the timed step remains and the session cannot wait, checkpoint for resumption after that time. A recorded deadline does not schedule background monitoring. After the deadline, send the same token explicitly, verify the live control, reconcile the result and restore any approved temporary TTL setting. A changed subject or missing valid control keeps the case pending.
+
+## Managed block scheduling
+
+Represent blocks and work items in OPERATOR. Give each case one block, retain its order and exit condition, and declare work dependencies and effective runtime resources. The selector prefers ready work in the active block, then other ready blocks. Case dependencies require a reviewed matched or violated outcome. Work completion metadata records scheduling progress. Preserve case verdicts in reviewer output. Schedule TTL after feasible execution work using the subject, deadline and controls. Continue through all blocks within the current assignment and apply the actual handoff boundary.

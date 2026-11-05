@@ -1,10 +1,10 @@
-# Vận hành Semgrep local
+# Operate local Semgrep
 
-## Chuẩn bị
+## Preparation
 
-Giải `SKILL_DIR` theo file SKILL.md đã nạp; `PRODUCT_DIR`, source roots và `RULES_FILE` lấy từ discovery. Không mang đường dẫn máy hoặc layout product cũ vào mặc định. Dùng binary cài sẵn; thiếu CLI thì chẩn đoán cách cài phù hợp trong quyền nhiệm vụ, không giả đã scan. Git/Python chỉ cần nếu thao tác cụ thể sử dụng chúng.
+Resolve `SKILL_DIR` from the loaded SKILL.md. Discover `PRODUCT_DIR`, source roots, and `RULES_FILE`; do not assume another product's layout. Use an installed binary and verify actual help/version. Missing CLI means unexecuted work, rather than an implied scan. Git/Python are needed only for operations using them.
 
-Tạo workspace private cho settings/log/raw của assessment, nằm ngoài source targets và không được commit. Ví dụ dưới dùng shell macOS/Linux; trên nền tảng khác dùng cách tương đương, không yêu cầu shell này là điều kiện Semgrep. Thay các giá trị mô tả bằng đường dẫn đã xác minh trước chạy:
+Create private settings/log/raw storage outside source targets and Git. Adapt these macOS/Linux examples to the platform and replace paths before execution:
 
 ```sh
 SKILL_DIR='/absolute/path/to/run-semgrep-scanner'
@@ -23,26 +23,26 @@ semgrep --version
 semgrep scan --help
 ```
 
-Đây là môi trường process riêng, không sửa settings đăng nhập hiện có. Không dump toàn env vì có thể chứa credential. Kiểm help của CLI thực và đọc cấu hình trước chạy. Không gắn label “readiness passed” nếu chưa kiểm rule/targets, không gọi help/version là scan.
+These are process-local settings; preserve existing login settings. Do not dump environments containing credentials. Help/version is not a scan or readiness certification.
 
-## Privacy và network
+## Privacy and network
 
-Mặc định chỉ dùng file rules local đã đọc; không `--config auto`, Registry ID, URL, `semgrep ci`, login, publish hay URL output. `--metrics=off`, version check off, settings riêng và token trống giảm kết nối tự động nhưng **không phải cơ chế chặn mạng**. Nếu tác vụ đòi offline bắt buộc, cần guard đã xác minh; thiếu thì báo blocker cho lượt đó, không tự hạ điều kiện.
+Use inspected local rule files. Do not use `--config auto`, Registry IDs, URLs, `semgrep ci`, login, publish, or URL output. Disabled metrics/version checks, isolated settings, and empty tokens reduce automatic connections but **do not block networking**. Mandatory offline work requires verified isolation; report a blocker if unavailable rather than weakening the requirement.
 
-Trên macOS có `sandbox-exec`, có thể dùng prefix sau cho version/help, lint, test và scan; kiểm guard chạy được và kiểm đối chứng một kết nối bị từ chối trước khi ghi network blocked (ví dụ loopback server local cùng connect probe với/không guard, không dùng dữ liệu product):
+On macOS, when available, use verified `sandbox-exec` prefixes for help/version, lint, tests, and scans. Verify denial with a non-product loopback probe that succeeds without the guard and fails with it:
 
 ```sh
 printf '(version 1)\n(allow default)\n(deny network*)\n' > "$SCAN_WORK/network-deny.sb"
 sandbox-exec -f "$SCAN_WORK/network-deny.sb" semgrep --version
 ```
 
-Trên Linux/Windows dùng isolation sẵn có phù hợp nếu cần, không đoán rằng một flag của Semgrep chặn network. Không tự provision Docker/VM hoặc sửa firewall hệ thống. Thiếu sandbox-exec là giới hạn cơ chế macOS, không là giới hạn phân tích source của Semgrep.
+Use suitable verified existing isolation on Linux/Windows when required. Do not assume a Semgrep flag blocks networking, provision Docker/VMs, or change system firewalls independently. Missing sandbox-exec limits that isolation method, rather than Semgrep source analysis itself.
 
-## Chạy lượt có mục đích
+## Purposeful rounds
 
-Theo [workflow mặc định](sequential-track-workflow.md), chọn rounds cho track đang làm, thu/đọc native output và tự kiểm cặp ALERTS/RUN trước execution track sau. Nhiều `--config`/roots có thể phục vụ các câu hỏi của cùng track; không tự gộp execution nhiều track chỉ vì tiện chạy cả thư viện. Output private của round khác với hai file handoff ổn định cho từng track.
+Under the [sequential workflow](sequential-track-workflow.md), collect/read/review the current track before executing another. Multiple configurations/roots may serve one track; cross-track combination requires the user's request. Private round output differs from stable per-track handoff files.
 
-Ví dụ native CLI sau đã chọn đúng source/rules. Nếu dùng guard, thêm prefix đã kiểm phía trước `semgrep`. Tạo tên lượt mới mỗi lần, không overwrite output cũ:
+After verifying rules/targets, use a new output directory per round. Add a verified guard prefix when required:
 
 ```sh
 mkdir "$SCAN_WORK/round-01"
@@ -57,66 +57,44 @@ semgrep scan --oss-only \
 SCAN_EXIT=$?
 ```
 
-Ghi `SCAN_EXIT` ngay sau process, không lấy exit của `cat`, pipe hay parser thay thế. CLI có thể exit 0 khi có findings nếu không dùng `--error`; `--error` thay đổi ý nghĩa exit 1. Đọc exit theo command/help thực cùng JSON và stderr, không gán chung mọi nonzero thành product finding hoặc mọi zero thành clean.
+Capture the process exit immediately, rather than a parser/pipe/cat exit. Findings may coexist with exit 0; `--error` changes exit-1 meaning. Interpret exit with actual help/command, JSON, and stderr. Nonzero does not automatically mean a product finding; zero does not mean clean.
 
-Có thể lặp `--config` cho nhiều bộ local, truyền nhiều roots nếu đều thuộc scope, hoặc `--include`/`--exclude` với lý do. Không có exclusion bắt buộc cho `.env*` hay tests: quyết định theo mục tiêu và bảo mật đầu ra; không in nội dung secret. Binary/generated/vendor thường cần xử lý khác source ứng dụng, ghi phần loại trừ ảnh hưởng.
+Repeat local configs/roots or add justified includes/excludes within scope. There is no mandatory `.env*`/test exclusion: use scope/privacy needs without printing secrets. Explain relevant binary/generated/vendor exclusions.
 
-`--include` không tự vượt `.gitignore`/`.semgrepignore` và không thay đổi `paths` trong rule. `--no-git-ignore` chỉ thay đổi lọc Git, không vô hiệu hóa mọi lọc khác. Không sửa ignore repo hoặc dùng internal flags để lách phần scope chưa hiểu. Khi cần quét file bị bỏ, xác định cơ chế cụ thể của version, thực hiện lượt hẹp phù hợp hoặc bố trí bản sao private có mapping rõ; ghi ảnh hưởng đổi path đối với rules. Không coi bản sao mặc định tương đương project đầy đủ.
+`--include` does not override all Git/Semgrep ignores or rule `paths`. `--no-git-ignore` affects Git filtering only. Diagnose version-specific filtering before narrow rescans or private copies with explicit path mappings; preserve repository ignores. Copies/path changes may alter rule applicability and are not automatically equivalent to full projects.
 
-Có thể thêm `--dataflow-traces` cho output mà version hỗ trợ khi cần đọc luồng. Không coi có trace là engine đã theo đầy đủ mọi caller/file. `--timeout`, `--timeout-threshold`, `--jobs` chọn theo lượt và tài nguyên; không cố định 30 phút hoặc unlimited cho mọi product.
+Use supported `--dataflow-traces` when needed, without claiming complete cross-file/caller coverage. Choose timeouts/thresholds/jobs for actual resources and rounds, rather than fixed unlimited or 30-minute defaults.
 
-## Đọc kết quả thực
+## Read actual results
 
-### Helper thu round tùy chọn
+### Optional round collector
 
-[record_round.py](../scripts/record_round.py) chạy argv qua subprocess không shell, ghi thời điểm/exit trực tiếp và đọc native JSON. Sau khi đọc CLI help, chọn rules/targets và lưu checkpoint RUN, tạo spec private theo [mẫu](../examples/reporting/round-spec.example.json). Thay các placeholder; đặt `--output-dir` mới ngoài mọi source target. `argv` chứa token `{native_json}` đúng một lần tại giá trị `--json-output`; có thể thêm guard đã kiểm phía trước semgrep. Dùng môi trường settings/metrics/version/token riêng ở bước chuẩn bị, helper không tự provision hoặc xác minh guard.
+[record_round.py](../scripts/record_round.py) executes argv without a shell and records timing/exit/native JSON. After help, rule/target selection, and the RUN checkpoint, prepare a private [specification](../examples/reporting/round-spec.example.json), replacing placeholders. Use a fresh output directory outside all targets. Include `{native_json}` exactly once as the `--json-output` value; prepend a verified guard if applicable. The helper does not provision or verify isolation.
 
 ```sh
 python3 "$SKILL_DIR/scripts/record_round.py" --spec "$SCAN_WORK/round-spec.json" --output-dir "$SCAN_WORK/round-02"
 ```
 
-Spec ghi cwd/targets thực và privacy/rules/exclusions đã chọn. `redact_values` liệt kê literal cần che khỏi metadata, kể cả positional args/paths nếu nhạy cảm; helper còn che secret-shaped assignments và flags phổ biến. Không truyền credential thật trên argv; không có heuristic redaction nào bảo đảm nhận mọi secret. Spec, native.json, stdout/stderr vẫn private, có thể chứa source/material nhạy cảm; không in chúng mặc định. File `round.json` không có matched lines, interpolated native messages, error text hoặc env dump; giữ index/reference về raw để tester đọc đã lọc. Raw message/ID/occurrences không bị xóa.
+Record actual cwd/targets/privacy/rules/exclusions. `redact_values` identifies sensitive literals, including paths/positional arguments. The helper additionally redacts common secret-shaped assignments/flags, but heuristics cannot guarantee all secrets; never pass real credentials on argv. Spec/native/stdout/stderr remain private and may contain sensitive source. Do not print them by default. `round.json` omits matched lines, interpolated native messages, error text, and environment dumps while retaining private-raw indexes/references.
 
-Exit helper cho biết đã thu được bản ghi; scan exit nằm ở `round.exit_code`, không lấy helper exit 0 làm scan pass. Helper chỉ thu observed facts: version/engine fields có thật, native results/errors/scanned/skipped entries và nguồn mỗi count. Requested engine giữ riêng, không giả actual. Chưa có adapter log-count đã kiểm theo version nên counts chỉ log/loaded/executed để null; không dùng wording log hoặc `time.rules` suy coverage. Unknown output/counts giữ null, zero scanned có diagnostic không clean. `status` null, `finding_ids` rỗng chờ tester đối soát; helper không chọn expectation, false-positive, priority, root cause hay completion. `review_groups` chỉ nhóm cùng native location để tiết kiệm đọc, chưa nhóm issues; tester có thể ghi caller/control dùng chung sau review. Merge bản ghi đã đọc vào RUN; `round.json` và raw không là file handoff mới.
+Helper success means collection, not scan success; use `round.exit_code`. Record observed version/engine/results/errors/scanned/skipped entries and count provenance. Requested engine differs from actual. Without a verified version-specific log adapter, log-only/loaded/executed counts remain null; log wording and `time.rules` do not establish coverage. Unknown output/counts remain null. Zero scanned is diagnostic, not clean. Status stays null and finding IDs empty until review. `review_groups` groups native locations for reading, rather than vulnerabilities; tester review determines shared callers/controls/root causes. Merge reviewed records into RUN; internal round/raw files are not additional handoffs.
 
-[report_records.py](../scripts/report_records.py) hỗ trợ `init <new-dir> --assessment-id <id>` tạo hai draft, hoặc `question Q-01 --track-id be-input --base-id BE-IN-01` xuất skeleton để bổ sung vào RUN. Không overwrite file có sẵn; draft null phải được tester hoàn thiện theo mức nhiệm vụ. [check_report_links.py](../scripts/check_report_links.py) chỉ đọc hai báo cáo, báo lỗi liên kết/provenance/counts đã biết, không tự sửa nội dung hoặc kiểm sự thật evidence.
+[report_records.py](../scripts/report_records.py) supports `init <new-dir> --assessment-id <id>` and `question Q-01 --track-id be-input --base-id BE-IN-01`. It does not overwrite files or complete draft decisions. [check_report_links.py](../scripts/check_report_links.py) reads the two reports and checks known links/provenance/counts without editing or verifying evidence truth.
 
-Đọc native JSON/log local, chỉ trích dữ liệu cần thiết đã sanitize. Tuỳ version, kiểm các phần `results`, `errors`, `paths.scanned`, `paths.skipped`, `skipped_rules`, `time` và engine/version khi có. Không giả key luôn tồn tại. Unknown là null; danh sách lỗi rỗng chỉ có nghĩa trong dữ liệu thực đã đọc được.
+Inspect actual version-dependent JSON/log fields: `results`, `errors`, `paths.scanned`, `paths.skipped`, `skipped_rules`, `time`, engine/version. Missing fields remain unknown/null. An empty errors array means only what the inspected output establishes.
 
-Phân biệt:
+Distinguish configured/valid/loaded/executed rules; candidate/scanned/skipped files; parse errors/invalid rules/timeouts/empty targets/unsupported languages/crashes/findings; and started/process-ended/readable-output/question-answered states. Reading 85 configurations does not establish all rules executed on every target. Timing rule lists are not execution counts. A “Partially analyzed” heading with `<none>` is not a parse error.
 
-- rules cấu hình / hợp lệ / loaded / thực sự executed nếu công cụ có thông tin; không suy executed từ số rules trong YAML;
-- candidate files / files scanned / skipped và lý do; tổng scanned không chứng minh mọi rule áp dụng mọi file;
-- parse error, invalid rule, timeout, empty target, unsupported language, tool crash và findings;
-- lượt bắt đầu / process kết thúc / output đọc được / câu hỏi nghiệp vụ đã giải quyết.
+Round completed requires valid output and no unresolved error preventing its purpose. Record partial/blocked as appropriate and retain usable findings even when another part failed.
 
-Các con số có thể khác nhau hợp lệ: CLI có thể đọc 85 rules nhưng chỉ chạy phần áp dụng cho ngôn ngữ/path của targets. Danh sách `time.rules` phục vụ timing không tự là số loaded/executed; giữ số gốc kèm ý nghĩa và để null nếu chưa xác định được. Với verbose logs, phân biệt tiêu đề “Partially analyzed” với danh sách lỗi bên dưới; tiêu đề kèm `<none>` không phải một lỗi parse.
+## Parsing, local metachecks, and tests
 
-Lượt chỉ gọi `completed` khi thực thi có kết quả hợp lệ và không còn lỗi làm thiếu mục tiêu lượt. Còn một phần lỗi thì `partial`; không thực hiện được phép kiểm có nghĩa thì `blocked`. Dù process kết thúc, vẫn ghi native exit và dữ liệu partial. Không loại bỏ findings của phần chạy được chỉ vì phần khác lỗi.
+Ordinary scans parse rules; inspect actual errors rather than blindly invoking `--validate`, which may fetch remote `p/semgrep-rule-lints` in some versions. If parse-only offline checking is necessary, inspect the installed semgrep-core help and supported local functionality; its CLI is version-specific, rather than a fixed skill dependency.
 
-## Rule parsing, offline metachecks và test
+[offline-rule-lints.yml](offline-rule-lints.yml) checks only `fix`/`fix-regex`, not full semantics. Scan selected rules with the same local OSS/privacy/strict/output options and that config. Metacheck findings are not product findings. Do not use `--autofix` or silently change semantics to pass.
 
-Scan thông thường kiểm cấu hình/rule trước hoặc trong thực thi; kiểm lỗi đó ở lượt thực, không chạy `--validate` mù quáng. Một số version dùng `--validate` để tải `p/semgrep-rule-lints`, không phù hợp yêu cầu local/offline. Nếu cần parse-only offline, kiểm đường dẫn/flags của `semgrep-core` cài cùng CLI rồi dùng khả năng local có thật; core CLI là chi tiết theo version, không là dependency cố định của skill.
+For new/changed rules, put representative matching/nonmatching fixtures beside rules with matching basenames in a separate test area. Use language-appropriate `ruleid:` and `ok:` annotations. Run supported `semgrep scan --test /local/rule-tests --oss-only --metrics=off --disable-version-check` with isolated settings/required guard and inspect actual counts/errors. Diagnose harness/version problems; direct fixture scanning and exact-location comparison is an acceptable explicitly documented alternative. Parsing or unexecuted tests do not establish detector correctness. See [rules/triage](rules-and-triage.md) and [fixtures](../tests/README.md).
 
-Metacheck local chỉ phát hiện directive `fix`/`fix-regex`, không chứng minh rule đúng ngữ nghĩa. Có thể chạy chính nó bằng Semgrep local trên thư mục rules được chọn, dùng nguyên flags OSS/privacy/strict/output như lượt thường và `--config "$SKILL_DIR/references/offline-rule-lints.yml"`. Không dùng findings của metacheck làm findings của product. Scan không được dùng `--autofix`; nếu metacheck phát hiện directive, đọc và báo đúng; không dùng autofix hoặc thay semantics âm thầm để báo pass.
+## Continuation and retesting
 
-Với rule mới/sửa, tạo test file cạnh rule với cùng basename và extension phù hợp, trong thư mục test riêng. Dùng `# ruleid: <id>` cho ca nên bắt, `# ok: <id>` cho ca không nên bắt (comment theo ngôn ngữ). Chạy bằng `semgrep scan --test /local/rule-tests --oss-only --metrics=off --disable-version-check` cùng settings riêng và guard nếu cần; đọc số ca, kết quả và lỗi thật. Nếu test harness lỗi, chẩn đoán cách gọi/version; có thể scan fixture và đối chiếu vị trí mong đợi trực tiếp, ghi đúng phương pháp thay thế. Không coi YAML parse pass hoặc test không chạy là rule đã bắt đúng. Xem [rules và triage](rules-and-triage.md) và [layout fixtures](../tests/README.md).
-
-## Tiếp tục và retest
-
-Mỗi lượt mới có output riêng; giữ câu hỏi, lệnh, source version và kết quả liên quan. Sau interrupt, kiểm process/output thuộc lượt trước trước khi kết luận; scan read-only có thể chạy lại sau reconcile, ghi đó là lượt mới. Ghi source_state_id và các câu hỏi/lượt đã đối soát khi tiếp tục.
-
-Retest sau thay đổi cần xem diff và chạy rule/source chịu ảnh hưởng, mở lại ngữ cảnh kiểm soát. Finding biến mất có thể do đổi path, ignore, rule hoặc scanner; kiểm nguyên nhân trước ghi fixed. Nếu chỉ được giao retest, không tự sửa ứng dụng hay mở whole-product assessment.
-
-Liên kết source state/thao tác/counts theo [contract v2](reporting-and-completion.md); evidence native/manual theo [evidence](evidence.md). Scan output thuộc private workspace, không overwrite lượt hoặc báo cáo lịch sử.
-
-## Tài liệu gốc khi cần kiểm capability
-
-- [Chạy rules local và kết hợp rules](https://docs.semgrep.dev/running-rules)
-- [CLI reference và exit codes](https://docs.semgrep.dev/cli-reference)
-- [Ignore và target selection](https://docs.semgrep.dev/ignoring-files-folders-code)
-- [Taint analysis](https://docs.semgrep.dev/writing-rules/data-flow/taint-mode/overview)
-- [Test rules](https://docs.semgrep.dev/writing-rules/testing-rules)
-- [Ranh giới CE và cross-file analysis](https://docs.semgrep.dev/semgrep-code/semgrep-pro-engine-intro)
-
-Help/runtime được cài là căn cứ cho flags đang thực thi; kiểm tài liệu chính thức khi thông tin version chưa rõ. Không biến một lần smoke thành chứng nhận hỗ trợ mọi version/ngôn ngữ.
+Each round retains separate output, questions, command, source version, and results. After interruption, inspect prior process/output before retrying; reconciled read-only scans may be rerun as new rounds. Record source-state IDs and reconciled work. Retest affected source/rules against changes and control context. Missing matches caused by ignores/filters/rule/engine changes do not establish fixes. Preserve historical native output and reports, continue feasible independent work, and use the [responsibility loop](responsibility-loop.md) before handoff.

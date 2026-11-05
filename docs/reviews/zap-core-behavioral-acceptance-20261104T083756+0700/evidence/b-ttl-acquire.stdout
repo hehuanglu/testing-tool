@@ -1,0 +1,1 @@
+{"assessmentId": "synthetic-zap-core-behavioral-acceptance-20261104T083756+0700", "taskId": "b-ttl", "workerId": "coordinator", "packetDigest": "bc01ca97d058563d10b3a252ff0c2a080f605745d23c0696855eb84ace8d0029", "resourceIds": ["synthetic-clock-resource"], "transactionId": "339413ce83902c9e3ddfad2ca8066171697ad07e318ba68b35bbc433ccba9adc", "alreadyApplied": false}

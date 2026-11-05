@@ -26,7 +26,8 @@ def save(root,name,value):
 def pins():
     files=[*Path(__file__).parent.glob('fe_anonymous_*.py'),*ROOT.joinpath('schemas').glob('fe-anonymous-*.json'),ROOT/'scripts/fe_anonymous_research.py']
     files += [Path(__file__).with_name(n) for n in ('ui_webdriver.py','runtime.py','transport.py','journal.py','evidence.py','anonymous_runner.py','discovery_handoff.py','product_cli.py','product_workflow.py','product_handoff.py','product_scope.py','product_scope_cli.py')]
-    files += [ROOT/'profiles/runtime-baseline.json']
+    files += [ROOT/'profiles/runtime-baseline.json',Path(__file__).with_name('security_scope.py')]
+    files += [Path(__file__).with_name(n) for n in ('business_discovery.py','question_evidence.py','work_selection.py','readiness.py','coverage_presentation.py','residual_review.py')]
     return {str(p):digest(p) for p in sorted(files)}
 
 def sources(doc):

@@ -1,5 +1,7 @@
 # FE authenticated research
 
+This is a technical browser research contract. Read the [documentation boundaries](README.md); criteria workflow v2 owns new assessment approvals, verdicts and Drive delivery. The legacy responsibility/qualification instructions below apply only to their selected versioned executor.
+
 `fe-authenticated-research/1.0` is a separate research lane. Its contracts are `fe-authenticated-research-plan/1.0`, `fe-authenticated-journeys/1.0`, and `fe-authenticated-evidence/1.0`. It does not change strict contracts or the existing backend/anonymous gates.
 
 Inspect the current source, supported contracts and qualification inputs before execution. Prior product runs are not packaged or reusable authority. Code/help availability alone does not establish runtime qualification.

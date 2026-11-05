@@ -1,0 +1,46 @@
+{
+  "generationId": "7d1791ca8de43ecc26c8fc5983211a288fd75f915647d483086b363267090edf",
+  "injectedTime": "2026-11-05T00:00:00Z",
+  "dispatches": 0,
+  "inputs": {
+    "run": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/state/generations/7d1791ca8de43ecc26c8fc5983211a288fd75f915647d483086b363267090edf/RUN.json",
+    "operator": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/fixture/state/generations/7d1791ca8de43ecc26c8fc5983211a288fd75f915647d483086b363267090edf/OPERATOR.json",
+    "recovery": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-ttl-released.stdout",
+    "review": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-resource-pending-review.stdout",
+    "historicalDecision": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/b-resource-next.stdout"
+  },
+  "decision": {
+    "decisionVersion": 1,
+    "planDigest": "962e33611ab3278b77cd36ed3e2a8be4ef245a9d719d35a0a10fbed60210ad2b",
+    "mode": "normal",
+    "assessmentStatus": "executing",
+    "criterionCounts": {
+      "met": 4,
+      "unmet": 1,
+      "not_evaluable": 0,
+      "pending": 1,
+      "notApplicable": 0
+    },
+    "pendingActionIds": [],
+    "pendingCertainty": "complete",
+    "readyWorkIds": [
+      "final-resource-review"
+    ],
+    "deferred": [],
+    "blockedCases": {},
+    "nextAction": {
+      "kind": "resource-review",
+      "workId": "final-resource-review",
+      "blockId": "B-TIME-CLOSE",
+      "reasonCode": "ready-work",
+      "refs": [
+        "fixture"
+      ],
+      "nextStep": "Reconcile the fixture resource disposition against readback before delivery",
+      "caseId": "T-FINAL"
+    },
+    "nextWakeAt": null,
+    "canConcludeTurn": false,
+    "conclusionReason": null
+  }
+}

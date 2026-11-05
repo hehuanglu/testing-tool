@@ -99,8 +99,23 @@ class ResearchRun:
         self.event('plan-locked',sha256=self.plan_digest)
     def event(self, event_type, **fields):
         with self.lock:
-            with (self.out/'journal.jsonl').open('a') as f:
-                f.write(json.dumps({'event':event_type,'at':time.time(),'monotonic':self.clock(),**fields})+'\n')
+            from .safety_io import write_all
+            data=(json.dumps({'event':event_type,'at':time.time(),'monotonic':self.clock(),**fields})+'\n').encode()
+            try:
+                fd=os.open(self.out/'journal.jsonl',os.O_WRONLY|os.O_APPEND|os.O_CREAT|os.O_NOFOLLOW,0o600)
+                try:
+                    write_all(fd,data)
+                    os.fsync(fd)
+                finally:os.close(fd)
+                # Persist a newly created journal's directory entry before dispatch.
+                parent=os.open(self.out,os.O_RDONLY)
+                try:os.fsync(parent)
+                finally:os.close(parent)
+            except OSError:
+                # A failed ACK write can follow a real effect. Do not admit a
+                # second start even when the uncertainty record also cannot sync.
+                self.lost.set()
+                raise
     def tool(self, name, args, client=None):
         self.event('mcp-intent',tool=name,arguments=args)
         result=(client or self.client).call_tool(name,args)
@@ -137,7 +152,9 @@ class ResearchRun:
         while not self.done.wait(self.plan['limits']['monitorIntervalSeconds']):
             try:self.current()
             except Exception as e:
-                self.event('binding-or-resource-loss',error=type(e).__name__);self.lost.set()
+                self.lost.set()
+                try:self.event('binding-or-resource-loss',error=type(e).__name__)
+                except OSError:pass  # Still stop owned producers when the journal is unavailable.
             if self.lost.is_set() or not self.validate(self.monitor_client):
                 self.lost.set();self.stop_all('auth-or-binding-loss');return
     def stop_all(self, reason):
@@ -145,13 +162,26 @@ class ResearchRun:
         for op in owned:
             if op.get('terminal'):continue
             begin=self.clock()
+            record={'operationId':op['operationId'],'reason':reason,'requestedAt':begin}
+            # Stop only ACKed operations held by this run. Never turn a journal
+            # failure into a broad stop, a start replay or a second stop dispatch.
+            if op['kind'] not in ('crawl','attack') or not isinstance(op['operationId'],str) or not op['operationId']:
+                self.lost.set();record['error']='InvalidOwnedOperation';self.stop_records.append(record);continue
+            name='zap_'+op['kind']+'_stop';args={'operationId':op['operationId']}
             try:
-                result=self.tool('zap_'+op['kind']+'_stop',{'operationId':op['operationId']},self.monitor_client)
-                self.stop_records.append({'operationId':op['operationId'],'reason':reason,'requestedAt':begin,
-                                          'ackAt':self.clock(),'result':result})
+                try:self.event('mcp-intent',tool=name,arguments=args)
+                except OSError as e:record.setdefault('journalErrors',[]).append({'stage':'intent','type':type(e).__name__})
+                result=self.monitor_client.call_tool(name,args)
+                record.update(ackAt=self.clock(),result=result)
+                try:self.event('mcp-response',tool=name,result=result)
+                except OSError as e:record.setdefault('journalErrors',[]).append({'stage':'response','type':type(e).__name__})
             except Exception as e:
-                self.stop_records.append({'operationId':op['operationId'],'reason':reason,'requestedAt':begin,'error':type(e).__name__})
-        write_json(self.out/'stops.json',self.stop_records)
+                record['error']=type(e).__name__
+            self.stop_records.append(record)
+        try:write_json(self.out/'stops.json',self.stop_records)
+        except OSError:
+            self.lost.set()
+            raise  # Memory retains ACK facts; all owned stop attempts already ran.
     def start(self, kind, target, **args):
         self.current()
         if self.plan.get('schemaVersion') in ('research-plan/2.0','research-plan/2.1'):

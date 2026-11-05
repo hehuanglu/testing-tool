@@ -127,8 +127,10 @@ class PMAcceptanceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             compact_results(Path(td)/'out',{'executionStatus':'completed','exitCode':0},alerts,scope)
             saved=json.loads((Path(td)/'out/RUN.json').read_text());a=json.loads((Path(td)/'out/ALERTS.json').read_text())
-            self.assertEqual(saved['notPerformed'],scope['openResponsibilities']);self.assertEqual(a['alerts'],alerts['alerts']);self.assertEqual(a['summary'],alerts['summary']);self.assertEqual(a['taskCompletion'],'partial')
-            self.assertEqual({p.name for p in (Path(td)/'out').iterdir()},{'RUN.json','ALERTS.json'})
+            self.assertEqual(saved['notPerformed'],scope['openResponsibilities'])
+            for key,value in alerts['alerts'][0].items():self.assertEqual(a['alerts'][0][key],value)
+            self.assertTrue(a['alerts'][0]['findingId']);self.assertEqual(a['summary'],alerts['summary']);self.assertEqual(a['taskCompletion'],'partial')
+            self.assertEqual({p.name for p in (Path(td)/'out').iterdir()},{'RUN.json','ALERTS.json','SCOPE_ALERTS.json'})
     def test_16_user_stop_and_phase_boundary(self):
         result=continue_work(inventory([case(actions=[action('never')])],phaseOnly=True),{}, {},{'never':lambda a:self.fail('continued after PM stop')},persist=lambda x:None,stop=True)
         self.assertEqual(result['taskCompletion'],'partial');self.assertFalse(result['wholeTrackComplete'])
@@ -306,6 +308,20 @@ class ContinuationControlTests(unittest.TestCase):
 
 
 class RolloverAndReportingTests(unittest.TestCase):
+    def test_v1_report_composer_reconciles_run_pending_state_without_new_traffic(self):
+        from workflow_fixtures import inventory as v1_inventory, operation, observed as v1_observed
+        inv=v1_inventory();op=operation()
+        rec=reconcile(inv,{'pin':v1_observed()},{},operations=[op])
+        self.assertEqual(rec['taskCompletion'],'complete')
+        source=dict(taskCompletion='complete',operations=[op],continuation=dict(pendingOperations=[
+            dict(operationRef='attempt-a',lastKnownState='unknown')]))
+        before=copy.deepcopy(source)
+        result=apply_completion(source,rec)
+        self.assertEqual(result['taskCompletion'],'partial')
+        self.assertEqual(result['completionSummary']['assignment']['status'],'partial')
+        self.assertTrue(result['notPerformed'][0]['outcomeUnknown'])
+        self.assertEqual(source,before)
+
     def test_reconciled_unknown_does_not_resurrect_after_another_allocation(self):
         events=[{'actionId':'old-post','caseId':'search','state':'unknown','effect':'mutation'}]
         inv=inventory([case(actions=[action('read-state','reconcile-state')])])

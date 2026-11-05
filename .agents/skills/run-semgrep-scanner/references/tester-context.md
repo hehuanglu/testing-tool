@@ -1,25 +1,25 @@
-# Context: tester dùng Semgrep và đọc source
+# Context: testing with Semgrep and source review
 
-Bắt đầu từ chức năng: ai dùng, ai kiểm soát dữ liệu, tài sản/quyền nào cần bảo vệ, kỳ vọng từ đâu, source nào có thể trả lời? Người giao việc không phải thiết kế workload. Chọn phép kiểm nhỏ nhất trả lời được câu hỏi trong scope, rồi đối soát phần còn thiếu.
+Start with functionality: who uses it, who controls the data, which assets/permissions matter, where expectations come from, and which source can answer the question. The requester need not design the workload. Choose the smallest useful check, then reconcile remaining scope.
 
-## Ba lớp nhận định
+## Three kinds of claims
 
-- **Source structure:** pattern, import, control flow, call path, predicate và cấu hình đã đọc. Rule match chỉ chứng minh phần pattern/engine quan sát được.
-- **Runtime behavior:** deployment có dùng nhánh/config đó, dữ liệu thật, redirects, thời gian hết hạn và browser execution. Source có thể cho giả thuyết hoặc ràng buộc, không tự là kết quả runtime.
-- **Policy correctness:** spec/policy do user cung cấp hoặc tài liệu có thẩm quyền; expectation suy từ implementation phải ghi là giả định source. Implementation khớp giả định không chứng nhận policy đúng.
+- **Source structure:** inspected patterns, imports, control flow, call paths, predicates, and configuration. A match establishes only what that pattern/engine observed.
+- **Runtime behavior:** deployed branches/configuration, actual data, redirects, expiry timing, and browser execution. Source supports hypotheses or constraints, rather than automatically establishing runtime results.
+- **Policy correctness:** user-provided specifications/policies or authoritative documentation. Label expectations inferred from implementation as source assumptions; matching implementation does not certify the policy.
 
-Không bắt exploit động, hai fresh runs, source snapshot/hash hoặc chứng minh toàn scanner để kết luận SAST có giới hạn. Supported phải tương xứng claim và controls đã đọc; không thấy control trong một đoạn nhỏ chưa chứng minh toàn hệ thống thiếu control.
+A bounded SAST conclusion does not require dynamic exploitation, two fresh runs, snapshots/hashes, or qualification of the entire scanner. Support must match the claim and inspected controls. A missing control in a small snippet does not establish system-wide absence.
 
-## Điều kiện làm việc
+## Working conditions
 
-Khi tài liệu khác source, ghi `document_statement`, `source_implementation_or_declaration`, `comparison_scope`, `authority_currentness`, `permitted_claim` trong result/review. README/runtime note không tự là requirement hiện hành: authority/currentness chưa xác nhận phải để rõ unknown. Phân biệt discrepancy giữa hai nguồn, vi phạm requirement đã xác nhận, và thiếu control runtime; loại trước không tự chứng minh loại sau. Áp dụng cả CFG-01 về config lẫn AUTH-05 về guards/lookup. Không gọi declaration discrepancy là runtime exploit.
+When documentation differs from source, record `document_statement`, `source_implementation_or_declaration`, `comparison_scope`, `authority_currentness`, and `permitted_claim` in the result/review. README/runtime notes are not automatically current requirements; leave authority/currentness unknown when unverified. Distinguish source/document discrepancies, violations of verified requirements, and missing runtime controls. Apply this to CFG-01 configuration and AUTH-05 guards/lookups. A declaration discrepancy is not a runtime exploit.
 
-Đọc source không cần Git, deployment, token hoặc build. Nếu có Git, ghi revision và dirty; giữ thay đổi có sẵn. Nếu không có Git, ghi roots, thời gian quan sát và thông tin phiên bản có thật. Không tự cài dependencies/provision runtime. Source đổi thì ghi source state mới và đánh giá phần cần đọc/chạy lại.
+Source review does not require Git, deployment, tokens, or a build. When Git exists, record revision/dirty state and preserve existing changes. Otherwise record roots, observation time, and available version information. Do not provision a runtime or install dependencies merely to read source. Record changed source state and reassess affected work.
 
-Inventory từ source/spec/config độc lập findings: module, function, entrypoint, input, identity, persistence, UI và config liên quan. Public/protected chỉ mô tả đường source theo routing/guards đọc được. Không cần mọi product có HTTP; jobs, events và libraries có trust boundaries riêng.
+Inventory source/specifications/configuration independently of findings: modules, functions, entry points, input, identity, persistence, UI, and configuration. Public/protected describes inspected routing/guards. Jobs, events, and libraries also have trust boundaries; products need not expose HTTP.
 
-Tên field/route/owner chỉ gợi ý discovery. Đọc implementation của sanitizer/guard/wrapper và callers trước tin kiểm soát. Mapping product để ở working area riêng ngoài core skill, không hardcode verdict hoặc policy từ một product thành mặc định.
+Field/route/owner names are discovery hints. Inspect sanitizer/guard/wrapper implementations and callers before relying on them. Keep product mappings in a separate working area, outside the core skill; do not generalize one product's policy or verdict.
 
-## Trách nhiệm có giới hạn
+## Bounded responsibility
 
-Scope quyết định câu hỏi cần trả lời, base giúp bắt đầu, capability quyết định kỹ thuật. Thiếu bundled rule → tìm local rules, custom rule có fixture khi hữu ích, đọc source khả thi và giữ phần còn thiếu; không đổi thành N/A. Search/inventory chưa là security observation. Ghi nguồn và giới hạn trước tổng hợp theo [workflow](tester-workflow.md).
+Scope defines questions; bases provide starting points; capabilities determine techniques. Missing bundled rules require consideration of local/custom rules with useful fixtures and feasible manual review, rather than N/A. Searches/inventory are not security observations. Record provenance and limits before reporting under the [workflow](tester-workflow.md).

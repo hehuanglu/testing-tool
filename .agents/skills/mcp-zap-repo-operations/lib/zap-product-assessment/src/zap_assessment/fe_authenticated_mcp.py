@@ -4,10 +4,11 @@ from .anonymous_runner import RecordedMCP as BaseRecordedMCP
 from .fe_authenticated_contract import save
 class RecordedMCP(BaseRecordedMCP):
     def record_response(self,prefix,result):
-        if not prefix.endswith('-zap_report_read_chunk'):return super().record_response(prefix,result)
+        if not prefix.endswith('-zap_report_read_chunk') or not isinstance(result.get('content'),list):
+            return super().record_response(prefix,result)
         record=copy.deepcopy(result)
         for block in record.get('content',[]):
-            if block.get('type')!='text':continue
+            if not isinstance(block,dict) or block.get('type')!='text':continue
             try:
                 page=json.loads(block['text'])
                 if isinstance(page,str):page=json.loads(page)

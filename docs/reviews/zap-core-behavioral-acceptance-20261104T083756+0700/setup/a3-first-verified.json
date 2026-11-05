@@ -1,0 +1,23 @@
+{
+  "id": "repair-fixture-reader",
+  "revision": 4,
+  "status": "verified",
+  "reproductionOutcome": "Captured envelope failed the flat reader, as shown by the retained stderr",
+  "verificationResult": "passed",
+  "verificationLevel": "offline-checked",
+  "changedFileRefs": [
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-fix.sha256"
+  ],
+  "positiveCheckRefs": [
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-positive.stdout"
+  ],
+  "negativeCheckRefs": [
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-wrong-object.stderr",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-wrong-action.stderr",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-nonterminal.stderr"
+  ],
+  "verificationRefs": [
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-positive.command.json",
+    "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/evidence/a3-first-reproduction.stderr"
+  ]
+}

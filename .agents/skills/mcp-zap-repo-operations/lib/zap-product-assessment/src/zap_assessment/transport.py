@@ -11,7 +11,12 @@ TOOLS={'zap_crawl_start','zap_crawl_status','zap_crawl_stop','zap_attack_start',
 class LostAck(ConnectionError): pass
 
 class MCP:
-    def __init__(self,request): self.request=request; self.session=None; self.seq=0; self.contracts={}
+    def __init__(self,request,*,allowed_tools=TOOLS,required_tools=TOOLS):
+        self.request=request; self.session=None; self.seq=0; self.contracts={}
+        self.allowed_tools=frozenset(allowed_tools)
+        self.required_tools=frozenset(required_tools)
+        if not self.required_tools <= self.allowed_tools:
+            raise ValueError('required tools must be allowed')
     def rpc(self,method,params=None,notification=False):
         self.seq+=1
         body={'jsonrpc':'2.0','method':method}
@@ -49,20 +54,39 @@ class MCP:
         result=self.rpc('initialize',{'protocolVersion':'2025-03-26','capabilities':{},'clientInfo':{'name':'zap-product-assessment','version':'0.1.0'}})
         self.rpc('notifications/initialized',notification=True)
         listing=self.rpc('tools/list')
-        if not isinstance(listing.get('tools'),list) or listing.get('nextCursor'): raise Blocked('unbounded tool listing')
-        self.contracts={t['name']:t['inputSchema'] for t in listing['tools']}
-        if not TOOLS<=self.contracts.keys(): raise Blocked('required MCP capability absent')
+        from .executor_routing import listing as parse_listing
+        try:
+            tools=parse_listing(listing)
+            self.contracts={name:t['inputSchema'] for name,t in tools.items()}
+        except (ValueError, KeyError) as exc:
+            raise Blocked('invalid or incomplete MCP tool listing') from exc
+        self.require_tools(self.required_tools)
         return {'serverInfo':result['serverInfo'],'protocolVersion':result['protocolVersion'],'tools':self.contracts}
-    def call(self,name,args):
-        if name not in TOOLS or name not in self.contracts: raise Blocked('unregistered MCP tool')
+    def require_tools(self,names):
+        missing=set(names)-(self.allowed_tools & self.contracts.keys())
+        if missing:
+            raise Blocked('required MCP capability absent: '+', '.join(sorted(missing)))
+
+    def validate_call(self,name,args):
+        if name not in self.allowed_tools or name not in self.contracts:
+            raise Blocked('unregistered MCP tool')
         from jsonschema import Draft202012Validator
-        Draft202012Validator(self.contracts[name]).validate(args)
-        result=self.rpc('tools/call',{'name':name,'arguments':args})
-        if result.get('isError') or not isinstance(result.get('content'),list):
+        schema=self.contracts[name]
+        if set(args) - schema.get('properties', {}).keys():
+            raise Blocked('unsupported MCP argument')
+        Draft202012Validator(schema).validate(args)
+
+    def exchange_call(self,name,args):
+        return self.rpc('tools/call',{'name':name,'arguments':args})
+
+    def call(self,name,args):
+        self.validate_call(name,args)
+        result=self.exchange_call(name,args)
+        if not isinstance(result,dict) or result.get('isError') or not isinstance(result.get('content'),list):
             self.last_response={'tool':name,'error':result}
             raise Blocked('MCP tool error')
         parts=result['content']
-        if any(x.get('type')!='text' or not isinstance(x.get('text'),str) for x in parts): raise Blocked('tool content contract')
+        if any(not isinstance(x,dict) or x.get('type')!='text' or not isinstance(x.get('text'),str) for x in parts): raise Blocked('tool content contract')
         text='\n'.join(x['text'] for x in parts)
         if text.startswith('"'):
             decoded=json.loads(text)

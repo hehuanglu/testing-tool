@@ -1,13 +1,13 @@
-# Chọn base nghiệp vụ
+# Select assessment question bases
 
-Chọn theo nhiệm vụ và discovery, không theo tên YAML. Mỗi base có sáu câu hỏi để cụ thể hóa, không bắt chạy tất cả vô điều kiện.
+Select by assignment and discovery, rather than YAML filenames. Each base offers six questions to specialize, rather than six mandatory checks for every product.
 
-- [be-input](tracks/be-input.md): BE-IN-01…06; public/protected backend input và shared processing.
+- [be-input](tracks/be-input.md): BE-IN-01…06; public/protected backend inputs and shared processing.
 - [fe-browser](tracks/fe-browser.md): FE-BR-01…06; browser data/code/message/navigation boundaries.
-- [authentication-session](tracks/authentication-session.md): AUTH-01…06; credential, verification, issuance/lifecycle, principal propagation và leakage.
-- [authorization-ownership](tracks/authorization-ownership.md): AUTHZ-01…06; chức năng, object/tenant, collection, relation, lifecycle và protected fields.
-- [configuration-build](tracks/configuration-build.md): CFG-01…06; effective config, privileges, network/TLS, dependency declarations, build/CI và credentials.
+- [authentication-session](tracks/authentication-session.md): AUTH-01…06; credentials, verification, issuance/lifecycle, principal propagation, and leakage.
+- [authorization-ownership](tracks/authorization-ownership.md): AUTHZ-01…06; functions, objects/tenants, collections, relations, lifecycle, and protected fields.
+- [configuration-build](tracks/configuration-build.md): CFG-01…06; effective configuration, privileges, network/TLS, dependency declarations, build/CI, and credentials.
 
-Chỉ giao một track thì không tự mở bốn track còn lại. Shared code cần đọc để hiểu câu hỏi không tự mở assessment service khác. Scope hẹp thì ghi selected_base_ids và lý do phần base không chọn; phân biệt ngoài scope với không áp dụng. Nhiều track dùng chung một lượt được, giữ mapping câu hỏi và không đếm trùng root cause.
+A single assigned track does not open the other four. Reading shared code to answer a question does not open another service's assessment. For narrow scope, record `selected_base_ids` and reasons for omitted bases; distinguish out-of-scope from inapplicable. Cross-track execution may be shared only under the workflow's user-requested exception, with question mappings and no duplicate root-cause counts.
 
-Tên rules giữ ổn định để nhận diện; `public`/`auth` trong tên không xác định surface. Xem [catalog đầy đủ](rule-catalog.md) để biết file, stack và giới hạn. Không có rule không là không có rủi ro; Python/Java/Go hoặc wrapper khác cần local/custom/manual phù hợp theo [rules và triage](rules-and-triage.md).
+Keep rule names stable. `public`/`auth` in names do not define surfaces. Consult the [catalog](rule-catalog.md) for files, stacks, and limitations. Missing rules do not establish absence of risk; Python/Java/Go and other wrappers require suitable local/custom/manual techniques under [rules and triage](rules-and-triage.md).

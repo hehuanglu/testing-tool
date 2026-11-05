@@ -1,69 +1,117 @@
-# Kiểm định skill bằng lượt vận hành có chọn
+# Validate the skill through selected operations
 
-Chỉ dùng khi user giao audit/verify/nghiệm thu skill hoặc công cụ. Đây không phải gate bổ sung cho assessment product thông thường. Có thể giữ raw thao tác và ghi nhận nội bộ phục vụ audit theo yêu cầu; folder kết quả product vẫn chỉ ALERTS.json và RUN.json. Không tự dựng qualification toàn platform.
+Apply only to assigned skill/tool audits, verification, or acceptance, rather than an extra ordinary product gate. Keep requested audit raw internally while product handoffs use the verified Drive table and retain RUN/ALERTS/SCOPE_ALERTS internally. Do not open whole-platform qualification automatically.
 
-## Phạm vi nghiệm thu và mức kết luận
+## Acceptance scope and claims
 
-Chọn workload cụ thể trước chạy: target/environment, track, operation chain, actor/input và điều gì sẽ được nghiệm thu. Một health HTTP crawl → terminal → passive → findings → report chỉ nghiệm thu luồng đó trên deployment đó. Nó không nghiệm thu full BE anonymous DAST, active/body/auth, real FE, BOLA, mọi endpoint hoặc đa product. Khi scope user chỉ là lượt tương tự, không tự mở active/mutation toàn product để tăng kết quả.
+Define target/environment/track/operation chain/actor/input/acceptance claim before execution. Health HTTP crawl → terminal → passive → findings → report qualifies that chain on that deployment only, not full anonymous/active/body/auth/FE/BOLA/all-endpoint/multi-product capability. Narrow audits do not authorize broad active/mutation work.
 
-Giữ riêng ba loại nhận xét:
+Separate runtime observations, source/test limitations with expected effects, and untested capabilities. Smoke success does not erase source limitations; source risks do not become confirmed product incidents. Report acceptance by capability rather than one global skill-pass label.
 
-- **Quan sát runtime:** có actual request/response/status/alert; kết luận trong phạm vi đã vận hành.
-- **Giới hạn hoặc rủi ro từ source/test:** code/contract cụ thể hoặc offline reproduction; ghi đúng căn cứ và ảnh hưởng dự kiến, chưa gọi là sự cố trên product.
-- **Chưa kiểm:** thiếu execution cần thiết; không mặc định fail hoặc pass.
+## Inspect interfaces
 
-Không xóa một giới hạn code đã đọc được chỉ vì smoke pass; cũng không biến giới hạn code thành lỗi runtime đã xác nhận. Không có lỗi trong workload hẹp không chứng minh mọi runner tốt. Ghi kết quả nghiệm thu theo capability, không một nhãn “skill pass” chung.
+Read complete actual tools/list/schema for the receiving deployment/session, including properties/requiredness/types/constraints/auth semantics and actual image/JAR. Names/version strings do not establish build/contract compatibility. inspect_operations.py source/runtime comparison covers registration/parameter names only, not auth/type/image attestation; two-runtime comparison adds schema detail. Keep raw schemas for requested audits without sending known unsupported fields to prove absence.
 
-## Kiểm interface trước dispatch
+Expert tools absent from guided are not-exposed; use suitable equivalents rather than intentionally unavailable calls unless rejection testing is assigned. Unknown tool does not prove repository/engine incapability. Do not enable expert/rebuild shared scanners merely for inventory. Missing method/postData means this schema cannot express exact bodies, rather than universal engine inability; auth differences need provider/session inspection.
 
-Lấy tools/list/schema thực từ đúng deployment/session nếu interface có thể khác source. So **tên tool và input properties**, required/constraints và auth semantics cần cho workload. Cùng tool name hoặc cùng version string chưa chắc cùng build/contract.
+## Execute and read enough
 
-`inspect_operations.py --runtime-tools ...` so registration và tên tham số Java với properties runtime; báo thiếu/khác tên, không tự so type/requiredness/auth semantics và không attest image. Giữ raw tools/list nếu user giao kiểm định; không cần gửi tham số ngoài schema để “chứng minh” field bị thiếu.
+Verify current binding/origin/health, using established local CA without disabled TLS. Record discovery separately from DAST. Start once, monitor ACKed IDs, reconcile lost ACK before retry, and read target-specific passive/findings/reports.
 
-Tool expert không có trong guided registration là **not exposed**; chọn operation tương đương khi phù hợp. Không gửi call đã biết unavailable trừ khi audit có chủ đích kiểm rejection. `Unknown tool` không chứng minh tên sai hay ZAP thiếu chức năng. Không bật expert/rebuild shared scanner chỉ để mọi tên xuất hiện.
+For new-finding attribution in shared sessions, collect permitted pre/post details/snapshots where useful. Missing visibility/baseline means limited attribution, not access-control bypass. Existing unchanged IDs remain historical. Do not reset history to make clean runs. Tool Next Actions do not expand scope or mandate release bundles. Complete previews need no additional chunk campaign; truncated data needs continued reading or explicit gaps.
 
-Nếu thiếu method/postData trong runtime, chỉ kết luận không biểu đạt được exact method/body qua schema đó; chưa kết luận engine/adapter khác không hỗ trợ. Auth mô tả khác source cần xác minh profile/provider, không suy failed bearer từ metadata nếu chưa thực hiện.
+## Repair and reassess
 
-## Lượt thực thi và dữ liệu đủ để hiểu
+For v2, check remaining work against every approved criterion/plan duty. When reviewing v1 history, use the retained [legacy scope/completion contract](assessment-scope-and-completion.md), including assigned duties outside the selected allocation; the current SKILL no longer defines a v1 stopping question. New execution follows v2. Execute feasible next steps only within the assigned authority. Skill edits may use historical/offline walkthroughs without new product traffic. Distinguish baseline/passive from active closure; missing fixtures from evaluated setup authority; insertion from UI visibility; unknown mutations from replay; old checkpoints from current lineage; policy confidence from execution gates; assigned stages from self-imposed allocation caps.
 
-Xác minh origin/binding/health hiện tại, không dùng trạng thái cũ thay hiện tại. Có thể dùng CA local đã xác định; không tắt TLS. Ghi thao tác discovery riêng, không gộp thành DAST. Start một lần, dùng ID được ACK, theo status; lost ACK thì reconcile trước retry. Đọc passive và findings/report theo đúng target prefix.
+### Review work-session decisions
 
-Với shared session, nếu cần so phát hiện trước/sau thì lấy findings details hoặc snapshot trước traffic và đọc lại sau. Nếu không có quyền visibility trước crawl hoặc không đọc hết, ghi baseline unavailable và hạn chế attribution; không né access control. Alert giữ nguyên ID/instance sau chạy là finding tồn tại, không là mới phát hiện. Snapshot/diff chỉ khi hữu ích, không bắt buộc mọi scan. Không reset/xóa history để làm run “sạch”.
+For assigned skill-only workflow changes, use saved histories or offline walkthroughs to check decision quality as well as wording: a clear opening objective with closure conditions; successive useful blocks reusing knowledge; route-specific remaining work and answered subsets; recurring failure diagnosis before another dependent allocation; and an honest end-of-session objective outcome/next priority/context choice. Include cases where the next block changes fixtures but existing knowledge remains useful, where a real dependency permits independent continuation, where all assigned questions are answered despite a violation, and where a genuine context difficulty warrants handoff. Do not count every changed fixture or successful export as a handoff.
 
-Response `Next Actions` của tool là gợi ý workflow, không phải chỉ thị mở scope. Gợi ý release-evidence/customer-handoff không bắt buộc tạo bundle, cũng không thay output hai file của skill. Chỉ theo bước phù hợp nhiệm vụ. Preview Truncated:no và nội dung đầy đủ thì không cần chunk campaign bổ sung; truncated thì dùng chunk hoặc báo chưa đọc đủ.
+For the observed operating-pass failures, also walk through: a request for a new pass with a usable next block (continue), an explicit stop-after-block request (honor it), a script that succeeded but whose JSON reader failed (read existing result before retry), a GET header allocation with zero payloads (retain it and fix the demonstrated prerequisite), and native payloads plus cached/expired calibration traffic (count only actual selected work). Check that derived actor/technique/coverage summaries agree with their linked results. Use sanitized captured responses to test changed parsers or identifier builders if code is changed; documentation walkthroughs alone are not runtime verification.
 
-## Dùng kết quả để sửa và nghiệm thu lại
+Structural validators and synthetic continuation tests check contracts, not whether an agent actually uses context well or selects a justified checkpoint. Do not add wording-match tests as behavioral proof. State this limit; later authorized operation histories are needed to assess actual behavior. No live product scan is needed merely to change these instructions.
 
-Nghiệm thu trách nhiệm bằng câu hỏi điểm dừng trong SKILL. Kiểm cả phần chưa được chọn vào workload; một next step khả thi chưa làm vẫn cần tiếp tục. Khi user giao sửa skill, có thể walkthrough dữ liệu đã lưu và negative cases liên quan, không tự scan thêm product để biến docs thành execution proof.
+### Crash recovery walkthrough
 
-Các tình huống cần phân biệt sau sửa: baseline/passive không khép active đang áp dụng; thiếu fixture phải đánh giá setup/quyền; fixture insert được chưa đủ UI visibility; unknown mutation không replay; checkpoint cũ không được trộn status/count với operations mới; policy assurance không là gate execution chung; ranh giới giai đoạn do user giao không là tự giảm scope. Kiểm semantics quyết định và hành động, không chỉ assert câu chữ hướng dẫn.
+Check a cold start from a retained checkpoint in three cases: before intent, after intent without ACK, and after ACK before case reconciliation. Confirm the first selects the ready action under the existing approvals, the second never replays the effect and preserves independent feasible work, and the third imports evidence by readback before dispatch. Check that the next ready block is selected after a private checkpoint and that completion still requires case closure and verified delivery. State whether this was an offline walkthrough or a real process interruption.
 
-### Kiểm hồi quy việc đóng phạm vi input
+### Input-closure regression scenarios
 
-Khi audit/sửa lỗi completion ở BE anonymous hoặc authenticated, dùng dữ liệu đã lưu phù hợp hoặc tình huống offline có kỳ vọng độc lập từ hợp đồng input và thứ tự xử lý product. Đây là kiểm tra có mục đích cho lỗi đã gặp, không là gate mới cho mọi assessment hoặc yêu cầu chạy lại toàn track.
+Use suitable saved data or offline cases with independently stated expectations from input contracts/processing order. This is focused validation of completion defects, rather than a new every-assessment gate:
 
-- Một input nullable đã phân bổ không có mutation, input khác có traffic: input thiếu vẫn mở; xét seed/kỹ thuật phù hợp. Không có sink của một kỹ thuật chỉ N/A kỹ thuật đó.
-- Baseline tạo mới thành công, mọi mutation cần kiểm tạo/lưu bị uniqueness hoặc sibling/cặp trường phụ thuộc chặn: giữ kết quả boundary/lookup có giá trị nhưng mục tiêu tạo/lưu còn mở. Có bước sửa fixture hợp lệ thì phải tiếp tục, không chỉ báo limitation.
-- Payload sai kiểu bị validator đúng hợp đồng từ chối: khép được câu hỏi boundary đã chọn, không ép tới DB và không tự suy toàn API chưa kiểm. Ngược lại, không đổi mục tiêu xử lý thành boundary sau khi thấy kết quả.
-- POST còn thiếu nhưng PUT đã kiểm: không lấy PUT khép nhánh POST. Product violation có quan sát đủ vẫn là đã kiểm; không bắt outcome luôn matched.
-- Scan terminal với zero probes hoặc mất phiên: không cấp active/authenticated coverage thiếu; unknown mutation vẫn cần state readback trước retry.
-- Nếu dùng helper, đưa observations chỉ gồm đơn vị thực sự đã đạt qua `reconcile` và bước tổng hợp RUN: phần thiếu phải còn trong completion/notPerformed/nextSteps. Thử đối chứng nhãn bị sao chép để nhận diện ranh giới tin cậy của helper; helper vẫn nhận nhãn giả không phải bằng chứng bản sửa đã chặn tự động lỗi đó.
+- Allocated nullable input with no mutation stays open despite sibling traffic; missing sinks may make one technique N/A only.
+- Valid create baseline followed by uniqueness/sibling-blocked mutations retains boundary/lookup observations but leaves assigned processing/store objectives open; perform available fixture repairs.
+- Correct type-validation rejection can close a preselected boundary question without DB access, but does not justify changing processing objectives after execution.
+- PUT does not close missing POST. Observed violations still count as tested; outcome need not always match.
+- Terminal scans with zero probes/auth loss provide no missing active/auth coverage. Unknown mutation needs state readback.
+- Send only actual observed units through reconciliation/composition. Missing work must survive taskCompletion/notPerformed/nextSteps. Deliberately copied labels expose the helper trust boundary, rather than proving automatic semantic prevention.
 
-Ghi rõ việc đã kiểm là đọc lại dữ liệu lịch sử, hợp đồng helper hay hành vi agent/runtime. Validator/link/diff chỉ kiểm cấu trúc và phạm vi sửa; walkthrough offline do người audit tự ánh xạ observations không chứng minh agent tương lai sẽ tự tạo đúng observations. Sửa tài liệu không được công bố thành sửa code hoặc retest product đã đạt.
+Identify whether checks concern historical readback, helper contracts, agent behavior, or runtime. Validators/links/diffs check structure/scope; auditor-mapped offline observations do not prove future agents will create correct observations. Documentation changes are not product retests/code fixes.
 
-Khi user yêu cầu thử các tình huống có thể xảy ra tiếp, ghi rõ giả định và kỳ vọng trước khi thử; phân biệt giả lập với dữ liệu product thật. Ưu tiên giả định làm thay đổi quyết định hoàn tất/tiếp tục, ghép mỗi ca dễ đóng sai với đối chứng tránh phủ nhận kết quả hợp lệ:
+For assigned forward scenarios, state assumptions/expected outcomes before testing and pair false-closure examples with valid controls: mismatched object/origin/build/JSON locations versus compatible results; uniqueness-only rewrites/dropped payloads versus application-received valid normalization; mid-scan login redirects versus later token expiry preserving earlier coverage; HTTP200 errors/202 acceptance versus terminal correct-object readback; technique N/A on aggregate cases versus remaining duties; and local failure/unknown/caps alongside eligible independent continuation. Test actual continuation, not labels alone.
 
-- Ghép nhầm active/readback giữa object, origin, lượt hoặc build; field cùng tên ở vị trí JSON khác hoặc parser/content type khác. Kiểm helper có thật sự xét các chiều này hay chỉ tin nhãn caller; chỉ hợp kết quả tương thích, giữ công việc không bị ảnh hưởng.
-- Fixture rewriter chỉ đổi trường uniqueness, hoặc mapping/guard bỏ payload đích trước khi tới ứng dụng: chưa có mutation field đích. Đối chứng là ứng dụng nhận payload rồi normalize/sanitize hợp lệ: vẫn ghi nhận xử lý, không ép lưu nguyên dạng.
-- Session hợp lệ trước/sau nhưng request ở giữa trả login page/denial: chỉ giữ coverage lúc đúng danh tính. Đối chứng token hết hạn sau công việc đã hoàn tất: không xóa kết quả cũ hoặc chạy lại chỉ để có token mới.
-- HTTP 200 chứa lỗi nghiệp vụ, hoặc 202 chỉ nhận job: không khép câu hỏi xử lý cuối. Đối chứng job đã kết thúc và readback đúng object: khép được câu hỏi đó; không bắt DB proof bổ sung.
-- N/A một kỹ thuật trên case endpoint gộp, hoặc phase completed nhưng whole-track chưa xong: thử tới bước tổng hợp để thấy helper có che phần khác không. Giữ nghĩa vụ còn lại và phân biệt user giao giai đoạn với cap/allocation do công cụ chia.
-- Ca lỗi/unknown/cap cục bộ đi cùng ca độc lập đủ điều kiện: kiểm ca độc lập vẫn chạy, unknown không replay và phần còn thiếu có bước tiếp. Không chỉ thử nhãn completion mà bỏ qua hành động tiếp tục.
+Do not turn these into exhaustive ordinary-work combinations. Helpers accepting wrong labels reveal implementation limits, not real product incidents or independent semantic validation. Add guidance only when demonstrated decisions remain ambiguous. Store bounded lessons in [knowledge](operational-knowledge.md), preserving source/runtime/unretested labels. Repair actual routing/interface/attribution/acceptance/reader problems without changing gates to pass. Changed helpers need relevant positive/negative checks; parsing/docs changes may reuse captured data rather than rescan.
 
-Không biến danh sách giả định thành yêu cầu thử mọi tổ hợp cho assessment thường. Thử helper nhận nhãn sai nhằm chỉ rõ giới hạn implementation; không công bố nó đã tự kiểm ngữ nghĩa hoặc giả định đó đã xảy ra trên product. Chỉ bổ sung hướng dẫn khi ca thử chỉ ra quyết định còn mơ hồ hoặc cách dùng helper có thể làm sai kết quả.
+Report qualified capabilities, reconfirmed limitations, skill changes, actual checks, and still-untested capabilities separately. Real new endpoint/actor/vector/UI/ownership claims require suitable execution. Existing scope authorization persists; clarify only genuinely expanded work.
 
-Lưu kiến thức dùng lại ở [kho tri thức](operational-knowledge.md), giữ điều kiện áp dụng, mức xác nhận và phần unknown. Bài học có source/runtime căn cứ nhưng chưa retest sau sửa giữ đúng nhãn đó; test offline không chứng minh agent tương lai sẽ tự xử lý mọi tình huống.
+## Version 1 tester-workflow offline acceptance
 
-Sửa phần đã lộ qua tình huống thật: hướng dẫn chọn surface, interface drift, attribution, scope nghiệm thu hoặc helper đọc kết quả. Không sửa scanner/gate để biến test thành pass. Khi đổi helper, kiểm cả positive/negative case liên quan; dùng lại dữ liệu runtime vừa thu để xác minh xử lý schema, không cần scan lại nếu chỉ đổi parsing/docs.
+Use Python 3.13 with requirements.lock and unittest; no new framework or scanner is required. The dedicated modules are test_business_discovery, test_question_evidence, test_work_selection, test_readiness and test_question_adapter. Read test setup before running related regressions (pm_scope, security_scope, work_session_checkpoint, executor_routing, operational_readback, report_reconciliation, product_continuation, discovery_transport, portability). Optional-source tests may skip honestly; do not substitute mocks for claimed runtime execution.
 
-Báo riêng: capability đã nghiệm thu, limitation đã tái xác nhận, sửa skill nào, test nào đã chạy và capability nào còn chưa nghiệm thu. Những lượt kế tiếp cần endpoint/actor/vector hoặc UI/ownership fixture thật; health smoke không thay chúng. Không xin user xác nhận lại các thao tác đã nằm trong scope; chỉ cần làm rõ nếu bước tiếp thực sự vượt scope còn hiệu lực.
+These synthetic scenarios are implementation acceptance, not a per-product checklist:
+
+1. Reviewed background without mapping leaves inventory open although pin has units; discovery delta and remaining relevant source scope stay visible. A feature missing from both declared sets is invisible. Group same-boundary presentation variants with basis/exclusions; a different owner/consumer needs another question or observation, not blanket representation. A decoration disposition cannot remove assigned API work.
+2. Partial attempt plus valid read units can close pin; completed without units cannot close background. A context-only old failure plus valid followup is usable, but a required open case still blocks its criterion. Moving unknown to context or setting a boolean resolution cannot hide it; exact action/object readback resolves its current projection without changing history. Independent work remains eligible.
+3. Same actor with different object/build/origin/input never auto-unions. Explicit finite compatibility has exact dimensions and basis; it neither proves source equivalence nor erases old findings. A 409 stale-version boundary supplies no processing/sink credit. Boundary-only questions require no media.
+4. A tested violation can have complete dynamic coverage with open findings/not-assigned remediation and partial governance catalog. Unknown method mapping stays in DAST gaps. Report recomposition preserves old operation statuses/pins/findings and validates support/context/resolution references after redaction before writing.
+5. Fake ACK → pending → correct actor/object stage finishes only on the last sample. Timeout, terminal failure, reader error, context mismatch, cancellation and changing remaining budgets do not dispatch mutations. Deadline bounds sleep and awaited samples; do not label timeout a policy violation without a pre-existing SLA.
+6. Blocked media lets reaction run; high-impact preparation with an explicit dependency can precede low execution. Missing handlers are next preparation, never completion. Preview and continuation load the same intents/operations/history. User stop, prior intent/ACK/unknown and understated compiled impact retain their safety behavior; intent persistence precedes every effect.
+7. Source-compatible capabilities remain source-reviewed; schema/auth rejection survives claimed adapter support. A fake injected adapter exercises prepare/identity/journaled execute/staged readback/owned cleanup through reconciliation and the three-report composer. No arbitrary module import or transport bypass enters the CLI.
+8. Walk through existing authority: assigned new fixtures/regression can proceed without repeated routine approval; unknown mutation cannot replay. Keep source-only workflow review separate from scan authority. Legacy contracts remain readable; optional review helper workComplete/declaredListHandled only describes handling the caller's list.
+
+Offline checks establish these declared helper contracts and integration only. They do not establish future agent discovery quality, policy understanding, product execution, historical background repair, FE timeout expansion, or generic runtime/auth/media qualification. No fresh product scan is required for this implementation acceptance.
+
+## Version 2 criteria workflow acceptance
+
+Use `test_criteria_workflow`, `test_criteria_integration`, `test_criteria_reporting_boundary` and `test_criteria_cli_boundary` with the existing locked environment. These check revision/content approval binding, finite approved scope, pending versus justified final verdicts, counterexample rules, resource/journal recovery, worker result boundaries and exact three-report projections. The actual CLI subprocess tests run from a temporary directory with network and nested executor subprocesses forbidden. Fixture evidence and fake executor callbacks do not qualify a real scanner or product adapter.
+
+`scope criteria-review` is the v2 reviewer. Legacy `review-closure`, `review-residuals`, `inspect-resume`, standalone session review and direct `apply_completion` reject v2 rather than silently projecting legacy completion. No automatic v2 discovery-to-live-executor adapter or semantic security oracle is claimed. Validate the admitted executor and its target/auth/readback gates separately before real traffic.
+
+## Subagent operations acceptance
+
+For assigned skill maintenance, select checks 1–3 according to the changed delegation, context handoff, merge or recovery behavior. Use retained sanitized artifacts and an offline fixture executor first. Record any applicable check that cannot run. Ordinary assessments use the operational workflow and do not add this qualification suite as a gate. Run checks 4–5 when qualifying the actual host or Drive path, or when those integrations change. These are skill maintenance checks, separate from assessment approvals and criterion verdicts.
+
+1. **Interrupted effect.** Simulate lost ACK and interruption after durable ACK but before case persistence. Recover the exact action from the journal, native receipt/status or fixture equivalent and object state. An unknown outcome must block replay and unsafe lease release while independent work remains eligible. Once reconciled, resume only missing work. Start with `test_criteria_resume`, `test_criteria_integration` and the lease/unknown-effect cases in `test_criteria_workflow`.
+2. **Selective brief.** Give a fresh worker one representative fixture case with an approved packet, locators for the original oracle and fixture/fallback/cleanup, and a compact return contract. Use a fixture or read-only replay. Pass when the worker can locate the correct conditions and retained result, produce a compact handoff and identify any missing input before acting. Record avoidable broad reads, repeated payloads and any missing locator. Fixture tests of packet fields cover structure only; the worker exercise checks actual context use.
+3. **Verify before merge.** Try a valid result, a stale binding and an operation outside the assigned case/context. Check rejection before canonical persistence for the invalid results, and verify the valid result against direct evidence using its locator. Start with the stale-packet integration test, worker-operation confinement tests and the real CLI packet/merge test. Structural acceptance and semantic evidence review are separate checks.
+4. **Host lifecycle.** Use a small read-only worker task. Record spawn options, any host-confirmed effective model/effort, fresh-context setting, follow-up behavior and supported retirement action. Verify a delta-only follow-up can continue the task and that the retained artifact stays readable after retirement. Record requested settings separately from effective settings when the host provides no confirmation.
+5. **Drive interrupted write.** Use a fixture or an authorized scratch worksheet with synthetic data. Simulate a write that succeeds before the worker can return a receipt. The coordinator reconciles the prior writer and in-flight write, reads the bound file/tab/range against the expected revision, and only repairs a confirmed mismatch within the managed range once there is no competing write. Verify the full managed table before marking delivered. Record fixture and connector evidence separately.
+
+For each check retain the scenario, mode (offline fixture, host or connector), expected outcome, actual outcome, evidence locator and status (`passed`, `failed`, `not_run` or `blocked`). For failures record the next check or repair. Keep raw outputs private and return a short summary. A passing helper test does not qualify worker context behavior, actual host lifecycle, a live scanner or Drive delivery.
+
+## Retained historical results
+
+### Implementation verification — 2026-11-02
+
+See the preserved [historical record](operational-validation-history.md#implementation-verification--2026-11-02). This record does not attest current v2 execution.
+
+### Runtime continuation acceptance — 2026-11-02
+
+See the preserved [historical record](operational-validation-history.md#runtime-continuation-acceptance--2026-11-02). This record does not attest current v2 execution.
+
+### Phase 2 offline verification — 2026-11-02
+
+See the preserved [historical record](operational-validation-history.md#phase-2-offline-verification--2026-11-02). This record does not attest current v2 execution.
+
+### Phase 3 offline verification — 2026-11-02
+
+See the preserved [historical record](operational-validation-history.md#phase-3-offline-verification--2026-11-02). This record does not attest current v2 execution.
+
+### Phase 3 closure continuation — 2026-11-02
+
+See the preserved [historical record](operational-validation-history.md#phase-3-closure-continuation--2026-11-02). This record does not attest current v2 execution.
+
+## Offline state and recovery qualification
+
+Run the coordinator fault tests, store CAS tests, selector and repair tests, and the synthetic process-restart walkthrough. Include interruption after durable acquire and release steps, committed retry after a lost receipt, torn-tail forensics and independent offline selection. Record positive and negative controls separately from live qualification and cross-context agent behavior. See the implementation report and acceptance handoff under docs/reviews/zap-core-implementation-20261104 in the workspace.

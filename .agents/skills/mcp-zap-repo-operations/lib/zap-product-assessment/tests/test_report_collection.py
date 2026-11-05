@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from zap_assessment.evidence import collect_report, read_report, report_preview_document, ReportReadFailure
 from zap_assessment.product_native import report_readback
+from zap_assessment.result_readers import read_native_alerts
 
 PATH='/zap/wrk/report.json'
 def pages(text, width=4):
@@ -24,6 +25,49 @@ def source(parts, calls=None):
     return reader
 
 class ReportCollectionTests(unittest.TestCase):
+    def alert_engine(self, totals, records):
+        counts=iter(totals);calls=[]
+        def engine(component,category,name,args):
+            calls.append((component,category,name,args))
+            if name=='numberOfAlerts':return {'numberOfAlerts':str(next(counts))}
+            return {'alerts':records[args['start']:args['start']+args['count']]}
+        return engine,calls
+    def test_native_alert_totals_stable_with_exact_ids_and_empty_control(self):
+        records=[{'id':str(i),'risk':'Low','messageId':str(i)} for i in range(3)]
+        for rows in (records,[]):
+            engine,calls=self.alert_engine([len(rows),len(rows)],rows)
+            self.assertEqual(read_native_alerts(engine,'http://owned',page_size=2),rows)
+            self.assertEqual(sum(c[2]=='numberOfAlerts' for c in calls),2)
+            self.assertTrue(all(c[3]['baseurl']=='http://owned' for c in calls))
+    def test_native_alert_total_drift_never_returns_complete_prefix(self):
+        for before,after in ((1,2),(1,0),(0,1)):
+            engine,_=self.alert_engine([before,after],[{'id':'native-7'}][:before])
+            with self.assertRaisesRegex(ValueError,'total changed'):
+                read_native_alerts(engine,'http://owned')
+    def test_native_alert_missing_and_duplicate_pages_still_rejected(self):
+        for records in ([{'id':'1'}],[{'id':'1'},{'id':'1'}]):
+            engine,_=self.alert_engine([2,2],records)
+            with self.assertRaises(ValueError):read_native_alerts(engine,'http://owned',page_size=2)
+    def test_native_alert_boundary_overlap_preserves_complete_native_ids(self):
+        # Captured local ZAP offset behavior: start=0 gives IDs 0..4, start=5
+        # repeats ID 4. Native IDs can have gaps; offsets are not native IDs.
+        ids=['0','1','2','3','4','5','6','8','9','10','11']
+        records=[{'id':i,'risk':'Low','confidence':'Medium'} for i in ids]
+        calls=[]
+        def engine(component,category,name,args):
+            if name=='numberOfAlerts':return {'numberOfAlerts':str(len(records))}
+            calls.append((args['start'],args['count']))
+            start=max(0,args['start']-1)
+            return {'alerts':records[start:start+args['count']]}
+        self.assertEqual(read_native_alerts(engine,'http://owned',page_size=5),records)
+        self.assertEqual(calls,[(0,5),(5,5),(10,5)])
+    def test_native_alert_boundary_overlap_cannot_hide_changed_record(self):
+        def engine(component,category,name,args):
+            if name=='numberOfAlerts':return {'numberOfAlerts':'3'}
+            if args['start']==0:return {'alerts':[{'id':'a','risk':'Low'},{'id':'b','risk':'Low'}]}
+            return {'alerts':[{'id':'b','risk':'High'},{'id':'c','risk':'Low'}]}
+        with self.assertRaisesRegex(ValueError,'changed during pagination'):
+            read_native_alerts(engine,'http://owned',page_size=2)
     def test_one_page_eof_null_and_valid_json(self):
         r=collect_report(source(pages('{}')),PATH,100,parse_json=True)
         self.assertEqual((r.status,r.document,r.next_offset),('complete',{},2))

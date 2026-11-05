@@ -1,17 +1,19 @@
 # BOLA research direct-client — 21/10/2026
 
+Đây là contract kỹ thuật của runner legacy. Đọc [ranh giới tài liệu](README.md): assessment mới dùng criteria workflow v2; observation từ direct client không tự trở thành evidence có nguồn ZAP. Các lệnh qualification bên dưới là lịch sử: `scripts/bola_research_qualification.py` không được đóng gói nên không chạy được từ skill này.
+
 Entry mới `scripts/bola_research.py` dùng contract `bola-research/1.0`, độc lập với borrowed v1.4 read-only và W6 owned synthetic. Core hiểu actor/object/policy và ID path/query/body; product adapter hiện chỉ finalsource local test. Product khác chưa được admit tự động. Không gọi BE-auth compiler, không cần ZAP session, native report hay active scan.
 
 Quyền triển khai không tự là quyền product execution. Xác minh quyền hiện hành, binding và deadline; mỗi run có fixtures và credentials riêng.
 
-Từ thư mục assessment được đóng gói trong skill (`$ASSESSMENT_ROOT`):
+Đặt `ASSESSMENT_ROOT`, `ZAP_PYTHON` và `PYTHONPATH` theo setup của skill; virtualenv không được đóng gói:
 
 ```sh
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research.py --help
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research.py discover --output NEW_DISCOVERY_DIRECTORY
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research.py product-run --discovery NEW_DISCOVERY_DIRECTORY/BOLA_DISCOVERY.json --inventory NEW_DISCOVERY_DIRECTORY/BOLA_INVENTORY.json --receipt AUTHORITY_RECEIPT.json --output NEW_RUN_DIRECTORY
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research.py verify --run NEW_RUN_DIRECTORY
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research.py compare --before FIRST_RUN_DIRECTORY --after SECOND_RUN_DIRECTORY
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/bola_research.py" --help
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/bola_research.py" discover --output NEW_DISCOVERY_DIRECTORY
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/bola_research.py" product-run --discovery NEW_DISCOVERY_DIRECTORY/BOLA_DISCOVERY.json --inventory NEW_DISCOVERY_DIRECTORY/BOLA_INVENTORY.json --receipt AUTHORITY_RECEIPT.json --output NEW_RUN_DIRECTORY
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/bola_research.py" verify --run NEW_RUN_DIRECTORY
+"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/bola_research.py" compare --before FIRST_RUN_DIRECTORY --after SECOND_RUN_DIRECTORY
 ```
 
 Receipt JSON cần `environment=finalsource-zap-test`, `productLocation` là absolute checkout finalsource, `source` trỏ tới yêu cầu thật, `permissions=["setup","read","mutation","poststate","cleanup","login"]`. Agent tự ghi receipt từ scope người dùng đã giao. Không tự điền quyền chưa có; đây không phải file PM phải chuẩn bị. Mode mới dùng owner-positive write trên sibling riêng nên cần tất cả quyền trên; nếu chỉ có borrowed-read-only authority, dùng v1.4 với actor/fixture provenance thật.
@@ -26,12 +28,7 @@ Account detail/list/options và Saving-goal list kiểm hai chiều A/B và anon
 
 Cleanup chỉ account IDs đã ack trong ledger và đúng actor identity, sau đó đọc404. User/goal không có DELETE API: giữ và liệt kê retention; không SQL/reset. Thất bại setup giữ FAILURE + journal + cleanup, không là BOLA finding hay full bundle. Run đủ plan có PLAN/hash, cases, HTTP/actions/journal, RESULTS, COVERAGE, ALERTS, cleanup và EVIDENCE_INDEX; verify replay policy/oracle và evidence references, không ký chứng nhận an toàn. Hash index local không là trust anchor độc lập. Không sửa bytes của run đã seal.
 
-Owned HTTP qualification có route/schema cargo độc lập, secure/vulnerable, shared read, later-page disclosure, denied mutation side effect, lost ACK và auth-loss controls:
-
-```sh
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research_qualification.py --help
-zap-product-assessment/.venv/bin/python zap-product-assessment/scripts/bola_research_qualification.py --output NEW_OWNED_DIRECTORY
-```
+Owned HTTP qualification lịch sử dùng driver `scripts/bola_research_qualification.py` với route/schema cargo độc lập, secure/vulnerable, shared read, later-page disclosure, denied mutation side effect, lost ACK và auth-loss controls. Driver này không được đóng gói; không có lệnh qualification tương đương được xác nhận từ package hiện tại.
 
 Test harness mock pacing waits để fault corpus chạy nhanh; target HTTP/server state thật, không là product throughput proof. Product runs giữ pacing thật. Focused regression dùng `.venv/bin/python -m unittest` với `PYTHONPATH=src:tests` từ assessment. Historical BE-auth/anonymous proofs chỉ chuyển recipe/mechanics, không chuyển verdict hoặc authority.
 

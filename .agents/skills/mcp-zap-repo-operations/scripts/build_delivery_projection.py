@@ -32,10 +32,10 @@ RISK_KEYS = {
     "Informational": "informational",
 }
 STATUS = {
-    "met": "Đáp ứng",
-    "unmet": "Không đáp ứng",
-    "not_evaluable": "Không áp dụng",
-    None: "Đang kiểm tra",
+    "met": "Met",
+    "unmet": "Unmet",
+    "not_evaluable": "Not applicable",
+    None: "Testing in progress",
 }
 UUID_RE = re.compile(r"\b[0-9a-fA-F]{8}-[0-9a-fA-F-]{27,}\b")
 LONG_ID_RE = re.compile(r"\b[0-9a-fA-F]{24,}\b")
@@ -174,6 +174,9 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
             })
 
     rows = []
+    english_criteria = spec.get("englishCriteria", {})
+    english_verdict_bases = spec.get("englishVerdictBases", {})
+    english_case_bases = spec.get("englishCaseBases", {})
     for criterion in criteria:
         cid = criterion["id"]
         result = results[cid]
@@ -212,15 +215,15 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
                 f"{origin} {count}" for origin, count in sorted(observed_origin.items())
             )
             note_parts.append(
-                f"Only observed = {len(observed_items)}; mức tester chỉ để mô tả: {severity_text}; "
-                f"nguồn: {origin_text}; IDs {compact_ids([item['findingId'] for item in observed_items], 7)}. "
-                "Các mức này không được tính vào bốn cột risk level của ZAP."
+                f"Only observed = {len(observed_items)}; tester ratings are descriptive only: {severity_text}; "
+                f"origins: {origin_text}; IDs {compact_ids([item['findingId'] for item in observed_items], 7)}. "
+                "These ratings are not included in the four native ZAP risk columns."
             )
         if spec.get("criterionNotes", {}).get(cid):
             note_parts.append(spec["criterionNotes"][cid])
         rows.append({
             "criterionId": cid,
-            "criterion": criterion["rawText"],
+            "criterion": english_criteria.get(cid, criterion["rawText"]),
             "status": STATUS[result["verdict"]],
             "counts": {
                 "high": counts["high"],
@@ -234,12 +237,13 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
             "evidenceLabel": (
                 f"Cases {compact_ids(case_index, 7) if case_index else 'N/A'}"
                 + (f" • Alerts {compact_ids(alert_index, 7)}" if alert_index else " • 0 alert mapped")
-                + " • Hồ sơ chứng cứ"
+                + " • Evidence record"
             ),
-            "verdictBasis": result.get("basis"),
+            "verdictBasis": english_verdict_bases.get(cid, result.get("basis")),
             "note": " ".join(note_parts),
             "caseEvidence": [
-                {"caseId": row["caseId"], "outcome": row["outcome"], "basis": row.get("basis"),
+                {"caseId": row["caseId"], "outcome": row["outcome"],
+                 "basis": english_case_bases.get(row["caseId"], row.get("basis")),
                  "operationIds": row.get("operationIds", []),
                  "evidenceOperationIds": [link.get("operationId") for link in row.get("evidenceLinks", [])]}
                 for row in case_rows
@@ -268,16 +272,16 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
 
 def write_native_index(path: Path, projection: dict, source_sha: str):
     lines = [
-        "# Chỉ mục native alert ZAP — Clicon",
+        "# Native ZAP alert index",
         "",
         f"- Assessment: `{projection['assessmentId']}`",
         f"- Generation: `{projection['sourceGeneration']}`",
-        f"- SHA-256 nguồn native: `{source_sha}`",
-        f"- Tổng native alert records: **{projection['nativeAlertCount']}**",
-        f"- Phân bố native: `{json.dumps(projection['nativeRiskTotals'], ensure_ascii=False)}`",
-        f"- Đã map: **{projection['mappedNativeAlertCount']}**; chưa map có lý do: **{projection['unmappedNativeAlertCount']}**",
+        f"- Native source SHA-256: `{source_sha}`",
+        f"- Total native alert records: **{projection['nativeAlertCount']}**",
+        f"- Native distribution: `{json.dumps(projection['nativeRiskTotals'], ensure_ascii=False)}`",
+        f"- Mapped: **{projection['mappedNativeAlertCount']}**; unmapped with rationale: **{projection['unmappedNativeAlertCount']}**",
         "",
-        "Tài liệu này là projection đã làm sạch. Route đã bỏ origin, UUID và giá trị query; không chứa cookie, token hay raw traffic.",
+        "This is a sanitized projection. Routes omit origins, UUIDs and query values; it contains no cookies, tokens or raw traffic.",
         "",
     ]
     grouped = defaultdict(list)
@@ -289,10 +293,10 @@ def write_native_index(path: Path, projection: dict, source_sha: str):
         plugin, name, risk, confidence, criterion, triage, rationale = key
         lines.extend([
             f"## ZAP {plugin} — {name}", "",
-            f"- Tiêu chí: `{criterion}`",
-            f"- Mức native / confidence: **{risk} / {confidence}**",
+            f"- Criterion: `{criterion}`",
+            f"- Native risk / confidence: **{risk} / {confidence}**",
             f"- Triage: {triage}",
-            f"- Lý do mapping: {rationale}",
+            f"- Mapping rationale: {rationale}",
             f"- Alert records: **{len(alerts)}**", "",
             "| Alert ID | Message ID | Method | Route |", "|---|---|---|---|",
         ])
@@ -300,27 +304,27 @@ def write_native_index(path: Path, projection: dict, source_sha: str):
             lines.append(f"| {alert['nativeAlertId']} | {alert['messageId']} | {alert['method']} | `{alert['route']}` |")
         lines.append("")
     if projection["unmappedNativeAlerts"]:
-        lines.extend(["## Native alerts chưa map vào catalog", ""])
+        lines.extend(["## Native alerts not mapped to the catalog", ""])
         by_rule = defaultdict(list)
         for alert in projection["unmappedNativeAlerts"]:
             by_rule[(alert["nativeRuleId"], alert["name"], alert["severity"], alert["unmappedReason"])].append(alert)
         for key, alerts in sorted(by_rule.items()):
             plugin, name, risk, reason = key
-            lines.extend([f"### ZAP {plugin} — {name}", "", f"- Mức native: **{risk}**", f"- Lý do chưa map: {reason}", f"- Alert records: **{len(alerts)}**", ""])
+            lines.extend([f"### ZAP {plugin} — {name}", "", f"- Native risk: **{risk}**", f"- Unmapped rationale: {reason}", f"- Alert records: **{len(alerts)}**", ""])
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def write_criterion_index(path: Path, projection: dict):
     lines = [
-        "# Chỉ mục chứng cứ theo tiêu chí — Clicon",
+        "# Evidence index by criterion",
         "",
         f"- Assessment: `{projection['assessmentId']}`",
         f"- Generation: `{projection['sourceGeneration']}`",
-        f"- Tiêu chí: **{projection['criteriaCount']}**",
-        f"- Native alerts: **{projection['nativeAlertCount']}**; Only observed findings do tester ghi nhận: **{projection['observedAlertCount']}** unique / **{projection['observedCriterionMappingCount']}** ánh xạ tiêu chí",
-        f"- Chỉ mục native alert: {projection.get('nativeIndexUrl') or 'chưa gắn URL Drive'}",
+        f"- Criteria: **{projection['criteriaCount']}**",
+        f"- Native alerts: **{projection['nativeAlertCount']}**; tester-recorded Only observed findings: **{projection['observedAlertCount']}** unique / **{projection['observedCriterionMappingCount']}** criterion mappings",
+        f"- Native alert index: {projection.get('nativeIndexUrl') or 'Drive URL not attached'}",
         "",
-        "Đây là chỉ mục đã làm sạch của kết quả vận hành. Only observed gồm finding do tester xác nhận từ ZAP hoặc source/config/runtime khi chưa có native ZAP detection tương ứng. Mỗi finding giữ ID, mức độ, nguồn quan sát, căn cứ rating và operation truy vết; bằng chứng thô, secret và đường dẫn cục bộ không được công bố.",
+        "This is a sanitized index of operational results. Only observed includes tester-confirmed findings from ZAP or source/config/runtime evidence when no corresponding native ZAP detection has been established. Each finding retains its ID, severity, observation origin, rating basis and traceable operation; raw evidence, secrets and local paths are not published.",
         "",
     ]
     for row in projection["rows"]:
@@ -328,18 +332,18 @@ def write_criterion_index(path: Path, projection: dict):
         lines.extend([
             f"## {row['criterionId']} — {row['status']}", "",
             row["criterion"], "",
-            f"- Native ZAP risk counts: Cao {c['high']} · Trung bình {c['medium']} · Thấp {c['low']} · Thông tin {c['informational']}",
-            f"- Only observed count: {c['onlyObserved']} (mức tester chỉ mô tả trong Ghi chú/Alerts, không tính vào bốn mức native ZAP)",
-            f"- Căn cứ kết luận: {row.get('verdictBasis') or 'Còn case hoặc applicability chưa khép.'}",
+            f"- Native ZAP risk counts: High {c['high']} · Medium {c['medium']} · Low {c['low']} · Informational {c['informational']}",
+            f"- Only observed count: {c['onlyObserved']} (tester ratings are descriptive in Notes/Alerts and are not included in the four native ZAP risk columns)",
+            f"- Verdict basis: {row.get('verdictBasis') or 'Cases or applicability remain unresolved.'}",
         ])
         if row.get("note"):
-            lines.append(f"- Ghi chú diễn giải: {row['note']}")
+            lines.append(f"- Explanatory note: {row['note']}")
         if row["caseEvidence"]:
             lines.extend(["", "### Cases", ""])
             for case in row["caseEvidence"]:
                 refs = case["operationIds"] or case["evidenceOperationIds"]
                 suffix = f"; operations `{compact_ids(refs, 10)}`" if refs else ""
-                lines.append(f"- `{case['caseId']}` — **{case['outcome']}**: {case.get('basis') or 'Không có basis'}{suffix}")
+                lines.append(f"- `{case['caseId']}` — **{case['outcome']}**: {case.get('basis') or 'No basis recorded'}{suffix}")
         if row["alerts"]:
             lines.extend(["", "### Alerts", ""])
             for alert in row["alerts"]:
@@ -350,10 +354,10 @@ def write_criterion_index(path: Path, projection: dict):
                     triage = alert["triage"].rstrip(".; ")
                     lines.append(
                         f"- `{alert['findingId']}` — Only observed **{alert['severity']}** (tester); "
-                        f"nguồn `{alert['evidenceOrigin']}`; {triage}; "
+                        f"origin `{alert['evidenceOrigin']}`; {triage}; "
                         f"native-match `{alert['nativeMatchState']}`; operations `{compact_ids(alert['operationIds'], 10)}`. "
-                        f"Quan sát: {alert['securitySignal']} Căn cứ mức độ: {alert['ratingBasis']} "
-                        f"Lý do ánh xạ: {alert['rationale']}"
+                        f"Observation: {alert['securitySignal']} Rating basis: {alert['ratingBasis']} "
+                        f"Mapping rationale: {alert['rationale']}"
                     )
         lines.append("")
     path.write_text("\n".join(lines), encoding="utf-8")

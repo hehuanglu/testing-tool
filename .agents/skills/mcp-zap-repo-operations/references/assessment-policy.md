@@ -26,7 +26,7 @@ After local failures or relevant changes, repair locally, reuse compatible retai
 
 ## Evidence gaps and final status
 
-Only product-grounded inapplicability can terminate as `not_evaluable` / **Không áp dụng**, reason `not_applicable`. Missing evidence, unperformed or partial checks, and method/access/capability limits remain pending even when no immediate action is available. Keep a concrete next action or dependency, continue independent feasible work, and do not finalize while an applicable criterion remains unresolved. Preserve historical evidence when reopening old method-limited conclusions.
+Only product-grounded inapplicability can terminate as `not_evaluable` / **Not applicable**, reason `not_applicable`. Missing evidence, unperformed or partial checks, and method/access/capability limits remain pending even when no immediate action is available. Keep a concrete next action or dependency, continue independent feasible work, and do not finalize while an applicable criterion remains unresolved. Preserve historical evidence when reopening old method-limited conclusions.
 
 ## Tester judgment and reported alerts
 

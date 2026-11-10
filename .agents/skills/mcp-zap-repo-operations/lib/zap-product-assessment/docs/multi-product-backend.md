@@ -1,6 +1,6 @@
 # Explicit multi-product backend workflow
 
-This describes finite technical runner contracts. Read the [documentation boundaries](README.md); new assessments use criteria workflow v2 around the selected admitted executor. Legacy reconcile/continue/handoff commands do not supply v2 completion or the user-facing Drive table.
+This describes finite technical runner contracts. Read the [documentation boundaries](README.md); new assessments use criteria workflow v3 around the selected admitted executor. Legacy reconcile/continue/handoff commands do not supply v3 completion or the user-facing Drive table.
 
 The common entry is `scripts/product_assessment.py`. Invoke it with the external `ZAP_PYTHON` and bundled-source `PYTHONPATH` from the [skill setup](../../../references/setup.md); no `.venv` is bundled. It accepts product location, discovery, explicit recipe and track; legacy CLIs retain their original finalsource scope. No product/deployment changes are needed to author/test a recipe. The scanner engine, native JSON bearer provider, queue, strict gates and historical readers have not been replaced.
 

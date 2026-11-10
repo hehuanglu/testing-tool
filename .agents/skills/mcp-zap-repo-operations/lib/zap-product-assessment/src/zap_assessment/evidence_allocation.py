@@ -34,10 +34,10 @@ def validate_allocation(allocation, question, operations, *, workflow, assessmen
     from .criteria_workflow import approval_digest, _approval_status
     if not isinstance(allocation, dict) or type(allocation.get('version')) is not int or allocation['version'] != 1:
         raise ValueError('native evidence allocation version 1 required')
-    if not isinstance(workflow, dict) or workflow.get('version') != 2 or not assessment_id:
-        raise ValueError('allocation requires current v2 workflow and assessment identity')
+    if not isinstance(workflow, dict) or workflow.get('version') not in (2, 3) or not assessment_id:
+        raise ValueError('allocation requires current criteria workflow and assessment identity')
     if not all(_approval_status(workflow).values()):
-        raise ValueError('allocation requires current original approvals')
+        raise ValueError('allocation requires current workflow approval')
     expected = dict(assessmentId=assessment_id, caseId=question.get('id', question.get('caseId')),
         criteriaDigest=approval_digest(workflow, 'criteria'), planDigest=approval_digest(workflow, 'plan'),
         workflowContext=workflow['context'], baseContext=bound_context(question, question=True),

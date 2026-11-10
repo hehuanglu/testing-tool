@@ -17,6 +17,16 @@ VERDICTS = ('met', 'unmet', 'not_evaluable')
 LIMITATION_REASONS = {'method_boundary', 'access', 'policy', 'capability',
     'environment', 'budget_exhausted', 'not_applicable'}
 EFFECTS = {'read', 'mutation', 'start'}
+FIXED_CATALOG_ID = 'OWASP-2025-CWE-MITRE-4.20'
+FIXED_CATALOG_VERSION = '2026-09-26'
+FIXED_CATALOG_SHA256 = '7765c109fcbcc957801351768648a1b0134e02088698bed6456dcc709af66f8c'
+FIXED_REQUIREMENTS_SHA256 = '2c1cb4b067595b24a6e2d6cb3806999c60926c97b9aba895e24e71598e3cc7ee'
+FIXED_CATEGORY_COUNTS = {'A01': 7, 'A02': 6, 'A03': 1, 'A04': 6, 'A05': 5,
+                         'A06': 6, 'A07': 5, 'A08': 5, 'A09': 3, 'A10': 6}
+FIXED_CRITERION_IDS = tuple(
+    f'SEC-{category}-{ordinal:02d}'
+    for category, count in FIXED_CATEGORY_COUNTS.items()
+    for ordinal in range(1, count + 1))
 
 
 def _text(value, label):
@@ -32,10 +42,17 @@ def _object(value, label):
 
 
 def approval_digest(workflow, kind):
-    """Stable content binding; a matching digest alone is not user authorization."""
+    """Stable content binding; only the plan digest is an approval boundary.
+
+    The criteria digest remains a useful immutable content identity and is folded
+    into the plan digest.  It is not a separate user-approval gate.
+    """
     if kind not in ('criteria', 'plan'):
         raise ValueError('approval kind must be criteria or plan')
-    payload = {key: workflow.get(key) for key in ('version', 'context', 'criteriaRevision', 'criteria')}
+    keys = ('version', 'context', 'criteriaRevision', 'criteria')
+    if workflow.get('version') == 3:
+        keys = ('version', 'catalog', 'context', 'criteriaRevision', 'criteria')
+    payload = {key: workflow.get(key) for key in keys}
     if kind == 'plan':
         payload = {'criteriaDigest': approval_digest(workflow, 'criteria'),
                    'planRevision': workflow.get('planRevision'), 'plan': workflow.get('plan')}
@@ -46,8 +63,8 @@ def approval_digest(workflow, kind):
 def validate_workflow(workflow):
     """Validate structural v2 input, returning a copy; incomplete reviews are legal."""
     w = copy.deepcopy(_object(workflow, 'criteriaWorkflow'))
-    if type(w.get('version')) is not int or w['version'] != 2:
-        raise ValueError('criteriaWorkflow version 2 required; legacy is not migrated')
+    if type(w.get('version')) is not int or w['version'] not in (2, 3):
+        raise ValueError('criteriaWorkflow version 2 or 3 required; v1 is not migrated')
     for field in ('criteriaRevision', 'planRevision'):
         _text(w.get(field), field)
     context = _object(w.get('context'), 'workflow context')
@@ -67,16 +84,46 @@ def validate_workflow(workflow):
     effects = set(strings(authority.get('allowedEffects'), 'authority effects'))
     if not effects or effects - EFFECTS:
         raise ValueError('invalid authority effects')
+    fixed_catalog = w.get('catalog')
+    if w['version'] == 3 and fixed_catalog is None:
+        raise ValueError('criteriaWorkflow version 3 requires the bundled fixed catalog')
+    if w['version'] == 3:
+        fixed_catalog = _object(fixed_catalog, 'catalog')
+        for field in ('id', 'version', 'sha256', 'source'):
+            _text(fixed_catalog.get(field), 'catalog ' + field)
+        if type(fixed_catalog.get('criterionCount')) is not int or fixed_catalog['criterionCount'] < 1:
+            raise ValueError('catalog criterionCount positive integer required')
+        if fixed_catalog['criterionCount'] != len(criteria):
+            raise ValueError('workflow criteria must account for every fixed catalog criterion')
+        expected_catalog = {'id': FIXED_CATALOG_ID, 'version': FIXED_CATALOG_VERSION,
+                            'sha256': FIXED_CATALOG_SHA256, 'criterionCount': len(FIXED_CRITERION_IDS)}
+        if any(fixed_catalog.get(key) != value for key, value in expected_catalog.items()):
+            raise ValueError('workflow must bind the bundled fixed catalog identity')
+        if tuple(criteria) != FIXED_CRITERION_IDS:
+            raise ValueError('workflow criteria must preserve all fixed SEC IDs in catalog order')
     for criterion in criteria.values():
         for field in ('rawText', 'source', 'requirement', 'oracle'):
             _text(criterion.get(field), 'criterion ' + field)
+        selected = criterion.get('selected', True)
+        if type(selected) is not bool:
+            raise ValueError('criterion selected must be boolean')
+        if w['version'] == 3 and 'selected' not in criterion:
+            raise ValueError('version 3 criterion selected decision required')
+        if w['version'] == 3 or 'selected' in criterion:
+            _text(criterion.get('selectionReason'), 'criterion selection reason')
+            if selected:
+                _text(criterion.get('testApproach'), 'selected criterion test approach')
         if criterion.get('applicability') not in ('applicable', 'not_applicable', 'unknown'):
             raise ValueError('invalid criterion applicability')
         if criterion.get('stoppingRule') not in ('all_cases', 'counterexample'):
             raise ValueError('explicit criterion stoppingRule required')
+        if w['version'] == 3 and criterion.get('stoppingRule') != 'all_cases':
+            raise ValueError('version 3 fixed-catalog criteria require all_cases')
         references(criterion.get('caseIds'), cases, 'criterion cases')
-        if criterion['applicability'] != 'not_applicable' and not criterion['caseIds']:
+        if selected and criterion['applicability'] != 'not_applicable' and not criterion['caseIds']:
             raise ValueError('assigned criterion needs a planned evaluation case')
+        if not selected and criterion['caseIds']:
+            raise ValueError('unselected criterion cannot carry execution cases')
         if criterion['applicability'] == 'not_applicable':
             _text(criterion.get('applicabilityBasis'), 'not_applicable product basis')
             if criterion['caseIds']:
@@ -150,6 +197,8 @@ def validate_workflow(workflow):
         _object(approval, 'approval')
         if approval.get('kind') not in ('criteria', 'plan'):
             raise ValueError('invalid approval kind')
+        if w['version'] == 3 and approval.get('kind') != 'plan':
+            raise ValueError('version 3 accepts only Gate 2 plan approval')
         for field in ('revision', 'digest', 'source'):
             _text(approval.get(field), 'approval ' + field)
     for key, identity, allowed in (('caseResults', 'caseId', cases),
@@ -167,9 +216,10 @@ def validate_workflow(workflow):
 
 
 def _approval_status(w):
+    kinds = ('plan',) if w['version'] == 3 else ('criteria', 'plan')
     return {kind: any(a['kind'] == kind and a['revision'] == w[kind + 'Revision']
             and a['digest'] == approval_digest(w, kind) for a in w['approvals'])
-            for kind in ('criteria', 'plan')}
+            for kind in kinds}
 
 
 def _limitation(row, allowed):
@@ -261,7 +311,7 @@ def _resource_review(run, w, operations, pending):
 def review_workflow(run):
     """Compute current assessment status; never use discovery as assigned scope.
 
-    Invalid references/contracts raise ValueError. Missing approvals, incomplete
+    Invalid references/contracts raise ValueError. Missing plan approval, incomplete
     observations and remaining work are diagnostics, not fabricated verdicts.
     """
     if run.get('reportProjection'):
@@ -292,7 +342,7 @@ def review_workflow(run):
     resolved = resolved_effect_ids(resolution, operations, pending)
     pending = [effect for effect in pending if effect['actionId'] not in resolved]
     diagnostics, next_work, limitations = coordinator_diagnostics, [], []
-    if not approvals['criteria']:
+    if not approvals.get('criteria', True):
         diagnostics.append('criteria-approval-required')
     if not approvals['plan']:
         diagnostics.append('plan-approval-required')
@@ -350,7 +400,11 @@ def review_workflow(run):
         rows = [reviewed_cases[i] for i in criterion['caseIds']]
         outcomes = [r['outcome'] for r in rows]
         verdict, basis = None, None
-        if criterion['applicability'] == 'unknown':
+        selected = criterion.get('selected', True)
+        if not selected:
+            if claim.get('verdict') is not None:
+                diagnostics.append('excluded-criterion-has-verdict:' + cid)
+        elif criterion['applicability'] == 'unknown':
             diagnostics.append('criterion-applicability-unresolved:' + cid)
             next_work.append({'criterionId': cid, 'action': 'resolve-product-applicability'})
         elif criterion['applicability'] == 'not_applicable':
@@ -381,7 +435,11 @@ def review_workflow(run):
                 basis = claim['basis']
         result = {'criterionId': cid, 'verdict': verdict, 'basis': basis,
                   'applicability': criterion['applicability'], 'caseIds': criterion['caseIds'],
-                  'stoppingRule': criterion['stoppingRule']}
+                  'stoppingRule': criterion['stoppingRule'], 'selected': selected,
+                  'selectionReason': criterion.get('selectionReason'),
+                  'testApproach': criterion.get('testApproach')}
+        if not selected:
+            result['disposition'] = 'out_of_scope_for_run'
         if verdict == 'not_evaluable':
             result['limitations'] = [r['limitation'] for r in rows if r.get('limitation')]
             if criterion['applicability'] == 'not_applicable':
@@ -403,15 +461,16 @@ def review_workflow(run):
             limitations.append({'caseId': cid, **row['limitation']})
     resource_diagnostics, effect_limits = _resource_review(run, w, operations, pending)
     diagnostics.extend(resource_diagnostics); limitations.extend(effect_limits)
-    counts = {verdict: sum(r['verdict'] == verdict for r in criterion_results) for verdict in VERDICTS}
-    counts['pending'] = sum(r['verdict'] is None for r in criterion_results)
+    counts = {verdict: sum(r['selected'] and r['verdict'] == verdict for r in criterion_results) for verdict in VERDICTS}
+    counts['pending'] = sum(r['selected'] and r['verdict'] is None for r in criterion_results)
+    counts['excluded'] = sum(not r['selected'] for r in criterion_results)
     counts['notApplicable'] = sum(r['applicability'] == 'not_applicable' and r['verdict'] == 'not_evaluable' for r in criterion_results)
     eligible = all(approvals.values()) and not counts['pending'] and not next_work and not diagnostics
     request = w.get('userRequest')
     if request:
         status = 'stopped_by_user' if request['kind'] == 'stop' else 'waiting_dependency'
         eligible = False
-    elif not approvals['criteria']:
+    elif not approvals.get('criteria', True):
         status = 'awaiting_criteria_approval'
     elif not approvals['plan']:
         status = 'awaiting_plan_approval'
@@ -419,7 +478,7 @@ def review_workflow(run):
         status = 'completed'
     else:
         status = 'executing'
-    return {'workflowVersion': 2, 'assessmentStatus': status, 'eligibleForCompletion': eligible,
+    return {'workflowVersion': w['version'], 'assessmentStatus': status, 'eligibleForCompletion': eligible,
             'approvalStatus': approvals, 'criteriaRevision': w['criteriaRevision'],
             'planRevision': w['planRevision'], 'criterionResults': criterion_results,
             'criterionCounts': counts, 'caseResults': list(reviewed_cases.values()),

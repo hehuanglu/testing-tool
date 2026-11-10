@@ -1,6 +1,6 @@
 # BOLA research direct-client — 21/10/2026
 
-Đây là contract kỹ thuật của runner legacy. Đọc [ranh giới tài liệu](README.md): assessment mới dùng criteria workflow v2; observation từ direct client không tự trở thành evidence có nguồn ZAP. Các lệnh qualification bên dưới là lịch sử: `scripts/bola_research_qualification.py` không được đóng gói nên không chạy được từ skill này.
+Đây là contract kỹ thuật của runner legacy. Đọc [ranh giới tài liệu](README.md): assessment mới dùng criteria workflow v3; observation từ direct client không tự trở thành evidence có nguồn ZAP. Các lệnh qualification bên dưới là lịch sử: `scripts/bola_research_qualification.py` không được đóng gói nên không chạy được từ skill này.
 
 Entry mới `scripts/bola_research.py` dùng contract `bola-research/1.0`, độc lập với borrowed v1.4 read-only và W6 owned synthetic. Core hiểu actor/object/policy và ID path/query/body; product adapter hiện chỉ finalsource local test. Product khác chưa được admit tự động. Không gọi BE-auth compiler, không cần ZAP session, native report hay active scan.
 

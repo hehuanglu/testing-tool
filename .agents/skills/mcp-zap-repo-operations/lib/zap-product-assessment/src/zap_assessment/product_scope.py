@@ -323,11 +323,11 @@ def compact_results(output,run,alerts,reconciliation=None,*,security_scope=None,
     """
     if 'criteriaWorkflow' in run:
         if any(value is not None for value in (reconciliation,security_scope,scope_assessment,previous_scope)):
-            raise ValueError('v2 reports use the approved criteriaWorkflow; legacy inventories cannot add assignments')
+            raise ValueError('criteria workflow reports use the approved plan; legacy inventories cannot add assignments')
         from .criteria_reporting import publish_reports
         return publish_reports(output,run,alerts,finalize=finalize_round,overwrite=overwrite,secrets=secrets)
     if run.get('workflowVersion') == 2:
-        raise ValueError('v2 requires criteriaWorkflow; never fall back to legacy completion')
+        raise ValueError('criteria workflow requires criteriaWorkflow state; never fall back to legacy completion')
     import json
     import os
     import tempfile

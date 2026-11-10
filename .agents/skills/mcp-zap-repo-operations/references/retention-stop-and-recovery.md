@@ -2,7 +2,7 @@
 
 Preserve recovery state throughout [criteria-driven authoring and execution](criteria-driven-workflow.md), including incomplete drafts and stopped or revised plans. Recovery does not authorize fresh effects; execution still needs current approvals and admission. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
-Before approved v2 execution effects, preserve the official state directory, exact packet and coordinator directory. Verify both approval bindings and retained executor evidence on continuation. Original packet readback, reconciliation and cleanup remain bound to durable task ownership after stop or revision. Fresh dispatch requires current approvals and admission. The legacy inspect-resume helper validates v1 continuation fields.
+Before approved v3 execution effects, preserve the official state directory, exact packet and coordinator directory. Verify the Gate 2 binding and retained executor evidence on continuation. Original packet readback, reconciliation and cleanup remain bound to durable task ownership after stop or revision. Fresh dispatch requires current approval and admission. Historical v2 continuation still verifies both of its approval bindings. The legacy inspect-resume helper validates v1 continuation fields.
 
 Use for checkpoint/resume and complicated attempts, rather than automatic fault/HA/repeatability campaigns. Deliver the [Drive assessment table](product-assessment-handoff.md); retain RUN/ALERTS/SCOPE_ALERTS internally without extra proof packages.
 
@@ -11,7 +11,7 @@ On worker handoff, retain the task and artifact references, unresolved work, and
 
 ## Operator schedule and crash checkpoint
 
-Use private intake notes for authorized reconnaissance before a valid v2 plan structure exists. Record authority, target, intended action and readback before traffic. Store registration accepts draft approvals and preserves the two gates.
+Use private intake notes for authorized reconnaissance before a valid v3 plan structure exists. Record authority, target, intended action and readback before traffic. Store registration accepts draft state and preserves the single Gate 2 plan approval.
 
 For a managed workflow, the explicit registry and verified current pointer identify the working generation. RUN holds workflow content and evidence. OPERATOR holds schedule, repairs and delivery outside the approval digest. Journal and executor receipts record effects and ownership. `state-render` regenerates the checklist and continuation prompt as projections. A process can resume from the store and journals even if projection generation or the final message was interrupted.
 
@@ -51,7 +51,7 @@ Honor actual user boundaries: an explicit stop, a specified time/operation budge
 
 ### Official location and minimum data
 
-During intake, resume from private notes and discovery records. For managed v2 execution, keep the official locator in the explicit registry or retained state directory; the Drive table and sanitized reports may reference it but never replace it. The older convention of moving a user-facing continuation pointer to the three-file bundle applies only when interpreting legacy checkpoints; it does not make a report projection executable. Keep scope/questions/observations in their existing structures and reference executor journals/native outputs for actual ACK/state. No duplicate operation journal or additional user-facing handoff file is required.
+During intake, resume from private notes and discovery records. For managed v3 execution (or retained v2), keep the official locator in the explicit registry or retained state directory; the Drive table and sanitized reports may reference it but never replace it. The older convention of moving a user-facing continuation pointer to the three-file bundle applies only when interpreting legacy checkpoints; it does not make a report projection executable. Keep scope/questions/observations in their existing structures and reference executor journals/native outputs for actual ACK/state. No duplicate operation journal or additional user-facing handoff file is required.
 
 Compact reports omit technical provenance such as `evidenceRefs`. Keep references to the existing working inventory/plans/journals needed by an executor in `nextActions.readFirst`; do not fabricate missing provenance or treat sanitized report inventory as an admitted plan. Those working artifacts remain outside the three-file handoff directory.
 

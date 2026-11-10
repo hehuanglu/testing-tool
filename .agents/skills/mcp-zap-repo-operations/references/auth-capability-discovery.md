@@ -1,6 +1,6 @@
 # Discover authentication as a tester
 
-Use discovery to support the [criteria-driven intake and planning phases](criteria-driven-workflow.md#intake-and-the-two-approvals). Source-only inspection may precede either approval gate; live discovery needs existing target/effect authority, and active testing waits for plan approval. This reference adds no track-wide assignment. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
+Use discovery to support the [criteria-driven intake and planning phases](criteria-driven-workflow.md#intake-and-gate-2-plan-approval). Source-only inspection may precede Gate 2; live discovery needs existing target/effect authority, and active testing waits for plan approval. This reference adds no track-wide assignment. User delivery follows the [Drive table contract](single-table-drive-output.md); JSON/native artifacts below are internal working data.
 
 Use this when internal contracts are absent or actual authentication capabilities are unclear. Inspect permitted source/spec/UI/traffic yourself; do not ask the requester for discoverable documentation/token fields. Source discovery does not wait for Docker/runtime authentication.
 

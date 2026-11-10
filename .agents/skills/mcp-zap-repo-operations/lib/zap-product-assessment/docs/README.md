@@ -1,6 +1,6 @@
 # Assessment library documentation boundaries
 
-For a new assessment, start with the skill's [criteria-driven workflow v2](../../../references/criteria-driven-workflow.md), [runner routing](../../../references/runner-routing.md) and [setup](../../../references/setup.md). Those references govern criteria, approvals, execution selection, completion and Drive delivery. This directory documents versioned technical contracts and retained implementation history; its legacy approval, status, release and local-bundle rules do not replace the current assessment workflow or grant traffic authority.
+For a new assessment, start with the skill's [criteria-driven workflow v3](../../../references/criteria-driven-workflow.md), [runner routing](../../../references/runner-routing.md) and [setup](../../../references/setup.md). Those references govern criteria, approval, execution selection, completion and Drive delivery. This directory documents versioned technical contracts and retained implementation history; its legacy approval, status, release and local-bundle rules do not replace the current assessment workflow or grant traffic authority.
 
 ## Technical contract guides
 
@@ -14,7 +14,7 @@ Reinspect the selected entrypoint, schema and current admission before using a g
 
 ## Historical records and unavailable artifacts
 
-[Decisions](decisions.md), [capability matrix](capability-matrix.md) and `remediation/*.md` retain milestone decisions, counts, limitations and evidence references as recorded. Statements such as “current”, “v2”, “blocked” or “verified” inside those records refer to that milestone and its contract, not automatically `criteriaWorkflow.version:2` or the current deployment. The capability registry is an assurance-profile index, not a criterion verdict engine.
+[Decisions](decisions.md), [capability matrix](capability-matrix.md) and `remediation/*.md` retain milestone decisions, counts, limitations and evidence references as recorded. Statements such as “current”, “v2”, “blocked” or “verified” inside those records refer to that milestone and its contract, not automatically `criteriaWorkflow.version:3` or the current deployment. The capability registry is an assurance-profile index, not a criterion verdict engine.
 
 The standalone skill does not contain the original workspace's `review/`, `runs/`, `docs/evidence/`, implementation-status documents or external planning documents. Historical relative links to them remain provenance references and cannot be read or treated as fresh evidence here. No missing artifact may be replaced with an invented receipt or success claim.
 

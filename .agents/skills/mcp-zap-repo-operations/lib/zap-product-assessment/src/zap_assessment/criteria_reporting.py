@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.parse import quote, quote_plus
 from uuid import uuid4
 
-from .criteria_workflow import approval_digest, review_workflow, validate_workflow
+from .criteria_workflow import _approval_status, approval_digest, review_workflow, validate_workflow
 from .question_evidence import operation_index, verified_zap_message
 from .security_scope import canonical_alerts
 from .safety_io import atomic_bytes
@@ -130,9 +130,8 @@ def alert_projection(run, document):
     declared_mappings = cw.get('alertMappings', [])
     if not isinstance(declared_mappings, list):
         raise ValueError('alertMappings list required')
-    if declared_mappings and not any(a['kind'] == 'criteria' and a['revision'] == cw['criteriaRevision']
-            and a['digest'] == approval_digest(cw, 'criteria') for a in cw.get('approvals', [])):
-        raise ValueError('alert mappings require approval of the current criteria')
+    if declared_mappings and not all(_approval_status(cw).values()):
+        raise ValueError('alert mappings require the current workflow approval')
     for mapping in declared_mappings:
         if not isinstance(mapping, dict):
             raise ValueError('alert mapping object required')
@@ -144,6 +143,8 @@ def alert_projection(run, document):
             raise ValueError('unique alert mapping with rationale required')
         seen.add((fid, cid))
         criterion = criteria[cid]
+        if criterion.get('selected', True) is not True:
+            raise ValueError('alert mapping cannot target a criterion excluded from this run')
         strict_cases = message_cases.intersection(criterion['caseIds'])
         alert = by_id[fid]
         if strict_cases and alert['recordKind'] == 'observed-security-alert' and not any(
@@ -220,7 +221,7 @@ def _publish_reports_locked(output, run, alerts, *, finalize=False, overwrite=Fa
     legacy = {k: result.pop(k) for k in ('assessmentRound', 'taskCompletion', 'completionSummary', 'handoffClosesTask', 'roundClosed', 'roundOutcome', 'roundClosureReview') if k in result}
     if legacy:
         result['legacyCompletionContext'] = legacy
-    result.update(workflowVersion=2, reportProjection=True,
+    result.update(workflowVersion=run['criteriaWorkflow']['version'], reportProjection=True,
         assessmentStatus='completed' if finalize else review['assessmentStatus'],
         criterionResults=copy.deepcopy(review['criterionResults']),
         criterionCounts=copy.deepcopy(review['criterionCounts']), criteriaReview=review,
@@ -232,7 +233,7 @@ def _publish_reports_locked(output, run, alerts, *, finalize=False, overwrite=Fa
     generation = dict(bundleId=str(uuid4()), kind='recomposition', performsRetest=False,
         writeGuarantee='staged new directory; overwrite is per-file atomic, not bundle crash-atomic')
     for report in (result, alert_report, scoped_report):
-        report.update(workflowVersion=2, assessmentContext=copy.deepcopy(context),
+        report.update(workflowVersion=run['criteriaWorkflow']['version'], assessmentContext=copy.deepcopy(context),
             assessmentStatus=result['assessmentStatus'], reportGeneration=copy.deepcopy(generation))
     bundle = [sanitize(r, secrets) for r in (result, alert_report, scoped_report)]
     # Revalidate sanitized semantic pointers. If redaction removed needed data,

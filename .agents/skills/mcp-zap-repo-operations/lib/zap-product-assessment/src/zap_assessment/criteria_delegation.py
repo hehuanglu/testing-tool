@@ -64,7 +64,7 @@ def _approved(run):
     workflow = validate_workflow(run.get('criteriaWorkflow'))
     workflow.setdefault('approvals', [])
     if not all(_approval_status(workflow).values()):
-        raise DelegationError('current criteria and plan approval required')
+        raise DelegationError('current workflow approval required')
     cw = run['criteriaWorkflow']
     if cw.get('userRequest', {}).get('kind') in ('stop', 'pause'):
         raise DelegationError('user stop/pause prevents dispatch')

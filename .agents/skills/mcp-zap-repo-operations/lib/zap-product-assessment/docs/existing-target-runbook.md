@@ -1,6 +1,6 @@
 # M2 existing Docker target — public/API only
 
-This is a legacy binding/runner contract, not the intake workflow for new assessments. Read the [documentation boundaries](README.md); its owner/reviewer input fields do not add approver-identity collection to the criteria workflow v2.
+This is a legacy binding/runner contract, not the intake workflow for new assessments. Read the [documentation boundaries](README.md); its owner/reviewer input fields do not add approver-identity collection to criteria workflow v3.
 
 Run from this package checkout, Python3.13/.venv, with Docker Desktop available. Runtime images/helper IDs in `profiles/runtime-baseline.json` must already exist. Do not build the dirty upstream JSON/Bearer checkout or reuse an existing ZAP session. Everything is foreground; no automation/service is installed.
 

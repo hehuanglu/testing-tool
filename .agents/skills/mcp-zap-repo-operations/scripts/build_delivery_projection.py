@@ -65,6 +65,7 @@ def compact_ids(values: list[str], limit: int = 12) -> str:
 
 def validate_review(run: dict, native_rows: list[dict], spec: dict) -> tuple[dict, dict]:
     criteria = {row["id"]: row for row in run["criteriaWorkflow"]["criteria"]}
+    excluded = {criterion for criterion, row in criteria.items() if row.get("selected", True) is False}
     operations = {row["id"]: row for row in run.get("operations", [])}
     plugin_rules = {}
     for row in spec.get("nativeRules", []):
@@ -76,6 +77,8 @@ def validate_review(run: dict, native_rows: list[dict], spec: dict) -> tuple[dic
             raise ValueError(f"native rule {plugin} needs mappings xor unmappedReason")
         if any(criterion not in criteria for criterion in mapped):
             raise ValueError(f"native rule {plugin} references unknown criterion")
+        if set(mapped) & excluded:
+            raise ValueError(f"native rule {plugin} maps to a criterion excluded from this run")
         if mapped and not str(row.get("rationale", "")).strip():
             raise ValueError(f"native rule {plugin} mapping rationale required")
         plugin_rules[plugin] = row
@@ -98,6 +101,8 @@ def validate_review(run: dict, native_rows: list[dict], spec: dict) -> tuple[dic
             criterion_ids = [row.get("criterionId")]
         if not criterion_ids or any(criterion not in criteria for criterion in criterion_ids):
             raise ValueError(f"observed alert {finding} references unknown criterion")
+        if set(criterion_ids) & excluded:
+            raise ValueError(f"observed alert {finding} maps to a criterion excluded from this run")
         if row.get("severity") not in RISK_KEYS:
             raise ValueError(f"observed alert {finding} needs supported tester severity")
         if row.get("nativeMatchState") not in ("matched", "possible", "none-established"):
@@ -194,6 +199,7 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
             and item["nativeMatchState"] == "none-established"
             for item in alerts
         )
+        excluded = result.get("selected") is False
         case_rows = [cases[case_id] for case_id in criterion.get("caseIds", []) if case_id in cases]
         case_index = [f"{row['caseId']}:{row['outcome']}" for row in case_rows]
         alert_index = [item["findingId"] for item in alerts]
@@ -224,13 +230,17 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
         rows.append({
             "criterionId": cid,
             "criterion": english_criteria.get(cid, criterion["rawText"]),
-            "status": STATUS[result["verdict"]],
+            "status": (
+                "Out of scope for this run"
+                if result.get("selected") is False
+                else STATUS[result["verdict"]]
+            ),
             "counts": {
-                "high": counts["high"],
-                "medium": counts["medium"],
-                "low": counts["low"],
-                "informational": counts["informational"],
-                "onlyObserved": only_observed,
+                "high": None if excluded else counts["high"],
+                "medium": None if excluded else counts["medium"],
+                "low": None if excluded else counts["low"],
+                "informational": None if excluded else counts["informational"],
+                "onlyObserved": None if excluded else only_observed,
             },
             "caseIndex": case_index,
             "alertIndex": alert_index,
@@ -239,7 +249,11 @@ def build(run: dict, native_doc: dict, spec: dict, native_url: str | None):
                 + (f" • Alerts {compact_ids(alert_index, 7)}" if alert_index else " • 0 alert mapped")
                 + " • Evidence record"
             ),
-            "verdictBasis": english_verdict_bases.get(cid, result.get("basis")),
+            "verdictBasis": (
+                result.get("selectionReason")
+                if excluded
+                else english_verdict_bases.get(cid, result.get("basis"))
+            ),
             "note": " ".join(note_parts),
             "caseEvidence": [
                 {"caseId": row["caseId"], "outcome": row["outcome"],

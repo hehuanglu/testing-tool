@@ -1,11 +1,15 @@
 import copy
+import hashlib
+import json
 import multiprocessing
 import tempfile
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from zap_assessment.criteria_delegation import Coordinator, coordinator_lock, make_packet, merge_result
-from zap_assessment.criteria_workflow import approval_digest, review_workflow
+from zap_assessment.criteria_workflow import (FIXED_CATALOG_ID, FIXED_CATALOG_SHA256,
+    FIXED_CATALOG_VERSION, FIXED_CRITERION_IDS, FIXED_REQUIREMENTS_SHA256,
+    approval_digest, review_workflow)
 
 
 def working(outcome="matched"):
@@ -31,7 +35,32 @@ def working(outcome="matched"):
 
 def approve(run):
     w=run["criteriaWorkflow"]
-    w["approvals"]=[dict(kind=k, revision=w[k+"Revision"], digest=approval_digest(w,k),source="user-approved-"+k) for k in ("criteria","plan")]
+    kinds = ("plan",) if w["version"] == 3 else ("criteria", "plan")
+    w["approvals"]=[dict(kind=k, revision=w[k+"Revision"], digest=approval_digest(w,k),source="user-approved-"+k) for k in kinds]
+
+
+def fixed_working(outcome=None, *, selected=True):
+    run = working(outcome); w = run['criteriaWorkflow']; template = w['criteria'][0]
+    w['version'] = 3
+    w['catalog'] = dict(id=FIXED_CATALOG_ID, version=FIXED_CATALOG_VERSION,
+        sha256=FIXED_CATALOG_SHA256, source='references/owasp-2025-security-catalog.json',
+        criterionCount=len(FIXED_CRITERION_IDS))
+    criteria = []
+    for index, cid in enumerate(FIXED_CRITERION_IDS):
+        active = selected and index == 0
+        criteria.append(dict(template, id=cid, selected=active,
+            selectionReason=('Relevant owner boundary exists' if active else 'Outside this fixture run'),
+            testApproach=('Run T1 with owner and non-owner controls through ZAP' if active else None),
+            caseIds=['T1'] if active else []))
+        if not active:
+            criteria[-1].pop('testApproach')
+    w['criteria'] = criteria
+    if selected:
+        w['plan']['cases'][0]['criterionIds'] = [FIXED_CRITERION_IDS[0]]
+    else:
+        w['plan']['cases'] = []
+    approve(run)
+    return run
 
 
 def limitation():
@@ -178,14 +207,80 @@ class CriteriaTests(unittest.TestCase):
         run=working();run["criteriaWorkflow"]["criterionResults"]=[dict(criterionId="C1",verdict="unmet")]
         self.assertFalse(review_workflow(run)["eligibleForCompletion"])
 
-    def test_approval_content_binding_preserves_the_two_gates(self):
+    def test_plan_approval_binds_criteria_and_plan_without_a_gate_one(self):
+        run = fixed_working()
         for field in ('rawText', 'source', 'requirement', 'oracle'):
-            run = working()
-            run['criteriaWorkflow']['criteria'][0][field] += ' changed'
-            self.assertEqual(review_workflow(run)['approvalStatus'], {'criteria': False, 'plan': False})
-        run = working()
-        run['criteriaWorkflow']['plan']['authority']['target'] += '/changed'
-        self.assertEqual(review_workflow(run)['approvalStatus'], {'criteria': True, 'plan': False})
+            changed = copy.deepcopy(run)
+            changed['criteriaWorkflow']['criteria'][0][field] += ' changed'
+            self.assertEqual(review_workflow(changed)['approvalStatus'], {'plan': False})
+        changed = copy.deepcopy(run)
+        changed['criteriaWorkflow']['plan']['authority']['target'] += '/changed'
+        self.assertEqual(review_workflow(changed)['approvalStatus'], {'plan': False})
+        changed = copy.deepcopy(run)
+        changed['criteriaWorkflow']['catalog']['source'] += '#changed'
+        self.assertEqual(review_workflow(changed)['approvalStatus'], {'plan': False})
+        changed = copy.deepcopy(run)
+        changed['criteriaWorkflow']['catalog']['sha256'] = 'wrong'
+        with self.assertRaises(ValueError):
+            review_workflow(changed)
+
+    def test_explicit_selection_accounts_for_excluded_catalog_rows(self):
+        run = working(None); w = run['criteriaWorkflow']; criterion = w['criteria'][0]
+        criterion.update(selected=False, selectionReason='Excluded from this assessment by the user')
+        criterion['caseIds'] = []
+        w['plan']['cases'] = []
+        approve(run)
+        review = review_workflow(run)
+        self.assertTrue(review['eligibleForCompletion'])
+        self.assertEqual(review['criterionCounts']['excluded'], 1)
+        self.assertEqual(review['criterionCounts']['pending'], 0)
+        self.assertEqual(review['criterionResults'][0]['disposition'], 'out_of_scope_for_run')
+
+    def test_fixed_catalog_plan_requires_selection_reason_and_test_approach(self):
+        run = fixed_working(); w = run['criteriaWorkflow']; criterion = w['criteria'][0]
+        criterion.pop('testApproach'); approve(run)
+        with self.assertRaises(ValueError):
+            review_workflow(run)
+        run = fixed_working(); run['criteriaWorkflow']['criteria'][0]['stoppingRule'] = 'counterexample'
+        approve(run)
+        with self.assertRaises(ValueError):
+            review_workflow(run)
+
+    def test_fixed_catalog_identity_and_all_original_ids_are_enforced(self):
+        run = fixed_working(selected=False); w = run['criteriaWorkflow']
+        review = review_workflow(run)
+        self.assertTrue(review['eligibleForCompletion'])
+        self.assertEqual(review['criterionCounts']['excluded'], 50)
+        changed = copy.deepcopy(run); changed['criteriaWorkflow']['catalog']['sha256'] = 'wrong'
+        with self.assertRaises(ValueError):
+            review_workflow(changed)
+        changed = copy.deepcopy(run); changed['criteriaWorkflow']['criteria'][-1]['id'] = 'SEC-A10-99'
+        with self.assertRaises(ValueError):
+            review_workflow(changed)
+        changed = copy.deepcopy(run); changed['criteriaWorkflow'].pop('catalog')
+        with self.assertRaises(ValueError):
+            review_workflow(changed)
+        changed = copy.deepcopy(run)
+        changed['criteriaWorkflow']['approvals'].append(dict(kind='criteria', revision='C-1',
+            digest=approval_digest(changed['criteriaWorkflow'], 'criteria'), source='obsolete-gate-one'))
+        with self.assertRaises(ValueError):
+            review_workflow(changed)
+
+    def test_v2_ignores_historical_noncanonical_catalog_metadata(self):
+        run = working(); run['criteriaWorkflow']['catalog'] = {'historical': 'opaque'}
+        approve(run)
+        self.assertTrue(review_workflow(run)['eligibleForCompletion'])
+
+    def test_bundled_catalog_matches_the_fixed_contract(self):
+        catalog_path = Path(__file__).resolve().parents[3] / 'references/owasp-2025-security-catalog.json'
+        raw = catalog_path.read_bytes(); catalog = json.loads(raw)
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), FIXED_CATALOG_SHA256)
+        self.assertEqual(catalog['catalog_id'], FIXED_CATALOG_ID)
+        self.assertEqual(catalog['catalog_version'], FIXED_CATALOG_VERSION)
+        self.assertEqual(tuple(row['sec_id'] for row in catalog['requirements']), FIXED_CRITERION_IDS)
+        requirements = json.dumps(catalog['requirements'], sort_keys=True, separators=(',', ':'),
+            ensure_ascii=False, allow_nan=False).encode()
+        self.assertEqual(hashlib.sha256(requirements).hexdigest(), FIXED_REQUIREMENTS_SHA256)
 
     def test_counterexample_removes_feasible_work_only_for_waived_case(self):
         run = working('violated'); w = run['criteriaWorkflow']

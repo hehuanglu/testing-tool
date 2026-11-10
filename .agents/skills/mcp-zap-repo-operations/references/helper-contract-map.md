@@ -11,7 +11,7 @@ This map covers the skill-level `scripts/` and vendored CI helpers. The [runner 
 
 ## Product-specific operational helpers
 
-The following scripts retain the fixed `finalsource-zap-test` environment, routes and evidence contracts. They are not defaults for a different project, an automatic v2 adapter or a linked end-to-end assessment pipeline. Their local receipt checks are necessary technical gates, not substitutes for actual user authority and the two v2 approvals where applicable.
+The following scripts retain the fixed `finalsource-zap-test` environment, routes and evidence contracts. They are not defaults for a different project, an automatic v2 adapter or a linked end-to-end assessment pipeline. Their local receipt checks are necessary technical gates, not substitutes for actual user authority and the Gate 2 plan approval where applicable.
 
 - `scripts/prepare_finalsource_fixture.py`: creates dedicated actors and an owned account, writes private generated credentials, intent/journal and BOLA preparation artifacts. It creates an isolated Docker client and retains product fixtures for authorized retesting; `--run-bola` additionally executes the prepared legacy BOLA lane. This is effectful setup/execution, not a status command. Its direct fixture API traffic does not itself establish ZAP-derived findings.
 - `scripts/probe_finalsource_auth.py`: consumes prepared fixture/config/credentials, performs bounded direct auth controls and may create one weak-password test actor. It records sanitized responses and private credentials separately and cleans its owned Docker client. Direct auth observations require their actual provenance; they are not native ZAP active coverage.
@@ -20,7 +20,7 @@ The following scripts retain the fixed `finalsource-zap-test` environment, route
 
 ## Vendored CI gate
 
-`lib/mcp-zap-server/.github/actions/zap-security-gate/mcp_zap_gate.py` is a pinned vendored snapshot; `lib/vendor-provenance.json` records its hashes. Its normal CLI sends seed/crawl/optional active/passive/report traffic. It has its own CI baseline/suppression/exit contract and does not implement v2 criteria approval, per-case semantic evidence, recovery or Drive publishing. Reuse suitable parsers/collectors only after checking callers and signatures.
+`lib/mcp-zap-server/.github/actions/zap-security-gate/mcp_zap_gate.py` is a pinned vendored snapshot; `lib/vendor-provenance.json` records its hashes. Its normal CLI sends seed/crawl/optional active/passive/report traffic. It has its own CI baseline/suppression/exit contract and does not implement v2 Gate 2 plan approval, per-case semantic evidence, recovery or Drive publishing. Reuse suitable parsers/collectors only after checking callers and signatures.
 
 The normal CLI requires `--api-key`; this is not a safe path for a private credential under the skill's no-secrets-in-argv rule. Use the configured connector or an inspected compatible private in-process transport instead of putting a secret on the command line. Token-bearing seeds do not authenticate the later scan starts. CI snapshot normalization and suppression projections do not replace retained native records, IDs, ratings or raw reports in assessment reporting.
 

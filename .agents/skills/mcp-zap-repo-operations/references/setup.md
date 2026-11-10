@@ -9,7 +9,7 @@ python3 -B scripts/install_skill.py check
 
 Inspect drift before `install --update`. The helper backs up the old installation under `~/.codex/skill-backups/`; use `--target` for another destination. It uses only stdlib and does not install dependencies, configure MCP, or send traffic. Project-local usage needs no personal installation. Do not copy product source, reports, secrets, or virtual environments from a developer machine.
 
-Repo-only maintenance does not authorize synchronizing a divergent personal copy. Use `check` read-only and report drift separately from implementation validation. Current criteria/report CLI usage is documented in the [v2 criteria workflow](criteria-driven-workflow.md).
+Repo-only maintenance does not authorize synchronizing a divergent personal copy. Use `check` read-only and report drift separately from implementation validation. Current criteria/report CLI usage is documented in the [v3 criteria workflow](criteria-driven-workflow.md).
 
 ## Paths and dependencies
 

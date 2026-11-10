@@ -1,0 +1,2309 @@
+{
+  "schema_version": "2.0",
+  "artifact_type": "security-catalog",
+  "catalog_id": "OWASP-2025-CWE-MITRE-4.20",
+  "catalog_version": "2026-09-26",
+  "status": "active",
+  "scope": {
+    "categories": [
+      "A01:2025",
+      "A02:2025",
+      "A03:2025",
+      "A04:2025",
+      "A05:2025",
+      "A06:2025",
+      "A07:2025",
+      "A08:2025",
+      "A09:2025",
+      "A10:2025"
+    ],
+    "total": 50,
+    "category_totals": {
+      "A01": 7,
+      "A02": 6,
+      "A03": 1,
+      "A04": 6,
+      "A05": 5,
+      "A06": 6,
+      "A07": 5,
+      "A08": 5,
+      "A09": 3,
+      "A10": 6
+    },
+    "unit": "One SEC ID identifies one CWE weakness from the OWASP Top 10:2025 official List of Mapped CWEs."
+  },
+  "provenance": {
+    "source_file": "resource/SEC-50-CWE-OWASP-2025-MITRE-Mitigations.xlsx",
+    "source_sha256": "c722657b26d2b06650009e6cb791c4fdcaeb532baae252283bd1fa5c34e17114",
+    "authoritative_sheet": "English",
+    "companion_sheet": "Tiếng Việt",
+    "companion_fields": [
+      "static_review_scope_vi"
+    ],
+    "excluded_sheets": [
+      "Archive EN 2026-09-26",
+      "Archive VI 2026-09-26",
+      "bổ sung SEC cho A03 Và A09"
+    ],
+    "header_row": 8,
+    "mitre_cwe_version": "4.20",
+    "owasp_top10_version": "2025",
+    "imported_at": "2026-10-05T00:17:12+07:00",
+    "importer": ".codex/skills/gen-security-coding-resource/scripts/import_cwe_catalog.py"
+  },
+  "zap_assessment_profile": {
+    "revision": "2026-11-10",
+    "precedence": "This profile is the operational contract for the MCP ZAP skill. The generation contract, scoring contract, workbook notes and workbook assessment rules are retained only as provenance for the source static-review study and must not override this profile.",
+    "criterion_source": "Use the 50 original requirements, preserving their IDs, wording and scoped security behavior. The workbook notes, workbook assessment rules and generation/scoring contracts describe the source study and do not govern ZAP assessment methods or verdicts.",
+    "planning": "Before Gate 2, account for all 50 SEC IDs. Each criterion records selected (true or false), a criterion-specific selection reason, mapped all_cases IDs, and, when selected, a concrete test approach explaining which product surfaces and ZAP or source/config observations will answer it. Unselected criteria remain visible as out of scope for the run and carry no cases or verdict obligation.",
+    "approval": "There is no catalog-normalization or catalog-approval Gate 1. Gate 2 is the sole user approval and binds the complete 50-criterion selection/mapping plus the detailed work-block plan, target and allowed effects.",
+    "execution": "Use applicable ZAP capabilities to the fullest extent supported by the approved test plan on an isolated local instance. Select authenticated and anonymous exploration, passive analysis, active probes and targeted requests according to the product and each criterion. Source, configuration and documentation may supply evidence where runtime observation cannot answer the criterion.",
+    "evidence": "Keep native ZAP alerts, observations from traffic through ZAP, and source/configuration evidence separately attributable. Derive a conclusion for each selected criterion from sufficient applicable evidence. Missing evidence, incomplete execution, and method/access/capability limits remain pending; they are not a terminal not_evaluable result. Zero alerts do not establish that a criterion is satisfied.",
+    "verdicts": "Selected criteria finish as met, unmet, or not_evaluable only when product-grounded not_applicable. Newly planned selected criteria use all_cases: a violation is retained immediately but does not waive unfinished sibling cases."
+  },
+  "workbook_notes": [
+    "Allocation A01→A10: 7–6–1–6–5–6–5–5–3–6. A03 is short by four; A09 by two. See allocation and transfer notes from row 104.",
+    "All 50 CWEs have Potential Mitigations and occur in their category's official mapped list. Description and Potential Mitigations reproduce MITRE CWE 4.20 English text.",
+    "Shared SEC fields are vertically merged; each Phase(s) occupies one row. Column K states study-selected scope; its cell note identifies the preferred source mitigation.",
+    "Static review does not require every alternative mitigation or test execution. A control counts only with evidence that it addresses the scoped behavior; missing evidence is not automatically UNMET.",
+    "Reviewed: 2026-09-26. SEC IDs are renumbered within categories. Prior versions remain in hidden Archive tabs. Removed/added CWE IDs and scope limits appear below."
+  ],
+  "workbook_assessment_rules": [
+    "All 50 CWE IDs have Potential Mitigations and occur in the corresponding OWASP Top 10:2025 List of Mapped CWEs. Allocation and assessment scope are study decisions, not 50 official OWASP/MITRE tests.",
+    "Column K states the static-review scope and source mitigation ordinal. Its cell note contains the preferred source entry verbatim. Columns M–N retain the full Potential Mitigations, including out-of-scope phases, with one row per phase.",
+    "MITRE alternatives need not all be implemented simultaneously. Evidence must show that an appropriate control or coherent set of controls addresses the scoped behavior across relevant paths. A supporting/defense-in-depth measure alone does not establish MET.",
+    "Review supplied source code, configuration, and documentation/inventories without executing tests. Testing, Policy, Distribution processes, and continuous operations are not mandatory in this scope. Operation-tagged text describing inspectable configuration can still be reviewed, e.g. TLS in CWE-523.",
+    "UNMET requires direct evidence of a scoped violation. Functional nonapplicability differs from insufficient evidence. No specific repository has been reviewed; selection does not guarantee zero N/A or NOT_EVALUABLE outcomes.",
+    "A03 retains CWE-1329 for software-component updateability. Hardware fuses, supplier reputation, continuous vulnerability monitoring, and patch responsibility are not inferred from code.",
+    "A09 focuses on log-input handling, secret exclusion, and logging of explicitly scoped security events. Missing production evidence is not treated as a code defect.",
+    "Do not double-count the same control or defect across overlapping SECs; record the location and behavior assessed. This is scoped static review, not a system-wide security certification.",
+    "SEC IDs have been renumbered within categories. Compare versions using CWE IDs and version date; the prior version is kept in hidden Archive tabs."
+  ],
+  "license": {
+    "copyright": "Copyright © 2006–2026, The MITRE Corporation. CWE, CWSS, CWRAF, and the CWE logo are trademarks of The MITRE Corporation.",
+    "terms": "CWE™ is free to use by any organization or individual for any research, development, and/or commercial purposes, per these CWE Terms of Use. Accordingly, The MITRE Corporation hereby grants you a non-exclusive, royalty-free license to use CWE for research, development, and commercial purposes. Any copy you make for such purposes is authorized on the condition that you reproduce MITRE’s copyright designation and this license in any such copy. CWE is a trademark of The MITRE Corporation.",
+    "url": "https://cwe.mitre.org/about/termsofuse.html"
+  },
+  "generation_contract": {
+    "authoritative_for_prompt_e": true,
+    "projection_mode": "exact-selected-records",
+    "prompt_e_mitigation_phases": [
+      "Architecture and Design",
+      "Implementation",
+      "Installation",
+      "System Configuration"
+    ],
+    "prompt_e_mitigation_rule": "Prompt E always includes the preferred mitigation and every Potential Mitigations phase row marked prompt_e_included; other phase rows remain catalog evidence only.",
+    "permitted_derivations": {
+      "requirement_id": "SR-<UC-ID>-<SEC category and ordinal copied from SEC ID>"
+    },
+    "prohibited_actions": [
+      "Do not reinterpret, paraphrase, translate, expand, merge, split, or invent security requirements or mitigations.",
+      "Do not add CWE IDs, mitigations, or URLs that are not recorded in this catalog.",
+      "Do not use the researcher-facing Markdown projection as machine input."
+    ]
+  },
+  "scoring_contract": {
+    "statuses": [
+      "met",
+      "unmet",
+      "not_evaluable"
+    ],
+    "not_evaluable_reasons": [
+      "not_applicable",
+      "insufficient_evidence"
+    ],
+    "met": "The CWE's scoped behavior exists and inspectable source/configuration evidence shows the preferred mitigation, or an equivalent MITRE alternative or coherent set of controls, addresses that behavior on every relevant path. A supporting or defense-in-depth measure alone is not met.",
+    "unmet": "Direct inspectable evidence of the scoped weakness: a relevant path that exhibits the CWE behavior, or a fully inspected applicable path where no adequate control exists.",
+    "not_evaluable_not_applicable": "The UC/application does not contain the scoped behavior, component or data flow named by static_review_scope.",
+    "not_evaluable_insufficient_evidence": "The scoped behavior exists but the evidence needed to decide is outside the retained or authorized source/configuration boundary.",
+    "no_double_counting": "Do not count the same control or defect as evidence for more than one overlapping SEC without a requirement-specific rationale."
+  },
+  "requirements": [
+    {
+      "sec_id": "SEC-A01-01",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-862",
+      "cwe_name": "Missing Authorization",
+      "cwe_description": "The product does not perform an authorization check when an actor attempts to access a resource or perform an action.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/862.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-862",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect server-side authorization guards on protected endpoints.",
+      "static_review_scope_vi": "Kiểm tra middleware/guard phân quyền ở các endpoint được bảo vệ.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #4 (Architecture and Design).",
+        "mitre_entry_ordinal": 4,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "For web applications, make sure that the access control mechanism is enforced correctly at the server side on every page. Users should not be able to access any unauthorized functionality or information by simply requesting direct access to that page.\nOne way to do this is to ensure that all pages containing sensitive information are not cached, and that all such pages restrict access to requests that are accompanied by an active and authenticated session token associated with a user who has the required permissions to access that page.",
+        "source_url": "https://cwe.mitre.org/data/definitions/862.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Divide the product into anonymous, normal, privileged, and administrative areas. Reduce the attack surface by carefully mapping roles with data and functionality. Use role-based access control (RBAC) [REF-229] to enforce the roles at the appropriate boundaries. Note that this approach may not protect against horizontal authorization, i.e., it will not protect a user from attacking others with the same role.\n\nEnsure that access control checks are performed related to the business logic. These checks may be different than the access control checks that are applied to more generic resources such as files, connections, processes, memory, and database records. For example, a database may restrict access for medical records to a specific database user, but each record might only be intended to be accessible to the patient and the patient's doctor [REF-7].\n\nStrategy: Libraries or Frameworks Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. For example, consider using authorization frameworks such as the JAAS Authorization Framework [REF-233] and the OWASP ESAPI Access Control feature [REF-45].\n\nFor web applications, make sure that the access control mechanism is enforced correctly at the server side on every page. Users should not be able to access any unauthorized functionality or information by simply requesting direct access to that page.\nOne way to do this is to ensure that all pages containing sensitive information are not cached, and that all such pages restrict access to requests that are accompanied by an active and authenticated session token associated with a user who has the required permissions to access that page.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "System Configuration",
+            "Installation"
+          ],
+          "text": "Use the access control capabilities of your operating system and server environment and define your access control lists accordingly. Use a \"default deny\" policy when defining these ACLs.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A01-02",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-639",
+      "cwe_name": "Authorization Bypass Through User-Controlled Key",
+      "cwe_description": "The system's authorization functionality does not prevent one user from gaining access to another user's data or record by modifying the key value identifying the data.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/639.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-639",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect ownership checks on record lookups using user-controlled IDs.",
+      "static_review_scope_vi": "Kiểm tra quyền sở hữu bản ghi ở truy vấn dùng ID do người dùng gửi.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "For each and every data access, ensure that the user has sufficient privilege to access the record that is being requested.",
+        "source_url": "https://cwe.mitre.org/data/definitions/639.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "For each and every data access, ensure that the user has sufficient privilege to access the record that is being requested.\n\nUse encryption in order to make it more difficult to guess other legitimate values of the key or associate a digital signature with the key so that the server can verify that there has been no tampering.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "Make sure that the key that is used in the lookup of a specific user's record is not controllable externally by the user or that any tampering can be detected.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A01-03",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-548",
+      "cwe_name": "Exposure of Information Through Directory Listing",
+      "cwe_description": "The product inappropriately exposes a directory listing with an index of all the resources located inside of the directory.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/548.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-548",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect directory-listing and sensitive-directory access settings.",
+      "static_review_scope_vi": "Đọc cấu hình tắt directory listing và hạn chế thư mục nhạy cảm.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design; System Configuration).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design",
+          "System Configuration"
+        ],
+        "text": "Recommendations include restricting access to important directories or files by adopting a need to know requirement for both the document and server root, and turning off features such as Automatic Directory Listings that could expose private files and provide information that could be utilized by an attacker when formulating or conducting an attack.",
+        "source_url": "https://cwe.mitre.org/data/definitions/548.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "System Configuration"
+          ],
+          "text": "Recommendations include restricting access to important directories or files by adopting a need to know requirement for both the document and server root, and turning off features such as Automatic Directory Listings that could expose private files and provide information that could be utilized by an attacker when formulating or conducting an attack.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A01-04",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-219",
+      "cwe_name": "Storage of File with Sensitive Data Under Web Root",
+      "cwe_description": "The product stores sensitive data under the web document root with insufficient access control, which might make it accessible to untrusted parties.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/219.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-219",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Compare sensitive-file locations with the web root and access settings.",
+      "static_review_scope_vi": "Đối chiếu đường dẫn tệp nhạy cảm với web root và cấu hình truy cập.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation; System Configuration).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation",
+          "System Configuration"
+        ],
+        "text": "Avoid storing information under the web root directory.",
+        "source_url": "https://cwe.mitre.org/data/definitions/219.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation",
+            "System Configuration"
+          ],
+          "text": "Avoid storing information under the web root directory.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "System Configuration"
+          ],
+          "text": "Access control permissions should be set to prevent reading/writing of sensitive files inside/outside of the web directory.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A01-05",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-1275",
+      "cwe_name": "Sensitive Cookie with Improper SameSite Attribute",
+      "cwe_description": "The SameSite attribute for sensitive cookies is not set, or an insecure value is used.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/1275.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-1275",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect SameSite settings on sensitive cookies.",
+      "static_review_scope_vi": "Đọc thuộc tính SameSite của cookie nhạy cảm.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Set the SameSite attribute of a sensitive cookie to 'Lax' or 'Strict'. This instructs the browser to apply this cookie only to same-domain requests, which provides a good Defense in Depth against CSRF attacks. When the 'Lax' value is in use, cookies are also sent for top-level cross-domain navigation via HTTP GET, HEAD, OPTIONS, and TRACE methods, but not for other HTTP methods that are more like to cause side-effects of state mutation.\nEffectiveness: High Note: While this mitigation is effective for protecting cookies from a browser's own scripting engine, third-party components or plugins may have their own engines that allow access to cookies. Attackers might also be able to use XmlHttpResponse to read the headers directly and obtain the cookie.",
+        "source_url": "https://cwe.mitre.org/data/definitions/1275.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Set the SameSite attribute of a sensitive cookie to 'Lax' or 'Strict'. This instructs the browser to apply this cookie only to same-domain requests, which provides a good Defense in Depth against CSRF attacks. When the 'Lax' value is in use, cookies are also sent for top-level cross-domain navigation via HTTP GET, HEAD, OPTIONS, and TRACE methods, but not for other HTTP methods that are more like to cause side-effects of state mutation.\nEffectiveness: High Note: While this mitigation is effective for protecting cookies from a browser's own scripting engine, third-party components or plugins may have their own engines that allow access to cookies. Attackers might also be able to use XmlHttpResponse to read the headers directly and obtain the cookie.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A01-06",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-601",
+      "cwe_name": "URL Redirection to Untrusted Site ('Open Redirect')",
+      "cwe_description": "The web application accepts a user-controlled input that specifies a link to an external site, and uses that link in a redirect.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/601.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-601",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect redirect allowlists or fixed ID-to-destination mappings.",
+      "static_review_scope_vi": "Đối chiếu đích redirect với danh sách cho phép hoặc ánh xạ ID cố định.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #3 (Architecture and Design).",
+        "mitre_entry_ordinal": 3,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Strategy: Enforcement by Conversion When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs. For example, ID 1 could map to \"/login.asp\" and ID 2 could map to \"http://www.example.com/\". Features such as the ESAPI AccessReferenceMap [REF-45] provide this capability.",
+        "source_url": "https://cwe.mitre.org/data/definitions/601.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Input Validation Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use a list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does.\nWhen performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules.\nAs an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if the input is only expected to contain colors such as \"red\" or \"blue.\" Do not rely exclusively on looking for malicious or malformed inputs. This is likely to miss at least one undesirable input, especially if the code's environment changes. This can give attackers enough room to bypass the intended validation.\nHowever, denylists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright. Use a list of approved URLs or domains to be used for redirection.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Use an intermediate disclaimer page that provides the user with a clear warning that they are leaving the current site. Implement a long timeout before the redirect occurs, or force the user to click on the link. Be careful to avoid XSS problems (CWE-79) when generating the disclaimer page.\n\nStrategy: Enforcement by Conversion When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs. For example, ID 1 could map to \"/login.asp\" and ID 2 could map to \"http://www.example.com/\". Features such as the ESAPI AccessReferenceMap [REF-45] provide this capability.\n\nEnsure that no externally-supplied requests are honored by requiring that all redirect requests include a unique nonce generated by the application [REF-483]. Be sure that the nonce is not predictable (CWE-330). Note: Note that this can be bypassed using XSS (CWE-79).",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "Strategy: Attack Surface Reduction Understand all the potential areas where untrusted inputs can enter your software: parameters or arguments, cookies, anything read from the network, environment variables, reverse DNS lookups, query results, request headers, URL components, e-mail, files, filenames, databases, and any external systems that provide data to the application. Remember that such inputs may be obtained indirectly through API calls.\nMany open redirect problems occur because the programmer assumed that certain inputs could not be modified, such as cookies and hidden form fields.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Strategy: Firewall Use an application firewall that can detect attacks against this weakness. It can be beneficial in cases in which the code cannot be fixed (because it is controlled by a third party), as an emergency prevention measure while more comprehensive software assurance measures are applied, or to provide defense in depth [REF-1481]. Effectiveness: Moderate Note: An application firewall might not cover all possible input vectors.\nIn addition, attack techniques might be available to bypass the protection mechanism, such as using malformed inputs that can still be processed by the component that receives those inputs. Depending on functionality, an application firewall might inadvertently reject or modify legitimate requests. Finally, some manual effort may be required for customization.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A01-07",
+      "owasp": "A01:2025",
+      "owasp_category_name": "Broken Access Control",
+      "cwe_id": "CWE-276",
+      "cwe_name": "Incorrect Default Permissions",
+      "cwe_description": "During installation, installed file permissions are set to allow anyone to modify those files.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/276.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-276",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect default resource permissions and access configuration.",
+      "static_review_scope_vi": "Đọc quyền mặc định khi tạo tài nguyên và cấu hình quyền truy cập.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design; Operation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design",
+          "Operation"
+        ],
+        "text": "The architecture needs to access and modification attributes for files to only those users who actually require those actions.",
+        "source_url": "https://cwe.mitre.org/data/definitions/276.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "Operation"
+          ],
+          "text": "The architecture needs to access and modification attributes for files to only those users who actually require those actions.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Strategy: Separation of Privilege Compartmentalize the system to have \"safe\" areas where trust boundaries can be unambiguously drawn. Do not allow sensitive data to go outside of the trust boundary and always be careful when interfacing with a compartment outside of the safe area. Ensure that appropriate compartmentalization is built into the system design, and the compartmentalization allows for and reinforces privilege separation functionality.\nArchitects and designers should rely on the principle of least privilege to decide the appropriate time to use privileges and the time to drop privileges.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A02-01",
+      "owasp": "A02:2025",
+      "owasp_category_name": "Security Misconfiguration",
+      "cwe_id": "CWE-614",
+      "cwe_name": "Sensitive Cookie in HTTPS Session Without 'Secure' Attribute",
+      "cwe_description": "The Secure attribute for sensitive cookies in HTTPS sessions is not set.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/614.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A02_2025-Security_Misconfiguration/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-614",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect the Secure attribute on cookies used in HTTPS sessions.",
+      "static_review_scope_vi": "Đọc thuộc tính Secure của cookie dùng trong phiên HTTPS.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Always set the secure attribute when the cookie should be sent via HTTPS only.",
+        "source_url": "https://cwe.mitre.org/data/definitions/614.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Always set the secure attribute when the cookie should be sent via HTTPS only.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A02-02",
+      "owasp": "A02:2025",
+      "owasp_category_name": "Security Misconfiguration",
+      "cwe_id": "CWE-1004",
+      "cwe_name": "Sensitive Cookie Without 'HttpOnly' Flag",
+      "cwe_description": "The product uses a cookie to store sensitive information, but the cookie is not marked with the HttpOnly flag.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/1004.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A02_2025-Security_Misconfiguration/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-1004",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect HttpOnly on sensitive cookies.",
+      "static_review_scope_vi": "Đọc thuộc tính HttpOnly của cookie nhạy cảm.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Leverage the HttpOnly flag when setting a sensitive cookie in a response. Effectiveness: High Note: While this mitigation is effective for protecting cookies from a browser's own scripting engine, third-party components or plugins may have their own engines that allow access to cookies. Attackers might also be able to use XmlHttpResponse to read the headers directly and obtain the cookie.",
+        "source_url": "https://cwe.mitre.org/data/definitions/1004.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Leverage the HttpOnly flag when setting a sensitive cookie in a response. Effectiveness: High Note: While this mitigation is effective for protecting cookies from a browser's own scripting engine, third-party components or plugins may have their own engines that allow access to cookies. Attackers might also be able to use XmlHttpResponse to read the headers directly and obtain the cookie.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A02-03",
+      "owasp": "A02:2025",
+      "owasp_category_name": "Security Misconfiguration",
+      "cwe_id": "CWE-611",
+      "cwe_name": "Improper Restriction of XML External Entity Reference",
+      "cwe_description": "The product processes an XML document that can contain XML entities with URIs that resolve to documents outside of the intended sphere of control, causing the product to embed incorrect documents into its output.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/611.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A02_2025-Security_Misconfiguration/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-611",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect XML parser settings disabling external entity expansion.",
+      "static_review_scope_vi": "Đọc tùy chọn parser vô hiệu hóa external entity expansion.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation; System Configuration).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation",
+          "System Configuration"
+        ],
+        "text": "Many XML parsers and validators can be configured to disable external entity expansion.",
+        "source_url": "https://cwe.mitre.org/data/definitions/611.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation",
+            "System Configuration"
+          ],
+          "text": "Many XML parsers and validators can be configured to disable external entity expansion.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A02-04",
+      "owasp": "A02:2025",
+      "owasp_category_name": "Security Misconfiguration",
+      "cwe_id": "CWE-260",
+      "cwe_name": "Password in Configuration File",
+      "cwe_description": "The product stores a password in a configuration file that might be accessible to actors who do not know the password.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/260.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A02_2025-Security_Misconfiguration/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-260",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect password storage locations, configuration permissions, and value protection.",
+      "static_review_scope_vi": "Đối chiếu chỗ lưu mật khẩu, quyền tệp cấu hình và cách bảo vệ giá trị.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Avoid storing passwords in easily accessible locations.",
+        "source_url": "https://cwe.mitre.org/data/definitions/260.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Avoid storing passwords in easily accessible locations.\n\nConsider storing cryptographic hashes of passwords as an alternative to storing in plaintext.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A02-05",
+      "owasp": "A02:2025",
+      "owasp_category_name": "Security Misconfiguration",
+      "cwe_id": "CWE-547",
+      "cwe_name": "Use of Hard-coded, Security-relevant Constants",
+      "cwe_description": "The product uses hard-coded constants instead of symbolic names for security-critical values, which increases the likelihood of mistakes during code maintenance or security policy change.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/547.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A02_2025-Security_Misconfiguration/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-547",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect security-sensitive constants and external configuration loading.",
+      "static_review_scope_vi": "Tìm hằng số liên quan bảo mật và đối chiếu cơ chế lấy từ cấu hình.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Avoid using hard-coded constants. Configuration files offer a more flexible solution.",
+        "source_url": "https://cwe.mitre.org/data/definitions/547.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Avoid using hard-coded constants. Configuration files offer a more flexible solution.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A02-06",
+      "owasp": "A02:2025",
+      "owasp_category_name": "Security Misconfiguration",
+      "cwe_id": "CWE-776",
+      "cwe_name": "Improper Restriction of Recursive Entity References in DTDs ('XML Entity Expansion')",
+      "cwe_description": "The product uses XML documents and allows their structure to be defined with a Document Type Definition (DTD), but it does not properly control the number of recursive definitions of entities.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/776.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A02_2025-Security_Misconfiguration/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-776",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect recursive-entity handling and DTD restrictions before XML parsing.",
+      "static_review_scope_vi": "Đọc xử lý DTD/recursive entity trước khi parser xử lý XML.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Before parsing XML files with associated DTDs, scan for recursive entity declarations and do not continue parsing potentially explosive content.",
+        "source_url": "https://cwe.mitre.org/data/definitions/776.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "If possible, prohibit the use of DTDs or use an XML parser that limits the expansion of recursive DTD entities.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Before parsing XML files with associated DTDs, scan for recursive entity declarations and do not continue parsing potentially explosive content.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A03-01",
+      "owasp": "A03:2025",
+      "owasp_category_name": "Software Supply Chain Failures",
+      "cwe_id": "CWE-1329",
+      "cwe_name": "Reliance on Component That is Not Updateable",
+      "cwe_description": "The product contains a component that cannot be updated or patched in order to remove vulnerabilities or significant bugs.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/1329.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A03_2025-Software_Supply_Chain_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-1329",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Software components only: inspect code/configuration that permits component updates or dependency replacement. Hardware fuses and supplier processes are outside the assessed scope.",
+      "static_review_scope_vi": "Chỉ xét thành phần phần mềm: mã/cấu hình cho phép cập nhật hoặc thay phiên bản phụ thuộc. Loại hardware-fuse và quy trình nhà cung cấp khỏi phạm vi chấm.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #4 (Implementation).",
+        "mitre_entry_ordinal": 4,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Implement the necessary functionality to allow each component to be updated.",
+        "source_url": "https://cwe.mitre.org/data/definitions/1329.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Requirements"
+          ],
+          "text": "Specify requirements that each component should be updateable, including ROM, firmware, etc.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Design the product to allow for updating of its components. Include the external infrastructure that might be necessary to support updates, such as distribution servers.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "With hardware, support patches that can be programmed in-field or during manufacturing through hardware fuses. This feature can be used for limited patching of devices after shipping, or for the next batch of silicon devices manufactured, without changing the full device ROM.\nEffectiveness: Moderate Note: Some parts of the hardware initialization or signature verification done to authenticate patches will always be \"not patchable.\" Hardware-fuse-based patches will also have limitations in terms of size and the number of patches that can be supported.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Implement the necessary functionality to allow each component to be updated.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A04-01",
+      "owasp": "A04:2025",
+      "owasp_category_name": "Cryptographic Failures",
+      "cwe_id": "CWE-323",
+      "cwe_name": "Reusing a Nonce, Key Pair in Encryption",
+      "cwe_description": "Nonces should be used for the present occasion and only once.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/323.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-323",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect nonce uniqueness within the relevant key scope.",
+      "static_review_scope_vi": "Đọc cơ chế bảo đảm nonce không lặp trong phạm vi khóa tương ứng.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Refuse to reuse nonce values.",
+        "source_url": "https://cwe.mitre.org/data/definitions/323.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Refuse to reuse nonce values.\n\nUse techniques such as requiring incrementing, time based and/or challenge response to assure uniqueness of nonces.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A04-02",
+      "owasp": "A04:2025",
+      "owasp_category_name": "Cryptographic Failures",
+      "cwe_id": "CWE-329",
+      "cwe_name": "Generation of Predictable IV with CBC Mode",
+      "cwe_description": "The product generates and uses a predictable initialization Vector (IV) with Cipher Block Chaining (CBC) Mode, which causes algorithms to be susceptible to dictionary attacks when they are encrypted under the same key.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/329.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-329",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect CBC IV generation against the source's random-IV or encrypted-nonce approaches.",
+      "static_review_scope_vi": "Đọc cách tạo IV cho CBC; đối chiếu ngẫu nhiên hoặc nonce mã hóa theo nguồn.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "NIST recommends two methods of generating unpredictable IVs for CBC mode [REF-1172]. The first is to generate the IV randomly. The second method is to encrypt a nonce with the same key and cipher to be used to encrypt the plaintext. In this case the nonce must be unique but can be predictable, since the block cipher will act as a pseudo random permutation.",
+        "source_url": "https://cwe.mitre.org/data/definitions/329.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "NIST recommends two methods of generating unpredictable IVs for CBC mode [REF-1172]. The first is to generate the IV randomly. The second method is to encrypt a nonce with the same key and cipher to be used to encrypt the plaintext. In this case the nonce must be unique but can be predictable, since the block cipher will act as a pseudo random permutation.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A04-03",
+      "owasp": "A04:2025",
+      "owasp_category_name": "Cryptographic Failures",
+      "cwe_id": "CWE-296",
+      "cwe_name": "Improper Following of a Certificate's Chain of Trust",
+      "cwe_description": "The product does not follow, or incorrectly follows, the chain of trust for a certificate back to a trusted root certificate.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/296.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-296",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect certificate-chain validation calls and trust-store configuration.",
+      "static_review_scope_vi": "Đọc cấu hình và lời gọi kiểm tra chuỗi chứng chỉ/trust store.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Understand, and properly implement all checks necessary to ensure the integrity of certificate trust integrity.",
+        "source_url": "https://cwe.mitre.org/data/definitions/296.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Ensure that proper certificate checking is included in the system design.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Understand, and properly implement all checks necessary to ensure the integrity of certificate trust integrity.\n\nIf certificate pinning is being used, ensure that all relevant properties of the certificate are fully validated before the certificate is pinned, including the full chain of trust.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A04-04",
+      "owasp": "A04:2025",
+      "owasp_category_name": "Cryptographic Failures",
+      "cwe_id": "CWE-523",
+      "cwe_name": "Unprotected Transport of Credentials",
+      "cwe_description": "Login pages do not use adequate measures to protect the user name and password while they are in transit from the client to the server.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/523.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-523",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect supplied HTTPS/TLS configuration for login and credential transmission; do not infer live deployment settings without evidence.",
+      "static_review_scope_vi": "Đọc cấu hình HTTPS/TLS của trang đăng nhập và đường truyền thông tin xác thực; không suy ra cấu hình máy chủ đang chạy nếu chưa có bằng chứng.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Operation; System Configuration).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Operation",
+          "System Configuration"
+        ],
+        "text": "Enforce SSL use for the login page or any page used to transmit user credentials or other sensitive information. Even if the entire site does not use SSL, it MUST use SSL for login. Additionally, to help prevent phishing attacks, make sure that SSL serves the login page. SSL allows the user to verify the identity of the server to which they are connecting. If the SSL serves login page, the user can be certain they are talking to the proper end system.\nA phishing attack would typically redirect a user to a site that does not have a valid trusted server certificate issued from an authorized supplier.",
+        "source_url": "https://cwe.mitre.org/data/definitions/523.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Operation",
+            "System Configuration"
+          ],
+          "text": "Enforce SSL use for the login page or any page used to transmit user credentials or other sensitive information. Even if the entire site does not use SSL, it MUST use SSL for login. Additionally, to help prevent phishing attacks, make sure that SSL serves the login page. SSL allows the user to verify the identity of the server to which they are connecting. If the SSL serves login page, the user can be certain they are talking to the proper end system.\nA phishing attack would typically redirect a user to a site that does not have a valid trusted server certificate issued from an authorized supplier.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A04-05",
+      "owasp": "A04:2025",
+      "owasp_category_name": "Cryptographic Failures",
+      "cwe_id": "CWE-759",
+      "cwe_name": "Use of a One-Way Hash without a Salt",
+      "cwe_description": "The product uses a one-way cryptographic hash against an input that should not be reversible, such as a password, but the product does not also use a salt as part of the input.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/759.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-759",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect library-managed salting or a distinct random salt per password.",
+      "static_review_scope_vi": "Đối chiếu salting của thư viện hash hoặc salt ngẫu nhiên riêng cho từng mật khẩu.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Architecture and Design).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "If a technique that requires extra computational effort can not be implemented, then for each password that is processed, generate a new random salt using a strong random number generator with unpredictable seeds. Add the salt to the plaintext password before hashing it. When storing the hash, also store the salt. Do not use the same salt for every password.\nEffectiveness: Limited Note: Be aware that salts will not reduce the workload of a targeted attack against an individual hash (such as the password for a critical person), and in general they are less effective than other hashing techniques such as increasing the computation time or memory overhead.\nWithout a built-in workload, modern attacks can compute large numbers of hashes, or even exhaust the entire space of all possible passwords, within a very short amount of time, using massively-parallel computing and GPU, ASIC, or FPGA hardware.",
+        "source_url": "https://cwe.mitre.org/data/definitions/759.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Use an adaptive hash function that can be configured to change the amount of computational effort needed to compute the hash, such as the number of iterations (\"stretching\") or the amount of memory required. Some hash functions perform salting automatically. These functions can significantly increase the overhead for a brute force attack compared to intentionally-fast functions such as MD5. For example, rainbow table attacks can become infeasible due to the high computing overhead.\nFinally, since computing power gets faster and cheaper over time, the technique can be reconfigured to increase the workload without forcing an entire replacement of the algorithm in use. Some hash functions that have one or more of these desired properties include bcrypt [REF-291], scrypt [REF-292], and PBKDF2 [REF-293]. While there is active debate about which of these is the most effective, they are all stronger than using salts with hash functions with very little computing overhead.\nNote that using these functions can have an impact on performance, so they require special consideration to avoid denial-of-service attacks. However, their configurability provides finer control over how much CPU and memory is used, so it could be adjusted to suit the environment's needs. Effectiveness: High\n\nIf a technique that requires extra computational effort can not be implemented, then for each password that is processed, generate a new random salt using a strong random number generator with unpredictable seeds. Add the salt to the plaintext password before hashing it. When storing the hash, also store the salt. Do not use the same salt for every password.\nEffectiveness: Limited Note: Be aware that salts will not reduce the workload of a targeted attack against an individual hash (such as the password for a critical person), and in general they are less effective than other hashing techniques such as increasing the computation time or memory overhead.\nWithout a built-in workload, modern attacks can compute large numbers of hashes, or even exhaust the entire space of all possible passwords, within a very short amount of time, using massively-parallel computing and GPU, ASIC, or FPGA hardware.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation",
+            "Architecture and Design"
+          ],
+          "text": "When using industry-approved techniques, use them correctly. Don't cut corners by skipping resource-intensive steps (CWE-325). These steps are often essential for preventing common attacks.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A04-06",
+      "owasp": "A04:2025",
+      "owasp_category_name": "Cryptographic Failures",
+      "cwe_id": "CWE-916",
+      "cwe_name": "Use of Password Hash With Insufficient Computational Effort",
+      "cwe_description": "The product generates a hash for a password, but it uses a scheme that does not provide a sufficient level of computational effort that would make password cracking attacks infeasible or expensive.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/916.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A04_2025-Cryptographic_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-916",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect password-hash algorithms and work-factor parameters; a stated applicable parameter baseline is needed to conclude strength.",
+      "static_review_scope_vi": "Đọc thuật toán hash mật khẩu và tham số workload; cần chuẩn tham số áp dụng đã công bố để kết luận độ mạnh.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Use an adaptive hash function that can be configured to change the amount of computational effort needed to compute the hash, such as the number of iterations (\"stretching\") or the amount of memory required. Some hash functions perform salting automatically. These functions can significantly increase the overhead for a brute force attack compared to intentionally-fast functions such as MD5. For example, rainbow table attacks can become infeasible due to the high computing overhead.\nFinally, since computing power gets faster and cheaper over time, the technique can be reconfigured to increase the workload without forcing an entire replacement of the algorithm in use. Some hash functions that have one or more of these desired properties include bcrypt [REF-291], scrypt [REF-292], and PBKDF2 [REF-293]. While there is active debate about which of these is the most effective, they are all stronger than using salts with hash functions with very little computing overhead.\nNote that using these functions can have an impact on performance, so they require special consideration to avoid denial-of-service attacks. However, their configurability provides finer control over how much CPU and memory is used, so it could be adjusted to suit the environment's needs. Effectiveness: High",
+        "source_url": "https://cwe.mitre.org/data/definitions/916.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Use an adaptive hash function that can be configured to change the amount of computational effort needed to compute the hash, such as the number of iterations (\"stretching\") or the amount of memory required. Some hash functions perform salting automatically. These functions can significantly increase the overhead for a brute force attack compared to intentionally-fast functions such as MD5. For example, rainbow table attacks can become infeasible due to the high computing overhead.\nFinally, since computing power gets faster and cheaper over time, the technique can be reconfigured to increase the workload without forcing an entire replacement of the algorithm in use. Some hash functions that have one or more of these desired properties include bcrypt [REF-291], scrypt [REF-292], and PBKDF2 [REF-293]. While there is active debate about which of these is the most effective, they are all stronger than using salts with hash functions with very little computing overhead.\nNote that using these functions can have an impact on performance, so they require special consideration to avoid denial-of-service attacks. However, their configurability provides finer control over how much CPU and memory is used, so it could be adjusted to suit the environment's needs. Effectiveness: High",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation",
+            "Architecture and Design"
+          ],
+          "text": "When using industry-approved techniques, use them correctly. Don't cut corners by skipping resource-intensive steps (CWE-325). These steps are often essential for preventing common attacks.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A05-01",
+      "owasp": "A05:2025",
+      "owasp_category_name": "Injection",
+      "cwe_id": "CWE-89",
+      "cwe_name": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+      "cwe_description": "The product constructs all or part of an SQL command using externally-influenced input from an upstream component, but it does not neutralize or incorrectly neutralizes special elements that could modify the intended SQL command when it is sent to a downstream component. Without sufficient removal or quoting of SQL syntax in user-controllable inputs, the generated SQL query can cause those inputs to be interpreted as SQL instead of ordinary user data.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/89.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A05_2025-Injection/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-89",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Trace query data flow and inspect parameter binding; focus on Parameterization.",
+      "static_review_scope_vi": "Theo luồng dữ liệu tới truy vấn, kiểm tra binding tham số; tập trung biện pháp Parameterization.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Architecture and Design).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Strategy: Parameterization If available, use structured mechanisms that automatically enforce the separation between data and code. These mechanisms may be able to provide the relevant quoting, encoding, and validation automatically, instead of relying on the developer to provide this capability at every point where output is generated. Process SQL queries using prepared statements, parameterized queries, or stored procedures.\nThese features should accept parameters or variables and support strong typing. Do not dynamically construct and execute query strings within these features using \"exec\" or similar functionality, since this may re-introduce the possibility of SQL injection. [REF-867]",
+        "source_url": "https://cwe.mitre.org/data/definitions/89.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Strategy: Libraries or Frameworks Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid [REF-1482]. For example, consider using persistence layers such as Hibernate or Enterprise Java Beans, which can provide significant protection against SQL injection if used properly.\n\nStrategy: Parameterization If available, use structured mechanisms that automatically enforce the separation between data and code. These mechanisms may be able to provide the relevant quoting, encoding, and validation automatically, instead of relying on the developer to provide this capability at every point where output is generated. Process SQL queries using prepared statements, parameterized queries, or stored procedures.\nThese features should accept parameters or variables and support strong typing. Do not dynamically construct and execute query strings within these features using \"exec\" or similar functionality, since this may re-introduce the possibility of SQL injection. [REF-867]\n\nFor any security checks that are performed on the client side, ensure that these checks are duplicated on the server side, in order to avoid CWE-602. Attackers can bypass the client-side checks by modifying values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server.\n\nStrategy: Enforcement by Conversion When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Operation"
+          ],
+          "text": "Strategy: Environment Hardening Run your code using the lowest privileges that are required to accomplish the necessary tasks [REF-76]. If possible, create isolated accounts with limited privileges that are only used for a single task. That way, a successful attack will not immediately give the attacker access to the rest of the software or its environment.\nFor example, database applications rarely need to run as the database administrator, especially in day-to-day operations. Specifically, follow the principle of least privilege when creating user accounts to a SQL database. The database users should only have the minimum privileges necessary to use their account. If the requirements of the system indicate that a user can read and modify their own data, then limit their privileges so they cannot read/write others' data.\nUse the strictest permissions possible on all database objects, such as execute-only for stored procedures.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Output Encoding While it is risky to use dynamically-generated query strings, code, or commands that mix control and data together, sometimes it may be unavoidable. Properly quote arguments and escape any special characters within those arguments. The most conservative approach is to escape or filter all characters that do not pass an extremely strict allowlist (such as everything that is not alphanumeric or white space).\nIf some special characters are still needed, such as white space, wrap each argument in quotes after the escaping/filtering step. Be careful of argument injection (CWE-88). Instead of building a new implementation, such features may be available in the database or programming language. For example, the Oracle DBMS_ASSERT package can check or enforce that parameters have certain properties that make them less vulnerable to SQL injection.\nFor MySQL, the mysql_real_escape_string() API function is available in both C and PHP.\n\nStrategy: Input Validation Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use a list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does.\nWhen performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules.\nAs an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if the input is only expected to contain colors such as \"red\" or \"blue.\" Do not rely exclusively on looking for malicious or malformed inputs. This is likely to miss at least one undesirable input, especially if the code's environment changes. This can give attackers enough room to bypass the intended validation.\nHowever, denylists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright. When constructing SQL query strings, use stringent allowlists that limit the character set based on the expected value of the parameter in the request. This will indirectly limit the scope of an attack, but this technique is less important than proper output encoding and escaping.\nNote that proper output encoding, escaping, and quoting is the most effective solution for preventing SQL injection, although input validation may provide some defense-in-depth. This is because it effectively limits what will appear in output. Input validation will not always prevent SQL injection, especially if you are required to support free-form text fields that could contain arbitrary characters.\nFor example, the name \"O'Reilly\" would likely pass the validation step, since it is a common last name in the English language. However, it cannot be directly inserted into the database because it contains the \"'\" apostrophe character, which would need to be escaped or otherwise handled. In this case, stripping the apostrophe might reduce the risk of SQL injection, but it would produce incorrect behavior because the wrong name would be recorded.\nWhen feasible, it may be safest to disallow meta-characters entirely, instead of escaping them. This will provide some defense in depth. After the data is entered into the database, later processes may neglect to escape meta-characters before use, and you may not have control over those processes.\n\nEnsure that error messages only contain minimal details that are useful to the intended audience and no one else. The messages need to strike the balance between being too cryptic (which can confuse users) or being too detailed (which may reveal more than intended). The messages should not reveal the methods that were used to determine the error. Attackers can use detailed information to refine or optimize their original attack, thereby increasing their chances of success.\nIf errors must be captured in some detail, record them in log messages, but consider what could occur if the log messages can be viewed by attackers. Highly sensitive information such as passwords should never be saved to log files. Avoid inconsistent messaging that might accidentally tip off an attacker about internal state, such as whether a user account exists or not.\nIn the context of SQL Injection, error messages revealing the structure of a SQL query can help attackers tailor successful attack strings.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Strategy: Firewall Use an application firewall that can detect attacks against this weakness. It can be beneficial in cases in which the code cannot be fixed (because it is controlled by a third party), as an emergency prevention measure while more comprehensive software assurance measures are applied, or to provide defense in depth [REF-1481. Effectiveness: Moderate Note: An application firewall might not cover all possible input vectors.\nIn addition, attack techniques might be available to bypass the protection mechanism, such as using malformed inputs that can still be processed by the component that receives those inputs. Depending on functionality, an application firewall might inadvertently reject or modify legitimate requests. Finally, some manual effort may be required for customization.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Operation",
+            "Implementation"
+          ],
+          "text": "Strategy: Environment Hardening When using PHP, configure the application so that it does not use register_globals. During implementation, develop the application so that it does not rely on this feature, but be wary of implementing a register_globals emulation that is subject to weaknesses such as CWE-95, CWE-621, and similar issues.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A05-02",
+      "owasp": "A05:2025",
+      "owasp_category_name": "Injection",
+      "cwe_id": "CWE-78",
+      "cwe_name": "Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+      "cwe_description": "The product constructs all or part of an OS command using externally-influenced input from an upstream component, but it does not neutralize or incorrectly neutralizes special elements that could modify the intended OS command when it is sent to a downstream component.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/78.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A05_2025-Injection/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-78",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect inputs reaching process calls; prioritize library APIs instead of shell commands, or appropriate safe argument separation.",
+      "static_review_scope_vi": "Kiểm tra đầu vào tới lời gọi tiến trình; ưu tiên API thư viện thay shell, hoặc cơ chế tách tham số an toàn phù hợp.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "If at all possible, use library calls rather than external processes to recreate the desired functionality.",
+        "source_url": "https://cwe.mitre.org/data/definitions/78.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "If at all possible, use library calls rather than external processes to recreate the desired functionality.\n\nStrategy: Attack Surface Reduction For any data that will be used to generate a command to be executed, keep as much of that data out of external control as possible. For example, in web applications, this may require storing the data locally in the session's state instead of sending it out to the client in a hidden form field.\n\nFor any security checks that are performed on the client side, ensure that these checks are duplicated on the server side, in order to avoid CWE-602. Attackers can bypass the client-side checks by modifying values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server.\n\nStrategy: Libraries or Frameworks Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid. For example, consider using the ESAPI Encoding control [REF-45] or a similar tool, library, or framework. These will help the programmer encode outputs in a manner less prone to error.\n\nStrategy: Parameterization If available, use structured mechanisms that automatically enforce the separation between data and code. These mechanisms may be able to provide the relevant quoting, encoding, and validation automatically, instead of relying on the developer to provide this capability at every point where output is generated. Some languages offer multiple functions that can be used to invoke commands.\nWhere possible, identify any function that invokes a command shell using a single string, and replace it with a function that requires individual arguments. These functions typically perform appropriate quoting and filtering of arguments. For example, in C, the system() function accepts a string that contains the entire command to be executed, whereas execl(), execve(), and others require an array of strings, one for each argument. In Windows, CreateProcess() only accepts one command at a time.\nIn Perl, if system() is provided with an array of arguments, then it will quote each of the arguments.\n\nStrategy: Enforcement by Conversion When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Operation"
+          ],
+          "text": "Strategy: Sandbox or Jail Run the code in a \"jail\" or similar sandbox environment that enforces strict boundaries between the process and the operating system. This may effectively restrict which files can be accessed in a particular directory or which commands can be executed by the software. OS-level examples include the Unix chroot jail, AppArmor, and SELinux. In general, managed code may provide some protection.\nFor example, java.io.FilePermission in the Java SecurityManager allows the software to specify restrictions on file operations. This may not be a feasible solution, and it only limits the impact to the operating system; the rest of the application may still be subject to compromise. Be careful to avoid CWE-243 and other weaknesses related to jails.\nEffectiveness: Limited Note: The effectiveness of this mitigation depends on the prevention capabilities of the specific sandbox or jail being used and might only help to reduce the scope of an attack, such as restricting the attacker to certain system calls or limiting the portion of the file system that can be accessed.\n\nStrategy: Environment Hardening Run your code using the lowest privileges that are required to accomplish the necessary tasks [REF-76]. If possible, create isolated accounts with limited privileges that are only used for a single task. That way, a successful attack will not immediately give the attacker access to the rest of the software or its environment.\nFor example, database applications rarely need to run as the database administrator, especially in day-to-day operations.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Output Encoding While it is risky to use dynamically-generated query strings, code, or commands that mix control and data together, sometimes it may be unavoidable. Properly quote arguments and escape any special characters within those arguments. The most conservative approach is to escape or filter all characters that do not pass an extremely strict allowlist (such as everything that is not alphanumeric or white space).\nIf some special characters are still needed, such as white space, wrap each argument in quotes after the escaping/filtering step. Be careful of argument injection (CWE-88).\n\nIf the program to be executed allows arguments to be specified within an input file or from standard input, then consider using that mode to pass arguments instead of the command line.\n\nStrategy: Input Validation Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use a list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does.\nWhen performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules.\nAs an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if the input is only expected to contain colors such as \"red\" or \"blue.\" Do not rely exclusively on looking for malicious or malformed inputs. This is likely to miss at least one undesirable input, especially if the code's environment changes. This can give attackers enough room to bypass the intended validation.\nHowever, denylists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright. When constructing OS command strings, use stringent allowlists that limit the character set based on the expected value of the parameter in the request. This will indirectly limit the scope of an attack, but this technique is less important than proper output encoding and escaping.\nNote that proper output encoding, escaping, and quoting is the most effective solution for preventing OS command injection, although input validation may provide some defense-in-depth. This is because it effectively limits what will appear in output. Input validation will not always prevent OS command injection, especially if you are required to support free-form text fields that could contain arbitrary characters.\nFor example, when invoking a mail program, you might need to allow the subject field to contain otherwise-dangerous inputs like \";\" and \">\" characters, which would need to be escaped or otherwise handled. In this case, stripping the character might reduce the risk of OS command injection, but it would produce incorrect behavior because the subject field would not be recorded as the user intended.\nThis might seem to be a minor inconvenience, but it could be more important when the program relies on well-structured subject lines in order to pass messages to other components. Even if you make a mistake in your validation (such as forgetting one out of 100 input fields), appropriate encoding is still likely to protect you from injection-based attacks.\nAs long as it is not done in isolation, input validation is still a useful technique, since it may significantly reduce your attack surface, allow you to detect some attacks, and provide other security benefits that proper encoding does not address.\n\nEnsure that error messages only contain minimal details that are useful to the intended audience and no one else. The messages need to strike the balance between being too cryptic (which can confuse users) or being too detailed (which may reveal more than intended). The messages should not reveal the methods that were used to determine the error. Attackers can use detailed information to refine or optimize their original attack, thereby increasing their chances of success.\nIf errors must be captured in some detail, record them in log messages, but consider what could occur if the log messages can be viewed by attackers. Highly sensitive information such as passwords should never be saved to log files. Avoid inconsistent messaging that might accidentally tip off an attacker about internal state, such as whether a user account exists or not.\nIn the context of OS Command Injection, error information passed back to the user might reveal whether an OS command is being executed and possibly which command is being used.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Strategy: Compilation or Build Hardening Run the code in an environment that performs automatic taint propagation and prevents any command execution that uses tainted variables, such as Perl's \"-T\" switch. This will force the program to perform validation steps that remove the taint, although you must be careful to correctly validate your inputs so that you do not accidentally mark dangerous inputs as untainted (see CWE-183 and CWE-184).\n\nStrategy: Environment Hardening Run the code in an environment that performs automatic taint propagation and prevents any command execution that uses tainted variables, such as Perl's \"-T\" switch. This will force the program to perform validation steps that remove the taint, although you must be careful to correctly validate your inputs so that you do not accidentally mark dangerous inputs as untainted (see CWE-183 and CWE-184).\n\nStrategy: Sandbox or Jail Use runtime policy enforcement to create an allowlist of allowable commands, then prevent use of any command that does not appear in the allowlist. Technologies such as AppArmor are available to do this.\n\nStrategy: Firewall Use an application firewall that can detect attacks against this weakness. It can be beneficial in cases in which the code cannot be fixed (because it is controlled by a third party), as an emergency prevention measure while more comprehensive software assurance measures are applied, or to provide defense in depth [REF-1481]. Effectiveness: Moderate Note: An application firewall might not cover all possible input vectors.\nIn addition, attack techniques might be available to bypass the protection mechanism, such as using malformed inputs that can still be processed by the component that receives those inputs. Depending on functionality, an application firewall might inadvertently reject or modify legitimate requests. Finally, some manual effort may be required for customization.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Operation",
+            "Implementation"
+          ],
+          "text": "Strategy: Environment Hardening When using PHP, configure the application so that it does not use register_globals. During implementation, develop the application so that it does not rely on this feature, but be wary of implementing a register_globals emulation that is subject to weaknesses such as CWE-95, CWE-621, and similar issues.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A05-03",
+      "owasp": "A05:2025",
+      "owasp_category_name": "Injection",
+      "cwe_id": "CWE-79",
+      "cwe_name": "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+      "cwe_description": "The product does not neutralize or incorrectly neutralizes user-controllable input before it is placed in output that is used as a web page that is served to other users.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/79.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A05_2025-Injection/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-79",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Trace data to HTML/JS/URL sinks and inspect context-appropriate encoding or framework auto-escaping.",
+      "static_review_scope_vi": "Theo dữ liệu tới HTML/JS/URL sink, đối chiếu encoding đúng ngữ cảnh và auto-escaping của framework.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #6 (Implementation).",
+        "mitre_entry_ordinal": 6,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Strategy: Output Encoding Use and specify an output encoding that can be handled by the downstream component that is reading the output. Common encodings include ISO-8859-1, UTF-7, and UTF-8. When an encoding is not specified, a downstream component may choose a different encoding, either by assuming a default encoding or automatically inferring which encoding is being used, which can be erroneous.\nWhen the encodings are inconsistent, the downstream component might treat some character or byte sequences as special, even if they are not special in the original encoding. Attackers might then be able to exploit this discrepancy and conduct injection attacks; they even might be able to bypass protection mechanisms that assume the original encoding is also being used by the downstream component. The problem of inconsistent output encodings often arises in web pages.\nIf an encoding is not specified in an HTTP header, web browsers often guess about which encoding is being used. This can open up the browser to subtle XSS attacks.",
+        "source_url": "https://cwe.mitre.org/data/definitions/79.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Strategy: Libraries or Frameworks Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid [REF-1482]. Examples of libraries and frameworks that make it easier to generate properly encoded output include Microsoft's Anti-XSS library, the OWASP ESAPI Encoding module, and Apache Wicket.\n\nFor any security checks that are performed on the client side, ensure that these checks are duplicated on the server side, in order to avoid CWE-602. Attackers can bypass the client-side checks by modifying values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server.\n\nStrategy: Parameterization If available, use structured mechanisms that automatically enforce the separation between data and code. These mechanisms may be able to provide the relevant quoting, encoding, and validation automatically, instead of relying on the developer to provide this capability at every point where output is generated.\n\nStrategy: Enforcement by Conversion When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation",
+            "Architecture and Design"
+          ],
+          "text": "Understand the context in which your data will be used and the encoding that will be expected. This is especially important when transmitting data between different components, or when generating outputs that can contain multiple encodings at the same time, such as web pages or multi-part mail messages. Study all expected communication protocols and data representations to determine the required encoding strategies.\nFor any data that will be output to another web page, especially any data that was received from external inputs, use the appropriate encoding on all non-alphanumeric characters. Parts of the same output document may require different encodings, which will vary depending on whether the output is in the:\n* HTML body\n* Element attributes (such as src=\"XYZ\")\n* URIs\n* JavaScript sections\n* Cascading Style Sheets and style property\netc. Note that HTML Entity Encoding is only appropriate for the HTML body. Consult the XSS Prevention Cheat Sheet [REF-724] for more details on the types of encoding and escaping that are needed.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "Strategy: Attack Surface Reduction Understand all the potential areas where untrusted inputs can enter your software: parameters or arguments, cookies, anything read from the network, environment variables, reverse DNS lookups, query results, request headers, URL components, e-mail, files, filenames, databases, and any external systems that provide data to the application. Remember that such inputs may be obtained indirectly through API calls.\nEffectiveness: Limited Note: This technique has limited effectiveness, but can be helpful when it is possible to store client state and sensitive information on the server side instead of in cookies, headers, hidden form fields, etc.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Output Encoding Use and specify an output encoding that can be handled by the downstream component that is reading the output. Common encodings include ISO-8859-1, UTF-7, and UTF-8. When an encoding is not specified, a downstream component may choose a different encoding, either by assuming a default encoding or automatically inferring which encoding is being used, which can be erroneous.\nWhen the encodings are inconsistent, the downstream component might treat some character or byte sequences as special, even if they are not special in the original encoding. Attackers might then be able to exploit this discrepancy and conduct injection attacks; they even might be able to bypass protection mechanisms that assume the original encoding is also being used by the downstream component. The problem of inconsistent output encodings often arises in web pages.\nIf an encoding is not specified in an HTTP header, web browsers often guess about which encoding is being used. This can open up the browser to subtle XSS attacks.\n\nWith Struts, write all data from form beans with the bean's filter attribute set to true.\n\nStrategy: Attack Surface Reduction To help mitigate XSS attacks against the user's session cookie, set the session cookie to be HttpOnly. In browsers that support the HttpOnly feature (such as more recent versions of Internet Explorer and Firefox), this attribute can prevent the user's session cookie from being accessible to malicious client-side scripts that use document.cookie. This is not a complete solution, since HttpOnly is not supported by all browsers.\nMore importantly, XmlHttpRequest and other powerful browser technologies provide read access to HTTP headers, including the Set-Cookie header in which the HttpOnly flag is set. Effectiveness: Defense in Depth\n\nStrategy: Input Validation Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use a list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does.\nWhen performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules.\nAs an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if the input is only expected to contain colors such as \"red\" or \"blue.\" Do not rely exclusively on looking for malicious or malformed inputs. This is likely to miss at least one undesirable input, especially if the code's environment changes. This can give attackers enough room to bypass the intended validation.\nHowever, denylists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright. When dynamically constructing web pages, use stringent allowlists that limit the character set based on the expected value of the parameter in the request. All input should be validated and cleansed, not just parameters that the user is supposed to specify, but all data in the request, including hidden fields, cookies, headers, the URL itself, and so forth.\nA common mistake that leads to continuing XSS vulnerabilities is to validate only fields that are expected to be redisplayed by the site. It is common to see data from the request that is reflected by the application server or the application that the development team did not anticipate. Also, a field that is not currently reflected may be used by a future developer. Therefore, validating ALL parts of the HTTP request is recommended.\nNote that proper output encoding, escaping, and quoting is the most effective solution for preventing XSS, although input validation may provide some defense-in-depth. This is because it effectively limits what will appear in output. Input validation will not always prevent XSS, especially if you are required to support free-form text fields that could contain arbitrary characters.\nFor example, in a chat application, the heart emoticon (\"<3\") would likely pass the validation step, since it is commonly used. However, it cannot be directly inserted into the web page because it contains the \"<\" character, which would need to be escaped or otherwise handled. In this case, stripping the \"<\" might reduce the risk of XSS, but it would produce incorrect behavior because the emoticon would not be recorded.\nThis might seem to be a minor inconvenience, but it would be more important in a mathematical forum that wants to represent inequalities. Even if you make a mistake in your validation (such as forgetting one out of 100 input fields), appropriate encoding is still likely to protect you from injection-based attacks.\nAs long as it is not done in isolation, input validation is still a useful technique, since it may significantly reduce your attack surface, allow you to detect some attacks, and provide other security benefits that proper encoding does not address. Ensure that you perform input validation at well-defined interfaces within the application. This will help protect the application even if a component is reused or moved elsewhere.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Strategy: Firewall Use an application firewall that can detect attacks against this weakness. It can be beneficial in cases in which the code cannot be fixed (because it is controlled by a third party), as an emergency prevention measure while more comprehensive software assurance measures are applied, or to provide defense in depth [REF-1481]. Effectiveness: Moderate Note: An application firewall might not cover all possible input vectors.\nIn addition, attack techniques might be available to bypass the protection mechanism, such as using malformed inputs that can still be processed by the component that receives those inputs. Depending on functionality, an application firewall might inadvertently reject or modify legitimate requests. Finally, some manual effort may be required for customization.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Operation",
+            "Implementation"
+          ],
+          "text": "Strategy: Environment Hardening When using PHP, configure the application so that it does not use register_globals. During implementation, develop the application so that it does not rely on this feature, but be wary of implementing a register_globals emulation that is subject to weaknesses such as CWE-95, CWE-621, and similar issues.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A05-04",
+      "owasp": "A05:2025",
+      "owasp_category_name": "Injection",
+      "cwe_id": "CWE-93",
+      "cwe_name": "Improper Neutralization of CRLF Sequences ('CRLF Injection')",
+      "cwe_description": "The product uses CRLF (carriage return line feeds) as a special element, e.g. to separate lines or records, but it does not neutralize or incorrectly neutralizes CRLF sequences from inputs.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/93.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A05_2025-Injection/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-93",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect CR/LF handling before use in CRLF-delimited output.",
+      "static_review_scope_vi": "Đọc xử lý ký tự CR/LF trước khi dùng trong định dạng có phân cách CRLF.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Appropriately filter or quote CRLF sequences in user-controlled input.",
+        "source_url": "https://cwe.mitre.org/data/definitions/93.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Avoid using CRLF as a special sequence.\n\nAppropriately filter or quote CRLF sequences in user-controlled input.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A05-05",
+      "owasp": "A05:2025",
+      "owasp_category_name": "Injection",
+      "cwe_id": "CWE-95",
+      "cwe_name": "Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')",
+      "cwe_description": "The product receives input from an upstream component, but it does not neutralize or incorrectly neutralizes code syntax before using the input in a dynamic evaluation call (e.g. \"eval\").",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/95.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A05_2025-Injection/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-95",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect externally influenced eval calls and refactoring that eliminates dynamic evaluation.",
+      "static_review_scope_vi": "Tìm eval hoặc tương đương nhận dữ liệu ngoài; đối chiếu phương án loại bỏ eval.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design; Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design",
+          "Implementation"
+        ],
+        "text": "Strategy: Refactoring If possible, refactor your code so that it does not need to use eval() at all.",
+        "source_url": "https://cwe.mitre.org/data/definitions/95.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "Strategy: Refactoring If possible, refactor your code so that it does not need to use eval() at all.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Input Validation Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use a list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does.\nWhen performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules.\nAs an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if the input is only expected to contain colors such as \"red\" or \"blue.\" Do not rely exclusively on looking for malicious or malformed inputs. This is likely to miss at least one undesirable input, especially if the code's environment changes. This can give attackers enough room to bypass the intended validation.\nHowever, denylists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright.\n\nInputs should be decoded and canonicalized to the application's current internal representation before being validated (CWE-180, CWE-181). Make sure that your application does not inadvertently decode the same input twice (CWE-174). Such errors could be used to bypass allowlist schemes by introducing dangerous inputs after they have been checked. Use libraries such as the OWASP ESAPI Canonicalization control.\nConsider performing repeated canonicalization until your input does not change any more. This will avoid double-decoding and similar scenarios, but it might inadvertently modify inputs that are allowed to contain properly-encoded dangerous content.\n\nFor Python programs, it is frequently encouraged to use the ast.literal_eval() function instead of eval, since it is intentionally designed to avoid executing code. However, an adversary could still cause excessive memory or stack consumption via deeply nested structures [REF-1372], so the python documentation discourages use of ast.literal_eval() on untrusted data [REF-1373]. Effectiveness: Discouraged Common Practice",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A06-01",
+      "owasp": "A06:2025",
+      "owasp_category_name": "Insecure Design",
+      "cwe_id": "CWE-598",
+      "cwe_name": "Use of HTTP Request With Sensitive Query String",
+      "cwe_description": "The web application uses an HTTP method to process a request, but the request includes sensitive information in the query string.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/598.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A06_2025-Insecure_Design/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-598",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect whether sensitive data is sent in query strings, bodies, or headers.",
+      "static_review_scope_vi": "Đọc nơi truyền dữ liệu nhạy cảm: query string, body hay header.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "When sending sensitive information, only include it in the request body or request headers instead of the query string. This may require avoiding use of GET requests.",
+        "source_url": "https://cwe.mitre.org/data/definitions/598.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "When sending sensitive information, only include it in the request body or request headers instead of the query string. This may require avoiding use of GET requests.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A06-02",
+      "owasp": "A06:2025",
+      "owasp_category_name": "Insecure Design",
+      "cwe_id": "CWE-539",
+      "cwe_name": "Use of Persistent Cookies Containing Sensitive Information",
+      "cwe_description": "The web application uses persistent cookies, but the cookies contain sensitive information.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/539.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A06_2025-Insecure_Design/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-539",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect persistent-cookie contents and lifetime settings.",
+      "static_review_scope_vi": "Đọc nội dung và thời hạn của persistent cookies.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Do not store sensitive information in persistent cookies.",
+        "source_url": "https://cwe.mitre.org/data/definitions/539.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Do not store sensitive information in persistent cookies.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A06-03",
+      "owasp": "A06:2025",
+      "owasp_category_name": "Insecure Design",
+      "cwe_id": "CWE-525",
+      "cwe_name": "Use of Web Browser Cache Containing Sensitive Information",
+      "cwe_description": "The web application does not use an appropriate caching policy that specifies the extent to which each web page and associated form fields should be cached.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/525.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A06_2025-Insecure_Design/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-525",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect cache policy on sensitive pages and forms.",
+      "static_review_scope_vi": "Đọc chính sách cache của trang/form chứa dữ liệu nhạy cảm.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Use a restrictive caching policy for forms and web pages that potentially contain sensitive information, such as \"no-cache\" in the Cache-Control header.",
+        "source_url": "https://cwe.mitre.org/data/definitions/525.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Protect information stored in cache.\n\nDo not store unnecessarily sensitive information in the cache.\n\nConsider using encryption in the cache.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Use a restrictive caching policy for forms and web pages that potentially contain sensitive information, such as \"no-cache\" in the Cache-Control header.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A06-04",
+      "owasp": "A06:2025",
+      "owasp_category_name": "Insecure Design",
+      "cwe_id": "CWE-1022",
+      "cwe_name": "Use of Web Link to Untrusted Target with window.opener Access",
+      "cwe_description": "The web application produces links to untrusted external sites outside of its sphere of control, but it does not properly prevent the external site from modifying security-critical properties of the window.opener object, such as the location property.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/1022.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A06_2025-Insecure_Design/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-1022",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect external-link rel attributes and window.opener handling.",
+      "static_review_scope_vi": "Đọc rel của liên kết external target và cách xử lý window.opener.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "When creating a link to an external document using the <a> tag with a defined target, for example \"_blank\" or a named frame, provide the rel attribute with a value \"noopener noreferrer\". If opening the external document in a new window via javascript, then reset the opener by setting it equal to null.",
+        "source_url": "https://cwe.mitre.org/data/definitions/1022.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Specify in the design that any linked external document must not be granted access to the location object of the calling page.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "When creating a link to an external document using the <a> tag with a defined target, for example \"_blank\" or a named frame, provide the rel attribute with a value \"noopener noreferrer\". If opening the external document in a new window via javascript, then reset the opener by setting it equal to null.\n\nDo not use \"_blank\" targets. However, this can affect the usability of the application.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A06-05",
+      "owasp": "A06:2025",
+      "owasp_category_name": "Insecure Design",
+      "cwe_id": "CWE-602",
+      "cwe_name": "Client-Side Enforcement of Server-Side Security",
+      "cwe_description": "The product is composed of a server that relies on the client to implement a mechanism that is intended to protect the server.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/602.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A06_2025-Insecure_Design/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-602",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Compare client-side security checks with corresponding server-side enforcement.",
+      "static_review_scope_vi": "Đối chiếu kiểm tra phía client với kiểm tra tương ứng phía server.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "For any security checks that are performed on the client side, ensure that these checks are duplicated on the server side. Attackers can bypass the client-side checks by modifying values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server. Even though client-side checks provide minimal benefits with respect to server-side security, they are still useful.\nFirst, they can support intrusion detection. If the server receives input that should have been rejected by the client, then it may be an indication of an attack. Second, client-side error-checking can provide helpful feedback to the user about the expectations for valid input. Third, there may be a reduction in server-side processing time for accidental input errors, although this is typically a small savings.",
+        "source_url": "https://cwe.mitre.org/data/definitions/602.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "For any security checks that are performed on the client side, ensure that these checks are duplicated on the server side. Attackers can bypass the client-side checks by modifying values after the checks have been performed, or by changing the client to remove the client-side checks entirely. Then, these modified values would be submitted to the server. Even though client-side checks provide minimal benefits with respect to server-side security, they are still useful.\nFirst, they can support intrusion detection. If the server receives input that should have been rejected by the client, then it may be an indication of an attack. Second, client-side error-checking can provide helpful feedback to the user about the expectations for valid input. Third, there may be a reduction in server-side processing time for accidental input errors, although this is typically a small savings.\n\nIf some degree of trust is required between the two entities, then use integrity checking and strong authentication to ensure that the inputs are coming from a trusted source. Design the product so that this trust is managed in a centralized fashion, especially if there are complex or numerous communication channels, in order to reduce the risks that the implementer will mistakenly omit a check in a single code path.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A06-06",
+      "owasp": "A06:2025",
+      "owasp_category_name": "Insecure Design",
+      "cwe_id": "CWE-1021",
+      "cwe_name": "Improper Restriction of Rendered UI Layers or Frames",
+      "cwe_description": "The web application does not restrict or incorrectly restricts frame objects or UI layers that belong to another application or domain.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/1021.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A06_2025-Insecure_Design/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-1021",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect response anti-framing/CSP settings; distinguish restrictions on being embedded from restrictions on embedded content.",
+      "static_review_scope_vi": "Đọc header chống framing/CSP ở đường trả response; phân biệt chặn bị nhúng với chặn nội dung được nhúng.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #3 (Implementation).",
+        "mitre_entry_ordinal": 3,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "This defense-in-depth technique can be used to prevent the improper usage of frames in web applications. It prioritizes the valid sources of data to be loaded into the application through the usage of declarative policies. Based on which implementation of Content Security Policy is in use, the developer should use the \"frame-ancestors\" directive or the \"frame-src\" directive to mitigate this weakness.\nBoth directives allow for the placement of restrictions when it comes to allowing embedded content.",
+        "source_url": "https://cwe.mitre.org/data/definitions/1021.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "The use of X-Frame-Options allows developers of web content to restrict the usage of their application within the form of overlays, frames, or iFrames. The developer can indicate from which domains can frame the content. The concept of X-Frame-Options is well documented, but implementation of this protection mechanism is in development to cover gaps. There is a need for allowing frames from multiple domains.\n\nA developer can use a \"frame-breaker\" script in each page that should not be framed. This is very helpful for legacy browsers that do not support X-Frame-Options security feature previously mentioned. It is also important to note that this tactic has been circumvented or bypassed. Improper usage of frames can persist in the web application through nested frames. The \"frame-breaking\" script does not intuitively account for multiple nested frames that can be presented to the user.\n\nThis defense-in-depth technique can be used to prevent the improper usage of frames in web applications. It prioritizes the valid sources of data to be loaded into the application through the usage of declarative policies. Based on which implementation of Content Security Policy is in use, the developer should use the \"frame-ancestors\" directive or the \"frame-src\" directive to mitigate this weakness.\nBoth directives allow for the placement of restrictions when it comes to allowing embedded content.\n\nIn addition to frames or iframes as previously mentioned, the web application is expected to place restrictions on whether it is allowed to be rendered within objects, embed, or applet elements.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A07-01",
+      "owasp": "A07:2025",
+      "owasp_category_name": "Authentication Failures",
+      "cwe_id": "CWE-613",
+      "cwe_name": "Insufficient Session Expiration",
+      "cwe_description": "According to WASC, \"Insufficient Session Expiration is when a web site permits an attacker to reuse old session credentials or session IDs for authorization.\"",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/613.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A07_2025-Authentication_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-613",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect session/token expiry settings and server-side expiry enforcement.",
+      "static_review_scope_vi": "Đọc thời hạn session/token và đường kiểm tra hết hạn phía server.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Set sessions/credentials expiration date.",
+        "source_url": "https://cwe.mitre.org/data/definitions/613.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Set sessions/credentials expiration date.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A07-02",
+      "owasp": "A07:2025",
+      "owasp_category_name": "Authentication Failures",
+      "cwe_id": "CWE-620",
+      "cwe_name": "Unverified Password Change",
+      "cwe_description": "When setting a new password for a user, the product does not require knowledge of the original password, or using another form of authentication.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/620.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A07_2025-Authentication_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-620",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect authenticated password-change flow and current-password verification.",
+      "static_review_scope_vi": "Đọc luồng đổi mật khẩu đã đăng nhập và kiểm tra mật khẩu hiện tại.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "When prompting for a password change, force the user to provide the original password in addition to the new password.",
+        "source_url": "https://cwe.mitre.org/data/definitions/620.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "When prompting for a password change, force the user to provide the original password in addition to the new password.\n\nDo not use \"forgotten password\" functionality. But if you must, ensure that you are only providing information to the actual user, e.g. by using an email address or challenge question that the legitimate user already provided in the past; do not allow the current user to change this identity information until the correct password has been provided.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A07-03",
+      "owasp": "A07:2025",
+      "owasp_category_name": "Authentication Failures",
+      "cwe_id": "CWE-307",
+      "cwe_name": "Improper Restriction of Excessive Authentication Attempts",
+      "cwe_description": "The product does not implement sufficient measures to prevent multiple failed authentication attempts within a short time frame.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/307.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A07_2025-Authentication_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-307",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect failed-login throttling, timeout/lockout, or equivalent controls.",
+      "static_review_scope_vi": "Đọc cơ chế giới hạn lần đăng nhập sai, timeout/lockout hoặc kiểm soát tương đương.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Common protection mechanisms include:\n* Disconnecting the user after a small number of failed attempts\n* Implementing a timeout\n* Locking out a targeted account\n* Requiring a computational task on the user's part.",
+        "source_url": "https://cwe.mitre.org/data/definitions/307.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Common protection mechanisms include:\n* Disconnecting the user after a small number of failed attempts\n* Implementing a timeout\n* Locking out a targeted account\n* Requiring a computational task on the user's part.\n\nStrategy: Libraries or Frameworks Use a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid [REF-1482]. Consider using libraries with authentication capabilities such as OpenSSL or the ESAPI Authenticator. [REF-45]",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A07-04",
+      "owasp": "A07:2025",
+      "owasp_category_name": "Authentication Failures",
+      "cwe_id": "CWE-297",
+      "cwe_name": "Improper Validation of Certificate with Host Mismatch",
+      "cwe_description": "The product communicates with a host that provides a certificate, but the product does not properly ensure that the certificate is actually associated with that host.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/297.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A07_2025-Authentication_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-297",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect hostname validation as well as certificate-chain trust.",
+      "static_review_scope_vi": "Đọc kiểm tra hostname trong certificate validation; không chỉ kiểm tra trust chain.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Fully check the hostname of the certificate and provide the user with adequate information about the nature of the problem and how to proceed.",
+        "source_url": "https://cwe.mitre.org/data/definitions/297.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Fully check the hostname of the certificate and provide the user with adequate information about the nature of the problem and how to proceed.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "If certificate pinning is being used, ensure that all relevant properties of the certificate are fully validated before the certificate is pinned, including the hostname.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A07-05",
+      "owasp": "A07:2025",
+      "owasp_category_name": "Authentication Failures",
+      "cwe_id": "CWE-259",
+      "cwe_name": "Use of Hard-coded Password",
+      "cwe_description": "The product contains a hard-coded password, which it uses for its own inbound authentication or for outbound communication to external components.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/259.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A07_2025-Authentication_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-259",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect authentication paths for hard-coded passwords and replacement secret-loading mechanisms.",
+      "static_review_scope_vi": "Tìm mật khẩu hard-coded ở đường xác thực và cơ chế nạp bí mật thay thế.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "For outbound authentication: store passwords outside of the code in a strongly-protected, encrypted configuration file or database that is protected from access by all outsiders, including other local users on the same system. Properly protect the key (CWE-320). If you cannot use encryption to protect the file, then make sure that the permissions are as restrictive as possible.",
+        "source_url": "https://cwe.mitre.org/data/definitions/259.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "For outbound authentication: store passwords outside of the code in a strongly-protected, encrypted configuration file or database that is protected from access by all outsiders, including other local users on the same system. Properly protect the key (CWE-320). If you cannot use encryption to protect the file, then make sure that the permissions are as restrictive as possible.\n\nFor inbound authentication: Rather than hard-code a default username and password for first time logins, utilize a \"first login\" mode that requires the user to enter a unique strong password.\n\nPerform access control checks and limit which entities can access the feature that requires the hard-coded password. For example, a feature might only be enabled through the system console instead of through a network connection.\n\nFor inbound authentication: apply strong one-way hashes to your passwords and store those hashes in a configuration file or database with appropriate access control. That way, theft of the file/database still requires the attacker to try to crack the password. When receiving an incoming password during authentication, take the hash of the password and compare it to the hash that you have saved. Use randomly assigned salts for each separate hash that you generate.\nThis increases the amount of computation that an attacker needs to conduct a brute-force attack, possibly limiting the effectiveness of the rainbow table method.\n\nFor front-end to back-end connections: Three solutions are possible, although none are complete. The first suggestion involves the use of generated passwords which are changed automatically and must be entered at given time intervals by a system administrator. These passwords will be held in memory and only be valid for the time intervals. Next, the passwords used should be limited at the back end to only performing actions valid for the front end, as opposed to having full access.\nFinally, the messages sent should be tagged and checksummed with time sensitive values so as to prevent replay style attacks.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A08-01",
+      "owasp": "A08:2025",
+      "owasp_category_name": "Software or Data Integrity Failures",
+      "cwe_id": "CWE-353",
+      "cwe_name": "Missing Support for Integrity Check",
+      "cwe_description": "The product uses a transmission protocol that does not include a mechanism for verifying the integrity of the data during transmission, such as a checksum.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/353.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A08_2025-Software_or_Data_Integrity_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-353",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Assess message integrity where the protocol specifies a checksum; a checksum does not prove adversarial authenticity.",
+      "static_review_scope_vi": "Chỉ xét tính toàn vẹn của thông điệp có checksum theo thiết kế; checksum không chứng minh tính xác thực chống kẻ tấn công.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Ensure that the checksums present in the protocol design are properly implemented and added to each message before it is sent.",
+        "source_url": "https://cwe.mitre.org/data/definitions/353.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Add an appropriately sized checksum to the protocol, ensuring that data received may be simply validated before it is parsed and used.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Ensure that the checksums present in the protocol design are properly implemented and added to each message before it is sent.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A08-02",
+      "owasp": "A08:2025",
+      "owasp_category_name": "Software or Data Integrity Failures",
+      "cwe_id": "CWE-427",
+      "cwe_name": "Uncontrolled Search Path Element",
+      "cwe_description": "The product uses a fixed or controlled search path to find resources, but one or more locations in that path can be under the control of unintended actors.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/427.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A08_2025-Software_or_Data_Integrity_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-427",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect executable/library paths and search-path controls.",
+      "static_review_scope_vi": "Đọc đường dẫn gọi chương trình/thư viện và kiểm soát search path.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Strategy: Attack Surface Reduction When invoking other programs, specify those programs using fully-qualified pathnames. While this is an effective approach, code that uses fully-qualified pathnames might not be portable to other systems that do not use the same pathnames. The portability can be improved by locating the full-qualified paths in a centralized, easily-modifiable location within the source code, and having the code refer to these paths.",
+        "source_url": "https://cwe.mitre.org/data/definitions/427.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "Strategy: Attack Surface Reduction Hard-code the search path to a set of known-safe values (such as system directories), or only allow them to be specified by the administrator in a configuration file. Do not allow these settings to be modified by an external party. Be careful to avoid related weaknesses such as CWE-426 and CWE-428.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Attack Surface Reduction When invoking other programs, specify those programs using fully-qualified pathnames. While this is an effective approach, code that uses fully-qualified pathnames might not be portable to other systems that do not use the same pathnames. The portability can be improved by locating the full-qualified paths in a centralized, easily-modifiable location within the source code, and having the code refer to these paths.\n\nStrategy: Attack Surface Reduction Remove or restrict all environment settings before invoking other programs. This includes the PATH environment variable, LD_LIBRARY_PATH, and other settings that identify the location of code libraries, and any application-specific search paths.\n\nCheck your search path before use and remove any elements that are likely to be unsafe, such as the current working directory or a temporary files directory. Since this is a denylist approach, it might not be a complete solution.\n\nUse other functions that require explicit paths. Making use of any of the other readily available functions that require explicit paths is a safe way to avoid this problem. For example, system() in C does not require a full path since the shell can take care of finding the program using the PATH environment variable, while execl() and execv() require a full path.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A08-03",
+      "owasp": "A08:2025",
+      "owasp_category_name": "Software or Data Integrity Failures",
+      "cwe_id": "CWE-502",
+      "cwe_name": "Deserialization of Untrusted Data",
+      "cwe_description": "The product deserializes untrusted data without sufficiently ensuring that the resulting data will be valid.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/502.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A08_2025-Software_or_Data_Integrity_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-502",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect deserialization sources and object-type/input restrictions; signatures alone are insufficient when keys or trust boundaries are unknown.",
+      "static_review_scope_vi": "Đọc nguồn dữ liệu deserialize và kiểm soát loại đối tượng/đầu vào; không kết luận an toàn chỉ vì có chữ ký nếu khóa hoặc ranh giới tin cậy chưa rõ.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "When deserializing data, populate a new object rather than just deserializing. The result is that the data flows through safe input validation and that the functions are safe.",
+        "source_url": "https://cwe.mitre.org/data/definitions/502.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "If available, use the signing/sealing features of the programming language to assure that deserialized data has not been tainted. For example, a hash-based message authentication code (HMAC) could be used to ensure that data has not been modified.\n\nMake fields transient to protect them from deserialization. An attempt to serialize and then deserialize a class containing transient fields will result in NULLs where the transient data should be. This is an excellent way to prevent time, environment-based, or sensitive variables from being carried over and used improperly.\n\nEmploy cryptography of the data or code for protection. However, it's important to note that it would still be client-side security. This is risky because if the client is compromised then the security implemented on the client (the cryptography) can be bypassed.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "When deserializing data, populate a new object rather than just deserializing. The result is that the data flows through safe input validation and that the functions are safe.\n\nExplicitly define a final object() to prevent deserialization.\n\nAvoid having unnecessary types or gadgets (a sequence of instances and method invocations that can self-execute during the deserialization process, often found in libraries) available that can be leveraged for malicious ends. This limits the potential for unintended or unauthorized types and gadgets to be leveraged by the attacker. Add only acceptable classes to an allowlist. Note: new gadgets are constantly being discovered, so this alone is not a sufficient mitigation.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Strategy: Firewall Use an application firewall that can detect attacks against this weakness. It can be beneficial in cases in which the code cannot be fixed (because it is controlled by a third party), as an emergency prevention measure while more comprehensive software assurance measures are applied, or to provide defense in depth [REF-1481]. Effectiveness: Moderate Note: An application firewall might not cover all possible input vectors.\nIn addition, attack techniques might be available to bypass the protection mechanism, such as using malformed inputs that can still be processed by the component that receives those inputs. Depending on functionality, an application firewall might inadvertently reject or modify legitimate requests. Finally, some manual effort may be required for customization.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A08-04",
+      "owasp": "A08:2025",
+      "owasp_category_name": "Software or Data Integrity Failures",
+      "cwe_id": "CWE-565",
+      "cwe_name": "Reliance on Cookies without Validation and Integrity Checking",
+      "cwe_description": "The product relies on the existence or values of cookies when performing security-critical operations, but it does not properly ensure that the setting is valid for the associated user.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/565.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A08_2025-Software_or_Data_Integrity_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-565",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect validation and integrity protection of cookies used in security decisions.",
+      "static_review_scope_vi": "Đọc cơ chế kiểm tra cookie dùng cho quyết định bảo mật và chống sửa dữ liệu.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #3 (Architecture and Design).",
+        "mitre_entry_ordinal": 3,
+        "phases": [
+          "Architecture and Design"
+        ],
+        "text": "Add integrity checks to detect tampering.",
+        "source_url": "https://cwe.mitre.org/data/definitions/565.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Avoid using cookie data for a security-related decision.\n\nAdd integrity checks to detect tampering.\n\nProtect critical cookies from replay attacks, since cross-site scripting or other attacks may allow attackers to steal a strongly-encrypted cookie that also passes integrity checks. This mitigation applies to cookies that should only be valid during a single transaction or session. By enforcing timeouts, you may limit the scope of an attack. As part of your integrity check, use an unpredictable, server-side value that is not exposed to the client.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Perform thorough input validation (i.e.: server side validation) on the cookie data if you're going to use it for a security related decision.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A08-05",
+      "owasp": "A08:2025",
+      "owasp_category_name": "Software or Data Integrity Failures",
+      "cwe_id": "CWE-915",
+      "cwe_name": "Improperly Controlled Modification of Dynamically-Determined Object Attributes",
+      "cwe_description": "The product receives input from an upstream component that specifies multiple attributes, properties, or fields that are to be initialized or updated in an object, but it does not properly control which attributes can be modified.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/915.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A08_2025-Software_or_Data_Integrity_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-915",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect allowlists for mass-assigned attributes and server-side enforcement.",
+      "static_review_scope_vi": "Đọc allowlist thuộc tính được mass-assign và ràng buộc phía server.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #3 (Implementation).",
+        "mitre_entry_ordinal": 3,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Strategy: Input Validation For any externally-influenced input, check the input against an allowlist of internal object attributes or fields that are allowed to be modified.",
+        "source_url": "https://cwe.mitre.org/data/definitions/915.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "If available, use features of the language or framework that allow specification of allowlists of attributes or fields that are allowed to be modified. If possible, prefer allowlists over denylists. For applications written with Ruby on Rails, use the attr_accessible (allowlist) or attr_protected (denylist) macros in each class that may be used in mass assignment.\n\nStrategy: Input Validation For any externally-influenced input, check the input against an allowlist of internal object attributes or fields that are allowed to be modified.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "If available, use the signing/sealing features of the programming language to assure that deserialized data has not been tainted. For example, a hash-based message authentication code (HMAC) could be used to ensure that data has not been modified.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation",
+            "Architecture and Design"
+          ],
+          "text": "Strategy: Refactoring Refactor the code so that object attributes or fields do not need to be dynamically identified, and only expose getter/setter functionality for the intended attributes.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A09-01",
+      "owasp": "A09:2025",
+      "owasp_category_name": "Security Logging and Alerting Failures",
+      "cwe_id": "CWE-117",
+      "cwe_name": "Improper Output Neutralization for Logs",
+      "cwe_description": "The product constructs a log message from external input, but it does not neutralize or incorrectly neutralizes special elements when the message is written to a log file.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/117.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A09_2025-Security_Logging_and_Alerting_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-117",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect untrusted data handling before log sinks, encoding, and record structure.",
+      "static_review_scope_vi": "Đọc xử lý dữ liệu không tin cậy trước log sink, encoding và cấu trúc bản ghi.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Strategy: Output Encoding Use and specify an output encoding that can be handled by the downstream component that is reading the output. Common encodings include ISO-8859-1, UTF-7, and UTF-8. When an encoding is not specified, a downstream component may choose a different encoding, either by assuming a default encoding or automatically inferring which encoding is being used, which can be erroneous.\nWhen the encodings are inconsistent, the downstream component might treat some character or byte sequences as special, even if they are not special in the original encoding. Attackers might then be able to exploit this discrepancy and conduct injection attacks; they even might be able to bypass protection mechanisms that assume the original encoding is also being used by the downstream component.",
+        "source_url": "https://cwe.mitre.org/data/definitions/117.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Strategy: Input Validation Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use a list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does.\nWhen performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules.\nAs an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if the input is only expected to contain colors such as \"red\" or \"blue.\" Do not rely exclusively on looking for malicious or malformed inputs. This is likely to miss at least one undesirable input, especially if the code's environment changes. This can give attackers enough room to bypass the intended validation.\nHowever, denylists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright.\n\nStrategy: Output Encoding Use and specify an output encoding that can be handled by the downstream component that is reading the output. Common encodings include ISO-8859-1, UTF-7, and UTF-8. When an encoding is not specified, a downstream component may choose a different encoding, either by assuming a default encoding or automatically inferring which encoding is being used, which can be erroneous.\nWhen the encodings are inconsistent, the downstream component might treat some character or byte sequences as special, even if they are not special in the original encoding. Attackers might then be able to exploit this discrepancy and conduct injection attacks; they even might be able to bypass protection mechanisms that assume the original encoding is also being used by the downstream component.\n\nStrategy: Input Validation Inputs should be decoded and canonicalized to the application's current internal representation before being validated (CWE-180). Make sure that the application does not decode the same input twice (CWE-174). Such errors could be used to bypass allowlist validation schemes by introducing dangerous inputs after they have been checked.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A09-02",
+      "owasp": "A09:2025",
+      "owasp_category_name": "Security Logging and Alerting Failures",
+      "cwe_id": "CWE-532",
+      "cwe_name": "Insertion of Sensitive Information into Log File",
+      "cwe_description": "The product writes sensitive information to a log file.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/532.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A09_2025-Security_Logging_and_Alerting_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-532",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect log arguments and secret exclusion/redaction; production cleanup and operational processes are outside the assessed scope.",
+      "static_review_scope_vi": "Đọc đối số log và cơ chế loại/redact bí mật; không chấm thao tác dọn log hoặc vận hành production.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design; Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design",
+          "Implementation"
+        ],
+        "text": "Consider seriously the sensitivity of the information written into log files. Do not write secrets into the log files.",
+        "source_url": "https://cwe.mitre.org/data/definitions/532.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "Implementation"
+          ],
+          "text": "Consider seriously the sensitivity of the information written into log files. Do not write secrets into the log files.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Distribution"
+          ],
+          "text": "Remove debug log files before deploying the application into production.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Protect log files against unauthorized read/write.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Adjust configurations appropriately when software is transitioned from a debug state to production.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A09-03",
+      "owasp": "A09:2025",
+      "owasp_category_name": "Security Logging and Alerting Failures",
+      "cwe_id": "CWE-778",
+      "cwe_name": "Insufficient Logging",
+      "cwe_description": "When a security-critical event occurs, the product either does not record the event or omits important details about the event when logging it.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/778.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A09_2025-Security_Logging_and_Alerting_Failures/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-778",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect logging for explicitly scoped security events and supplied logging configuration; do not infer operational quality from code.",
+      "static_review_scope_vi": "Đọc logging ở các sự kiện bảo mật đã liệt kê trong phạm vi, cùng cấu hình log được cung cấp; không suy ra chất lượng vận hành từ code.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #2 (Implementation).",
+        "mitre_entry_ordinal": 2,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Ensure that all security-related successes and failures can be logged. When storing data in the cloud (e.g., AWS S3 buckets, Azure blobs, Google Cloud Storage, etc.), use the provider's controls to enable and capture detailed logging information.",
+        "source_url": "https://cwe.mitre.org/data/definitions/778.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Use a centralized logging mechanism that supports multiple levels of detail.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Ensure that all security-related successes and failures can be logged. When storing data in the cloud (e.g., AWS S3 buckets, Azure blobs, Google Cloud Storage, etc.), use the provider's controls to enable and capture detailed logging information.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Operation"
+          ],
+          "text": "Be sure to set the level of logging appropriately in a production environment. Sufficient data should be logged to enable system administrators to detect attacks, diagnose errors, and recover from attacks. At the same time, logging too much data (CWE-779) can cause the same problems, including unexpected costs when using a cloud environment.\n\nTo enable storage logging using Azure's Portal, navigate to the name of the Storage Account, locate Monitoring (CLASSIC) section, and select Diagnostic settings (classic). For each of the various properties (blob, file, table, queue), ensure the status is properly set for the desired logging data. If using PowerShell, the Set-AzStorageServiceLoggingProperty command could be called using appropriate -ServiceType, -LoggingOperations, and -RetentionDays arguments.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": false
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A10-01",
+      "owasp": "A10:2025",
+      "owasp_category_name": "Mishandling of Exceptional Conditions",
+      "cwe_id": "CWE-252",
+      "cwe_name": "Unchecked Return Value",
+      "cwe_description": "The product does not check the return value from a method or function, which can prevent it from detecting unexpected states and conditions.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/252.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-252",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect return-value checks and error branches for scoped calls.",
+      "static_review_scope_vi": "Đọc kiểm tra return value và nhánh xử lý lỗi của các lời gọi trong phạm vi.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Check the results of all functions that return a value and verify that the value is expected. Effectiveness: High Note: Checking the return value of the function will typically be sufficient, however beware of race conditions (CWE-362) in a concurrent environment.",
+        "source_url": "https://cwe.mitre.org/data/definitions/252.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Check the results of all functions that return a value and verify that the value is expected. Effectiveness: High Note: Checking the return value of the function will typically be sufficient, however beware of race conditions (CWE-362) in a concurrent environment.\n\nFor any pointers that could have been modified or provided from a function that can return NULL, check the pointer for NULL before use. When working with a multithreaded or otherwise asynchronous environment, ensure that proper locking APIs are used to lock before the check, and unlock when it has finished [REF-1484].\n\nEnsure that you account for all possible return values from the function.\n\nWhen designing a function, make sure you return a value or throw an exception in case of an error.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A10-02",
+      "owasp": "A10:2025",
+      "owasp_category_name": "Mishandling of Exceptional Conditions",
+      "cwe_id": "CWE-478",
+      "cwe_name": "Missing Default Case in Multiple Condition Expression",
+      "cwe_description": "The code does not have a default case in an expression with multiple conditions, such as a switch statement.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/478.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-478",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect switch/dispatch coverage and handling of invalid or unhandled values.",
+      "static_review_scope_vi": "Đọc switch/dispatch và xử lý giá trị không hợp lệ hoặc trường hợp chưa được bao phủ.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Ensure that there are no cases unaccounted for when adjusting program flow or values based on the value of a given variable. In the case of switch style statements, the very simple act of creating a default case can, if done correctly, mitigate this situation. Often however, the default case is used simply to represent an assumed option, as opposed to working as a check for invalid input. This is poor practice and in some cases is as bad as omitting a default case entirely.",
+        "source_url": "https://cwe.mitre.org/data/definitions/478.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Ensure that there are no cases unaccounted for when adjusting program flow or values based on the value of a given variable. In the case of switch style statements, the very simple act of creating a default case can, if done correctly, mitigate this situation. Often however, the default case is used simply to represent an assumed option, as opposed to working as a check for invalid input. This is poor practice and in some cases is as bad as omitting a default case entirely.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A10-03",
+      "owasp": "A10:2025",
+      "owasp_category_name": "Mishandling of Exceptional Conditions",
+      "cwe_id": "CWE-484",
+      "cwe_name": "Omitted Break Statement in Switch",
+      "cwe_description": "The product omits a break statement within a switch or similar construct, causing code associated with multiple conditions to execute. This can cause problems when the programmer only intended to execute code associated with one condition.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/484.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-484",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect switch break/return statements and documented intentional fall-through.",
+      "static_review_scope_vi": "Đọc break/return và fall-through có chủ ý trong switch.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Omitting a break statement so that one may fall through is often indistinguishable from an error, and therefore should be avoided. If you need to use fall-through capabilities, make sure that you have clearly documented this within the switch statement, and ensure that you have examined all the logical possibilities.",
+        "source_url": "https://cwe.mitre.org/data/definitions/484.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Omitting a break statement so that one may fall through is often indistinguishable from an error, and therefore should be avoided. If you need to use fall-through capabilities, make sure that you have clearly documented this within the switch statement, and ensure that you have examined all the logical possibilities.\n\nThe functionality of omitting a break statement could be clarified with an if statement. This method is much safer.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A10-04",
+      "owasp": "A10:2025",
+      "owasp_category_name": "Mishandling of Exceptional Conditions",
+      "cwe_id": "CWE-460",
+      "cwe_name": "Improper Cleanup on Thrown Exception",
+      "cwe_description": "The product does not clean up its state or incorrectly cleans up its state when an exception is thrown, leading to unexpected state or control flow.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/460.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-460",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect finally/defer/context-manager/RAII cleanup on exception paths.",
+      "static_review_scope_vi": "Đọc finally/defer/context manager/RAII và cleanup trên đường ném ngoại lệ.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "If one breaks from a loop or function by throwing an exception, make sure that cleanup happens or that you should exit the program. Use throwing exceptions sparsely.",
+        "source_url": "https://cwe.mitre.org/data/definitions/460.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "If one breaks from a loop or function by throwing an exception, make sure that cleanup happens or that you should exit the program. Use throwing exceptions sparsely.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A10-05",
+      "owasp": "A10:2025",
+      "owasp_category_name": "Mishandling of Exceptional Conditions",
+      "cwe_id": "CWE-215",
+      "cwe_name": "Insertion of Sensitive Information Into Debugging Code",
+      "cwe_description": "The product inserts sensitive information into debugging code, which could expose this information if the debugging code is not disabled in production.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/215.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-215",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect debug statements and build configuration for sensitive information exposure.",
+      "static_review_scope_vi": "Đọc debug statements và build configuration có thể làm lộ thông tin nhạy cảm.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Implementation).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Implementation"
+        ],
+        "text": "Do not leave debug statements that could be executed in the source code. Ensure that all debug information is eradicated before releasing the software.",
+        "source_url": "https://cwe.mitre.org/data/definitions/215.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Implementation"
+          ],
+          "text": "Do not leave debug statements that could be executed in the source code. Ensure that all debug information is eradicated before releasing the software.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        },
+        {
+          "phases": [
+            "Architecture and Design"
+          ],
+          "text": "Strategy: Separation of Privilege Compartmentalize the system to have \"safe\" areas where trust boundaries can be unambiguously drawn. Do not allow sensitive data to go outside of the trust boundary and always be careful when interfacing with a compartment outside of the safe area. Ensure that appropriate compartmentalization is built into the system design, and the compartmentalization allows for and reinforces privilege separation functionality.\nArchitects and designers should rely on the principle of least privilege to decide the appropriate time to use privileges and the time to drop privileges.",
+          "contains_preferred_entry": false,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    },
+    {
+      "sec_id": "SEC-A10-06",
+      "owasp": "A10:2025",
+      "owasp_category_name": "Mishandling of Exceptional Conditions",
+      "cwe_id": "CWE-550",
+      "cwe_name": "Server-generated Error Message Containing Sensitive Information",
+      "cwe_description": "Certain conditions, such as network failure, will cause a server error message to be displayed.",
+      "cwe_url": "https://cwe.mitre.org/data/definitions/550.html",
+      "owasp_category_url": "https://top10.owasp.org/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
+      "owasp_page_location": "List of Mapped CWEs → CWE-550",
+      "mapping_status": "In OWASP's official List of Mapped CWEs",
+      "static_review_scope": "Inspect configuration and error handlers that prevent detailed server errors reaching users.",
+      "static_review_scope_vi": "Đọc cấu hình và error handler chặn lỗi server chi tiết trả về người dùng.",
+      "preferred_mitigation": {
+        "reference": "MITRE Potential Mitigations #1 (Architecture and Design; System Configuration).",
+        "mitre_entry_ordinal": 1,
+        "phases": [
+          "Architecture and Design",
+          "System Configuration"
+        ],
+        "text": "Recommendations include designing and adding consistent error handling mechanisms which are capable of handling any user input to your web application, providing meaningful detail to end-users, and preventing error messages that might provide information useful to an attacker from being displayed.",
+        "source_url": "https://cwe.mitre.org/data/definitions/550.html",
+        "selection_statement": "Selection of assessment scope is by the study; the MITRE text in Potential Mitigations is reproduced verbatim."
+      },
+      "potential_mitigations": [
+        {
+          "phases": [
+            "Architecture and Design",
+            "System Configuration"
+          ],
+          "text": "Recommendations include designing and adding consistent error handling mechanisms which are capable of handling any user input to your web application, providing meaningful detail to end-users, and preventing error messages that might provide information useful to an attacker from being displayed.",
+          "contains_preferred_entry": true,
+          "prompt_e_included": true
+        }
+      ],
+      "checked_on": "2026-09-26",
+      "security_point": 1
+    }
+  ]
+}

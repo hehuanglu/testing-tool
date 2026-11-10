@@ -22,7 +22,7 @@ For new-finding attribution in shared sessions, collect permitted pre/post detai
 
 ## Repair and reassess
 
-For v2, check remaining work against every approved criterion/plan duty. When reviewing v1 history, use the retained [legacy scope/completion contract](assessment-scope-and-completion.md), including assigned duties outside the selected allocation; the current SKILL no longer defines a v1 stopping question. New execution follows v2. Execute feasible next steps only within the assigned authority. Skill edits may use historical/offline walkthroughs without new product traffic. Distinguish baseline/passive from active closure; missing fixtures from evaluated setup authority; insertion from UI visibility; unknown mutations from replay; old checkpoints from current lineage; policy confidence from execution gates; assigned stages from self-imposed allocation caps.
+For v3, check remaining work against every selected criterion/plan duty. Historical v2 retains its original review contract. When reviewing v1 history, use the retained [legacy scope/completion contract](assessment-scope-and-completion.md), including assigned duties outside the selected allocation; the current SKILL no longer defines a v1 stopping question. New execution follows v3. Execute feasible next steps only within the assigned authority. Skill edits may use historical/offline walkthroughs without new product traffic. Distinguish baseline/passive from active closure; missing fixtures from evaluated setup authority; insertion from UI visibility; unknown mutations from replay; old checkpoints from current lineage; policy confidence from execution gates; assigned stages from self-imposed allocation caps.
 
 ### Review work-session decisions
 
@@ -72,11 +72,11 @@ These synthetic scenarios are implementation acceptance, not a per-product check
 
 Offline checks establish these declared helper contracts and integration only. They do not establish future agent discovery quality, policy understanding, product execution, historical background repair, FE timeout expansion, or generic runtime/auth/media qualification. No fresh product scan is required for this implementation acceptance.
 
-## Version 2 criteria workflow acceptance
+## Version 3 criteria workflow acceptance
 
-Use `test_criteria_workflow`, `test_criteria_integration`, `test_criteria_reporting_boundary` and `test_criteria_cli_boundary` with the existing locked environment. These check revision/content approval binding, finite approved scope, pending versus justified final verdicts, counterexample rules, resource/journal recovery, worker result boundaries and exact three-report projections. The actual CLI subprocess tests run from a temporary directory with network and nested executor subprocesses forbidden. Fixture evidence and fake executor callbacks do not qualify a real scanner or product adapter.
+Use `test_criteria_workflow`, `test_criteria_integration`, `test_criteria_reporting_boundary` and `test_criteria_cli_boundary` with the existing locked environment. These check fixed-catalog identity, revision/content approval binding, finite approved scope, v3 all_cases, historical v2 counterexample compatibility, pending versus justified final verdicts, resource/journal recovery, worker result boundaries and exact three-report projections. The actual CLI subprocess tests run from a temporary directory with network and nested executor subprocesses forbidden. Fixture evidence and fake executor callbacks do not qualify a real scanner or product adapter.
 
-`scope criteria-review` is the v2 reviewer. Legacy `review-closure`, `review-residuals`, `inspect-resume`, standalone session review and direct `apply_completion` reject v2 rather than silently projecting legacy completion. No automatic v2 discovery-to-live-executor adapter or semantic security oracle is claimed. Validate the admitted executor and its target/auth/readback gates separately before real traffic.
+`scope criteria-review` is the v2/v3 reviewer. Legacy `review-closure`, `review-residuals`, `inspect-resume`, standalone session review and direct `apply_completion` reject criteria workflows rather than silently projecting legacy completion. No automatic v3 discovery-to-live-executor adapter or semantic security oracle is claimed. Validate the admitted executor and its target/auth/readback gates separately before real traffic.
 
 ## Subagent operations acceptance
 

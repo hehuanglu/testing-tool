@@ -203,7 +203,7 @@ def main(argv=None):
         working=load(a.run)
         if 'criteriaWorkflow' in working or working.get('workflowVersion')==2:
             if any(supplied) or a.security_scope or a.scope_assessment or a.previous_scope:
-                parser.error('v2 uses approved criteriaWorkflow; do not supply legacy scope/inventory arguments')
+                parser.error('criteria workflow uses its approved plan; do not supply legacy scope/inventory arguments')
             from .criteria_reporting import CriteriaFinalizationError
             from .criteria_delegation import coordinator_lock
             try:
@@ -319,7 +319,7 @@ def main(argv=None):
 
 def require_legacy_run(run):
     if 'criteriaWorkflow' in run or run.get('workflowVersion') == 2:
-        raise ValueError('legacy scope command cannot evaluate v2; use criteria-review with private working RUN')
+        raise ValueError('legacy scope command cannot evaluate criteria workflow v2/v3; use criteria-review with private working RUN')
 
 
 def closure_work_state(args):

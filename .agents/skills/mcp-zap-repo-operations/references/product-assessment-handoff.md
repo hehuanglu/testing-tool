@@ -2,13 +2,13 @@
 
 ## Required deliverables
 
-The user-facing output is one native Google Sheets file on Drive with one worksheet, one eleven-column assessment table and one row per original catalog criterion. Follow [single-table output](single-table-drive-output.md) for exact labels, visual reference, statuses, severity, evidence links, explanatory notes, synchronization and readback. Retain catalog order and explicit exclusions. Project + security catalog are the business inputs; do not ask the user to author technical JSON or matrices.
+The user-facing output is one native Google Sheets file on Drive with one worksheet, one eleven-column assessment table and one row per original catalog criterion. Follow [single-table output](single-table-drive-output.md) for exact labels, visual reference, statuses, severity, evidence links, explanatory notes, synchronization and readback. Retain catalog order and explicit exclusions. The project is the business input; the 50-criterion OWASP 2025 catalog is bundled with the skill. Do not ask the user to author technical JSON or matrices.
 
 Use the [criteria-driven workflow](criteria-driven-workflow.md) for every assessment operation. Track-specific runners and legacy bookkeeping guides supply primitives, never additional assessment workflows or alternative delivery formats. Skill/tool audits and maintenance report their actual changes/checks/limits without inventing product traffic or a spreadsheet.
 
-## Version 2 — approved criteria and plan
+## Version 3 — fixed criteria and approved plan
 
-Use criteriaWorkflow.version:2 in the private working RUN. Preserve approved criteria/plan revisions, real approval sources and content digests, actual operations/semantic observations, limitations, resource/effect state and private continuation references. Review each criterion independently even when several use the same case or operation. A worker summary, successful export or zero alerts does not establish a verdict.
+Use criteriaWorkflow.version:3 in the private working RUN for every new assessment. Preserve the fixed-catalog criteria revision, approved plan revision, real Gate 2 approval source and content digests, actual operations/semantic observations, limitations, resource/effect state and private continuation references. Review each selected criterion independently even when several use the same case or operation. A worker summary, successful export or zero alerts does not establish a verdict. Historical version 2 RUNs retain their original two approvals and are not templates for new work.
 
 The implemented internal exporter is criteria_reporting.publish_reports, selected by product_scope.compact_results and the CLI:
 
@@ -18,7 +18,7 @@ The implemented internal exporter is criteria_reporting.publish_reports, selecte
   --run PRIVATE_WORKING_RUN.json --alerts TRIAGED_ALERTS.json --output NEW_DIRECTORY
 ```
 
-Use configured dependencies/PYTHONPATH from [setup](setup.md). Add --finalize-round only when the current v2 review is eligible. It does not invoke legacy round closure. Legacy inventory/scope CLI arguments are rejected for v2. Exporting a progress snapshot neither authorizes traffic nor makes the assessment complete. The exporter writes local JSON; it does not synchronize Google Sheets.
+Use configured dependencies/PYTHONPATH from [setup](setup.md). Add --finalize-round only when the current v3 review is eligible. It does not invoke legacy round closure. Legacy inventory/scope CLI arguments are rejected for v2/v3. Exporting a progress snapshot neither authorizes traffic nor makes the assessment complete. The exporter writes local JSON; it does not synchronize Google Sheets.
 
 ## Internal evidence projections
 
@@ -32,11 +32,11 @@ Apply the [alert boundary](zap-result-boundary.md). Native alerts preserve rule/
 
 Count distinct alerts separately from instances/occurrences and criterion mappings. Multiple rows reusing one finding do not create multiple alerts. Unknown occurrence totals remain unknown; a native ID alone is not an occurrence count. Preserve historical issues not retested and actual grouping/attribution limits.
 
-The v2 publisher checks exact mapped subset, counts, context/generation and sanitized links. New directories are staged then renamed. Overwrite is atomic per file, not crash-atomic across all three files; reconcile generation mismatch after interruption. Preserve raw/journals/pins and historical bundles. Sanitized report projections are not executable working RUNs; retain the private working RUN and coordinator directory. Sanitize arbitrary text and known secret values before any supporting material is shared; a validator does not prove complete secret/PII removal.
+The v2/v3 publisher checks exact mapped subset, counts, context/generation and sanitized links. New directories are staged then renamed. Overwrite is atomic per file, not crash-atomic across all three files; reconcile generation mismatch after interruption. Preserve raw/journals/pins and historical bundles. Sanitized report projections are not executable working RUNs; retain the private working RUN and coordinator directory. Sanitize arbitrary text and known secret values before any supporting material is shared; a validator does not prove complete secret/PII removal.
 
 ## Assessment completion and Drive delivery
 
-Assessment completion follows the canonical criteria reviewer: all active approved criteria and plan obligations are accounted for, with controlled effects/resources and no hidden feasible required work. It can include unmet or product-grounded N/A (`not_evaluable` with reason `not_applicable`) results; applicable criteria with insufficient evidence remain pending and prohibit completion. Completion never means product safety or remediation approval.
+Assessment completion follows the canonical criteria reviewer: all selected criteria and approved plan obligations are accounted for, every excluded row retains its selection reason, and effects/resources are controlled with no hidden feasible required work. It can include unmet or product-grounded N/A (`not_evaluable` with reason `not_applicable`) results; selected applicable criteria with insufficient evidence remain pending and prohibit completion. Completion never means product safety or remediation approval.
 
 Delivery completion is separate and agent-maintained. Retain driveOutput with actual run/file/worksheet identity, URL, pending/verified/outdated/failed status, last verified synchronization and reviewed source revision/snapshot. The reviewer does not enforce this metadata. Update the same file by criterion ID, maintain the agreed layout/content in the assessment-managed range and verify values, formatting and evidence access after writing. Human-edit reconciliation is outside scope; sharing stays with the user. New reviewed results mark the old table outdated until verified again. Failed creation with uncertain outcome requires file/metadata reconciliation before replacement.
 
@@ -50,4 +50,4 @@ For completed work, give only concrete reopening triggers where needed. For an a
 
 ## Historical compatibility
 
-Existing legacy reports, statuses, approvals, findings and pins stay historical. [Legacy scope](assessment-scope-and-completion.md) and [legacy representations](user-security-scope.md) are readback/compatibility references only. Before new execution, prepare the current v2 criteria/plan, reuse only explicitly compatible observations and obtain missing content-bound approvals. Do not run legacy closure/continue commands against v2 or create a parallel legacy assessment workflow. Reclassification and table synchronization are not retests.
+Existing legacy reports, statuses, approvals, findings and pins stay historical. [Legacy scope](assessment-scope-and-completion.md) and [legacy representations](user-security-scope.md) are readback/compatibility references only. Before new execution, prepare the current v3 fixed-catalog criteria/plan, reuse only explicitly compatible observations and obtain the content-bound Gate 2 approval. Do not run legacy closure/continue commands against v2/v3 or create a parallel legacy assessment workflow. Reclassification and table synchronization are not retests.

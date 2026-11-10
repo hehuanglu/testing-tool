@@ -20,7 +20,7 @@ Results contain `unit`, `evidenceUnits`, `status`, `missingFields`, request coun
 
 `context` binds meaningful product/environment/origin/build, method/route/inputLocation, actorRef/role/relation, objectRef/state/objective. Unknown stays unknown. Operation coverageContext, when present, must agree with its link. Inheritance needs `compatibility:{basis,dimensions:{build:{from:"b0",to:"b1"}},operationIds:["old-read"]}` with exact reviewed dimension values; request origin/method/route/input location/objective cannot be inherited. This is a declared finite mapping, not automatic source equivalence or native execution under a new actor.
 
-For v2, support operations must additionally match every `criteriaWorkflow.context` dimension exactly. Explicit compatibility applies only to remaining case-level dimensions. A case-level build can use a reviewed retained-build mapping; a build bound at workflow level, product or environment cannot be changed through that mapping.
+For criteria workflow v2/v3, support operations must additionally match every `criteriaWorkflow.context` dimension exactly. Explicit compatibility applies only to remaining case-level dimensions. A case-level build can use a reviewed retained-build mapping; a build bound at workflow level, product or environment cannot be changed through that mapping.
 
 ### Finite native evidence allocations under an unchanged plan
 

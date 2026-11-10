@@ -1,11 +1,12 @@
 """Offline admission, projection and publication checks for the v2 handoff."""
 import copy
+import importlib.util
 import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from test_criteria_workflow import working, approve
+from test_criteria_workflow import approve, fixed_working, working
 from zap_assessment.criteria_reporting import (alert_projection, publish_reports,
     validate_report_bundle)
 
@@ -83,7 +84,7 @@ class ReportingBoundaryTests(unittest.TestCase):
         self.assertNotIn('unmappedReason', alerts['alerts'][0])
         self.assertEqual(scoped['alerts'][0]['criterionMappings'][0]['criterionId'], 'C1')
 
-    def test_mappings_cannot_claim_unapproved_criteria(self):
+    def test_mappings_cannot_claim_criteria_without_an_approved_plan(self):
         for mode in ('absent', 'stale'):
             run = mapped_working()
             if mode == 'absent': run['criteriaWorkflow']['approvals'] = []
@@ -91,11 +92,26 @@ class ReportingBoundaryTests(unittest.TestCase):
             with self.subTest(mode=mode), self.assertRaises(ValueError):
                 alert_projection(run, [observed()])
 
-    def test_progress_without_mapping_is_allowed_before_approval(self):
-        run = working(); run['criteriaWorkflow']['approvals'] = []
+    def test_progress_without_mapping_is_allowed_before_plan_approval(self):
+        run = fixed_working('matched'); run['criteriaWorkflow']['approvals'] = []
         with tempfile.TemporaryDirectory() as td:
             report = publish_reports(Path(td)/'reports', run, [observed()])
-            self.assertEqual(report['assessmentStatus'], 'awaiting_criteria_approval')
+            self.assertEqual(report['assessmentStatus'], 'awaiting_plan_approval')
+
+    def test_delivery_projection_rejects_mappings_to_excluded_rows(self):
+        script = Path(__file__).resolve().parents[3] / 'scripts/build_delivery_projection.py'
+        spec = importlib.util.spec_from_file_location('build_delivery_projection_test', script)
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        run = fixed_working(selected=False)
+        native = [{'id': '1', 'pluginId': '1001'}]
+        cases = [
+            {'nativeRules': [{'pluginId': '1001', 'criterionIds': ['SEC-A01-01'], 'rationale': 'invalid'}]},
+            {'nativeRules': [{'pluginId': '1001', 'unmappedReason': 'not mapped'}],
+             'observedAlerts': [{'findingId': 'O1', 'criterionIds': ['SEC-A01-01']}]},
+        ]
+        for review_spec in cases:
+            with self.subTest(review_spec=review_spec), self.assertRaisesRegex(ValueError, 'excluded from this run'):
+                module.validate_review(run, native, review_spec)
 
     def test_source_only_or_direct_alert_provenance_is_rejected(self):
         for factory in (native, observed):

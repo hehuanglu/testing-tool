@@ -147,7 +147,7 @@ def main(argv=None):
                         choices=["all", *SCENARIOS])
     parser.add_argument("--out", required=True)
     args = parser.parse_args(argv)
-    root = Path(args.out)
+    root = Path(args.out).resolve()
     if root.exists() and any(root.iterdir()):
         raise SystemExit("qualification output must be new or empty")
     root.mkdir(parents=True, exist_ok=True)

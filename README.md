@@ -35,8 +35,8 @@ Copy the complete skill directory to another project. Bundled `lib/mcp-zap-serve
 ## 1. Clone the repository
 
 ```sh
-git clone https://github.com/hehuanglu/ConcolicTool.git
-cd ConcolicTool
+git clone https://github.com/hehuanglu/testing-tool.git
+cd testing-tool
 ```
 
 Unless stated otherwise, commands start at this checkout root. Installers use Python stdlib and do not install engines, configure MCP, or scan products.

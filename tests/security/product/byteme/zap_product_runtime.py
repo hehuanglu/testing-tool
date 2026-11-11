@@ -27,6 +27,14 @@ from pathlib import Path
 from threading import Thread
 
 
+ZAP_CONFIG = (
+    "api.disablekey=true",
+    "alert.maxInstances=0",
+    "alert.mergeissues=false",
+    "autoupdate.checkOnStart=false",
+)
+
+
 def canonical_bytes(value):
     return (json.dumps(value, sort_keys=True, indent=2, ensure_ascii=False,
                        allow_nan=False) + "\n").encode("utf-8")
@@ -220,10 +228,10 @@ def run(args):
     zap_home = out / "zap-home"
     zap_home.mkdir(exist_ok=True)
     zap_log = (out / "zap.log").open("wb")
+    config_args = [value for config in ZAP_CONFIG for value in ("-config", config)]
     process = subprocess.Popen([
         "/zap/zap.sh", "-daemon", "-host", "127.0.0.1", "-port", str(api_port),
-        "-dir", str(zap_home), "-config", "api.disablekey=true",
-        "-config", "alert.maxInstances=0", "-config", "alert.mergeissues=false",
+        "-dir", str(zap_home), *config_args,
     ], stdout=zap_log, stderr=subprocess.STDOUT, start_new_session=True)
     result = None
     try:

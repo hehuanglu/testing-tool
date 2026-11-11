@@ -11,6 +11,10 @@ SPEC = importlib.util.spec_from_file_location("run_zap_product_suite",
                                               ROOT / "run_zap_product_suite.py")
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+RUNTIME_SPEC = importlib.util.spec_from_file_location(
+    "zap_product_runtime", ROOT / "product/byteme/zap_product_runtime.py")
+RUNTIME = importlib.util.module_from_spec(RUNTIME_SPEC)
+RUNTIME_SPEC.loader.exec_module(RUNTIME)
 
 
 class ProductSuiteTests(unittest.TestCase):
@@ -56,6 +60,9 @@ class ProductSuiteTests(unittest.TestCase):
                          canonical("https://github.com/hehuanglu/ByteMe/"))
         self.assertNotEqual(canonical("https://github.com/hehuanglu/ByteMe.git"),
                             canonical("https://github.com/another/ByteMe.git"))
+
+    def test_product_runtime_disables_addon_drift(self):
+        self.assertIn("autoupdate.checkOnStart=false", RUNTIME.ZAP_CONFIG)
 
 
 if __name__ == "__main__":

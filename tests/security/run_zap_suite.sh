@@ -43,7 +43,7 @@ docker run --rm --network none --hostname localhost \
   --user "$(id -u):$(id -g)" \
   --env "HOME=/tmp/zap-regression-home" \
   --env "ZAP_IMAGE_DIGEST=${IMAGE#*@}" \
-  --env "GITHUB_SHA=${GITHUB_SHA:-local}" \
+  --env "GITHUB_SHA=${REGRESSION_COMMIT_SHA:-${GITHUB_SHA:-local}}" \
   --mount "type=bind,src=$SCRIPT_DIR,dst=/workspace/security,readonly" \
   --mount "type=bind,src=$CASES_ABS,dst=/workspace/cases,readonly" \
   --mount "type=bind,src=$OUT_ABS,dst=/zap/wrk/output" \

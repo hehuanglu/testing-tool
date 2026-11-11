@@ -218,14 +218,16 @@ class ByteMeAdapter:
                             "sha256": sha256_file(regression)})
         diff = output(["git", "diff", "--binary"], cwd=self.workspace)
         key_dir = self.workspace / ".local" / "docker-keys"
-        key_dir.mkdir(parents=True, mode=0o700)
+        key_dir.mkdir(parents=True, mode=0o755)
         private = key_dir / "private.pem"
         public = key_dir / "public.pem"
         command(["openssl", "genpkey", "-algorithm", "RSA", "-pkeyopt",
                  "rsa_keygen_bits:2048", "-out", str(private)], timeout=30)
         command(["openssl", "pkey", "-in", str(private), "-pubout", "-out", str(public)],
                 timeout=30)
-        private.chmod(0o600)
+        # The source tree remains below mkdtemp's 0700 parent, while this bind-mounted
+        # directory must be traversable by ByteMe's non-host UID (10001) on Linux CI.
+        private.chmod(0o444)
         public.chmod(0o644)
         config_files = [
             self.workspace / "Dockerfile",
@@ -364,6 +366,17 @@ class ByteMeAdapter:
             command(["docker", "image", "rm", name], timeout=60)
         self.cleanup.append({"kind": kind, "name": name, "state": "removed"})
 
+    def capture_service_logs(self):
+        for name, filename in ((self.db, "database.log"), (self.backend, "backend.log")):
+            if docker_inspect("container", name) is None:
+                continue
+            try:
+                with (self.case_dir / filename).open("w", encoding="utf-8") as log:
+                    command(["docker", "logs", name], timeout=30, stdout=log, check=False)
+            except Exception as exc:
+                (self.case_dir / (filename + ".error")).write_text(
+                    type(exc).__name__ + ": " + str(exc) + "\n", encoding="utf-8")
+
     def cleanup_all(self):
         for name in (self.scanner, self.ready, self.backend, self.db):
             self.cleanup_resource("container", name)
@@ -405,6 +418,7 @@ class ByteMeAdapter:
             (self.case_dir / "adapter-error.txt").write_text(type(exc).__name__ + ": " + str(exc) + "\n",
                                                               encoding="utf-8")
         finally:
+            self.capture_service_logs()
             try:
                 self.cleanup_all()
             except Exception as exc:

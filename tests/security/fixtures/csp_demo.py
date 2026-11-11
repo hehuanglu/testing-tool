@@ -25,7 +25,7 @@ class _Handler(BaseHTTPRequestHandler):
         media_type = ("application/json" if server.mode == "wrong-media" and request_id == "docs"
                       else "text/html")
         csp = None
-        if request_id == "docs" and server.mode != "csp-regression":
+        if request_id == "docs" and server.mode not in ("csp-regression", "healthy"):
             csp = "default-src 'self'; frame-ancestors 'none'; form-action 'self'"
         if request_id == "control" and server.mode == "missing-control":
             csp = "default-src 'self'; frame-ancestors 'none'; form-action 'self'"

@@ -5,7 +5,7 @@ Two portable security-testing skills for use across projects. Each directory inc
 - **[run-semgrep-scanner](.agents/skills/run-semgrep-scanner/SKILL.md):** criterion-based source security assessment using local Semgrep OSS/CE, manual review, and Google Sheets reporting.
 - **[mcp-zap-repo-operations](.agents/skills/mcp-zap-repo-operations/SKILL.md):** MCP/ZAP operations for anonymous/authenticated backend/frontend testing and BOLA ownership checks, from discovery through execution and result reconciliation.
 
-`main` maintains the English instructions. `vie-version` preserves the Vietnamese baseline.
+Open the cloned repository as a Codex workspace to use both project skills directly. Install a copy only if you want to use them from another workspace.
 
 ## Repository layout
 
@@ -24,10 +24,10 @@ Two portable security-testing skills for use across projects. Each directory inc
     ├── agents/
     ├── references/          # Workflow, operations, runtime, setup
     ├── scripts/             # Installer and operations helpers
-    └── lib/
+    ├── lib/
         ├── zap-product-assessment/ # Source, schemas, profiles, CLI, tests
         └── mcp-zap-server/         # Reused helpers and license
-mcp-zap-server/               # Separate scanner source for build/setup
+    └── runtime/mcp-zap-server/ # Bundled scanner source and setup scripts
 ```
 
 Copy the complete skill directory to another project. Bundled `lib/mcp-zap-server/` contains reused helpers, not a scanner server. External scanner source is unnecessary when a suitable connector/runtime already exists. Vendored implementation/runbooks and historical fixtures retain their original language and interfaces; maintained skill instructions and metadata are English.
@@ -35,13 +35,13 @@ Copy the complete skill directory to another project. Bundled `lib/mcp-zap-serve
 ## 1. Clone the repository
 
 ```sh
-git clone https://github.com/hehuanglu/testing-tool.git
-cd testing-tool
+git clone https://github.com/hehuanglu/ConcolicTool.git
+cd ConcolicTool
 ```
 
 Unless stated otherwise, commands start at this checkout root. Installers use Python stdlib and do not install engines, configure MCP, or scan products.
 
-## 2. Install the skills
+## 2. Use from another workspace (optional)
 
 For a project-local copy, replace PROJECT_DIR with the actual destination:
 
@@ -97,7 +97,7 @@ Package setup uses networking and is separate from assessment. Scans use inspect
 
 ### ZAP through MCP
 
-Configure a connector to an authorized scanner, then verify actual tools/schemas/endpoints/auth profiles. For scanner builds/setup read its [README](mcp-zap-server/README.md). Reuse suitable isolated existing runtimes rather than rebuilding for every project.
+Use an existing MCP ZAP connection or prepare one from the [bundled scanner setup](.agents/skills/mcp-zap-repo-operations/references/setup.md). Runtime prerequisites are Python, Semgrep for the Semgrep skill, and a scanner connection for the ZAP skill. The bundled scanner can start with Docker and its versioned image. Google Sheets delivery uses the user's connected Google Drive account.
 
 Stdlib helpers can run independently. The bundled assessment library requires **Python 3.13** and locked dependencies:
 
@@ -111,7 +111,7 @@ PYTHONPATH="$ASSESSMENT_ROOT/src" "$ZAP_VENV/bin/python" \
   "$ASSESSMENT_ROOT/scripts/product_assessment.py" --help
 ```
 
-Help sends no traffic. Docker/browsers/pinned images/JARs are required only by selected executors. Verify separate MCP_ZAP_REPO for scanner source/build/doctor rather than deriving it from product cwd. Read [setup](.agents/skills/mcp-zap-repo-operations/references/setup.md) and [runtime](.agents/skills/mcp-zap-repo-operations/references/local-runtime.md).
+Help sends no traffic. Docker/browsers/pinned images/JARs are required only by selected executors. Set `MCP_ZAP_REPO` to the scanner workspace when building or running diagnostics. Read [setup](.agents/skills/mcp-zap-repo-operations/references/setup.md) and [runtime](.agents/skills/mcp-zap-repo-operations/references/local-runtime.md).
 
 ## 4. Assign an assessment
 
@@ -130,8 +130,7 @@ Example ZAP request:
 Use $mcp-zap-repo-operations to assess anonymous backend APIs at
 <authorized test origin>, with source at /absolute/path/to/product.
 Discover all in-scope public APIs, use the configured MCP runtime,
-read results, and deliver RUN.json, ALERTS.json and SCOPE_ALERTS.json
-with untested scope. Use my supplied security policy/catalog when provided.
+and deliver the reviewed assessment in Google Sheets with untested scope.
 ```
 
 Specify product/source/deployment, objectives, scope, and testing authority. The agent discovers inventory/techniques; rule IDs and hand-written scan commands are unnecessary. Targeted scans/retests do not automatically open every track. Responding in the user's language remains supported.
@@ -161,6 +160,8 @@ These test helpers/contracts against synthetic data rather than assess products.
 
 ## Results and private data
 
-Deliver `ALERTS.json` with actual findings/alerts, triage and native/manual/direct provenance; and `RUN.json` with scope/inventory, actual operations/results, coverage, limits, unfinished work, and completion. Semgrep uses one pair per sequential track. ZAP aggregates assigned scope/tracks and additionally delivers `SCOPE_ALERTS.json` with every assigned user criterion, applicability, questions, finding associations and gaps. The agent prepares internal mappings from supplied JSON/text and product discovery; see [user security scope and offline CLI](.agents/skills/mcp-zap-repo-operations/references/user-security-scope.md).
+Both skills deliver criterion-level results in Google Sheets. Retain the internal `RUN.json` and `ALERTS.json` records privately. ZAP may also retain a `SCOPE_ALERTS.json` projection. See the individual skills for coverage, evidence and continuation rules.
+
+The [latest Clicon run metrics](docs/assessment-runs/clicon-2026-11-11/) are repository documentation.
 
 Keep executor logs/raw/spec/actors/sessions private outside skill/product. Do not commit credentials/tokens/cookies/raw responses/run data into portable skill directories. Zero alerts does not establish safety. Close scope only after inventory/questions are reconciled and unexecuted/blocked work remains accurately represented.

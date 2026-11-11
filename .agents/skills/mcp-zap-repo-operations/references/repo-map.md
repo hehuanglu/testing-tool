@@ -1,6 +1,6 @@
 # Scanner repository and runner map
 
-Paths below are relative to the verified external `mcp-zap-server` checkout, except assessment paths. Inspect current files before use: this is a source map, rather than proof every mode has run.
+Paths below are relative to the selected scanner workspace copied from the [bundled source](../runtime/mcp-zap-server/README.md), except assessment paths. Inspect current files before use: this is a source map, rather than proof every mode has run.
 
 ## Source, build, and tests
 

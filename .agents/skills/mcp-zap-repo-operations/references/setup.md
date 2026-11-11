@@ -28,7 +28,19 @@ The assessment library requires Python 3.13 and `lib/zap-product-assessment/requ
 
 `lib/zap-product-assessment/` includes source/schemas/profiles/CLI/tests. `lib/mcp-zap-server/` includes reused transport/report helpers and regression entry points with license/provenance; it is not a scanner server. MCP endpoints/auth profiles/Docker/browsers/pinned images/JARs are needed only by the selected executor. Source/status tasks do not automatically provision scanners.
 
-For scanner build/doctor tasks, verify the separately prepared `MCP_ZAP_REPO`; do not infer it from cwd/product names. Otherwise prefer the configured connector. Legacy product-named adapters retain their own contracts, rather than defining defaults for new products. When a legacy layout is actually selected, `ZAP_PRODUCT_WORKSPACE` is the caller-selected product workspace (default cwd), not the skill directory. Do not create products or reuse historical credentials to satisfy it.
+For scanner build/doctor tasks, use the scanner workspace prepared below as `MCP_ZAP_REPO`. Otherwise use the configured connector. Legacy product-named adapters retain their own contracts, rather than defining defaults for new products. When a legacy layout is actually selected, `ZAP_PRODUCT_WORKSPACE` is the caller-selected product workspace (default cwd), not the skill directory. Do not create products or reuse historical credentials to satisfy it.
+
+## Scanner setup from the skill
+
+Reuse a compatible connection if available. For a new local scanner, copy the bundled source to a new runtime workspace before bootstrap so credentials, build output and scanner state stay outside the skill. Docker with Compose is required for the local stack.
+
+```sh
+MCP_ZAP_REPO="$(mktemp -d)"
+cp -R "$SKILL_DIR/runtime/mcp-zap-server/." "$MCP_ZAP_REPO/"
+(cd "$MCP_ZAP_REPO" && ./bin/bootstrap-local.sh --start)
+```
+
+Keep the workspace path for future diagnostics or restarts. Follow the [connection instructions](../runtime/mcp-zap-server/README.md#quick-start) and keep generated credentials private. The first startup may download the configured scanner image. Source builds use the bundled Gradle wrapper and the scanner's documented JDK.
 
 ## Portability checks
 

@@ -8,7 +8,8 @@ support.
 - `openapi-passive`: OpenAPI import plus actual passive `/items` transport.
 - `bearer-passive`: static bearer environment injection, actor marker and canary leak check.
 - `active-xss`: native active rule `40012` only, with vulnerable/fixed/auth-loss controls.
-- `form-cookie-csrf`: form authentication, cookie session, CSRF and refresh witness.
+- `form-cookie-csrf`: form authentication and cookie refresh using one fixed CSRF literal in the
+  login body; it does not extract or rotate tokens.
 - `bola-two-actor`: exact read-only actor/object oracle through ZAP.
 - `browser-journey`: prerequisite check; currently blocked by missing `geckodriver`.
 

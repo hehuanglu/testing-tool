@@ -73,6 +73,7 @@ class FixtureServer:
         self.server.record_lock = Lock()
         self.thread = Thread(target=self.server.serve_forever,
                              name="csp-demo-" + case["id"], daemon=True)
+        self.started = False
 
     @property
     def origin(self):
@@ -80,14 +81,18 @@ class FixtureServer:
 
     def start(self):
         self.thread.start()
+        self.started = True
         return self
 
     def stop(self):
-        self.server.shutdown()
-        self.server.server_close()
-        self.thread.join(timeout=5)
-        if self.thread.is_alive():
-            raise RuntimeError("fixture thread did not stop")
+        try:
+            if self.started or self.thread.is_alive():
+                self.server.shutdown()
+                self.thread.join(timeout=5)
+                if self.thread.is_alive():
+                    raise RuntimeError("fixture thread did not stop")
+        finally:
+            self.server.server_close()
 
     def evidence(self):
         with self.server.record_lock:

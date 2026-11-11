@@ -227,6 +227,23 @@ def _case_result(case, case_hash, status, reason, native_exit, case_dir, out_dir
     return result
 
 
+def _fixture_evidence(fixture):
+    if fixture is None:
+        return []
+    try:
+        return fixture.evidence()
+    except Exception:
+        return []
+
+
+def _ensure_failure_artifacts(case_dir: Path, records, error_name: str):
+    atomic_json(case_dir / "evidence.json", {"responses": records})
+    if not (case_dir / "plan.yaml").exists():
+        (case_dir / "plan.yaml").write_text("{}\n", encoding="utf-8")
+    if not (case_dir / "zap.log").exists():
+        (case_dir / "zap.log").write_text(error_name + "\n", encoding="utf-8")
+
+
 def classify(case, origin, records, report):
     by_id = {}
     for row in records:
@@ -270,11 +287,17 @@ def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
     case_dir.mkdir(parents=False, exist_ok=False)
     (case_dir / "case.json").write_bytes(case_payload)
     home = case_dir / "zap-home"
-    home.mkdir()
-    fixture = FIXTURES[case["fixture"]](case, run_id, fixture_mode).start()
+    fixture = None
+    fixture_started = False
     native_exit = None
     report_exists = False
+    result = None
+    cleanup_error = None
     try:
+        home.mkdir()
+        fixture = FIXTURES[case["fixture"]](case, run_id, fixture_mode)
+        fixture.start()
+        fixture_started = True
         plan = render_plan(case, fixture.origin, case_dir, omit_request_id)
         plan_path = case_dir / "plan.yaml"
         plan_path.write_bytes(canonical_bytes(plan))
@@ -288,45 +311,63 @@ def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
         if timed_out:
             records = fixture.evidence()
             atomic_json(case_dir / "evidence.json", {"responses": records})
-            return _case_result(case, case_hash, "EXECUTION_ERROR", "TIMEOUT", native_exit,
-                                case_dir, out_dir)
-        if native_exit != 0:
+            result = _case_result(case, case_hash, "EXECUTION_ERROR", "TIMEOUT", native_exit,
+                                  case_dir, out_dir)
+        elif native_exit != 0:
             records = fixture.evidence()
             atomic_json(case_dir / "evidence.json", {"responses": records})
             report_exists = (case_dir / "zap-report.json").is_file()
-            return _case_result(case, case_hash, "EXECUTION_ERROR", "ZAP_NATIVE_EXIT_NONZERO",
-                                native_exit, case_dir, out_dir, report_exists)
-        try:
-            _raw, parsed = load_fresh_report(case_dir / "zap-report.json", started_ns)
-            report_exists = True
-        except ReportError as error:
-            records = fixture.evidence()
-            atomic_json(case_dir / "evidence.json", {"responses": records})
-            return _case_result(case, case_hash, "EXECUTION_ERROR",
-                                "REPORT_INVALID:" + str(error), native_exit,
-                                case_dir, out_dir, (case_dir / "zap-report.json").is_file())
-        records = fixture.evidence()
-        atomic_json(case_dir / "evidence.json", {
-            "responses": records,
-            "matchedAlertPointers": [row.pointer for row in parsed.instances
-                                      if row.alert_ref == case["expect"]["alertRef"]],
-        })
-        status, reason = classify(case, fixture.origin, records, parsed)
-        return _case_result(case, case_hash, status, reason, native_exit,
-                            case_dir, out_dir, report_exists)
-    except (OSError, subprocess.SubprocessError, ValueError) as error:
-        records = fixture.evidence()
-        atomic_json(case_dir / "evidence.json", {"responses": records})
-        if not (case_dir / "plan.yaml").exists():
-            (case_dir / "plan.yaml").write_text("{}\n", encoding="utf-8")
-        if not (case_dir / "zap.log").exists():
-            (case_dir / "zap.log").write_text(type(error).__name__ + "\n", encoding="utf-8")
-        return _case_result(case, case_hash, "EXECUTION_ERROR",
-                            "RUNNER_ERROR:" + type(error).__name__, native_exit,
-                            case_dir, out_dir, (case_dir / "zap-report.json").is_file())
+            result = _case_result(case, case_hash, "EXECUTION_ERROR",
+                                  "ZAP_NATIVE_EXIT_NONZERO", native_exit,
+                                  case_dir, out_dir, report_exists)
+        else:
+            try:
+                _raw, parsed = load_fresh_report(case_dir / "zap-report.json", started_ns)
+                report_exists = True
+            except ReportError as error:
+                records = fixture.evidence()
+                atomic_json(case_dir / "evidence.json", {"responses": records})
+                result = _case_result(case, case_hash, "EXECUTION_ERROR",
+                                      "REPORT_INVALID:" + str(error), native_exit,
+                                      case_dir, out_dir,
+                                      (case_dir / "zap-report.json").is_file())
+            else:
+                records = fixture.evidence()
+                atomic_json(case_dir / "evidence.json", {
+                    "responses": records,
+                    "matchedAlertPointers": [row.pointer for row in parsed.instances
+                                              if row.alert_ref == case["expect"]["alertRef"]],
+                })
+                status, reason = classify(case, fixture.origin, records, parsed)
+                result = _case_result(case, case_hash, status, reason, native_exit,
+                                      case_dir, out_dir, report_exists)
+    except Exception as error:
+        records = _fixture_evidence(fixture)
+        _ensure_failure_artifacts(case_dir, records, type(error).__name__)
+        prefix = "RUNNER_ERROR" if fixture_started else "FIXTURE_SETUP_ERROR"
+        result = _case_result(case, case_hash, "EXECUTION_ERROR",
+                              prefix + ":" + type(error).__name__, native_exit,
+                              case_dir, out_dir, (case_dir / "zap-report.json").is_file())
     finally:
-        fixture.stop()
+        if fixture is not None:
+            try:
+                fixture.stop()
+            except Exception as error:
+                cleanup_error = error
         shutil.rmtree(home, ignore_errors=True)
+    if cleanup_error is not None:
+        records = _fixture_evidence(fixture)
+        _ensure_failure_artifacts(case_dir, records, type(cleanup_error).__name__)
+        with (case_dir / "zap.log").open("a", encoding="utf-8") as log:
+            log.write("fixture cleanup failed: " + type(cleanup_error).__name__ + "\n")
+        if result is None or result["status"] != "EXECUTION_ERROR":
+            result = _case_result(case, case_hash, "EXECUTION_ERROR",
+                                  "FIXTURE_CLEANUP_ERROR:" + type(cleanup_error).__name__,
+                                  native_exit, case_dir, out_dir,
+                                  (case_dir / "zap-report.json").is_file())
+    if result is None:
+        raise RuntimeError("case execution produced no result")
+    return result
 
 
 def suite_result(run_id, cases, *, suite_error=None):
@@ -336,7 +377,8 @@ def suite_result(run_id, cases, *, suite_error=None):
     value = {
         "schemaVersion": 1,
         "runId": run_id,
-        "commitSha": os.environ.get("GITHUB_SHA", "local"),
+        "testedCommitSha": os.environ.get("TESTED_COMMIT_SHA", "local"),
+        "pullRequestHeadSha": os.environ.get("PULL_REQUEST_HEAD_SHA") or None,
         "imageDigest": os.environ.get("ZAP_IMAGE_DIGEST", "unknown"),
         "caseCount": len(cases),
         "counts": counts,

@@ -19,7 +19,7 @@ The supported profile registry is:
 | experimental | `openapi-passive-v1` | OpenAPI import and passive API transport only | `tests/security/experiments/openapi-passive/` |
 | experimental | `bearer-passive-v1` | Static bearer injection and auth witness only | `tests/security/experiments/bearer-passive/` |
 | experimental | `active-xss-v1` | One selected native active XSS rule on disposable fixture | `tests/security/experiments/active-xss/` |
-| experimental | `form-cookie-csrf-v1` | Synthetic form auth, cookie session, fixed CSRF and refresh witness | `tests/security/experiments/form-cookie-csrf/` |
+| experimental | `form-cookie-csrf-v1` | Synthetic form auth, cookie session and refresh witness with one fixed CSRF literal embedded in the login body; no token extraction or rotation | `tests/security/experiments/form-cookie-csrf/` |
 | experimental | `bola-two-actor-v1` | Read-only two-actor ownership oracle with exact object/actor witness | `tests/security/experiments/bola-two-actor/` |
 | blocked | `browser-journey-v1` | Pinned Firefox exists but matching `geckodriver` is absent | `tests/security/experiments/browser-journey/` |
 | unsupported | async/OAST/WebSocket/GraphQL and product-specific auth/BOLA | No stable profile | A named experiment or product adapter must first satisfy its qualification gates |
@@ -49,6 +49,12 @@ readback links and profile boundary. It projects only stable provenance digests.
 read files named by the RUN, send traffic, or commit raw responses and secrets. Missing data
 returns a field-specific `MISSING_PREREQUISITE`; an operation outside the profile returns
 `UNSUPPORTED_OPERATION`.
+
+The current runtime registry accepts only the synthetic `csp-demo` fixture. A real RUN v3 can
+validate provenance and generate the current case shape, but it does not make that case runnable
+against a product build. Product transfer also requires implementing and qualifying a versioned
+product adapter/fixture mapping, target build lifecycle and response/control readback before the
+profile can enter the stable suite.
 
 Review a newly created file or the exit-2 candidate diff. A byte-identical existing case is
 `UNCHANGED`; a different existing file is never overwritten. After review, run the portable

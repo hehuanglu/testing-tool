@@ -34,6 +34,11 @@ else
 fi
 IMAGE="$(tr -d '[:space:]' < "$SCRIPT_DIR/zap-image.txt")"
 [[ "$IMAGE" == *@sha256:* ]] || { echo "zap-image.txt must pin a digest" >&2; exit 2; }
+TESTED_COMMIT_SHA="${REGRESSION_TESTED_COMMIT_SHA:-}"
+if [[ -z "$TESTED_COMMIT_SHA" ]]; then
+  TESTED_COMMIT_SHA="$(git -C "$SCRIPT_DIR" rev-parse HEAD 2>/dev/null || true)"
+fi
+TESTED_COMMIT_SHA="${TESTED_COMMIT_SHA:-local}"
 RUNNER_ARGS=(--cases /workspace/cases --out /zap/wrk/output)
 if ((${#EXTRA[@]})); then
   RUNNER_ARGS+=("${EXTRA[@]}")
@@ -43,7 +48,8 @@ docker run --rm --network none --hostname localhost \
   --user "$(id -u):$(id -g)" \
   --env "HOME=/tmp/zap-regression-home" \
   --env "ZAP_IMAGE_DIGEST=${IMAGE#*@}" \
-  --env "GITHUB_SHA=${REGRESSION_COMMIT_SHA:-${GITHUB_SHA:-local}}" \
+  --env "TESTED_COMMIT_SHA=$TESTED_COMMIT_SHA" \
+  --env "PULL_REQUEST_HEAD_SHA=${REGRESSION_PR_HEAD_SHA:-}" \
   --mount "type=bind,src=$SCRIPT_DIR,dst=/workspace/security,readonly" \
   --mount "type=bind,src=$CASES_ABS,dst=/workspace/cases,readonly" \
   --mount "type=bind,src=$OUT_ABS,dst=/zap/wrk/output" \

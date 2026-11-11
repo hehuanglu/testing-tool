@@ -50,6 +50,9 @@ runtime metadata in a case.
 case copy, rendered AF plan, response evidence, native `traditional-json` report when ZAP
 created one, and the ZAP log. A `PASS` means only that the narrow committed assertion was
 satisfied with its controls; it is not an OWASP criterion verdict or an assessment result.
+`testedCommitSha` is the checked-out commit returned by host `git rev-parse HEAD`;
+`pullRequestHeadSha` is separate metadata and is null outside a pull request. A PR normally tests
+its generated merge commit, so these values are intentionally allowed to differ.
 
 Run offline parser/contract tests without Docker:
 
@@ -69,3 +72,7 @@ Qualification modes are harness-only arguments. Committed stable cases cannot se
 fixture fault mode. Authentication, OpenAPI import, active scan, browser journeys and BOLA
 are not supported by `passive-http-v1`; their experiments remain isolated under
 `experiments/` until each profile meets its own qualification gates.
+
+The runtime fixture registry currently contains only `csp-demo`. Accepting provenance from a
+real RUN v3 is not product execution support: a target repository still needs a versioned,
+qualified adapter/fixture mapping, disposable build lifecycle and product-specific witnesses.

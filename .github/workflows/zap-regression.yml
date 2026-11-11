@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Run fixed ZAP regression cases
         env:
-          REGRESSION_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
         run: bash tests/security/run_zap_suite.sh --cases tests/security/cases --out artifacts/zap
       - name: Write suite summary
         if: always()

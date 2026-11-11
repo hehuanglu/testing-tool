@@ -137,6 +137,7 @@ def main():
         elif args.mode == "revoke": expected_reasons = {"SESSION_REFRESH_WITNESSED"}
         else: expected_reasons = {"AUTH_LOST", "AUTH_WITNESS_INCOMPLETE"}
         result = {"schemaVersion": 1, "profile": "form-cookie-csrf-v1", "mode": args.mode,
+                  "csrfMode": "fixed-login-body-literal",
                   "status": status, "reason": reason, "nativeExit": native_exit,
                   "records": server.records, "expectedStatus": expected_status,
                   "expectedReasons": sorted(expected_reasons)}

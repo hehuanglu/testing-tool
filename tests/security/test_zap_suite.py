@@ -3,8 +3,9 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
-from run_zap_suite import CaseError, classify, discover_cases, validate_case
+from run_zap_suite import CaseError, classify, discover_cases, main, validate_case
 from zap_report import parse_report
 
 
@@ -75,7 +76,7 @@ class SuiteTests(unittest.TestCase):
             self.assertEqual(len(discover_cases(root)), 1)
             duplicate = copy.deepcopy(case)
             (root / "other.json").write_text(json.dumps(duplicate), encoding="utf-8")
-            with self.assertRaises(CaseError):
+            with self.assertRaisesRegex(CaseError, "duplicate case ID"):
                 discover_cases(root)
             (root / "other.json").unlink()
             outside = root.parent / "outside-case.json"
@@ -83,6 +84,29 @@ class SuiteTests(unittest.TestCase):
             (root / "linked.json").symlink_to(outside)
             with self.assertRaises(CaseError):
                 discover_cases(root)
+
+    def test_runtime_failure_does_not_suppress_later_case_result(self):
+        first = stable_case()
+        second = copy.deepcopy(first); second["id"] = "csp-docs-two"
+        second["source"]["caseId"] = "csp-docs-two"
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); cases = root / "cases"; cases.mkdir(); out = root / "out"
+            (cases / "csp-docs.json").write_text(json.dumps(first), encoding="utf-8")
+            (cases / "csp-docs-two.json").write_text(json.dumps(second), encoding="utf-8")
+            rows = [
+                {"id": "csp-docs", "caseHash": "a" * 64,
+                 "status": "EXECUTION_ERROR", "reason": "fixture"},
+                {"id": "csp-docs-two", "caseHash": "b" * 64,
+                 "status": "PASS", "reason": "fixture"},
+            ]
+            with patch("run_zap_suite.execute_case", side_effect=rows) as execute:
+                self.assertEqual(main(["--cases", str(cases), "--out", str(out)]), 1)
+            self.assertEqual(execute.call_count, 2)
+            result = json.loads((out / "suite-results.json").read_text())
+            self.assertEqual([row["id"] for row in result["cases"]],
+                             ["csp-docs", "csp-docs-two"])
+            self.assertEqual(result["counts"]["EXECUTION_ERROR"], 1)
+            self.assertEqual(result["counts"]["PASS"], 1)
 
 
 if __name__ == "__main__":

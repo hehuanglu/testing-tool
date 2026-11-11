@@ -19,7 +19,10 @@ The supported profile registry is:
 | experimental | `openapi-passive-v1` | OpenAPI import and passive API transport only | `tests/security/experiments/openapi-passive/` |
 | experimental | `bearer-passive-v1` | Static bearer injection and auth witness only | `tests/security/experiments/bearer-passive/` |
 | experimental | `active-xss-v1` | One selected native active XSS rule on disposable fixture | `tests/security/experiments/active-xss/` |
-| unsupported | form/cookie/CSRF, browser journey, BOLA, async/OAST/WebSocket/GraphQL | No stable profile | A named experiment or product adapter must first satisfy its qualification gates |
+| experimental | `form-cookie-csrf-v1` | Synthetic form auth, cookie session, fixed CSRF and refresh witness | `tests/security/experiments/form-cookie-csrf/` |
+| experimental | `bola-two-actor-v1` | Read-only two-actor ownership oracle with exact object/actor witness | `tests/security/experiments/bola-two-actor/` |
+| blocked | `browser-journey-v1` | Pinned Firefox exists but matching `geckodriver` is absent | `tests/security/experiments/browser-journey/` |
+| unsupported | async/OAST/WebSocket/GraphQL and product-specific auth/BOLA | No stable profile | A named experiment or product adapter must first satisfy its qualification gates |
 
 ZAP exposing a feature or add-on does not make it supported by this skill.
 

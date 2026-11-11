@@ -154,9 +154,11 @@ def discover_cases(directory: Path):
             value = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as error:
             raise CaseError(path.name + " is unreadable: " + type(error).__name__) from None
-        validate_case(value, path.name)
+        validate_case(value)
         if value["id"] in seen:
             raise CaseError("duplicate case ID: " + value["id"])
+        if path.name != value["id"] + ".json":
+            raise CaseError("filename must equal <id>.json")
         seen.add(value["id"])
         cases.append((path, value))
     return cases

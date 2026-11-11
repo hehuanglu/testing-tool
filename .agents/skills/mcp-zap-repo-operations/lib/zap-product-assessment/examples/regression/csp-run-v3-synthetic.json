@@ -1,0 +1,727 @@
+{
+  "assessmentId": "synthetic-regression-export-v3",
+  "criteriaWorkflow": {
+    "version": 3,
+    "catalog": {
+      "id": "OWASP-2025-CWE-MITRE-4.20",
+      "version": "2026-09-26",
+      "sha256": "7765c109fcbcc957801351768648a1b0134e02088698bed6456dcc709af66f8c",
+      "source": "references/owasp-2025-security-catalog.json",
+      "criterionCount": 50
+    },
+    "context": {
+      "product": "synthetic-csp",
+      "environment": "offline",
+      "build": "fixture-v1"
+    },
+    "criteriaRevision": "C-SYNTHETIC-1",
+    "planRevision": "P-SYNTHETIC-1",
+    "criteria": [
+      {
+        "id": "SEC-A01-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": true,
+        "selectionReason": "CSP header contract selected for exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [
+          "csp-docs"
+        ],
+        "stoppingRule": "all_cases",
+        "testApproach": "Read the reviewed CSP response and positive control through ZAP"
+      },
+      {
+        "id": "SEC-A01-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A01-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A01-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A01-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A01-06",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-06",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A01-07",
+        "rawText": "Synthetic catalog placeholder for SEC-A01-07",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A02-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A02-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A02-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A02-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A02-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A02-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A02-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A02-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A02-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A02-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A02-06",
+        "rawText": "Synthetic catalog placeholder for SEC-A02-06",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A03-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A03-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A04-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A04-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A04-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A04-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A04-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A04-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A04-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A04-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A04-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A04-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A04-06",
+        "rawText": "Synthetic catalog placeholder for SEC-A04-06",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A05-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A05-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A05-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A05-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A05-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A05-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A05-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A05-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A05-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A05-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A06-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A06-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A06-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A06-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A06-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A06-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A06-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A06-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A06-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A06-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A06-06",
+        "rawText": "Synthetic catalog placeholder for SEC-A06-06",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A07-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A07-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A07-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A07-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A07-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A07-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A07-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A07-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A07-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A07-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A08-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A08-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A08-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A08-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A08-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A08-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A08-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A08-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A08-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A08-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A09-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A09-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A09-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A09-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A09-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A09-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A10-01",
+        "rawText": "Synthetic catalog placeholder for SEC-A10-01",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A10-02",
+        "rawText": "Synthetic catalog placeholder for SEC-A10-02",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A10-03",
+        "rawText": "Synthetic catalog placeholder for SEC-A10-03",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A10-04",
+        "rawText": "Synthetic catalog placeholder for SEC-A10-04",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A10-05",
+        "rawText": "Synthetic catalog placeholder for SEC-A10-05",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      },
+      {
+        "id": "SEC-A10-06",
+        "rawText": "Synthetic catalog placeholder for SEC-A10-06",
+        "source": "synthetic-contract-fixture",
+        "requirement": "Synthetic contract requirement",
+        "oracle": "Synthetic contract oracle",
+        "selected": false,
+        "selectionReason": "Outside this synthetic exporter fixture",
+        "applicability": "applicable",
+        "caseIds": [],
+        "stoppingRule": "all_cases"
+      }
+    ],
+    "plan": {
+      "cases": [
+        {
+          "id": "csp-docs",
+          "criterionIds": [
+            "SEC-A01-01"
+          ],
+          "objective": "Verify the documentation CSP header",
+          "expectedBehavior": "The documentation response sends a nonempty enforcing CSP header",
+          "expectationBasis": "The documentation page must send an enforcing CSP header.",
+          "requiredEvidence": [
+            "response-witness",
+            "positive-control"
+          ],
+          "coverageContext": {
+            "product": "synthetic-csp",
+            "environment": "offline",
+            "build": "fixture-v1",
+            "method": "GET",
+            "route": "/docs",
+            "objective": "Verify the documentation CSP header"
+          },
+          "effects": [
+            "read"
+          ],
+          "resourceIds": [],
+          "allowedLimitations": [
+            "capability"
+          ]
+        }
+      ],
+      "authority": {
+        "source": "synthetic-plan-approval",
+        "target": "http://fixture.invalid",
+        "allowedEffects": [
+          "read"
+        ]
+      }
+    },
+    "approvals": [
+      {
+        "kind": "plan",
+        "revision": "P-SYNTHETIC-1",
+        "digest": "50b1ae6a9f3cca1e0623d250db8dcc3504a148337071bc2cf0ff388899261af8",
+        "source": "synthetic-reviewed-plan"
+      }
+    ],
+    "caseResults": [
+      {
+        "caseId": "csp-docs",
+        "outcome": "matched",
+        "basis": "Synthetic reviewed response and control",
+        "evidenceLinks": [
+          {
+            "operationId": "op-csp-readback",
+            "resultPath": "/readback",
+            "observationUnits": [
+              "response-witness",
+              "positive-control"
+            ],
+            "resultRead": true,
+            "basis": "Synthetic exact readback",
+            "context": {
+              "product": "synthetic-csp",
+              "environment": "offline",
+              "build": "fixture-v1",
+              "method": "GET",
+              "route": "/docs",
+              "objective": "Verify the documentation CSP header"
+            },
+            "role": "support"
+          }
+        ]
+      }
+    ],
+    "resourceReview": {
+      "reviewed": true,
+      "basis": "No resources created",
+      "resources": []
+    }
+  },
+  "operations": [
+    {
+      "id": "op-csp-readback",
+      "status": "completed",
+      "coverageContext": {
+        "product": "synthetic-csp",
+        "environment": "offline",
+        "build": "fixture-v1",
+        "method": "GET",
+        "route": "/docs",
+        "objective": "Verify the documentation CSP header"
+      },
+      "provenance": {
+        "transport": "zap-proxy"
+      },
+      "readback": {
+        "responseWitness": true,
+        "controlAlert": true
+      }
+    }
+  ],
+  "resources": []
+}

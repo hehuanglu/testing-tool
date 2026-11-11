@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/zap-assessment/regression-export-v1.schema.json",
+  "title": "ZAP regression export input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ci"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "caseId"],
+      "properties": {
+        "kind": {"const": "synthetic-demo"},
+        "path": {"type": "string", "minLength": 1},
+        "caseId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"}
+      }
+    },
+    "ci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "profile", "fixture", "requests", "requireResponses", "expect"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+        "profile": {"const": "passive-http-v1"},
+        "fixture": {"const": "csp-demo"},
+        "requests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "method", "path"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+              "method": {"type": "string", "minLength": 1},
+              "path": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "requireResponses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "mediaType"],
+          "properties": {
+            "status": {"type": "integer", "minimum": 100, "maximum": 599},
+            "mediaType": {"type": "string", "minLength": 1}
+          }
+        },
+        "expect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"],
+          "properties": {
+            "basis": {"type": "string", "minLength": 1},
+            "alertRef": {"type": "string", "minLength": 1},
+            "presentOn": {"type": "string", "minLength": 1},
+            "absentOn": {"type": "string", "minLength": 1},
+            "requireNonEmptyCspOn": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}

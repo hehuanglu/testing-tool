@@ -1,0 +1,19 @@
+{
+  "ci": {
+    "expect": {
+      "absentOn": "docs",
+      "alertRef": "10038-1",
+      "basis": "The documentation page must send an enforcing CSP header.",
+      "presentOn": "control",
+      "requireNonEmptyCspOn": "docs"
+    },
+    "fixture": "csp-demo",
+    "id": "csp-docs",
+    "profile": "passive-http-v1",
+    "requests": [
+      {"id": "docs", "method": "GET", "path": "/docs"},
+      {"id": "control", "method": "GET", "path": "/control"}
+    ],
+    "requireResponses": {"mediaType": "text/html", "status": 200}
+  }
+}

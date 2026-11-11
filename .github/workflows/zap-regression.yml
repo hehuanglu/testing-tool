@@ -19,7 +19,7 @@ jobs:
       - name: Run fixed ZAP regression cases
         env:
           REGRESSION_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: bash tests/security/run_zap_suite.sh --cases tests/security/cases --out artifacts/zap --omit-request-id docs
+        run: bash tests/security/run_zap_suite.sh --cases tests/security/cases --out artifacts/zap
       - name: Write suite summary
         if: always()
         run: |

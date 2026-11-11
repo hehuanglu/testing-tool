@@ -50,6 +50,13 @@ class ProductSuiteTests(unittest.TestCase):
         with self.assertRaises(MODULE.AdapterError):
             MODULE.validate_case(changed, changed["id"] + ".json")
 
+    def test_repository_binding_accepts_only_optional_dot_git_suffix(self):
+        canonical = MODULE.canonical_repository_url
+        self.assertEqual(canonical("https://github.com/hehuanglu/ByteMe.git"),
+                         canonical("https://github.com/hehuanglu/ByteMe/"))
+        self.assertNotEqual(canonical("https://github.com/hehuanglu/ByteMe.git"),
+                            canonical("https://github.com/another/ByteMe.git"))
+
 
 if __name__ == "__main__":
     unittest.main()

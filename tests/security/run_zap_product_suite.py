@@ -147,6 +147,14 @@ def discover_cases(directory: Path):
     return cases
 
 
+def canonical_repository_url(value: str):
+    """Normalize only Git's optional .git suffix and trailing slash."""
+    normalized = value.rstrip("/")
+    if normalized.endswith(".git"):
+        normalized = normalized[:-4]
+    return normalized
+
+
 class ByteMeAdapter:
     def __init__(self, case, case_dir: Path, source: Path, variant: str, fault: str,
                  omit_request_id: str | None, deadline: float, run_id: str):
@@ -188,7 +196,7 @@ class ByteMeAdapter:
             raise AdapterError("product checkout does not match pinned commit")
         if dirty:
             raise AdapterError("product checkout must be clean")
-        if remote.rstrip("/") != target["repository"].rstrip("/"):
+        if canonical_repository_url(remote) != canonical_repository_url(target["repository"]):
             raise AdapterError("product checkout origin does not match target repository")
         return actual
 

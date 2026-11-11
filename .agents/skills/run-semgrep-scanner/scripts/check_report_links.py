@@ -78,6 +78,36 @@ def check(run, alerts):
                 dest.extend(values)
     evidences = index(evidence_records, "evidence")
     index(occurrence_records, "occurrences")
+    if "criteria" in run:
+        criteria = index(run["criteria"], "criteria")
+        selected_findings = set()
+        for cid, criterion in criteria.items():
+            qids = refs(criterion, "question_ids", questions, cid)
+            fids = refs(criterion, "finding_ids", findings, cid)
+            eids = refs(criterion, "evidence_ids", evidences, cid)
+            remaining = refs(criterion, "remaining_question_ids", questions, cid)
+            expected_remaining = {qid for qid in qids
+                                  if questions[qid].get("status") in ("open", "blocked")}
+            if set(remaining) != expected_remaining:
+                fail(cid, "remaining_question_ids differs from mapped open/blocked questions")
+            if run["status"] == "completed" and criterion.get("selected") and remaining:
+                fail(cid, "completed assessment still has open/blocked criterion questions")
+            linked_evidence = set()
+            for fid in fids:
+                finding = findings[fid]
+                finding_questions = finding.get("question_ids") or []
+                if not set(qids).intersection(finding_questions):
+                    fail(cid, f"finding {fid} has no mapped criterion question")
+                linked_evidence.update(e["id"] for e in finding.get("evidence") or []
+                                       if isinstance(e, dict) and isinstance(e.get("id"), str))
+            if not set(eids).issubset(linked_evidence):
+                fail(cid, "evidence_ids must belong to linked findings")
+            if criterion.get("selected") is True:
+                selected_findings.update(fids)
+        for fid, finding in findings.items():
+            status = (finding.get("triage") or {}).get("status")
+            if status in ("supported", "needs-review") and fid not in selected_findings:
+                fail(fid, "reportable finding must be linked to a selected criterion")
     native_by_round = {rid: set() for rid in rounds}
     occurrence_count = Counter()
     for fid, finding in findings.items():
@@ -209,6 +239,7 @@ def check(run, alerts):
             fail(tid, "completed track still has remaining questions")
     coverage = run.get("coverage") or {}
     candidates = index(coverage.get("inventory_candidate_reviews", []), "inventory_candidate_reviews")
+    candidate_indices = {rid: set() for rid in rounds}
     for cid, candidate in candidates.items():
         round_record = ref(candidate.get("round_id"), rounds, f"{cid}.round_id")
         refs(candidate, "question_ids", questions, cid)
@@ -218,6 +249,17 @@ def check(run, alerts):
         total = (round_record.get("counts") or {}).get("native_matches") if round_record else None
         if n is not None and (type(n) is not int or n < 0 or (type(total) is int and n >= total)):
             fail(cid, "native_result_index outside round results")
+        elif n is not None and round_record is not None:
+            indices = candidate_indices[candidate["round_id"]]
+            if n in indices:
+                fail(cid, "duplicate native result index within round")
+            indices.add(n)
+    if "criteria" in run:
+        for rid, round_record in rounds.items():
+            total = (round_record.get("counts") or {}).get("native_matches")
+            if type(total) is int and 0 <= total and len(candidate_indices[rid]) < total:
+                missing = total - len(candidate_indices[rid])
+                fail(rid, f"candidate ledger missing {missing} of {total} native result indexes")
     for field in ("resolved_question_ids", "remaining_question_ids", "semgrep_question_ids", "manual_question_ids"):
         if field in coverage:
             refs(coverage, field, questions, "coverage")

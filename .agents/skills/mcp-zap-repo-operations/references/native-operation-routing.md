@@ -1,6 +1,6 @@
 # Native operations: select by testing need
 
-Read relevant [track intents](track-intents.md), then inspect actual runtime schemas. This source inventory was compared against Java services/delegates on 2026-10-25: 78 tools. It does not qualify images/runtimes. McpServerApplication.toolCallbackProvider always registers guided/auth/passive/history; expert configuration adds other groups. Missing session registration does not establish missing repository support.
+Read relevant [track intents](track-intents.md), then inspect actual runtime schemas. Source inventory does not qualify deployed images or runtimes. McpServerApplication.toolCallbackProvider always registers guided/auth/passive/history; expert configuration adds other groups. Missing session registration does not establish missing repository support.
 
 Read-only drift inspection:
 

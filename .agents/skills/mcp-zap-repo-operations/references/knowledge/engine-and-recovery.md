@@ -26,24 +26,10 @@ ACKed mutations followed by selector/assertion failures need ACK/journal/state r
 
 After stop/start, reread ephemeral port mappings/client URLs and current scope/identity/binding. New login/preparation after cleanup is a new session rather than old-session resume.
 
-## Actual media fixture readiness
+## Media fixture readiness
 
-Verified 2026-11-01 in a local WebRTC/provider assessment: a WHIP 201 and negotiated codec did not establish real transmission or recorder readiness. A headless sender negotiated H264 while reporting zero encoded frames/video bytes; a genuine Opus sender produced increasing RTP bytes and a terminal recording-ready state. Prefer actual sender/receiver byte/frame counters plus authoritative product state; preserve failed attempts and diagnose codec/encoder prerequisites before a purposeful new attempt. Recheck browser/provider versions and sender capability for each product; do not simulate provider outcomes or infer video coverage from audio success.
+Negotiation and a successful setup response do not establish that media is flowing or that recording is ready. Verify sender and receiver counters and the expected product state for each media type. Treat capability URLs as credentials when the protocol uses them as authorization.
 
-Follow-up on the same verification date: VP9/Opus real fixture tracks subsequently produced increasing video bytes/encoded frames and authoritative recorder readiness. Advertised H264 support alone remains insufficient. Select a supported and actually encoding fixture codec; preserve failed history and qualify the successful media types. A WHIP session Location can itself be an authentication capability under RFC 9725 §4.7.1; deliberately transferring it to another actor and obtaining DELETE success does not alone prove BOLA. Treat exact session URLs as credentials and require a concrete acquisition/authorization question before a vulnerability conclusion.
+## Scanner readback and result attribution
 
-## Stateful native input fixture supervision
-
-Verified 2026-11-01 on ZAP 2.17.0/Graal.js: blocking an HTTP-sender script while an external supervisor calls native `core/sendRequest` can deadlock the shared script engine, including unrelated support paths. The local adapter subsequently operated three complete command-input scans using strictly verified direct support on the existing published ingress for prerequisites, while attack payloads and final readback remained through ZAP. Label such support separately; do not count it as ZAP-derived testing. Recheck certificate identity and deployment binding before direct support, without disabling TLS verification or expanding targets.
-
-A request file rewritten in place can be transiently empty; tolerate incomplete JSON or use atomic replacement. API script `error` may be the string `"false"`, so parse its actual boolean representation. Both defects were observed and corrected before subsequent complete readbacks. Preserve every ACKed allocation and inspect native payloads/gate bindings: after a sender failure, a final request can fall back to a baseline receipt and return conflict. Reconcile that exact blocked input with a valid prerequisite instead of replaying the whole scan. Recheck engine/API behavior on other deployments; these are verified local mechanisms, not universal causes.
-
-## GET native input and script result pitfalls
-
-Verified 2026-11-01 on the local ZAP 2.17.0/Graal.js deployment; these are deployment-specific observations, not defaults to impose on every scanner. An authenticated GET header allocation reported plugins Complete with no plugin payloads. A subsequent allocation used the exact successful SiteNode seed and scoped `scanHeadersAllRequests=true` and delivered header payloads. Check actual GET/header eligibility and seed binding on the receiving runtime; preserve prior settings/exclusions and restore temporary changes. Never enable/change a shared scanner option merely from this lesson. Keep the original zero-payload result and test only undelivered work.
-
-The same deployment rejected ScriptVars keys of 30 or more characters. Its `globalVars` API could return a stored JSON value already decoded as an object; unconditional JSON string parsing then failed after the script had run. Validate the full generated key against current runtime constraints, handle the actual string/object response form, and inspect existing result plus script error state before retry. A client reader error is not evidence of an unexecuted script. Verify these boundaries offline using saved sanitized output where available.
-
-Nonrecursive scans also returned engine random-path calibration GETs against cached site-tree paths and expired/unknown actors. These were not selected native plugin inputs. Separate their message/result attribution before counting authenticated input coverage; unchanged-path baseline controls likewise do not establish changed-input processing.
-
-Large native session load/save calls exceeded the client timeout while the engine operation had succeeded or was still settling. Reconcile exact session location, saved message state and closure through the available runtime views before further effects; do not retry load/save solely because the client timed out. These observations do not establish a universal timeout value or guarantee successful recovery on another deployment.
+Check actual result types and producer state before retrying after a parser error or client timeout. Reconcile terminal status against recorded messages; exclude calibration traffic, unchanged controls and work from a different session or actor. Use atomic replacement when another process reads a shared JSON file.

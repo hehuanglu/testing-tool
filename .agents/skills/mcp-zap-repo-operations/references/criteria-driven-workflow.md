@@ -113,6 +113,8 @@ When execution delegation tools or required isolation are unavailable, the coord
 
 ## Reporting, migration and reopening
 
+Use the [follow-up loop](criteria-follow-up.md) when one or more revisions leave evidence obligations open or concrete product evidence challenges a prior verdict. Keep the current approved generation authoritative until a revised plan is approved and committed. Carry forward unaffected conclusions only after confirming the evidence and case bindings remain compatible.
+
 Deliver the [single-table Google Sheets output](single-table-drive-output.md) as the user-facing result, using the [handoff contract](product-assessment-handoff.md). RUN holds approved criteria/plan, verdicts, actual operations, evidence, limits and private working-state references; ALERTS holds security alerts; SCOPE_ALERTS holds only the mapped alert subset. These are internal supported projections, not three mandatory extra user deliverables. `not_evaluable` is not an alert. Do not compute a product safety percentage from `met` counts.
 
 Track delivery separately in retained private working state: `driveOutput` records runId, actual fileId/url/worksheet identity, status (`pending|verified|outdated|failed`), lastVerifiedAt, the reviewed source revision/snapshot last synchronized, and exact remaining publishing action when needed. This is agent-maintained output state, not a new field enforced by review_workflow or an implemented exporter. Row readback, formatting, intended link access and content must be checked through connected tools. Assessment completed + Drive outdated is unfinished delivery, not a successful final handoff. Lead the handoff with the actual spreadsheet link and synchronization status.

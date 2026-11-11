@@ -12,6 +12,8 @@ A bounded SAST conclusion does not require dynamic exploitation, two fresh runs,
 
 ## Working conditions
 
+Use authoritative specifications as expectations and the assigned source/configuration as evidence of implementation. Restrict retained evidence reuse to compatible Semgrep rounds and manual source reviews. Evidence from ZAP or another assessment remains outside RUN/ALERTS and the Semgrep Sheet even when it references the same commit. A deployment observation cannot close a source-review gap or establish a Semgrep verdict. Record the precise unchecked runtime condition as an evidence limit.
+
 When documentation differs from source, record `document_statement`, `source_implementation_or_declaration`, `comparison_scope`, `authority_currentness`, and `permitted_claim` in the result/review. README/runtime notes are not automatically current requirements; leave authority/currentness unknown when unverified. Distinguish source/document discrepancies, violations of verified requirements, and missing runtime controls. Apply this to CFG-01 configuration and AUTH-05 guards/lookups. A declaration discrepancy is not a runtime exploit.
 
 Source review does not require Git, deployment, tokens, or a build. When Git exists, record revision/dirty state and preserve existing changes. Otherwise record roots, observation time, and available version information. Do not provision a runtime or install dependencies merely to read source. Record changed source state and reassess affected work.

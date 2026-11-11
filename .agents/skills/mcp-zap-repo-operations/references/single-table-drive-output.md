@@ -10,17 +10,15 @@ A run means an assessment episode, not a tool invocation, individual scan, retry
 
 Above the table, show product/project, verified target/environment, assessed build/version when known, run ID, assessment status, assessment dates and last successful synchronization time. Mark unknown context explicitly. Use a recognizable file title such as `ZAP — <project> — <environment> — <run ID>`.
 
-Render the complete user-facing workbook in English: title, metadata, headers, status labels, criteria, interpretations, observations/evidence, next steps, notes, links and cell notes. Translate non-English catalog wording faithfully for column B and retain the original wording and source location in private assessment state. Supporting evidence indexes linked from the table must also use English. The bundled asset remains a structural/layout reference only and may retain its sample language.
+Render the complete user-facing workbook in English: title, metadata, headers, status labels, criteria, interpretations, observations/evidence, next steps, notes, links and cell notes. Translate non-English catalog wording faithfully for column B and retain the original wording and source location in private assessment state. Supporting evidence indexes linked from the table must also use English.
 
 ## Visual specification
-
-Use the bundled [layout reference](../assets/assessment-sheet-reference.png) as the visual target. All example criteria, ratings, observations and EV references in the image are fictional, not facts or usable evidence links. Replace them with the actual catalog and reviewed evidence. The screenshot is a layout example, not an authoritative severity assessment.
 
 - Keep columns A:K in the order below. B, I, J and K are wide text columns; D:H are compact numeric columns. Suggested starting widths in pixels: 100, 310, 200, 95, 110, 95, 105, 130, 400, 260, 340; adjust for legibility.
 - Use a solid dark navy header with bold white text, light gray borders, white body cells and a readable sans-serif font. Use restrained risk colors for D:G and a distinct pale fill for H. Wrap text, vertically center cells, align narrative text left and status/counts centrally. Size rows to show all content; do not truncate evidence or next actions.
 - Freeze through the table header, filter the complete table, and avoid merged cells inside the filter range. Metadata above the header may span cells without changing the table schema.
 - In C, use status chips or equivalent cell fill and bold text: red for Unmet, green for Met, blue for Testing in progress, amber for Waiting on prerequisite, neutral gray for Not tested, Not applicable and excluded rows. Colors never substitute for status text.
-- Render genuine accessible evidence hyperlinks in I or cell notes. Never fabricate EV URLs to mimic the picture. Inspect available Sheets formatting capabilities and read back formatting or inspect a preview as well as values; report material limitations.
+- Render genuine accessible evidence hyperlinks in I or cell notes. Inspect available Sheets formatting capabilities and read back formatting or inspect a preview as well as values; report material limitations.
 
 ## Eleven columns
 

@@ -7,7 +7,7 @@ python3 -B scripts/install_skill.py install
 python3 -B scripts/install_skill.py check
 ```
 
-Inspect drift before `install --update`. The helper backs up the old installation under `~/.codex/skill-backups/`; use `--target` for another destination. It uses only stdlib and does not install dependencies, configure MCP, or send traffic. Project-local usage needs no personal installation. Do not copy product source, reports, secrets, or virtual environments from a developer machine.
+Inspect drift before `install --update`. The helper backs up the old installation under `~/.codex/skill-backups/`; use `--target` for another destination. It uses only stdlib and does not install dependencies, configure MCP, or send traffic. Project-local usage needs no personal installation. Keep project source, assessment results, screenshots, credentials, and environment snapshots outside the skill. Bundle only reusable references, generic tools, and synthetic fixtures.
 
 Repo-only maintenance does not authorize synchronizing a divergent personal copy. Use `check` read-only and report drift separately from implementation validation. Current criteria/report CLI usage is documented in the [v3 criteria workflow](criteria-driven-workflow.md).
 
@@ -40,8 +40,6 @@ PYTHONPATH="$ASSESSMENT_ROOT/src" "$ZAP_PYTHON" -B \
 ```
 
 These are offline contract/bookkeeping checks, rather than product assessment/runtime qualification. Keep actor/raw/run data private outside skill/product, never in `lib/` for reuse.
-
-Historical portability checks on 2026-10-26 copied/installed the standalone tree and ran outside the developer checkout: 85 contract/binding/capability/research/portability tests passed with existing Python/dependencies. Bundled transport matched provenance; CLI/helper help needed no external scanner source. Another 79 regression/discovery/common-workflow cases passed with a simulated 8 GiB storage sample; six default extended cases were blocked by host reserve guards. A separate test verified no dispatch below reserve. Runtime guards were not lowered. No new product assessment, scanner provisioning, or cross-platform qualification occurred.
 
 ## Managed state commands
 

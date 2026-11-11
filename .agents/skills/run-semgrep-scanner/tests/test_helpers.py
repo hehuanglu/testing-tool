@@ -48,6 +48,76 @@ class Links(unittest.TestCase):
     def test_mixed_support_example(self):
         self.assertEqual([], self.verify())
 
+    def test_criterion_links(self):
+        finding = self.alerts['findings'][0]
+        qid = finding['question_ids'][0]
+        criterion = {
+            'id': 'SEC-01', 'selected': True, 'question_ids': [qid],
+            'finding_ids': [finding['id']], 'evidence_ids': [finding['evidence'][0]['id']],
+            'remaining_question_ids': [
+                q['id'] for q in self.run['questions']
+                if q['id'] == qid and q['status'] in ('open', 'blocked')
+            ],
+        }
+        self.complete_candidate_ledger()
+        other_criteria = [
+            {
+                'id': f"SEC-{record['id']}", 'selected': True, 'question_ids': record['question_ids'],
+                'finding_ids': [record['id']], 'evidence_ids': [],
+                'remaining_question_ids': [
+                    q['id'] for q in self.run['questions']
+                    if q['id'] in record['question_ids'] and q['status'] in ('open', 'blocked')
+                ],
+            }
+            for record in self.alerts['findings'][1:] if record['triage']['status'] != 'false-positive'
+        ]
+        self.run['criteria'] = [criterion, *other_criteria]
+        self.assertEqual([], self.verify())
+        criterion['selected'] = False
+        self.assertIn(f"{finding['id']}: reportable finding must be linked to a selected criterion", self.verify())
+        criterion['selected'] = True
+        criterion.update(finding_ids=[], evidence_ids=[])
+        self.assertIn(f"{finding['id']}: reportable finding must be linked to a selected criterion", self.verify())
+        criterion['evidence_ids'] = [finding['evidence'][0]['id']]
+        criterion['question_ids'].append('Q-missing')
+        errors = self.verify()
+        self.assertTrue(any('unknown reference' in error for error in errors))
+        self.assertTrue(any('belong to linked findings' in error for error in errors))
+
+    def complete_candidate_ledger(self):
+        candidates = self.run['coverage']['inventory_candidate_reviews']
+        for index in (1, 2):
+            candidate = copy.deepcopy(candidates[0])
+            candidate.update(id=f'C-synthetic-{index}', native_result_index=index)
+            candidates.append(candidate)
+        return candidates
+
+    def test_criteria_ledger_reports_missing_native_index(self):
+        for finding in self.alerts['findings']:
+            finding['triage']['status'] = 'false-positive'
+        self.recount()
+        self.run['criteria'] = []
+        candidates = self.complete_candidate_ledger()
+        self.assertEqual([], self.verify())
+        candidates[1]['native_result_index'] = None
+        self.assertIn('R-01: candidate ledger missing 1 of 3 native result indexes', self.verify())
+
+    def test_criteria_ledger_allows_unknown_native_count(self):
+        for finding in self.alerts['findings']:
+            finding['triage']['status'] = 'false-positive'
+        self.recount()
+        self.run['criteria'] = []
+        self.run['rounds'][0]['counts']['native_matches'] = None
+        self.alerts['summary']['native_matches_by_round']['R-01'] = None
+        self.assertEqual([], self.verify())
+
+    def test_duplicate_native_result_index(self):
+        candidates = self.run['coverage']['inventory_candidate_reviews']
+        duplicate = copy.deepcopy(next(c for c in candidates if c['native_result_index'] is not None))
+        duplicate['id'] = 'C-duplicate'
+        candidates.append(duplicate)
+        self.assertTrue(any('duplicate native result index' in error for error in self.verify()))
+
     def test_manual_round_contamination(self):
         self.run['rounds'][0]['finding_ids'].append('F-04')
         self.assertTrue(any('only/exactly' in e for e in self.verify()))

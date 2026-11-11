@@ -1,67 +1,45 @@
 ---
 name: run-semgrep-scanner
 description: >-
-  Assess product source security using local Semgrep scans and source review.
-  Discover the product, define test questions, select or extend rules, triage
-  candidates, and reconcile scope. Run assessment tracks sequentially with
-  process and evidence self-review. Supports targeted scans and retesting;
-  does not replace dynamic testing.
+  Assess source security against assigned criteria using local Semgrep and
+  manual source review. Plan checks from product behavior, share compatible
+  scans, triage evidence, and report criterion-level coverage and conclusions
+  in one concise Google Sheets table with Semgrep risk counts, agent observations
+  and evidence. Leave Next steps and Notes empty unless they contain a material
+  action, dependency, limitation, skip or warning. Also supports targeted scans,
+  custom rules, and retests.
 ---
 
 # Run Semgrep Scanner
 
-Work as a tester using Semgrep and source review. Follow the user's language preference. The user supplies the goal; discover rule IDs, commands, and framework mappings yourself.
+Work as a tester in the user's language. Use the assigned criteria to decide what to check, the product to identify relevant surfaces, and the available static evidence to decide what can be concluded. Read [tester context](references/tester-context.md) for source, runtime, and policy claim boundaries.
 
-All skill resources reside beside this SKILL.md. Copy the complete directory into another project's `.agents/skills/` or install it for personal use. Read [setup and synchronization](references/setup.md); resolve paths from the loaded skill, rather than the product working directory. The repository's `.agents/skills/run-semgrep-scanner/` is the maintained source; personal installations include its references, rules, scripts, examples, and tests.
+Operate this assessment independently. Base findings, coverage and conclusions on local Semgrep output and manual review of the assigned source and versioned configuration. A scope from another assessment may supply criterion IDs and selection decisions. Exclude ZAP and other scanner or runtime results from the evidence, counts and conclusions, including during follow-up and delivery. Keep claims requiring effective deployment or runtime observations open.
 
-## Context and principles
+Resolve references from this skill directory. The repository's complete skill tree is the maintained source. See [setup and synchronization](references/setup.md) for portable installations.
 
-Read [tester context](references/tester-context.md) for an assessment. The user defines scope, the product defines inventory, and test questions and actual capabilities determine techniques. Keep source structure, runtime behavior, and policy correctness as separate claims. Findings are not inventory; zero matches do not establish safety, and control names do not establish enforcement.
+## Assessment workflow
 
-## Five assessment tracks
+1. **Intake and discovery.** Determine the requested criteria or goal, source snapshot, roots, included/excluded paths, stack, and triage depth. Follow [discovery and question design](references/tester-workflow.md). Read the source and available specs before asking the user about unresolved scope or policy.
+2. **Prepare and review the plan.** For a new criteria assessment, assign one [preparation subagent](references/criteria-workflow.md#prepare-and-revise-plans-with-a-subagent) to scoped discovery and drafting. Review the draft against the source and send concrete questions back to the same preparer for revision. Follow the [criteria workflow](references/criteria-workflow.md) for question IDs, expectations, surfaces, methods, targets and closure evidence.
+3. **Present the plan and stop for approval.** Apply the [single plan approval gate](references/criteria-workflow.md#plan-approval-gate) after each reviewed plan, including targeted scans, retests and follow-up plans. Persist and present the exact revision, then end the turn until the user explicitly approves it.
+4. **Execute the approved plan in full.** Complete all feasible work in the approved revision, including readback, triage and self-review. Select inspected local rule IDs and target paths with the [catalog](references/rule-catalog.md) and [CLI guide](references/semgrep-operations.md). Combine compatible work across criteria and tracks with explicit rule/target/question mappings. Use focused [custom rules with fixtures](references/rules-and-triage.md) or manual review where they answer a question.
+5. **Reconcile coverage and replan as needed.** Compare actual evidence, errors, skips, timeouts and suppressions against the plan and inventory. If new work is needed, return to [follow-up planning](references/criteria-workflow.md#plan-the-next-pass-from-coverage-gaps), have the preparer draft and revise the supplement, then present it at the same gate and stop.
+6. **Conclude and deliver.** Record applicability, coverage, conclusion, and remaining work per criterion. Maintain a private [RUN/ALERTS pair](references/reporting-and-completion.md) and deliver [one Google Sheets table](references/sheets-delivery.md) with one row per criterion, four criterion statuses (Pass, Fail, Not evaluable, Out of scope), four risk counts for Semgrep-detected issues, an Only observed count for agent-only observations, and linked evidence. Keep Next steps and Notes blank when there is no material row-specific content; do not fill them with generic retest advice, repeated method text or statements that no gap exists. Apply the [risk rubric](references/rules-and-triage.md#assign-reviewed-risk) to supported Semgrep detections after triage. For targeted or setup-only requests, follow the requested scope and output.
 
-- [be-input](references/tracks/be-input.md): backend input and data processing, including public and protected source within scope.
-- [fe-browser](references/tracks/fe-browser.md): HTML/DOM, code, navigation, messaging, and browser trust boundaries.
-- [authentication-session](references/tracks/authentication-session.md): credentials, identity, sessions, and propagation; does not automatically include every protected business handler.
-- [authorization-ownership](references/tracks/authorization-ownership.md): actor/action, object, tenant, collection, relation, and state boundaries.
-- [configuration-build](references/tracks/configuration-build.md): configuration, builds, and dependency declarations; does not constitute an SCA/CVE scan.
+## Question and technique library
 
-Use the [track index](references/track-intents.md) to select starting questions. Adapt relevant questions to the product and assigned scope. Public/protected describes source surfaces; it does not establish that anonymous/authenticated execution occurred.
+Use the [track index](references/track-intents.md) to find relevant questions and source-review guidance for backend input, browser, authentication/session, authorization/ownership, and configuration/build. Tracks organize techniques. They add no scope, execution order, or reporting requirement. For a goal without a supplied catalog, derive a bounded set of criteria from the goal and product, recording their source. A focused retest or candidates-only request can use only the relevant questions.
 
-## Default workflow
+## Routing and boundaries
 
-Run multiple tracks **sequentially**, following the [track workflow](references/sequential-track-workflow.md): discovery → RUN checkpoint → technique selection → execution/readback → triage → inventory/question/native-result reconciliation → process and evidence self-review → save the track's ALERTS/RUN → next track. Complete these steps yourself without waiting for another reviewer. Describe this as self-review, not independent evaluation.
+- **New criteria assessment:** plan, execute and self-review against the assigned criteria, then verify Sheets delivery.
+- **Continue a criteria assessment:** recover the reviewed RUN/ALERTS and Sheet binding. Resume the exact approved revision from its first unfinished work item. For a pending revision, wait for its approval. For gaps requiring new work, prepare a supplement and stop at the plan gate. Read back the results and update the authorized summary from the reviewed evidence. A planning-only request ends with the reviewed plan and its approval state.
+- **Targeted scan or candidates:** keep the plan bounded to the requested detector scope, triage depth, and output. Claim only the work actually performed.
+- **Retest:** compare source, rule, ignore, path, and engine changes with retained evidence. Reuse compatible evidence and preserve prior results.
+- **Status or delivery refresh:** use reviewed retained state. A status request does not assign a new scan. Update the bound Sheet when the user asks for a refresh or the latest table.
+- **Setup, audit of the skill, or maintenance:** use [validation](references/validation.md) for the assigned work.
 
-Select only assigned tracks. For a whole-product assessment, prefer the order above unless dependencies require otherwise. Targeted scans and retests do not automatically open all five tracks. A track may need several rounds; one YAML file does not define the entire assessment. A track may be ready for handoff while still partial/blocked after all feasible local work is exhausted and remaining dependencies are documented. Do not add approval checkpoints between tracks.
+Use local Semgrep OSS/CE, inspected local rules, isolated settings, disabled metrics/version checks, and private output outside the target. Record the actual engine/version. Verify isolation when offline execution is required. Use already-inspected, versioned local copies of any authorized Registry rules. Keep product code and suppressions intact. Local review and scan authorization covers the identified source and scope. Login, rule downloads, uploads outside the agreed report, dependency changes, runtime probing, and product remediation require separate scope.
 
-## Dispatcher
-
-1. **Discover:** read applicable AGENTS instructions, source/specifications/configuration, and available local rules. Verify roots, stack, and Git revision/dirty state when available. Follow the [tester workflow](references/tester-workflow.md); inventory HTTP/GraphQL/RPC, jobs/events, libraries, UI, and configuration where relevant. Products need not expose endpoints.
-2. **Announce track and scope:** inform the user without requesting authorization already granted. For example: “I will assess `<track>` across `<scope>`, starting with `<base IDs>`. Discovery will refine the questions around the actual features, framework, and controls. Results will distinguish Semgrep output from manual source review.” For several tracks, state scope and order; for narrow tasks, explain the selected bases.
-3. **Checkpoint questions before execution:** save known scope, inventory, and questions in the working RUN, including expectations and their sources, planned techniques, and closure conditions. Leave unknown facts null. Follow [checkpointing and question instances](references/tester-workflow.md); base labels do not replace discovery. This is local bookkeeping, not an approval gate or another handoff file. Continue independent discovery and checks while inventory is incomplete.
-4. **Map techniques:** consult the [catalog](references/rule-catalog.md) and [rules/triage](references/rules-and-triage.md): inspect repository/local rules and applicability, add a focused custom rule with fixtures when useful, and perform feasible manual review. Bundled rules support limited stacks; a missing rule does not make a question inapplicable.
-5. **Execute:** use the [local CLI](references/semgrep-operations.md), selecting targets/rules for the current track's questions. Keep each round's output private outside the product. Read actual CLI help before choosing flags. Combine execution across tracks only at the user's request; retain separate question/output mappings and do not imply blanket coverage.
-6. **Read back and triage:** inspect native results, errors, skips, timeouts, source, callers, and controls. Record newly discovered questions/techniques and why they arose without backdating the plan. Keep candidate dispositions in RUN; inventory candidates do not automatically become security alerts. Distinguish Semgrep from manual provenance and retain native severity/confidence.
-7. **Reconcile and continue:** compare every inventory item/question against actual work using the [responsibility loop](references/responsibility-loop.md). Execute feasible next steps instead of stopping after documenting a limitation.
-8. **Self-review and hand off the track:** follow the [track workflow](references/sequential-track-workflow.md) and [completion contract](references/reporting-and-completion.md). Assess process sufficiency for the scope/claims separately from evidence support for observations/triage. Save the two files and the review in RUN before moving on. Separate round status from assignment status. A supported issue does not prevent completion; exit 0 does not establish it.
-
-## Outputs
-
-For new assessments, deliver exactly **ALERTS.json and RUN.json per track**, using the v2 [reporting contract](references/reporting-and-completion.md), in a stable local directory outside the product. Embed [SAST evidence](references/evidence.md) in ALERTS; record operation/source provenance and self-review under `tracks[].review` in RUN. Keep raw output, logs, and temporary rules private. Do not require an extra EVALUATION file, canvas, evidence directory, archive, or hash manifest. Produce a separate evaluation only when requested. [Synthetic examples](examples/README.md) are not actual scan results. Preserve historical reports and never invent missing evidence.
-
-## Task routing
-
-- **New assessment:** context → sequential workflow → assigned question bases → catalog/CLI → responsibility loop → per-track self-review and reporting.
-- **Targeted scan/candidates:** select relevant bases and the requested triage depth; detector search completion does not establish a system-wide audit.
-- **Custom rule:** inspect implementation and keep product mappings outside the core skill; follow [rules/triage](references/rules-and-triage.md) and [fixtures](tests/README.md). A single question need not produce a multilingual library.
-- **Retest:** inspect source changes and prior results. Check ignore/rule/path/engine changes before claiming a fix. Preserve history.
-- **CLI/output failure:** [operations](references/semgrep-operations.md) → [responsibility loop](references/responsibility-loop.md); continue independent work.
-- **Audit/setup-only/skill maintenance:** perform only the assigned work and use [validation](references/validation.md). Do not run a product assessment or fabricate ALERTS/RUN.
-
-## Authorization, privacy, and stopping
-
-An assessment of an identified product authorizes necessary local scans, source review, and triage within scope without per-round approval. A path alone or a setup question does not assign an assessment. Use OSS/CE, inspected local rules, isolated settings, and disabled metrics/version checks. Network isolation is a separate capability that must be verified. Do not independently log in/upload, use Registry/auto/Pro/SCA/Secrets, autofix, fetch dependencies, modify the product or machine-wide configuration, or send traffic to prove static findings. Resolve relative links from the skill directory.
-
-Stop when the assigned scope and triage are addressed, the user requests a stop, or a diagnosed blocker leaves no valid step after authorized remediation. Do not retry unchanged conditions or open an assurance campaign. Ask only for missing information that materially affects scope, authorization, or conclusions and cannot be found locally; continue independent work.
-
-Use **Operations** and **Limitations** in the final response: actual work/results/completion, links to both files for assessments, unfinished work, attempted remedies, and resumption conditions. For skill maintenance, report changes and validation accurately. Do not independently commit/push/publish, send messages, create chats, or spawn subagents without user instructions.
+Finish feasible assigned work and retain precise blockers, remedies attempted, and resumption conditions. Report assessment status and verified delivery status separately. Return the Sheet link for a criteria assessment when available and state any unfinished work. Report maintenance and validation directly for skill-only work.

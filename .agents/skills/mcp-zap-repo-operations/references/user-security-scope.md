@@ -175,17 +175,6 @@ The common layer is `security_scope.py`; `product_scope.compact_results` compose
 
 Offline tests in `test_security_scope.py` exercise declared contracts and report consistency. A Markdown intake walkthrough preserves the exact requirement/location in this representation; it does not prove arbitrary natural-language understanding. Catalog adapter checks can retain every input row and its metadata without validating standard crosswalk accuracy. Neither establishes product execution or runtime qualification. Personal installation drift is checked separately; updating the repo skill does not authorize overwriting a divergent personal skill.
 
-Implementation validation on 2026-10-31 (Python 3.13.2, existing environment, no dependency installation):
-
-```sh
-PYTHONPATH="$ASSESSMENT_ROOT/src:$ASSESSMENT_ROOT/tests" "$ZAP_PYTHON" -B \
-  -m unittest test_security_scope test_pm_scope test_operational_readback \
-  test_portability test_fe_anonymous_contract test_fe_anonymous_workflow \
-  test_fe_authenticated_workflow -q
-```
-
-92 tests: 84 passed, 8 skipped because optional product source is not bundled; no failures. Additional checks: skill validator, local Markdown target checks, `git diff --check`, CLI help and a real script-entry offline fixture from an unrelated directory. A temporary Markdown walkthrough preserved original text/location and unknown applicability. A temporary agent-prepared adapter represented all 50 current example-catalog entries with metadata/author classifications, left applicability/coverage unassessed and did not validate ASVS crosswalks. Fixtures/reports were temporary, not assessment deliverables. Static imports/routing and guarded offline fixtures confirmed no report/normalization dispatch. Read-only personal installation check found drift (exit 1); the personal copy was not changed. No product scan, credential access, scanner provisioning or runtime qualification was performed.
-
 ## Aggregate accounting and round review
 
 `scopeAssessment.aggregateReviews:{version:1,rows:[...]}` records one row per retained parent: `aggregateQuestionId`, current `scopeRevision`, `sourceRefs:[{sourceRef,sourcePointer}]`, `coverageBasis`, explicit `unmappedClauses`, and `obligationAtoms:[{id,text,basis,questionIds,residualItemIds,disposition}]`. Source refs identify original requirement/remainingWork locations, not a newly narrowed objective. A child refines that parent under the existing criterion/context/revision/cycle guards. The original parent ID/question/closureCondition/requiredObservations remain unchanged.

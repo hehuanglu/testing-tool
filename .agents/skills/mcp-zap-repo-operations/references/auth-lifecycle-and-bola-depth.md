@@ -21,10 +21,6 @@ Missing old tokens/positive baselines/compatible bindings means same-token/sessi
 
 Missing refresh/revoke in inspected inventory is `not_observed_in_scope` where appropriate, not runtime pass/fail or automatic executor unsupported. Known unsupported features identify the precise entry/vector. Auth loss stops dependent work and retains partial results; 401/anonymous traffic is not authenticated coverage. Samples do not establish zero-in-flight/all-time behavior. End deeper checks when continuity/budget/new information/authority/capability is exhausted, retaining routine handoff results.
 
-### Historical source checkpoint — 2026-10-23
-
-research_product.main check-expiry constructs Product(output) with fixed finalsource origin and `/api/v1/accounts`, reads private actor A, compares exp, and sends direct GET. It bypasses run's discovery/adapter/binding path even if common parser flags exist, and neither prepares native sessions nor measures monitor reaction. Do not advertise it as generic expiry or use old credentials against current deployments. New-deployment/native-loss goals need current authority/binding and a compatible entry, otherwise an implementation/proof dependency. ResearchRun source supports periodic validation/loss latch/owned stops without proving product natural-expiry/runtime monitor behavior.
-
 ## Select deeper ownership questions
 
 Preserve important object/action/relation/state obligations, then choose bounded [fixtures/workloads](product-extension-planning.md). Record actors/owners/references, before/after state, expected disclosure/side effects, executor, and cost without opening the whole case space.

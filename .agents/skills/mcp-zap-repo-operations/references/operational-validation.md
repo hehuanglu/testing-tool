@@ -90,28 +90,6 @@ For assigned skill maintenance, select checks 1–3 according to the changed del
 
 For each check retain the scenario, mode (offline fixture, host or connector), expected outcome, actual outcome, evidence locator and status (`passed`, `failed`, `not_run` or `blocked`). For failures record the next check or repair. Keep raw outputs private and return a short summary. A passing helper test does not qualify worker context behavior, actual host lifecycle, a live scanner or Drive delivery.
 
-## Retained historical results
-
-### Implementation verification — 2026-11-02
-
-See the preserved [historical record](operational-validation-history.md#implementation-verification--2026-11-02). This record does not attest current v2 execution.
-
-### Runtime continuation acceptance — 2026-11-02
-
-See the preserved [historical record](operational-validation-history.md#runtime-continuation-acceptance--2026-11-02). This record does not attest current v2 execution.
-
-### Phase 2 offline verification — 2026-11-02
-
-See the preserved [historical record](operational-validation-history.md#phase-2-offline-verification--2026-11-02). This record does not attest current v2 execution.
-
-### Phase 3 offline verification — 2026-11-02
-
-See the preserved [historical record](operational-validation-history.md#phase-3-offline-verification--2026-11-02). This record does not attest current v2 execution.
-
-### Phase 3 closure continuation — 2026-11-02
-
-See the preserved [historical record](operational-validation-history.md#phase-3-closure-continuation--2026-11-02). This record does not attest current v2 execution.
-
 ## Offline state and recovery qualification
 
-Run the coordinator fault tests, store CAS tests, selector and repair tests, and the synthetic process-restart walkthrough. Include interruption after durable acquire and release steps, committed retry after a lost receipt, torn-tail forensics and independent offline selection. Record positive and negative controls separately from live qualification and cross-context agent behavior. See the implementation report and acceptance handoff under docs/reviews/zap-core-implementation-20261104 in the workspace.
+Run the coordinator fault tests, store CAS tests, selector and repair tests, and the synthetic process-restart walkthrough. Include interruption after durable acquire and release steps, committed retry after a lost receipt, torn-tail forensics and independent offline selection. Record positive and negative controls separately from live qualification and cross-context agent behavior.

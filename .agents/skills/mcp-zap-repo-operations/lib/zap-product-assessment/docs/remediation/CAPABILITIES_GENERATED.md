@@ -10,7 +10,7 @@ source-supported; execution: offline-only; gate: offline-only; contract: 2.0.
 
 Offline external-plan-pinned JSON direct API coverage verification and report reconstruction.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
 Known failures: Operational G3/G4/G8/G10/G11/G12-D incomplete; independent human acceptance pending
 
@@ -24,13 +24,13 @@ source-supported; execution: existing-contract; gate: existing-contract; contrac
 
 Existing anonymous isolated HTTP/OpenAPI JSON/report CLI, including exact borrowed Docker binding.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
 Known failures: HTTPS/DNS/IPv6/browser/auth/active outside this admitted adapter; Legacy guard lacks independent correlation; synthetic observer does not enable borrowed/P0 mode; Dedicated W4 development fixture is evaluated separately; borrowed/protected mode acceptance remains absent
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
-Evidence: [anonymous-http-source](../../../zap-product-assessment/docs/remediation/source-snapshots/anonymous_runner.py.snapshot)
+Evidence: [anonymous-http-source](../../../zap-product-assessment/src/zap_assessment/anonymous_runner.py)
 
 ## bola-account-read
 
@@ -38,7 +38,7 @@ source-supported; execution: existing-contract; gate: existing-contract; contrac
 
 Separate direct-client account-read BOLA; borrowed v1.4 performs two logins and nine GET controls.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
 Known failures: Client dispatch is not target-side wire attestation; historical proof must not bypass source drift
 
@@ -50,11 +50,11 @@ Evidence: [bola-account-read-source](../../../zap-product-assessment/src/zap_ass
 
 blocked; execution: blocked; gate: blocked; contract: historical P0; G3/G12-N pending.
 
-Native authenticated browser/Client Spider diagnostic path.
+Native browser and Client Spider diagnostic path.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
-Known failures: Historical password/JWT persistence in history, scripts, tool responses and reports; G3 failed
+Known failures: Credential persistence and runtime containment are unverified.
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
@@ -64,11 +64,11 @@ Evidence: [p0-native-source](../../../zap-product-assessment/src/zap_assessment/
 
 blocked; execution: blocked; gate: blocked; contract: W5 core 1.0 + owned scanner diagnostic 1.0; operational blocked.
 
-Per-actor/epoch guard candidate plus owned ZAP/MCP canary pipeline; no finalsource or P0 operational admission.
+Delegated scanner guard and credential sink diagnostics.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
-Known failures: G3 operational remains blocked: generic production source/broker contract and complete actual per-sink seeded lifecycle controls have no acceptance; opaque synthetic source proof is narrower; G4 finalsource: unavailable identity/role/lifecycle cases may be skipped in user-authorized tester scope after discovery; source-supported features remain runtime-unverified, full G4 is not passed and synthetic outcomes cannot replace product proof; Regular crash case kills holder after producers terminal; separate historical mid-crawl SIGKILL evidence is diagnostic only.; All failed/cancelled attempts remain in the W5 scanner checkpoint; no protected modes enabled
+Known failures: Credential source, sink lifecycle and operational admission are unverified.
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
@@ -78,11 +78,11 @@ Evidence: [p0-delegated-source](../../../zap-product-assessment/src/zap_assessme
 
 blocked; execution: blocked; gate: blocked; contract: Historical P0 blocked; w6-owned-business-1 synthetic implementation verified.
 
-W6 dynamic manifest/minor-unit account CRUD, goal, expense/revenue/ownership/list API adapter on owned synthetic fixtures; historical P0 remains blocked.
+Business API checks using owned synthetic fixtures.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
-Known failures: Operational G3 and full product G4 remain blocked/unverified; no R1 or product G7 admission.; No permitted populated-bill fixture creation API found; product category preparation has no observed create route.; Finalsource adapter is source-derived/runtime-unverified; synthetic identity and reserved IDs are not product proof.
+Known failures: Production fixture preparation, identity lifecycle and operational admission are unverified.
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
@@ -92,15 +92,15 @@ Evidence: [p0-business-source](../../../zap-product-assessment/src/zap_assessmen
 
 blocked; execution: blocked; gate: blocked; contract: w7-owned-ui-diagnostic-1; functional synthetic verified; operational blocked.
 
-Actual owned Firefox login/create/expense/balance/reload/A-B-denial/final-state diagnostic; three fresh fixed flows13/13, five fault flows and session spike.
+Browser session and state readback diagnostics using owned fixtures.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
-Known failures: Actual Firefox profile localStorage SQLite retains synthetic canary after browser close; secretVerdict/securityVerdict fail.; Oversize startup cache and full143 sink/lifecycle/encoding controls remain unproven; no generic product broker or server revocation proof.; Canonical TLS/CORS/cookie/CSRF and product runtime unverified.
+Known failures: Browser profile storage requires separate secret persistence verification.; Production origin, session and operational admission are unverified.
 
 Pins: Current source reference only; no source-to-image or runtime attestation.
 
-Evidence: [browser-e2e-source](../../../zap-product-assessment/docs/remediation/source-snapshots/fe_authenticated_runner.py.snapshot)
+Evidence: [browser-e2e-source](../../../zap-product-assessment/src/zap_assessment/fe_authenticated_runner.py)
 
 ## canonical-origin
 
@@ -108,7 +108,7 @@ blocked; execution: blocked; gate: blocked; contract: G12-C candidate.
 
 Future exact scheme/host/port TLS/cookie/CORS/CSRF fidelity.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
 Known failures: G12-C no candidate campaign/transport equivalence proof
 
@@ -122,7 +122,7 @@ blocked; execution: blocked; gate: blocked; contract: G12-H candidate.
 
 Future same-target concurrent clients, durable queue/history and fault acceptance.
 
-Limits: Source inventory only. Historical run results were deleted during workspace cleanup; no pilot or current runtime verification is claimed. Existing execution contracts and admission checks remain mandatory.
+Limits: Source inventory only. Existing execution contracts and admission checks remain mandatory. No runtime verification is claimed.
 
 Known failures: G12-H topology/fault/RPO/RTO and independent acceptance unproven
 

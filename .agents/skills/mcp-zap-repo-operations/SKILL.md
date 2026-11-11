@@ -13,6 +13,8 @@ description: >-
 
 Resolve `SKILL_DIR` from this file and `ASSESSMENT_ROOT` as `lib/zap-product-assessment/`. Prefer the configured MCP connector; source/build work needs a separately verified scanner checkout (`MCP_ZAP_REPO`). The workflow is product-neutral; individual runners have conditional product/auth/protocol support. Read [setup](references/setup.md) for installation or project changes.
 
+Orchestrate assessment execution through configured MCP/native ZAP server operations or verified adapters. Use browser automation only when an approved case requires a real frontend journey and only through a verified allowed executor. A host session with no callable ZAP tool namespace has an exposure or registration dependency to diagnose; it does not establish that no ZAP server or engine capability exists and does not authorize ZAP Desktop, computer control, or researcher-operated manual fallback. Keep affected work pending and continue independent authorized work when the required route is unavailable. Retained prompts, deleted guides and vendor/tutorial artifacts are historical or supporting evidence, not current operating policy.
+
 ## One assessment workflow
 
 Apply the [agreed assessment policy](references/assessment-policy.md): the bundled catalog and user business knowledge are authoritative; no approver identity collection; one plan approval gate; reconnaissance before testing; all_cases; flexible coordinator-led discovery/adapters/subagents and local continuation; consolidated Drive reporting with sharing managed by the user. Read it at intake; these choices are settled and do not need another questionnaire.
@@ -48,6 +50,8 @@ Read the canonical workflow for plan approval and stopping rules. Manage account
 Use [discovery](references/product-discovery.md), [dispatch](references/operation-dispatch.md) and [responsibility reconciliation](references/responsibility-loop.md) as technical building blocks. Their legacy inventory/round statuses do not override v3 criteria/plan scope or completion. Persist recovery state throughout; [checkpoint/recovery](references/retention-stop-and-recovery.md) governs live effects and selective resume. Changing fixture, role, work unit or worker does not require a new chat.
 
 ## Evidence and completion
+
+When one or more prior plans leave a criterion unresolved or new evidence challenges its verdict, run the [follow-up planning and execution loop](references/criteria-follow-up.md). Compare retained evidence across revisions, plan only the remaining obligations, and continue under the current approval or a reviewed revision as required. Repeat after each reviewed batch while feasible approved work remains.
 
 Apply the [ZAP result boundary](references/zap-result-boundary.md). Native alerts and meaningful ZAP-derived observations have separate provenance. Source/config reads support discovery, fixtures and interpretation; source-only findings, dependency scans and traffic bypassing ZAP do not become ZAP-derived coverage. UI/passive/BOLA observations do not substitute for an active DAST obligation; API calls do not substitute for an approved real UI journey.
 

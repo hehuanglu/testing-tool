@@ -2,7 +2,7 @@
 
 ## Preparation
 
-Resolve `SKILL_DIR` from the loaded SKILL.md. Discover `PRODUCT_DIR`, source roots, and `RULES_FILE`; do not assume another product's layout. Use an installed binary and verify actual help/version. Missing CLI means unexecuted work, rather than an implied scan. Git/Python are needed only for operations using them.
+Resolve `SKILL_DIR` from the loaded SKILL.md. Discover `PRODUCT_DIR`, source roots, and `RULES_FILE`; do not assume another product's layout. Prefer the pinned version in [requirements.txt](../requirements.txt) or a version supplied by the user. Use an installed binary and verify actual help/version. Record any version difference and its effects on the assessment. Missing CLI means unexecuted work, rather than an implied scan. Git/Python are needed only for operations using them.
 
 Create private settings/log/raw storage outside source targets and Git. Adapt these macOS/Linux examples to the platform and replace paths before execution:
 
@@ -27,7 +27,7 @@ These are process-local settings; preserve existing login settings. Do not dump 
 
 ## Privacy and network
 
-Use inspected local rule files. Do not use `--config auto`, Registry IDs, URLs, `semgrep ci`, login, publish, or URL output. Disabled metrics/version checks, isolated settings, and empty tokens reduce automatic connections but **do not block networking**. Mandatory offline work requires verified isolation; report a blocker if unavailable rather than weakening the requirement.
+Use inspected local rule files. Run with explicit local configs, including inspected versioned local copies of authorized Registry rules. Use local scan output and avoid `--config auto`, Registry IDs or URLs in scan commands, `semgrep ci`, login, and publishing raw results. Disabled metrics/version checks, isolated settings, and empty tokens reduce automatic connections but **do not block networking**. Mandatory offline work requires verified isolation; report a blocker if unavailable rather than weakening the requirement.
 
 On macOS, when available, use verified `sandbox-exec` prefixes for help/version, lint, tests, and scans. Verify denial with a non-product loopback probe that succeeds without the guard and fails with it:
 
@@ -40,7 +40,7 @@ Use suitable verified existing isolation on Linux/Windows when required. Do not 
 
 ## Purposeful rounds
 
-Under the [sequential workflow](sequential-track-workflow.md), collect/read/review the current track before executing another. Multiple configurations/roots may serve one track; cross-track combination requires the user's request. Private round output differs from stable per-track handoff files.
+Use [compatible work groups](criteria-workflow.md#execute-by-compatible-work). Record actual rule IDs/config origins and versions or checksums, the target mappings, and exclusions. Read back each round before using it for follow-up.
 
 After verifying rules/targets, use a new output directory per round. Add a verified guard prefix when required:
 
@@ -63,7 +63,7 @@ Repeat local configs/roots or add justified includes/excludes within scope. Ther
 
 `--include` does not override all Git/Semgrep ignores or rule `paths`. `--no-git-ignore` affects Git filtering only. Diagnose version-specific filtering before narrow rescans or private copies with explicit path mappings; preserve repository ignores. Copies/path changes may alter rule applicability and are not automatically equivalent to full projects.
 
-Use supported `--dataflow-traces` when needed, without claiming complete cross-file/caller coverage. Choose timeouts/thresholds/jobs for actual resources and rounds, rather than fixed unlimited or 30-minute defaults.
+Use JSON for native result accounting. The [CLI reference](https://docs.semgrep.dev/cli-reference) documents `--dataflow-traces` for text and SARIF output. Check the installed CLI and inspect actual trace output before recording native-dataflow. Take snippets from the inspected source state where needed, because CE JSON does not guarantee `extra.lines`. Choose timeouts/thresholds/jobs for actual resources and rounds, rather than fixed unlimited or 30-minute defaults.
 
 ## Read actual results
 

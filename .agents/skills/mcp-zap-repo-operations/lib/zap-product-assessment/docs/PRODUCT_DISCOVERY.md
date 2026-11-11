@@ -16,7 +16,6 @@ With `ASSESSMENT_ROOT`, `ZAP_PYTHON` and `PYTHONPATH` set as in the skill setup:
 
 ```sh
 "$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/product_discovery.py" validate --manifest /absolute/PRODUCT_DISCOVERY.json --executable
-"$ZAP_PYTHON" "$ASSESSMENT_ROOT/scripts/be_authenticated_research.py" run --adapter finalsource --discovery /absolute/PRODUCT_DISCOVERY.json --output /absolute/new-private-run --jar /absolute/mcp-zap-server/build/libs/mcp-zap-server-0.16.0.jar
 ```
 
 Validate discovery first; confirm live ownership/binding/resources before running.
@@ -28,8 +27,7 @@ reproduction; it cannot count as discovery proof. No product auto-selects an ada
 `discovery.compile_plan` takes the frozen manifest, independently established actor,
 resolved owned fixtures and concrete requests. It rejects missing provenance,
 blocking conflicts, unverified origins, identity gaps, source/binding drift and
-mutations without preparation/ownership/postconditions. The finalsource adapter
-checks its finite supported surface before writes and rechecks runtime inventory;
+mutations without preparation/ownership/postconditions. The selected adapter must check its supported surface before writes and recheck runtime inventory;
 unsupported metadata fails with an extension reason rather than falling back.
 
 The plan embeds a manifest snapshot/canonical digest. Adapter fixture recipes

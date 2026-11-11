@@ -81,7 +81,6 @@ def main():
  for name in ('verify','recover'):
   p=subs.add_parser(name);p.add_argument('path',type=Path)
  p=subs.add_parser('controls');p.add_argument('--output',type=Path,required=True)
- p=subs.add_parser('handoff');p.add_argument('--root',type=Path,required=True)
  a=parser.parse_args()
  if a.command=='discover':print(json.dumps({'operations':len(discover(a.output)['operations']),'execution':'discovery-only'}));return 0
  if a.command=='product-run':return product_run(a)
@@ -94,8 +93,5 @@ def main():
  if a.command=='controls':
   from zap_assessment.anonymous_controls import controls
   print(json.dumps(controls(a.output)));return 0
- if a.command=='handoff':
-  from zap_assessment.anonymous_handoff import handoff
-  print(json.dumps(handoff(a.root),ensure_ascii=False));return 0
 
 if __name__=='__main__':raise SystemExit(main())

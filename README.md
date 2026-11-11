@@ -2,7 +2,7 @@
 
 Two portable security-testing skills for use across projects. Each directory includes its instructions, helpers, and supporting resources; product source and scanner runtimes are prepared separately.
 
-- **[run-semgrep-scanner](.agents/skills/run-semgrep-scanner/SKILL.md):** local Semgrep OSS/CE scans, source review, triage, and coverage reconciliation across backend input, browser, authentication/session, authorization/ownership, and configuration/build tracks.
+- **[run-semgrep-scanner](.agents/skills/run-semgrep-scanner/SKILL.md):** criterion-based source security assessment using local Semgrep OSS/CE, manual review, and Google Sheets reporting.
 - **[mcp-zap-repo-operations](.agents/skills/mcp-zap-repo-operations/SKILL.md):** MCP/ZAP operations for anonymous/authenticated backend/frontend testing and BOLA ownership checks, from discovery through execution and result reconciliation.
 
 `main` maintains the English instructions. `vie-version` preserves the Vietnamese baseline.
@@ -119,8 +119,9 @@ Example Semgrep request:
 
 ```text
 Use $run-semgrep-scanner to assess source at /absolute/path/to/product.
-Scope: backend input and authorization/ownership. Review source to triage
-candidates and deliver ALERTS.json and RUN.json for each track.
+Scope: backend input and authorization/ownership. Use the supplied criteria
+or derive them from this scope. Triage candidates and deliver coverage,
+conclusions, and evidence in Google Sheets.
 ```
 
 Example ZAP request:

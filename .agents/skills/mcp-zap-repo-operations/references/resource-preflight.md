@@ -6,7 +6,7 @@ Read before heavy workloads or resource failures. Identify bottlenecks and groun
 
 Record time, actual output filesystem, Docker context, and planned workload. Use `df -k OUTPUT_PARENT` and separately measure Docker-image volumes where different. Host and Linux-VM free space are distinct.
 
-Read current reserve/growth/calibration from actual plan/source/sidecars. Historical W4 used preflight `2×estimatedGrowth + 2GiB reserve`, runtime reserve 2GiB, plus memory/sampling/stop conditions; the fixed 8GiB floor was removed on 2026-10-19. This snapshot does not override current source. Disk sufficiency alone is not admission; HTTP calibration does not qualify HTTPS/browser workloads. Missing calibration means exact headroom is unknown.
+Read reserve, growth and calibration from the current plan and its supporting inputs. Check headroom for the assigned workload; without calibration, exact headroom is unknown.
 
 Use `docker system df`, with `-v` only for attribution. Distinguish shared image layers/writable containers/volumes/build cache without summing every tag's full size. Reclaimable is not deletable authority: unused images may be pinned; zero-link volumes may hold backups/user data.
 

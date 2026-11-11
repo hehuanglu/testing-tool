@@ -1,4 +1,4 @@
 interface:
   display_name: "Run Semgrep Scanner"
-  short_description: "Assess source security with Semgrep and manual review"
-  default_prompt: "Use $run-semgrep-scanner to discover the product and assess the assigned tracks sequentially: select questions and techniques, run local Semgrep scans, review source, reconcile scope, self-review process and evidence, and save each track's ALERTS.json and RUN.json before proceeding."
+  short_description: "Assess source security and deliver concise evidence"
+  default_prompt: "Use $run-semgrep-scanner to assess the assigned criteria with local Semgrep and source review. Present each reviewed plan for approval and stop. After approval, complete all feasible work in that revision, then reconcile coverage and prepare a follow-up plan if needed. Deliver concise coverage, conclusions, and evidence in Google Sheets; leave Next steps and Notes blank unless they contain material row-specific content."

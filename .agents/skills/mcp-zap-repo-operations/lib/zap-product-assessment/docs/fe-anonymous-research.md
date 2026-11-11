@@ -2,7 +2,7 @@
 
 This is a browser research contract guide. Read the [documentation boundaries](README.md); its technical status and qualification rules do not override criteria workflow v3 or establish current runtime qualification.
 
-`fe-anonymous-research/1.0` is a separate research contract. `product_assessment.py fe-anonymous` dispatches to `fe_anonymous_cli`; the backend `TRACKS` tuple, strict browser/canonical-origin capabilities and legacy diagnostic runner retain their contracts. Qualification evidence and unresolved obligations are recorded in the workspace's `review/fe-anonymous-audit-2026-10-23/IMPLEMENTATION_STATUS.md`.
+`fe-anonymous-research/1.0` is a separate research contract. `product_assessment.py fe-anonymous` dispatches to `fe_anonymous_cli`; the backend `TRACKS` tuple, strict browser/canonical-origin capabilities and legacy diagnostic runner retain their contracts.
 
 ## Commands
 
@@ -23,7 +23,6 @@ The selection identifies the current frontend container/image/start/network/addr
 
 Every journey creates and closes its own Firefox profile. It captures initial storage/cache/IndexedDB/service-worker/cookie state, UI assertions and bounded DOM facts/screenshots, then inventories and disposes the closed profile. Cookies require name/provenance admission. Credential headers, non-admitted cookie/query/body authority and unplanned identity transitions fail closed. Public registration/login responses remain anonymous request evidence; receipt/storage of identity ends that case's anonymous phase. Follow-up traffic is blocked without stripping credentials. Authenticated API fixture setup is a separate lane and is excluded from FE anonymous coverage; its exact intent/ACK/ownership/cleanup ledger is retained.
 
-Native rules are identified by their installed name and ID. Rule 40012 is reflected XSS; 40018 is SQL Injection. The finalsource recipe retains validation/error controls and adds bounded email-query 40018 probes with a valid baseline, successful quote/markup registration, login persistence readback, and length boundaries. It does not claim SQL sink coverage, stored-XSS execution or exhaustive input coverage. Login uses a fresh owned unknown email, a baseline and at most two changed active probes and four total app requests including native unchanged controls/baseline, below the inspected lockout threshold. The broker enforces the campaign cap before delivery. Guard denials are not application payload exercise. Native stop/status and rule delivery are retained separately from successful technique coverage.
 
 ## Evidence and operation
 
@@ -52,14 +51,4 @@ mutation gate. Unknown mutation states (sent/response-headers/unknown) retain
 correlation and a reconciliation/retention obligation, latch further producer
 traffic and never replay. Only a proved pre-send error means not-sent.
 
-Finalsource public input coverage combines valid sibling fields, the source input
-map, browser validation/boundaries, native payloads and bounded owned persistence
-checks. SQLi on bcrypt password and dynamic SQL in ORM save are not inferred from
-rule names; N/A reasoning lives in responsibilities with source provenance. Markup
-must remain DOM text with no injected element and be read back through a fresh login;
-these are separate browser/API observations, not native exploit alerts. Successful
-identities without a supported public DELETE remain in the private retention ledger.
-
 Final UI transport counters/network claims are refreshed from final broker records after producer stop; journal ACK snapshots remain historical. Caps include unchanged native control requests as well as changed payloads.
-
-Native control qualification also independently checks every host sample against reserve, raw detector outcomes and broker/app arrivals. A producer pass with a late sub-reserve sample is rejected in a separate disposition; retain raw and rerun into a fresh namespace only after sufficient headroom. The final resource-qualified pair and supersession are indexed by the current acceptance artifact.

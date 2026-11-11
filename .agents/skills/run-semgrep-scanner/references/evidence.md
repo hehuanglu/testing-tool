@@ -34,6 +34,6 @@ Missing native traces do not invalidate findings. Missing controls in a small sn
 
 ## Review and examples
 
-Before moving tracks, perform [evidence self-review](sequential-track-workflow.md#does-evidence-support-the-observations): compare native records to actual output, then re-read the source ranges/controls supporting claims. Existing files, in-bounds ranges, and a passing checker do not establish semantic support. Retain non-promoted candidates in RUN; fewer observations do not measure correctness or recall.
+Before concluding criteria, perform [evidence self-review](criteria-workflow.md#review-the-process-and-evidence): compare native records to actual output, then re-read the source ranges/controls supporting claims. Existing files, in-bounds ranges, and a passing checker do not establish semantic support. Retain non-promoted candidates in RUN; fewer observations do not measure correctness or recall.
 
 The [synthetic JSON pair](../examples/README.md) illustrates native-match/manual controls, needs-review, false-positive, and manual findings. It contains no real Semgrep output/trace. Check IDs, locations, source states, operations, and counts; never rewrite v1 history to invent missing evidence.

@@ -1,1 +1,0 @@
-{"caseId": "T-SOURCE", "outcome": "violated", "operationId": "observation-t-source", "basis": "Fixture config cross-account access is allow against expected deny"}

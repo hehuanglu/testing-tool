@@ -1,2 +1,0 @@
-Tracked working-tree diff identical before and after.
-SHA-256 65ecdced53636761988866f18fe9d73b3d78448777caf86642515643dbbcfac5

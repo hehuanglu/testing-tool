@@ -1,7 +1,0 @@
-{"stage": "1-synthetic-approval", "generationId": "8140f67d25749784017909231d1092ee27d0d16805305bb9443554abff0c67dd", "storePath": "/private/var/folders/75/6_tyjkx53z18r176lxlb7xv80000gn/T/tmp.1ruVy2HtAL/fixture/state"}
-{"stage": "2-lease-recovery", "fakeEffectCount": 0}
-{"stage": "3-fake-effect", "fakeEffectCount": 1, "receipt": "/private/var/folders/75/6_tyjkx53z18r176lxlb7xv80000gn/T/tmp.1ruVy2HtAL/fixture/fake-effect-receipt.json"}
-{"stage": "4-cold-retained-merge", "fakeEffectCount": 1}
-{"stage": "5-repair-and-independent-work", "originalReadback": "reader"}
-{"stage": "6-ttl-selection", "nextWakeAt": "2026-11-05T00:00:00+00:00"}
-{"stage": "7-synthetic-delivery", "decision": "workflow-done", "fakeEffectCount": 1, "projections": {"checklist.md": "/private/var/folders/75/6_tyjkx53z18r176lxlb7xv80000gn/T/tmp.1ruVy2HtAL/fixture/state/projections/b4af39d5b65a14849e885a9d65f0efe4f4e689989689c28c16cfcb3a6e78db5a/checklist.md", "CONTINUE-PROMPT.md": "/private/var/folders/75/6_tyjkx53z18r176lxlb7xv80000gn/T/tmp.1ruVy2HtAL/fixture/state/projections/b4af39d5b65a14849e885a9d65f0efe4f4e689989689c28c16cfcb3a6e78db5a/CONTINUE-PROMPT.md"}}

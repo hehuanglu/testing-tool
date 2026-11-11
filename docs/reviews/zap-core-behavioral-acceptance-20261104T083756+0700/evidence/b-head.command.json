@@ -1,8 +1,0 @@
-{
-  "argv": [
-    "git",
-    "rev-parse",
-    "HEAD"
-  ],
-  "exitCode": 0
-}

@@ -1,4 +1,0 @@
-S1 CONFIRMED: ACK-only appended history cleared pending mutation; eligibleForCompletion False -> True
-S1 CONTROL: no added operation, terminal readback or resolution; retained original intent unchanged
-S2 state-inspect after parent corruption: clean
-S2 next commit rejects same store: generation-integrity

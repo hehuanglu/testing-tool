@@ -1,1 +1,0 @@
-{"resultRef": "/Users/hahoangloc/Working/testing tool/docs/reviews/zap-core-behavioral-acceptance-20261104T083756+0700/setup/b-effect-merge-result.json", "caseId": "T-EFFECT", "operationId": "observation-t-effect", "outcome": "matched", "basis": "Verified terminal receipt binds the original action, case and object with fixture transition 0 to 1"}

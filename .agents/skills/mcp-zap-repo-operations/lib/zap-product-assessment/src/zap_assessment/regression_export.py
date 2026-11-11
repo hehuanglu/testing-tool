@@ -95,9 +95,9 @@ def _synthetic_source(value, run_path):
         if source is not None:
             raise ExportError("INVALID_INPUT", "source", "RUN export mapping must not declare source")
         return None
-    if not source or source.get("kind") != "synthetic-demo":
+    if not source or source.get("kind") not in ("synthetic-demo", "product-qualification"):
         raise ExportError("INVALID_INPUT", "source/kind",
-                          "standalone export accepts synthetic-demo only")
+                          "standalone export accepts synthetic-demo or product-qualification only")
     path = Path(source["path"])
     if path.is_absolute() or ".." in path.parts:
         raise ExportError("INVALID_INPUT", "source/path", "source path must be repository-relative")
@@ -183,8 +183,14 @@ def build_case(value, run=None, case_id=None):
             raise ExportError("INVALID_INPUT", "case-id", "--case-id is required with --run")
         source, reviewed_case = _product_source(run, case_id)
     ci = copy.deepcopy(value["ci"])
-    if source["caseId"] != ci["id"] and source["kind"] == "synthetic-demo":
+    if source["caseId"] != ci["id"] and source["kind"] in ("synthetic-demo", "product-qualification"):
         raise ExportError("INVALID_INPUT", "source/caseId", "source caseId must equal ci.id")
+    if source["kind"] == "product-qualification":
+        target = ci.get("target", {})
+        if (source.get("repository") != target.get("repository")
+                or source.get("commitSha") != target.get("commitSha")):
+            raise ExportError("INVALID_INPUT", "source",
+                              "product qualification source and target repository/commit must match")
     if reviewed_case is not None:
         if ci["id"] != case_id:
             raise ExportError("INVALID_INPUT", "ci/id", "ci.id must equal --case-id")

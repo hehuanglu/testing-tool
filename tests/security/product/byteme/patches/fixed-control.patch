@@ -1,0 +1,13 @@
+diff --git a/src/main/java/org/example/config/SecurityConfiguration.java b/src/main/java/org/example/config/SecurityConfiguration.java
+index 4bbb20e..a91f5cc 100644
+--- a/src/main/java/org/example/config/SecurityConfiguration.java
++++ b/src/main/java/org/example/config/SecurityConfiguration.java
+@@ -24,6 +24,8 @@ public class SecurityConfiguration {
+     }
+     @Bean @Order(2) SecurityFilterChain protectedApi(HttpSecurity http,ObjectMapper json) throws Exception {
+         return http.csrf(csrf->csrf.disable()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
++          .headers(headers->headers.contentSecurityPolicy(csp->csp.policyDirectives(
++              "frame-ancestors 'none'; object-src 'none'; base-uri 'self'")))
+           .authorizeHttpRequests(auth->auth.requestMatchers("/error", "/openapi.yaml","/swagger-ui.html","/swagger-ui/**", "/v3/api-docs/swagger-config", "/actuator/health", "/actuator/health/**").permitAll()
+               .requestMatchers(HttpMethod.GET, "/api/foods", "/api/foods/**").permitAll()
+               .requestMatchers(HttpMethod.POST, "/api/foods").hasRole("ADMIN")

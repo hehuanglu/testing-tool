@@ -33,6 +33,22 @@ class RegressionExportTests(unittest.TestCase):
             self.assertNotIn("timestamp", payload.decode())
             self.assertEqual(hashlib.sha256(payload).hexdigest(), hashlib.sha256(second[2]).hexdigest())
 
+    def test_product_qualification_export_pins_target_without_run(self):
+        case = build_case(self.load("byteme-csp-qualification-input.json"))
+        self.assertEqual(case["source"]["kind"], "product-qualification")
+        self.assertEqual(case["fixture"], "byteme-v1")
+        self.assertEqual(case["target"]["commitSha"],
+                         "510f6415b6af535ceec77213f0b0c7d5082123f7")
+        self.assertEqual({row["origin"] for row in case["requests"]},
+                         {"product", "detector-control"})
+
+    def test_product_qualification_source_must_match_target(self):
+        value = self.load("byteme-csp-qualification-input.json")
+        value["ci"]["target"]["commitSha"] = "0" * 40
+        with self.assertRaises(ExportError) as raised:
+            build_case(value)
+        self.assertEqual(raised.exception.field, "source")
+
     def test_existing_changed_file_requires_review_without_overwrite(self):
         with tempfile.TemporaryDirectory() as temporary:
             out = Path(temporary) / "cases"

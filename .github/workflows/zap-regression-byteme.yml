@@ -1,0 +1,104 @@
+name: ZAP regression ByteMe product adapter
+
+on:
+  pull_request:
+  push:
+    branches:
+      - codex/zap-regression-generator
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: Product adapter control to execute
+        required: true
+        default: fixed
+        type: choice
+        options:
+          - fixed
+          - original
+          - regression
+          - missing
+          - wrong-response
+          - startup-failure
+          - scanner-timeout
+          - cleanup-failure
+          - all
+
+permissions:
+  contents: read
+
+jobs:
+  byteme:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Checkout pinned ByteMe source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: hehuanglu/ByteMe
+          ref: 510f6415b6af535ceec77213f0b0c7d5082123f7
+          path: artifacts/byteme-source
+          persist-credentials: false
+      - name: Verify pinned source and product contract tests
+        run: |
+          test "$(git -C artifacts/byteme-source rev-parse HEAD)" = "510f6415b6af535ceec77213f0b0c7d5082123f7"
+          test -z "$(git -C artifacts/byteme-source status --porcelain)"
+          python3 -m unittest discover -s tests/security -p 'test_zap_product_suite.py' -v
+      - name: Run ByteMe adapter scenario
+        env:
+          REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+          SCENARIO: ${{ inputs.scenario || 'fixed' }}
+        run: |
+          case "$SCENARIO" in
+            fixed)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant fixed-control --deadline 600
+              ;;
+            original)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant upstream-original --deadline 600
+              ;;
+            regression)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant regression-control --deadline 600
+              ;;
+            missing)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant fixed-control --omit-request-id swagger-index --deadline 600
+              ;;
+            wrong-response|startup-failure|scanner-timeout|cleanup-failure)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant fixed-control --fault-mode "$SCENARIO" --deadline 600
+              ;;
+            all)
+              python3 tests/security/product/byteme/run_acceptance.py --product-source artifacts/byteme-source --out artifacts/byteme --scenario all --deadline 600
+              ;;
+            *)
+              echo "unsupported scenario: $SCENARIO" >&2
+              exit 2
+              ;;
+          esac
+      - name: Write product adapter summary
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          suite = Path("artifacts/byteme/suite-results.json")
+          qualification = Path("artifacts/byteme/byteme-qualification-results.json")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("## ByteMe ZAP product adapter\n\n")
+              if suite.is_file():
+                  value = json.loads(suite.read_text())
+                  summary.write(f"Suite: **{value['status']}**; counts: `{json.dumps(value['counts'], sort_keys=True)}`.\n")
+                  for case in value["cases"]:
+                      summary.write(f"- `{case['id']}`: `{case['status']}/{case['reason']}` ({case['variant']})\n")
+              elif qualification.is_file():
+                  value = json.loads(qualification.read_text())
+                  summary.write(f"Qualification: **{value['status']}**, {value['scenarioCount']} scenarios.\n")
+              else:
+                  summary.write("No retained result was produced.\n")
+          PY
+      - name: Upload ByteMe adapter artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: zap-regression-byteme-${{ github.job }}-${{ github.run_attempt }}
+          path: artifacts/byteme
+          if-no-files-found: warn
+          retention-days: 7

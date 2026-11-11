@@ -7,14 +7,30 @@
   "required": ["ci"],
   "properties": {
     "source": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["kind", "path", "caseId"],
-      "properties": {
-        "kind": {"const": "synthetic-demo"},
-        "path": {"type": "string", "minLength": 1},
-        "caseId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"}
-      }
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path", "caseId"],
+          "properties": {
+            "kind": {"const": "synthetic-demo"},
+            "path": {"type": "string", "minLength": 1},
+            "caseId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "repository", "commitSha", "path", "caseId"],
+          "properties": {
+            "kind": {"const": "product-qualification"},
+            "repository": {"type": "string", "pattern": "^https://github[.]com/[^/]+/[^/]+[.]git$"},
+            "commitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "path": {"type": "string", "minLength": 1},
+            "caseId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"}
+          }
+        }
+      ]
     },
     "ci": {
       "type": "object",
@@ -23,7 +39,17 @@
       "properties": {
         "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
         "profile": {"const": "passive-http-v1"},
-        "fixture": {"const": "csp-demo"},
+        "fixture": {"enum": ["csp-demo", "byteme-v1"]},
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["adapter", "repository", "commitSha"],
+          "properties": {
+            "adapter": {"const": "byteme-v1"},
+            "repository": {"type": "string", "pattern": "^https://github[.]com/[^/]+/[^/]+[.]git$"},
+            "commitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+          }
+        },
         "requests": {
           "type": "array",
           "minItems": 1,
@@ -34,7 +60,8 @@
             "properties": {
               "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
               "method": {"type": "string", "minLength": 1},
-              "path": {"type": "string", "minLength": 1}
+              "path": {"type": "string", "minLength": 1},
+              "origin": {"enum": ["product", "detector-control"]}
             }
           }
         },
@@ -59,7 +86,19 @@
             "requireNonEmptyCspOn": {"type": "string", "minLength": 1}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"fixture": {"const": "byteme-v1"}}, "required": ["fixture"]},
+          "then": {
+            "required": ["target"],
+            "properties": {
+              "requests": {"items": {"required": ["origin"]}}
+            }
+          },
+          "else": {"not": {"required": ["target"]}}
+        }
+      ]
     }
   }
 }

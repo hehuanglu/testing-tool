@@ -15,7 +15,7 @@ The supported profile registry is:
 
 | Status | Profile | Boundary | Qualification |
 |---|---|---|---|
-| supported | `passive-http-v1` | Anonymous literal GET, CSP missing rule `10038-1`, fixed fixture and response/control witnesses | `tests/security/qualification/run_acceptance.py` LIVE-01 through LIVE-06 |
+| supported | `passive-http-v1` | Anonymous literal GET, CSP missing rule `10038-1`, fixed response/control witnesses; synthetic `csp-demo` and registry-bound ByteMe v1 product lane | `tests/security/qualification/run_acceptance.py` LIVE-01 through LIVE-06; `tests/security/product/byteme/run_acceptance.py` |
 | experimental | `openapi-passive-v1` | OpenAPI import and passive API transport only | `tests/security/experiments/openapi-passive/` |
 | experimental | `bearer-passive-v1` | Static bearer injection and auth witness only | `tests/security/experiments/bearer-passive/` |
 | experimental | `active-xss-v1` | One selected native active XSS rule on disposable fixture | `tests/security/experiments/active-xss/` |
@@ -50,11 +50,18 @@ read files named by the RUN, send traffic, or commit raw responses and secrets. 
 returns a field-specific `MISSING_PREREQUISITE`; an operation outside the profile returns
 `UNSUPPORTED_OPERATION`.
 
-The current runtime registry accepts only the synthetic `csp-demo` fixture. A real RUN v3 can
-validate provenance and generate the current case shape, but it does not make that case runnable
-against a product build. Product transfer also requires implementing and qualifying a versioned
-product adapter/fixture mapping, target build lifecycle and response/control readback before the
-profile can enter the stable suite.
+The runtime registry accepts synthetic `csp-demo` and versioned product adapter `byteme-v1`.
+The product adapter pins `hehuanglu/ByteMe` at a full SHA, builds an isolated target with private
+database/keys, gives ZAP/backend/database one owned network without public ports, and reads the
+response and alerts back from ZAP history. Its detector control uses a separate origin and is not
+product evidence. The committed ByteMe case is `product-qualification`: it qualifies the adapter
+and CSP assertion without pretending the legacy RUN is v3.
+
+A real RUN v3 can produce the same product case shape only when its current approved case has
+reviewed support links and an expectation basis compatible with the CSP assertion. Do not turn a
+historical missing-CSP alert into an anti-framing verdict: an effective `X-Frame-Options` policy
+may satisfy the catalog criterion even while rule `10038-1` fires. Keep adapter qualification and
+assessment-to-suite transfer as separate claims.
 
 Review a newly created file or the exit-2 candidate diff. A byte-identical existing case is
 `UNCHANGED`; a different existing file is never overwritten. After review, run the portable
@@ -66,3 +73,16 @@ separate. Export itself is offline. Product traffic still requires the approved 
 scope; disposable CI fixtures may be exercised by their repository workflow. A future target,
 auth protocol or business oracle requires a newly qualified adapter rather than relabeling a
 generic ZAP operation.
+
+For ByteMe adapter qualification, run:
+
+```sh
+python3 tests/security/product/byteme/run_acceptance.py \
+  --product-source /clean/pinned/ByteMe \
+  --out artifacts/byteme-qualification \
+  --scenario all
+```
+
+The harness distinguishes upstream-original, fixed-control and regression-control, plus missing
+request, wrong response, startup, scanner-timeout and cleanup failures. Fixed/regression patches
+are versioned in testing-tool and must never be reported as upstream ByteMe behavior.

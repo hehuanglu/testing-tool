@@ -62,7 +62,13 @@ class ProductSuiteTests(unittest.TestCase):
                             canonical("https://github.com/another/ByteMe.git"))
 
     def test_product_runtime_disables_addon_drift(self):
-        self.assertIn("autoupdate.checkOnStart=false", RUNTIME.ZAP_CONFIG)
+        self.assertTrue({
+            "autoupdate.checkOnStart=false",
+            "start.checkForUpdates=false",
+            "start.downloadNewRelease=false",
+            "start.checkAddonUpdates=false",
+            "start.installAddonUpdates=false",
+        }.issubset(RUNTIME.ZAP_CONFIG))
 
 
 if __name__ == "__main__":

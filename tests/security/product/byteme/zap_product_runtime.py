@@ -32,6 +32,10 @@ ZAP_CONFIG = (
     "alert.maxInstances=0",
     "alert.mergeissues=false",
     "autoupdate.checkOnStart=false",
+    "start.checkForUpdates=false",
+    "start.downloadNewRelease=false",
+    "start.checkAddonUpdates=false",
+    "start.installAddonUpdates=false",
 )
 
 

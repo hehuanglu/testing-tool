@@ -155,6 +155,10 @@ def canonical_repository_url(value: str):
     return normalized
 
 
+def retained_reference(base: Path, relative: str):
+    return relative if (base / relative).is_file() else None
+
+
 class ByteMeAdapter:
     def __init__(self, case, case_dir: Path, source: Path, variant: str, fault: str,
                  omit_request_id: str | None, deadline: float, run_id: str):
@@ -456,7 +460,7 @@ class ByteMeAdapter:
             "adapter": "byteme-v1",
             "caseHash": case_hash,
             "cleanupPath": str((self.case_dir / "cleanup.json").name),
-            "evidencePath": "scan/evidence.json",
+            "evidencePath": retained_reference(self.case_dir, "scan/evidence.json"),
             "id": self.case["id"],
             "reason": runtime["reason"],
             "sourceKind": self.case["source"]["kind"],

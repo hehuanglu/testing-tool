@@ -61,6 +61,15 @@ class ProductSuiteTests(unittest.TestCase):
         self.assertNotEqual(canonical("https://github.com/hehuanglu/ByteMe.git"),
                             canonical("https://github.com/another/ByteMe.git"))
 
+    def test_retained_reference_is_null_until_artifact_exists(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            self.assertIsNone(MODULE.retained_reference(base, "scan/evidence.json"))
+            (base / "scan").mkdir()
+            (base / "scan/evidence.json").write_text("{}\n")
+            self.assertEqual(MODULE.retained_reference(base, "scan/evidence.json"),
+                             "scan/evidence.json")
+
     def test_product_runtime_disables_addon_drift(self):
         self.assertTrue({
             "autoupdate.checkOnStart=false",

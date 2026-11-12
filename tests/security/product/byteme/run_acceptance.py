@@ -59,6 +59,12 @@ def assert_artifact(directory: Path, expected_status, expected_reason, expected_
         raise AssertionError(f"actual {(result['status'], result['reason'])}, "
                              f"expected {(expected_status, expected_reason)}")
     case_dir = directory / result["id"]
+    for key in ("targetIdentityPath", "cleanupPath"):
+        if not (case_dir / result[key]).is_file():
+            raise AssertionError(f"retained artifact reference {key} does not exist")
+    evidence_path = result.get("evidencePath")
+    if evidence_path is not None and not (case_dir / evidence_path).is_file():
+        raise AssertionError("retained evidence reference does not exist")
     identity = json.loads((case_dir / result["targetIdentityPath"]).read_text(encoding="utf-8"))
     if identity["actualCommitSha"] != source_sha or identity["expectedCommitSha"] != source_sha:
         raise AssertionError("target source SHA binding mismatch")
@@ -75,7 +81,9 @@ def assert_artifact(directory: Path, expected_status, expected_reason, expected_
             if canary in text:
                 raise AssertionError(f"forbidden artifact canary {canary!r} in {path}")
     if expected_status != "EXECUTION_ERROR":
-        evidence = json.loads((case_dir / result["evidencePath"]).read_text(encoding="utf-8"))
+        if evidence_path is None:
+            raise AssertionError("non-execution result must retain ZAP evidence")
+        evidence = json.loads((case_dir / evidence_path).read_text(encoding="utf-8"))
         if evidence.get("zapVersion") != "2.17.0":
             raise AssertionError("unexpected ZAP version")
         if evidence.get("detectorControlPurpose") != (

@@ -16,6 +16,7 @@ The supported profile registry is:
 | Status | Profile | Boundary | Qualification |
 |---|---|---|---|
 | supported | `passive-http-v1` | Anonymous literal GET, CSP missing rule `10038-1`, fixed response/control witnesses; synthetic `csp-demo` and registry-bound ByteMe v1 product lane | `tests/security/qualification/run_acceptance.py` LIVE-01 through LIVE-06; `tests/security/product/byteme/run_acceptance.py` |
+| qualification-pending | `anti-framing-http-v1` | ByteMe v1 exact anonymous GET HTML response; ZAP-derived semantics for enforcing CSP `frame-ancestors` and XFO, with unsupported complexity failing closed | `tests/security/product/byteme/run_acceptance.py --profile anti-framing`; promote after local and GitHub artifact readback |
 | experimental | `openapi-passive-v1` | OpenAPI import and passive API transport only | `tests/security/experiments/openapi-passive/` |
 | experimental | `bearer-passive-v1` | Static bearer injection and auth witness only | `tests/security/experiments/bearer-passive/` |
 | experimental | `active-xss-v1` | One selected native active XSS rule on disposable fixture | `tests/security/experiments/active-xss/` |
@@ -57,6 +58,12 @@ response and alerts back from ZAP history. Its detector control uses a separate 
 product evidence. The committed ByteMe case is `product-qualification`: it qualifies the adapter
 and CSP assertion without pretending the legacy RUN is v3.
 
+The separate anti-framing candidate does not require native alert `10038-1`. It reads the exact
+ZAP message and projects only the framing-policy header allowlist. An enforcing CSP
+`frame-ancestors` directive takes precedence over XFO; Report-Only, `default-src`, and
+`frame-src` do not provide inbound anti-framing. The profile never claims a browser framing
+attempt. Complex or unsupported syntax returns missing evidence rather than PASS.
+
 Keep every ZAP updater gate disabled in this pinned lane (`autoupdate.checkOnStart` plus the
 `start.*` check/download/install flags); otherwise a downloaded network add-on can change the
 effective scanner and restart its listener. Every non-null result locator must resolve inside the
@@ -86,6 +93,12 @@ For ByteMe adapter qualification, run:
 python3 tests/security/product/byteme/run_acceptance.py \
   --product-source /clean/pinned/ByteMe \
   --out artifacts/byteme-qualification \
+  --scenario all
+
+python3 tests/security/product/byteme/run_acceptance.py \
+  --profile anti-framing \
+  --product-source /clean/pinned/ByteMe \
+  --out artifacts/byteme-anti-framing-qualification \
   --scenario all
 ```
 

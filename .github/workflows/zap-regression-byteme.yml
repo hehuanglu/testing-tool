@@ -10,9 +10,17 @@ on:
       scenario:
         description: Product adapter control to execute
         required: true
-        default: fixed
+        default: anti-all
         type: choice
         options:
+          - anti-original
+          - anti-csp-none
+          - anti-regression
+          - anti-missing
+          - anti-wrong-status
+          - anti-wrong-media
+          - anti-malformed
+          - anti-all
           - fixed
           - original
           - regression
@@ -29,7 +37,7 @@ permissions:
 jobs:
   byteme:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Checkout pinned ByteMe source
@@ -44,12 +52,37 @@ jobs:
           test "$(git -C artifacts/byteme-source rev-parse HEAD)" = "510f6415b6af535ceec77213f0b0c7d5082123f7"
           test -z "$(git -C artifacts/byteme-source status --porcelain)"
           python3 -m unittest discover -s tests/security -p 'test_zap_product_suite.py' -v
+          PYTHONPATH=tests/security python3 -m unittest discover -s tests/security -p 'test_anti_framing.py' -v
       - name: Run ByteMe adapter scenario
         env:
           REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
-          SCENARIO: ${{ inputs.scenario || 'fixed' }}
+          SCENARIO: ${{ inputs.scenario || 'anti-all' }}
         run: |
           case "$SCENARIO" in
+            anti-original)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant upstream-original --deadline 600
+              ;;
+            anti-csp-none)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant anti-csp-none --deadline 600
+              ;;
+            anti-regression)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant anti-no-protection --deadline 600
+              ;;
+            anti-missing)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant upstream-original --omit-request-id swagger-index --deadline 600
+              ;;
+            anti-wrong-status)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant upstream-original --fault-mode wrong-status --deadline 600
+              ;;
+            anti-wrong-media)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant upstream-original --fault-mode wrong-media --deadline 600
+              ;;
+            anti-malformed)
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant anti-malformed --deadline 600
+              ;;
+            anti-all)
+              python3 tests/security/product/byteme/run_acceptance.py --profile anti-framing --product-source artifacts/byteme-source --out artifacts/byteme --scenario all --deadline 600
+              ;;
             fixed)
               bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant fixed-control --deadline 600
               ;;

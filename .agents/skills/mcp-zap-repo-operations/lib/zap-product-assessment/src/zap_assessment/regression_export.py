@@ -52,6 +52,11 @@ def _validate_schema(value, name: str, field: str):
     if errors:
         error = errors[0]
         location = "/".join(str(item) for item in error.absolute_path)
+        instance = error.instance
+        if (location.endswith("expect") and isinstance(instance, dict)
+                and (not isinstance(instance.get("basis"), str)
+                     or not instance.get("basis", "").strip())):
+            location += "/basis"
         raise ExportError("INVALID_INPUT", field + ("/" + location if location else ""),
                           error.message)
 
@@ -65,13 +70,14 @@ def _validate_route(route: str, field: str):
 
 
 def validate_case(case):
-    if isinstance(case, dict) and case.get("profile") != "passive-http-v1":
+    supported = ("passive-http-v1", "anti-framing-http-v1")
+    if isinstance(case, dict) and case.get("profile") not in supported:
         raise ExportError("UNSUPPORTED_OPERATION", "case/profile",
-                          "only passive-http-v1 is qualified")
+                          "profile is not qualified")
     for index, request in enumerate(case.get("requests", []) if isinstance(case, dict) else []):
         if isinstance(request, dict) and request.get("method") != "GET":
             raise ExportError("UNSUPPORTED_OPERATION", f"case/requests/{index}/method",
-                              "passive-http-v1 supports GET only")
+                              "qualified HTTP profiles support GET only")
     _validate_schema(case, "regression-case-v1.schema.json", "case")
     request_ids = []
     for index, request in enumerate(case["requests"]):
@@ -79,11 +85,20 @@ def validate_case(case):
         _validate_route(request["path"], f"case/requests/{index}/path")
     if len(request_ids) != len(set(request_ids)):
         raise ExportError("INVALID_INPUT", "case/requests", "request IDs must be unique")
-    for field in ("presentOn", "absentOn", "requireNonEmptyCspOn"):
+    expected_fields = ({"basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"}
+                       if case["profile"] == "passive-http-v1" else
+                       {"basis", "evaluateOn", "trustedAncestors", "assumption"})
+    if set(case["expect"]) != expected_fields:
+        raise ExportError("INVALID_INPUT", "case/expect",
+                          "expectation fields do not match the selected profile")
+    references = (("presentOn", "absentOn", "requireNonEmptyCspOn")
+                  if case["profile"] == "passive-http-v1" else ("evaluateOn",))
+    for field in references:
         if case["expect"][field] not in request_ids:
             raise ExportError("MISSING_PREREQUISITE", "case/expect/" + field,
                               "assertion must reference an existing request ID")
-    if case["expect"]["presentOn"] == case["expect"]["absentOn"]:
+    if (case["profile"] == "passive-http-v1"
+            and case["expect"]["presentOn"] == case["expect"]["absentOn"]):
         raise ExportError("INVALID_INPUT", "case/expect",
                           "positive control and protected request must differ")
     return case
@@ -151,7 +166,7 @@ def _product_source(run, case_id: str):
         route = context.get("route")
         if method not in (None, "GET"):
             raise ExportError("UNSUPPORTED_OPERATION", "run/operations/" + operation["id"],
-                              "passive-http-v1 supports GET evidence only")
+                              "qualified HTTP profiles support GET evidence only")
         if route is not None:
             _validate_route(route, "run/operations/" + operation["id"] + "/coverageContext/route")
         fact = read_pointer(operation, link["resultPath"])

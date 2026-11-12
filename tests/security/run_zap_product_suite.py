@@ -24,8 +24,11 @@ IMAGE_PATH = ROOT / "zap-image.txt"
 OWNER_LABEL = "io.testing-tool.zap-regression.owner"
 ADAPTER_LABEL = "io.testing-tool.zap-regression.adapter"
 STATUSES = ("PASS", "REGRESSION", "MISSING_EVIDENCE", "EXECUTION_ERROR")
-VARIANTS = ("upstream-original", "fixed-control", "regression-control")
-FAULTS = ("none", "wrong-response", "startup-failure", "scanner-timeout", "cleanup-failure")
+VARIANTS = ("upstream-original", "fixed-control", "regression-control",
+            "anti-csp-none", "anti-no-protection", "anti-report-only",
+            "anti-wide-csp-xfo", "anti-malformed")
+FAULTS = ("none", "wrong-response", "wrong-status", "wrong-media",
+          "startup-failure", "scanner-timeout", "cleanup-failure")
 SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 
 
@@ -92,8 +95,8 @@ def validate_case(case, filename):
         raise AdapterError("filename must equal <id>.json")
     if case["source"].get("kind") not in ("product-qualification", "assessment-run-v3"):
         raise AdapterError("product source kind is unsupported")
-    if case["profile"] != "passive-http-v1" or case["fixture"] != "byteme-v1":
-        raise AdapterError("product runner accepts byteme-v1 passive-http-v1 only")
+    if case["profile"] not in ("passive-http-v1", "anti-framing-http-v1") or case["fixture"] != "byteme-v1":
+        raise AdapterError("product runner accepts qualified byteme-v1 profiles only")
     target = case["target"]
     if (set(target) != {"adapter", "repository", "commitSha"}
             or target["adapter"] != "byteme-v1"
@@ -114,16 +117,27 @@ def validate_case(case, filename):
             raise AdapterError("request contract is invalid")
         ids.append(row["id"])
         origins.add(row["origin"])
-    if len(ids) != len(set(ids)) or origins != {"product", "detector-control"}:
-        raise AdapterError("unique product and detector-control requests are required")
+    required_origins = ({"product", "detector-control"}
+                        if case["profile"] == "passive-http-v1" else {"product"})
+    if len(ids) != len(set(ids)) or origins != required_origins:
+        raise AdapterError("request origins do not match the selected profile")
     expect = case["expect"]
-    if (expect.get("alertRef") != "10038-1"
-            or expect.get("presentOn") not in ids or expect.get("absentOn") not in ids
-            or expect.get("requireNonEmptyCspOn") not in ids
-            or not isinstance(expect.get("basis"), str) or not expect["basis"].strip()):
-        raise AdapterError("expectation contract is invalid")
-    if expect["presentOn"] == expect["absentOn"]:
-        raise AdapterError("detector control and protected request must differ")
+    if not isinstance(expect.get("basis"), str) or not expect["basis"].strip():
+        raise AdapterError("expectation basis is invalid")
+    if case["profile"] == "passive-http-v1":
+        if (set(expect) != {"basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"}
+                or expect.get("alertRef") != "10038-1"
+                or expect.get("presentOn") not in ids or expect.get("absentOn") not in ids
+                or expect.get("requireNonEmptyCspOn") not in ids):
+            raise AdapterError("CSP expectation contract is invalid")
+        if expect["presentOn"] == expect["absentOn"]:
+            raise AdapterError("detector control and protected request must differ")
+    else:
+        if (set(expect) != {"basis", "evaluateOn", "trustedAncestors", "assumption"}
+                or expect.get("evaluateOn") not in ids
+                or expect.get("trustedAncestors") != ["'self'"]
+                or expect.get("assumption") != "modern-user-agent-csp3-html-xfo"):
+            raise AdapterError("anti-framing expectation contract is invalid")
     return case
 
 
@@ -220,6 +234,13 @@ class ByteMeAdapter:
             command(["git", "apply", str(regression)], cwd=self.workspace)
             applied.append({"path": str(regression.relative_to(ROOT)),
                             "sha256": sha256_file(regression)})
+        if self.variant.startswith("anti-"):
+            patch_name = self.registry["antiFramingPatches"][self.variant]
+            control = ROOT / patch_name
+            command(["git", "apply", "--check", str(control)], cwd=self.workspace)
+            command(["git", "apply", str(control)], cwd=self.workspace)
+            applied.append({"path": str(control.relative_to(ROOT)),
+                            "sha256": sha256_file(control)})
         diff = output(["git", "diff", "--binary"], cwd=self.workspace)
         key_dir = self.workspace / ".local" / "docker-keys"
         key_dir.mkdir(parents=True, mode=0o755)
@@ -340,8 +361,8 @@ class ByteMeAdapter:
                 "--deadline", str(scanner_deadline)]
         if self.omit_request_id:
             args.extend(["--omit-request-id", self.omit_request_id])
-        if self.fault == "wrong-response":
-            args.extend(["--fault-mode", "wrong-response"])
+        if self.fault in ("wrong-response", "wrong-status", "wrong-media"):
+            args.extend(["--fault-mode", self.fault])
         with (self.case_dir / "scanner-container.log").open("w", encoding="utf-8") as log:
             try:
                 completed = command(args, timeout=self.deadline + 60, stdout=log, check=False)

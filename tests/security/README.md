@@ -20,8 +20,8 @@ case is `PASS`, or when discovery finds zero cases and records `EMPTY` with `cas
 ## Case contract
 
 Each test is one canonical JSON file named `<id>.json`. Runtime discovers `*.json` in
-filename order. Version 1 supports only the qualified `passive-http-v1` profile. The synthetic
-lane uses:
+filename order. Version 1 supports `passive-http-v1` and the ByteMe-only
+`anti-framing-http-v1` profile. The synthetic lane uses:
 
 - allowlisted fixture `csp-demo`;
 - anonymous literal GET routes without query, fragment, credentials, traversal or CRLF;
@@ -33,6 +33,11 @@ The separate product lane also accepts the registry-controlled `byteme-v1` adapt
 adds a target repository/full commit binding and marks each request origin as `product` or
 `detector-control`. The detector control has a separate loopback origin and proves only that
 ZAP rule `10038-1` fired; it is never ByteMe evidence.
+
+The anti-framing profile reads only the exact product response from ZAP history. It preserves
+the allowlisted framing-policy header values plus method, URL, status, media type, message ID,
+body digest and a Swagger document marker. It stores no raw response body and does not claim
+browser enforcement was tested. Unsupported or conflicting values never pass.
 
 Use the assessment exporter to create or update a case. It creates a new file exclusively,
 returns `UNCHANGED` for byte-identical output, and returns exit 2 plus a candidate on stdout
@@ -63,6 +68,21 @@ bash tests/security/run_zap_product_suite.sh \
   --out artifacts/byteme \
   --product-source /path/to/clean/ByteMe \
   --variant fixed-control
+```
+
+Generate and qualify the separate anti-framing case:
+
+```sh
+PYTHONPATH=.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src \
+  zap-assessment regression generate \
+  --input .agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/examples/regression/byteme-anti-framing-qualification-input.json \
+  --out-dir tests/security/product-anti-framing-cases
+
+python3 tests/security/product/byteme/run_acceptance.py \
+  --profile anti-framing \
+  --product-source /path/to/clean/ByteMe \
+  --scenario all \
+  --out artifacts/byteme-anti-framing-qualification
 ```
 
 `byteme-v1` creates a uniquely labelled Docker network, unexposed MySQL and backend containers,
@@ -97,7 +117,7 @@ python3 tests/security/qualification/run_acceptance.py \
   --out artifacts/qualification
 ```
 
-Run the eight ByteMe lifecycle and verdict controls:
+Run the historical CSP lifecycle/verdict controls:
 
 ```sh
 python3 tests/security/product/byteme/run_acceptance.py \
@@ -106,13 +126,17 @@ python3 tests/security/product/byteme/run_acceptance.py \
   --out artifacts/byteme-qualification
 ```
 
+Run the separate anti-framing semantic controls with `--profile anti-framing` as shown above.
+
 Qualification modes are harness-only arguments. Committed stable cases cannot select a
 fixture fault mode. Authentication, OpenAPI import, active scan, browser journeys and BOLA
 are not supported by `passive-http-v1`; their experiments remain isolated under
 `experiments/` until each profile meets its own qualification gates.
 
 The registry contains synthetic `csp-demo` and product adapter `byteme-v1`. The ByteMe adapter
-is qualified for its narrow anonymous Swagger CSP contract and disposable lifecycle. Its
+is qualified for its narrow anonymous Swagger CSP contract and disposable lifecycle. The
+anti-framing candidate has separate controls; neither qualification is an assessment verdict.
+The historical CSP
 committed case is explicitly `product-qualification`, not an assessment transfer. A real RUN
 v3 still needs a current approved plan, reviewed evidence and an oracle compatible with the
 exported assertion. A CSP-missing result cannot be promoted into an anti-framing violation when

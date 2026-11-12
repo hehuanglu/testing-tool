@@ -26,6 +26,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from anti_framing import evaluate_anti_framing
+
 
 ZAP_CONFIG = (
     "api.disablekey=true",
@@ -146,6 +149,13 @@ def response_witness(message, request_id, expected_url):
         "bodySha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
         "cspNonEmpty": bool(csp and csp.strip()),
         "cspPresent": csp is not None,
+        "policyHeaders": {
+            name: list(response_headers.get(name, []))
+            for name in ("content-security-policy",
+                         "content-security-policy-report-only",
+                         "x-frame-options")
+            if response_headers.get(name)
+        },
         "expectedUrl": expected_url,
         "mediaType": media_type,
         "messageId": str(message.get("id", "")),
@@ -153,6 +163,7 @@ def response_witness(message, request_id, expected_url):
         "requestId": request_id,
         "responseHeaderNames": sorted(response_headers),
         "status": int(match.group(1)) if match else None,
+        "swaggerUiMarker": ("swagger ui" in body.lower() and "swagger-ui" in body.lower()),
     }
 
 
@@ -191,13 +202,31 @@ def classify(case, responses, alerts, url_by_id):
         witness = by_id.get(request["id"])
         if witness is None:
             return "MISSING_EVIDENCE", "REQUIRED_RESPONSE_MISSING"
+        if case["profile"] == "anti-framing-http-v1":
+            if witness.get("status") != case["requireResponses"]["status"]:
+                return "MISSING_EVIDENCE", "RESPONSE_STATUS_MISMATCH"
+            if witness.get("mediaType") != case["requireResponses"]["mediaType"]:
+                return "MISSING_EVIDENCE", "RESPONSE_MEDIA_TYPE_MISMATCH"
         if witness.get("actualUrl") != url_by_id[request["id"]] or witness.get("method") != "GET":
             return "MISSING_EVIDENCE", "RESPONSE_IDENTITY_MISMATCH"
-        if witness.get("status") != case["requireResponses"]["status"]:
+        if (case["profile"] != "anti-framing-http-v1"
+                and witness.get("status") != case["requireResponses"]["status"]):
             return "MISSING_EVIDENCE", "RESPONSE_STATUS_MISMATCH"
-        if witness.get("mediaType") != case["requireResponses"]["mediaType"]:
+        if (case["profile"] != "anti-framing-http-v1"
+                and witness.get("mediaType") != case["requireResponses"]["mediaType"]):
             return "MISSING_EVIDENCE", "RESPONSE_MEDIA_TYPE_MISMATCH"
     expect = case["expect"]
+    if case["profile"] == "anti-framing-http-v1":
+        product = by_id[expect["evaluateOn"]]
+        if not product.get("swaggerUiMarker"):
+            return "MISSING_EVIDENCE", "SWAGGER_DOCUMENT_MARKER_MISSING"
+        evaluation = evaluate_anti_framing(product.get("policyHeaders", {}))
+        product["antiFraming"] = evaluation
+        if evaluation["state"] == "protected":
+            return "PASS", "ANTI_FRAMING_POLICY_PROTECTED"
+        if evaluation["state"] == "unprotected":
+            return "REGRESSION", "ANTI_FRAMING_POLICY_UNPROTECTED"
+        return "MISSING_EVIDENCE", "ANTI_FRAMING_POLICY_INDETERMINATE"
     control = expect["presentOn"]
     product = expect["absentOn"]
     control_hits = matching_alerts(alerts, url=url_by_id[control], method="GET",
@@ -247,8 +276,10 @@ def run(args):
         for request in case["requests"]:
             origin = product_origin if request["origin"] == "product" else control_origin
             path = request["path"]
-            if args.fault_mode == "wrong-response" and request["origin"] == "product":
+            if args.fault_mode in ("wrong-response", "wrong-media") and request["origin"] == "product":
                 path = "/openapi.yaml"
+            elif args.fault_mode == "wrong-status" and request["origin"] == "product":
+                path = "/anti-framing-control-not-found"
             url = origin + path
             url_by_id[request["id"]] = origin + request["path"]
             if request["id"] == args.omit_request_id:
@@ -270,8 +301,10 @@ def run(args):
         for request in case["requests"]:
             expected = url_by_id[request["id"]]
             actual = expected
-            if args.fault_mode == "wrong-response" and request["origin"] == "product":
+            if args.fault_mode in ("wrong-response", "wrong-media") and request["origin"] == "product":
                 actual = product_origin + "/openapi.yaml"
+            elif args.fault_mode == "wrong-status" and request["origin"] == "product":
+                actual = product_origin + "/anti-framing-control-not-found"
             message = find_message(messages, actual)
             if message is not None:
                 responses.append(response_witness(message, request["id"], expected))
@@ -289,15 +322,17 @@ def run(args):
         })
         atomic_json(out / "evidence.json", {
             "detectorControlOrigin": control_origin,
-            "detectorControlPurpose": "Confirms ZAP rule 10038-1 only; not ByteMe evidence.",
+            "detectorControlPurpose": (
+                "Confirms ZAP rule 10038-1 only; not ByteMe evidence."
+                if case["profile"] == "passive-http-v1" else None),
             "productOrigin": product_origin,
             "responses": responses,
-            "matchedAlertIds": {
+            "matchedAlertIds": ({
                 request["id"]: [row["alertId"] for row in matching_alerts(
                     alerts, url=url_by_id[request["id"]], method="GET",
                     alert_ref=case["expect"]["alertRef"])]
                 for request in case["requests"]
-            },
+            } if case["profile"] == "passive-http-v1" else {}),
             "zapVersion": version,
         })
         result = {"status": status, "reason": reason, "nativeExit": 0,
@@ -339,7 +374,9 @@ def main(argv=None):
     parser.add_argument("--out", required=True)
     parser.add_argument("--product-origin", required=True)
     parser.add_argument("--omit-request-id")
-    parser.add_argument("--fault-mode", choices=("none", "wrong-response"), default="none")
+    parser.add_argument("--fault-mode",
+                        choices=("none", "wrong-response", "wrong-status", "wrong-media"),
+                        default="none")
     parser.add_argument("--deadline", type=float, default=180.0)
     return run(parser.parse_args(argv))
 

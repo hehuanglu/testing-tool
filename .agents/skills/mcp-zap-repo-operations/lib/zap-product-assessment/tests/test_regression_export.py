@@ -42,6 +42,19 @@ class RegressionExportTests(unittest.TestCase):
         self.assertEqual({row["origin"] for row in case["requests"]},
                          {"product", "detector-control"})
 
+    def test_anti_framing_qualification_export_uses_semantic_expectation(self):
+        case = build_case(self.load("byteme-anti-framing-qualification-input.json"))
+        self.assertEqual(case["profile"], "anti-framing-http-v1")
+        self.assertEqual(case["expect"]["evaluateOn"], "swagger-index")
+        self.assertNotIn("alertRef", case["expect"])
+
+    def test_profile_and_expectation_shape_cannot_be_crossed(self):
+        value = self.load("byteme-anti-framing-qualification-input.json")
+        value["ci"]["profile"] = "passive-http-v1"
+        with self.assertRaises(ExportError) as raised:
+            build_case(value)
+        self.assertEqual(raised.exception.field, "case/expect")
+
     def test_product_qualification_source_must_match_target(self):
         value = self.load("byteme-csp-qualification-input.json")
         value["ci"]["target"]["commitSha"] = "0" * 40

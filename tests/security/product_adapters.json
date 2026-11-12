@@ -2,6 +2,13 @@
   "adapters": {
     "byteme-v1": {
       "backendAlias": "byteme-backend",
+      "antiFramingPatches": {
+        "anti-csp-none": "product/byteme/patches/anti-csp-none.patch",
+        "anti-malformed": "product/byteme/patches/anti-malformed.patch",
+        "anti-no-protection": "product/byteme/patches/anti-no-protection.patch",
+        "anti-report-only": "product/byteme/patches/anti-report-only.patch",
+        "anti-wide-csp-xfo": "product/byteme/patches/anti-wide-csp-xfo.patch"
+      },
       "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
       "databaseAlias": "mysql",
       "databaseImage": "mysql:8.4",
@@ -9,7 +16,7 @@
       "readinessPath": "/actuator/health",
       "regressionPatch": "product/byteme/patches/regression-control.patch",
       "repository": "https://github.com/hehuanglu/ByteMe.git",
-      "version": 1
+      "version": 2
     }
   },
   "schemaVersion": 1

@@ -15,7 +15,10 @@ from pathlib import Path
 
 SECURITY = Path(__file__).resolve().parents[2]
 ROOT = SECURITY.parents[1]
-CASES = SECURITY / "product-cases"
+CASE_DIRS = {
+    "csp": SECURITY / "product-cases",
+    "anti-framing": SECURITY / "product-anti-framing-cases",
+}
 RUNNER = SECURITY / "run_zap_product_suite.sh"
 SCENARIOS = {
     "fixed": ("fixed-control", "none", None, "PASS",
@@ -35,6 +38,26 @@ SCENARIOS = {
     "cleanup-failure": ("fixed-control", "cleanup-failure", None, "EXECUTION_ERROR",
                         "INJECTED_CLEANUP_FAILURE", 1),
 }
+ANTI_FRAMING_SCENARIOS = {
+    "original": ("upstream-original", "none", None, "PASS",
+                 "ANTI_FRAMING_POLICY_PROTECTED", 0),
+    "csp-none": ("anti-csp-none", "none", None, "PASS",
+                 "ANTI_FRAMING_POLICY_PROTECTED", 0),
+    "absent": ("anti-no-protection", "none", None, "REGRESSION",
+               "ANTI_FRAMING_POLICY_UNPROTECTED", 1),
+    "report-only": ("anti-report-only", "none", None, "REGRESSION",
+                    "ANTI_FRAMING_POLICY_UNPROTECTED", 1),
+    "wide-csp-xfo": ("anti-wide-csp-xfo", "none", None, "REGRESSION",
+                     "ANTI_FRAMING_POLICY_UNPROTECTED", 1),
+    "missing": ("upstream-original", "none", "swagger-index", "MISSING_EVIDENCE",
+                "REQUIRED_RESPONSE_MISSING", 1),
+    "wrong-status": ("upstream-original", "wrong-status", None, "MISSING_EVIDENCE",
+                     "RESPONSE_STATUS_MISMATCH", 1),
+    "wrong-media": ("upstream-original", "wrong-media", None, "MISSING_EVIDENCE",
+                    "RESPONSE_MEDIA_TYPE_MISMATCH", 1),
+    "malformed": ("anti-malformed", "none", None, "MISSING_EVIDENCE",
+                  "ANTI_FRAMING_POLICY_INDETERMINATE", 1),
+}
 FORBIDDEN = ("-----BEGIN PRIVATE KEY-----", "ByteMeDemo!2026", "MYSQL_PASSWORD=",
              "DB_PASSWORD=", '"responseBody"')
 
@@ -48,7 +71,7 @@ def digest_tree(path: Path):
 
 
 def assert_artifact(directory: Path, expected_status, expected_reason, expected_exit,
-                    actual_exit, source_sha):
+                    actual_exit, source_sha, profile):
     if actual_exit != expected_exit:
         raise AssertionError(f"exit {actual_exit}, expected {expected_exit}")
     suite = json.loads((directory / "suite-results.json").read_text(encoding="utf-8"))
@@ -86,9 +109,18 @@ def assert_artifact(directory: Path, expected_status, expected_reason, expected_
         evidence = json.loads((case_dir / evidence_path).read_text(encoding="utf-8"))
         if evidence.get("zapVersion") != "2.17.0":
             raise AssertionError("unexpected ZAP version")
-        if evidence.get("detectorControlPurpose") != (
-                "Confirms ZAP rule 10038-1 only; not ByteMe evidence."):
-            raise AssertionError("detector control provenance missing")
+        if profile == "csp":
+            if evidence.get("detectorControlPurpose") != (
+                    "Confirms ZAP rule 10038-1 only; not ByteMe evidence."):
+                raise AssertionError("detector control provenance missing")
+        elif evidence.get("detectorControlPurpose") is not None:
+            raise AssertionError("anti-framing evidence must not claim a detector control")
+        if profile == "anti-framing" and expected_status in ("PASS", "REGRESSION"):
+            responses = evidence.get("responses", [])
+            if (len(responses) != 1 or not responses[0].get("swaggerUiMarker")
+                    or responses[0].get("antiFraming", {}).get("state") not in
+                    ("protected", "unprotected")):
+                raise AssertionError("anti-framing semantic response evidence is incomplete")
     if expected_reason == "INJECTED_CLEANUP_FAILURE":
         if result.get("preCleanupStatus") != "PASS":
             raise AssertionError("cleanup failure did not retain the preceding PASS result")
@@ -99,7 +131,10 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--product-source", required=True)
     parser.add_argument("--out", required=True)
-    parser.add_argument("--scenario", choices=("all", *SCENARIOS), default="all")
+    parser.add_argument("--scenario",
+                        choices=("all", *sorted(set(SCENARIOS) | set(ANTI_FRAMING_SCENARIOS))),
+                        default="all")
+    parser.add_argument("--profile", choices=("csp", "anti-framing"), default="csp")
     parser.add_argument("--deadline", type=float, default=600.0)
     args = parser.parse_args(argv)
     out = Path(args.out).resolve()
@@ -109,19 +144,23 @@ def main(argv=None):
     source = Path(args.product_source).resolve()
     source_sha = subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"],
                                          text=True).strip()
-    selected = list(SCENARIOS) if args.scenario == "all" else [args.scenario]
+    scenarios = SCENARIOS if args.profile == "csp" else ANTI_FRAMING_SCENARIOS
+    if args.scenario != "all" and args.scenario not in scenarios:
+        raise SystemExit(f"scenario {args.scenario!r} is unavailable for {args.profile}")
+    selected = list(scenarios) if args.scenario == "all" else [args.scenario]
     records = []
     for name in selected:
-        variant, fault, omit, status, reason, expected_exit = SCENARIOS[name]
+        variant, fault, omit, status, reason, expected_exit = scenarios[name]
         scenario_out = out / name
-        command = ["bash", str(RUNNER), "--cases", str(CASES), "--out", str(scenario_out),
+        command = ["bash", str(RUNNER), "--cases", str(CASE_DIRS[args.profile]), "--out", str(scenario_out),
                    "--product-source", str(source), "--variant", variant,
                    "--fault-mode", fault, "--deadline", str(args.deadline)]
         if omit:
             command.extend(["--omit-request-id", omit])
         completed = subprocess.run(command, cwd=ROOT, env=os.environ.copy())
         suite, identity, cleanup = assert_artifact(
-            scenario_out, status, reason, expected_exit, completed.returncode, source_sha)
+            scenario_out, status, reason, expected_exit, completed.returncode, source_sha,
+            args.profile)
         records.append({
             "actual": {"reason": suite["cases"][0]["reason"],
                        "status": suite["cases"][0]["status"]},
@@ -132,7 +171,7 @@ def main(argv=None):
             "targetActualCommitSha": identity["actualCommitSha"],
             "variant": variant,
         })
-    result = {"caseSource": "product-qualification", "product": "ByteMe",
+    result = {"caseSource": "product-qualification", "profile": args.profile, "product": "ByteMe",
               "productCommitSha": source_sha, "scenarioCount": len(records),
               "scenarios": records, "status": "PASS"}
     (out / "byteme-qualification-results.json").write_text(

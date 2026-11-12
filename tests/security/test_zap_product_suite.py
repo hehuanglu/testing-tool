@@ -27,6 +27,14 @@ class ProductSuiteTests(unittest.TestCase):
         self.assertEqual(self.case["target"]["commitSha"], registry["commitSha"])
         self.assertEqual(self.case["target"]["repository"], registry["repository"])
 
+    def test_anti_framing_case_uses_semantic_profile_without_detector_control(self):
+        case_path = ROOT / "product-anti-framing-cases/byteme-swagger-anti-framing-qualification.json"
+        case = json.loads(case_path.read_text())
+        MODULE.validate_case(case, case_path.name)
+        self.assertEqual(case["profile"], "anti-framing-http-v1")
+        self.assertEqual({row["origin"] for row in case["requests"]}, {"product"})
+        self.assertNotIn("alertRef", case["expect"])
+
     def test_add_delete_discovery_needs_no_manifest(self):
         with tempfile.TemporaryDirectory() as temporary:
             folder = Path(temporary)
@@ -78,6 +86,20 @@ class ProductSuiteTests(unittest.TestCase):
             "start.checkAddonUpdates=false",
             "start.installAddonUpdates=false",
         }.issubset(RUNTIME.ZAP_CONFIG))
+
+    def test_anti_framing_wrong_status_and_media_never_pass(self):
+        case_path = ROOT / "product-anti-framing-cases/byteme-swagger-anti-framing-qualification.json"
+        case = json.loads(case_path.read_text())
+        url = "http://byteme-backend:8080/swagger-ui/index.html"
+        base = {"requestId": "swagger-index", "actualUrl": url, "method": "GET",
+                "status": 200, "mediaType": "text/html", "swaggerUiMarker": True,
+                "policyHeaders": {"x-frame-options": ["DENY"]}}
+        for changed, reason in (({"status": 404}, "RESPONSE_STATUS_MISMATCH"),
+                                ({"mediaType": "application/yaml"},
+                                 "RESPONSE_MEDIA_TYPE_MISMATCH")):
+            witness = {**base, **changed}
+            self.assertEqual(RUNTIME.classify(case, [witness], [], {"swagger-index": url}),
+                             ("MISSING_EVIDENCE", reason))
 
 
 if __name__ == "__main__":

@@ -38,7 +38,7 @@
       "required": ["id", "profile", "fixture", "requests", "requireResponses", "expect"],
       "properties": {
         "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
-        "profile": {"const": "passive-http-v1"},
+        "profile": {"enum": ["passive-http-v1", "anti-framing-http-v1"]},
         "fixture": {"enum": ["csp-demo", "byteme-v1"]},
         "target": {
           "type": "object",
@@ -75,16 +75,31 @@
           }
         },
         "expect": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"],
-          "properties": {
-            "basis": {"type": "string", "minLength": 1},
-            "alertRef": {"type": "string", "minLength": 1},
-            "presentOn": {"type": "string", "minLength": 1},
-            "absentOn": {"type": "string", "minLength": 1},
-            "requireNonEmptyCspOn": {"type": "string", "minLength": 1}
-          }
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"],
+              "properties": {
+                "basis": {"type": "string", "minLength": 1},
+                "alertRef": {"type": "string", "minLength": 1},
+                "presentOn": {"type": "string", "minLength": 1},
+                "absentOn": {"type": "string", "minLength": 1},
+                "requireNonEmptyCspOn": {"type": "string", "minLength": 1}
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["basis", "evaluateOn", "trustedAncestors", "assumption"],
+              "properties": {
+                "basis": {"type": "string", "minLength": 1},
+                "evaluateOn": {"type": "string", "minLength": 1},
+                "trustedAncestors": {"const": ["'self'"]},
+                "assumption": {"const": "modern-user-agent-csp3-html-xfo"}
+              }
+            }
+          ]
         }
       },
       "allOf": [

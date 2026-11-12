@@ -83,7 +83,7 @@
       ]
     },
     "id": {"$ref": "#/$defs/slug"},
-    "profile": {"const": "passive-http-v1"},
+    "profile": {"enum": ["passive-http-v1", "anti-framing-http-v1"]},
     "fixture": {"enum": ["csp-demo", "byteme-v1"]},
     "target": {
       "type": "object",
@@ -120,16 +120,31 @@
       }
     },
     "expect": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"],
-      "properties": {
-        "basis": {"type": "string", "minLength": 1},
-        "alertRef": {"const": "10038-1"},
-        "presentOn": {"$ref": "#/$defs/slug"},
-        "absentOn": {"$ref": "#/$defs/slug"},
-        "requireNonEmptyCspOn": {"$ref": "#/$defs/slug"}
-      }
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["basis", "alertRef", "presentOn", "absentOn", "requireNonEmptyCspOn"],
+          "properties": {
+            "basis": {"type": "string", "minLength": 1},
+            "alertRef": {"const": "10038-1"},
+            "presentOn": {"$ref": "#/$defs/slug"},
+            "absentOn": {"$ref": "#/$defs/slug"},
+            "requireNonEmptyCspOn": {"$ref": "#/$defs/slug"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["basis", "evaluateOn", "trustedAncestors", "assumption"],
+          "properties": {
+            "basis": {"type": "string", "minLength": 1},
+            "evaluateOn": {"$ref": "#/$defs/slug"},
+            "trustedAncestors": {"const": ["'self'"]},
+            "assumption": {"const": "modern-user-agent-csp3-html-xfo"}
+          }
+        }
+      ]
     }
   },
   "allOf": [

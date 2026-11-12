@@ -82,6 +82,7 @@ jobs:
               ;;
             anti-all)
               python3 tests/security/product/byteme/run_acceptance.py --profile anti-framing --product-source artifacts/byteme-source --out artifacts/byteme --scenario all --deadline 600
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-assessment-cases --out artifacts/byteme-assessment --product-source artifacts/byteme-source --variant upstream-original --deadline 600
               ;;
             fixed)
               bash tests/security/run_zap_product_suite.sh --cases tests/security/product-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant fixed-control --deadline 600
@@ -113,6 +114,7 @@ jobs:
           import json, os
           from pathlib import Path
           suite = Path("artifacts/byteme/suite-results.json")
+          assessment = Path("artifacts/byteme-assessment/suite-results.json")
           qualification = Path("artifacts/byteme/byteme-qualification-results.json")
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
               summary.write("## ByteMe ZAP product adapter\n\n")
@@ -126,12 +128,19 @@ jobs:
                   summary.write(f"Qualification: **{value['status']}**, {value['scenarioCount']} scenarios.\n")
               else:
                   summary.write("No retained result was produced.\n")
+              if assessment.is_file():
+                  value = json.loads(assessment.read_text())
+                  summary.write(f"\nTransferred assessment case: **{value['status']}**; counts: `{json.dumps(value['counts'], sort_keys=True)}`.\n")
+                  for case in value["cases"]:
+                      summary.write(f"- `{case['id']}`: `{case['status']}/{case['reason']}` ({case['variant']})\n")
           PY
       - name: Upload ByteMe adapter artifact
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: zap-regression-byteme-${{ github.job }}-${{ github.run_attempt }}
-          path: artifacts/byteme
+          path: |
+            artifacts/byteme
+            artifacts/byteme-assessment
           if-no-files-found: warn
           retention-days: 7

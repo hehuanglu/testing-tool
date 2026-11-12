@@ -298,6 +298,7 @@ def run(args):
         raw_messages = api(api_origin, "core", "view", "messages", start=0, count=1000)
         messages = raw_messages.get("messages", [])
         responses = []
+        native_messages = []
         for request in case["requests"]:
             expected = url_by_id[request["id"]]
             actual = expected
@@ -308,6 +309,12 @@ def run(args):
             message = find_message(messages, actual)
             if message is not None:
                 responses.append(response_witness(message, request["id"], expected))
+                if args.retain_native_message:
+                    native_messages.append({
+                        "expectedUrl": expected,
+                        "message": message,
+                        "requestId": request["id"],
+                    })
         raw_alerts = api(api_origin, "core", "view", "alerts", start=0, count=1000)
         alerts = [alert_row(row) for row in raw_alerts.get("alerts", [])]
         status, reason = classify(case, responses, alerts, url_by_id)
@@ -335,6 +342,12 @@ def run(args):
             } if case["profile"] == "passive-http-v1" else {}),
             "zapVersion": version,
         })
+        if args.retain_native_message:
+            atomic_json(out / "native-message.json", {
+                "purpose": "private-assessment-native-readback",
+                "responses": native_messages,
+                "zapVersion": version,
+            })
         result = {"status": status, "reason": reason, "nativeExit": 0,
                   "zapVersion": version}
     except TimeoutError as error:
@@ -374,6 +387,7 @@ def main(argv=None):
     parser.add_argument("--out", required=True)
     parser.add_argument("--product-origin", required=True)
     parser.add_argument("--omit-request-id")
+    parser.add_argument("--retain-native-message", action="store_true")
     parser.add_argument("--fault-mode",
                         choices=("none", "wrong-response", "wrong-status", "wrong-media"),
                         default="none")

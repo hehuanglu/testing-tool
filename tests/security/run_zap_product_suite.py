@@ -175,7 +175,8 @@ def retained_reference(base: Path, relative: str):
 
 class ByteMeAdapter:
     def __init__(self, case, case_dir: Path, source: Path, variant: str, fault: str,
-                 omit_request_id: str | None, deadline: float, run_id: str):
+                 omit_request_id: str | None, deadline: float, run_id: str,
+                 retain_native_message: bool = False):
         self.case = case
         self.case_dir = case_dir
         self.source = source
@@ -184,6 +185,7 @@ class ByteMeAdapter:
         self.omit_request_id = omit_request_id
         self.deadline = deadline
         self.run_id = run_id
+        self.retain_native_message = retain_native_message
         self.short = run_id[:12] + "-" + case["id"][:20]
         self.network = "zap-byteme-" + self.short
         self.db = "zap-byteme-db-" + self.short
@@ -344,6 +346,9 @@ class ByteMeAdapter:
         self.resources.append({"kind": "container", "name": self.ready})
 
     def run_scanner(self):
+        if (self.retain_native_message
+                and self.case["source"]["kind"] != "assessment-run-v3"):
+            raise AdapterError("native message retention requires assessment-run-v3 source")
         scan_out = self.case_dir / "scan"
         scan_out.mkdir()
         case_path = self.case_dir / "case.json"
@@ -363,6 +368,8 @@ class ByteMeAdapter:
             args.extend(["--omit-request-id", self.omit_request_id])
         if self.fault in ("wrong-response", "wrong-status", "wrong-media"):
             args.extend(["--fault-mode", self.fault])
+        if self.retain_native_message:
+            args.append("--retain-native-message")
         with (self.case_dir / "scanner-container.log").open("w", encoding="utf-8") as log:
             try:
                 completed = command(args, timeout=self.deadline + 60, stdout=log, check=False)
@@ -526,6 +533,7 @@ def main(argv=None):
     parser.add_argument("--variant", choices=VARIANTS, default="fixed-control")
     parser.add_argument("--fault-mode", choices=FAULTS, default="none")
     parser.add_argument("--omit-request-id")
+    parser.add_argument("--retain-native-message", action="store_true")
     parser.add_argument("--deadline", type=float, default=240.0)
     args = parser.parse_args(argv)
     out_dir = Path(args.out).resolve()
@@ -540,7 +548,8 @@ def main(argv=None):
         for case in cases:
             adapter = ByteMeAdapter(case, out_dir / case["id"], Path(args.product_source).resolve(),
                                     args.variant, args.fault_mode, args.omit_request_id,
-                                    args.deadline, run_id + "-" + uuid.uuid4().hex[:8])
+                                    args.deadline, run_id + "-" + uuid.uuid4().hex[:8],
+                                    args.retain_native_message)
             results.append(adapter.execute())
         suite = suite_result(run_id, results)
     except Exception as error:

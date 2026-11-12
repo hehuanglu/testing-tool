@@ -13,12 +13,13 @@ runtime ZAP thật, parser, suite lifecycle, artifact, portable copy và GitHub 
 Hai profile được hỗ trợ là `passive-http-v1` và ByteMe-bound `anti-framing-http-v1`; một case
 PASS chỉ là kết quả regression test, không thay verdict hay trạng thái hoàn tất của assessment.
 
-**ByteMe adapter qualification COMPLETE; real assessment transfer PENDING.** Registry đã có
+**ByteMe adapter qualification và bounded real assessment transfer COMPLETE.** Registry đã có
 `byteme-v1`, checkout ByteMe ở SHA đầy đủ, dựng database/keys/network disposable, gửi request
 qua ZAP và đọc lại history/alerts thật. Case commit mang nhãn `product-qualification`; nó không
 được đổi nhãn thành assessment. Ba RUN lịch sử không có `criteriaWorkflow` v3 và không được sửa.
-Assessment-to-suite transfer vẫn chờ Gate 2, fresh evidence v3 và một assertion tương thích với
-case đã duyệt; không có tuyên bố end-to-end real assessment transfer.
+Sau Gate 2 cho `ByteMe-P-DRAFT-5`, một assessment v3 mới chỉ chọn `SEC-A06-06` đã tạo fresh
+receipt-backed evidence, được review `met`, rồi export thành case `assessment-run-v3`. Kết luận
+này chỉ áp dụng cho case anti-framing đã duyệt, không mở rộng thành đánh giá toàn bộ ByteMe.
 
 **B/C experiments:** B1, B2, B3, C1 và C3 có script, controls local/GitHub và vẫn ở mức
 `experimental`. C2 là `blocked` vì image ghim có Firefox nhưng thiếu `geckodriver`. Async,
@@ -43,6 +44,9 @@ OAST, WebSocket, GraphQL và product-specific auth/BOLA vẫn `unsupported`.
 - Anti-framing implementation: `c77f97a98b5353e9545d669bb583d457db3c0371`; case
   `byteme-swagger-anti-framing-qualification.json`:
   `sha256:71878f73d6ef577d549f2d18823d568716700c1d90b8cb5c947dcd5758d5171e`.
+- Assessment transfer case `byteme-swagger-anti-framing.json`:
+  `sha256:76cbbb12495e1cd9751d24601ef8e5442d0e8e86260305b6c331faad23641d86`;
+  source is `assessment-run-v3`, not qualification.
 - Image: `zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238`
   (ZAP 2.17.0).
 - Case `csp-docs.json`: `sha256:7c1bb4924d6e68bdf4346fc6207ee23c07c37f47755f6a86e4a5310594c9aa4f`.
@@ -120,6 +124,32 @@ it stores only the allowlisted policy headers plus body digest, not the response
 scenario records six removed owned resources and `retainedRuntimeSecrets=false`. No `zap-home`
 directory, private key, database secret or bearer token is retained in the artifact.
 
+### Bounded assessment-to-suite transfer (2026-11-12)
+
+Gate 2 approved plan `ByteMe-P-DRAFT-5`, digest
+`4dea2ea045f81dc3e915e611e8a099f0fc0c2229a6a6cdec9fcbce7a0f13d7b5`, for target
+`510f6415b6af535ceec77213f0b0c7d5082123f7` and only `SEC-A06-06` / case
+`byteme-swagger-anti-framing`. Assessment `ByteMe-AF-V3-20261112-LIVE-1` executed one anonymous,
+read-only `GET /swagger-ui/index.html` through ZAP 2.17.0 against the disposable upstream-original
+fixture. The response was `200 text/html`, contained the Swagger marker and
+`X-Frame-Options: DENY`; no enforcing CSP was present. Reviewer generation
+`14bd5e5031fa7b3d4377c41da5a084c90fb1d0e84f6606dbb840629f6909c54a` completed with
+`SEC-A06-06 = met`, one matched case, no pending criteria and clean integrity.
+
+Both reviewed evidence pointers bind to native ZAP message `1`. The request was anonymous and
+had no body, cookie, authorization header or query. Request and response hashes are respectively
+`0f8747c9e73819cf8bb16dd389689790652a61c2fdbb385f1d71ed1ab962705b` and
+`6310d3ab6c3f4ee6e6eb0942d840ce33f24db1e5369a3978548128e476895d3b`. All six owned resources
+(scanner, readiness container, backend, database, network and image) were removed; the lease was
+reconciled and released with no pending action or runtime secret. Raw native readback remains in
+the ignored private assessment directory and is never enabled by the default committed CI lane.
+
+The official exporter returned `CREATED` then `UNCHANGED` with identical canonical bytes and
+placed the transferred case under `tests/security/product-assessment-cases/`. CI keeps the
+qualification case isolated, then runs this transferred case separately against the same pinned
+ByteMe commit. This proves the reviewed case can enter the regression suite; it does not turn a
+single anonymous response-header check into broader product coverage.
+
 ### Source, case và giới hạn claim
 
 - Checkout nghiệm thu là clone sạch riêng của `hehuanglu/ByteMe`, full SHA
@@ -130,8 +160,8 @@ directory, private key, database secret or bearer token is retained in the artif
   expected behavior không được học từ response đang quan sát.
 - Upstream-original trả `X-Frame-Options: DENY` nhưng thiếu CSP. Vì vậy alert missing-CSP không
   chứng minh tiêu chí anti-framing bị vi phạm. Profile kiểm tra cả `frame-ancestors` và XFO đã
-  được qualify, nhưng draft assessment chỉ chọn `SEC-A06-06` và Gate 2 vẫn pending; transfer
-  thật vẫn cần fresh v3 receipt-backed evidence sau approval.
+  được qualify; assessment mới chỉ chọn `SEC-A06-06`, đã hoàn tất fresh v3 evidence và transfer
+  cho đúng case này.
 - Ba `zap/*/RUN.json` của ByteMe không có `criteriaWorkflow`, approval hay case results v3, và
   còn bind source SHA lịch sử `e163fbb...`. Chúng chỉ dùng để hiểu bối cảnh, không được relabel,
   chỉnh sửa hay export như RUN v3.
@@ -259,12 +289,8 @@ bash tests/security/run_zap_suite.sh \
 
 ## Remaining work
 
-1. Hoàn tất Gate 2 cho draft ByteMe chỉ chọn `SEC-A06-06`, chạy fresh assessment v3 và review
-   case/result/evidence. Assertion anti-framing đã được implement và qualify; chỉ sau fresh
-   reviewed evidence mới export một `assessment-run-v3` case. Hai case qualification hiện tại
-   chỉ nghiệm thu adapter/profile và không được dùng để tuyên bố transfer thật.
-2. Pin/package a `geckodriver` version matching the image Firefox, then implement the fixed
+1. Pin/package a `geckodriver` version matching the image Firefox, then implement the fixed
    open/click/wait and no-click browser controls through the ZAP proxy.
-3. Promote experimental profiles only after their remaining stable-contract gates are met;
+2. Promote experimental profiles only after their remaining stable-contract gates are met;
    do not infer generic auth, API, active-scan or BOLA support from the synthetic fixtures.
 

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  echo "usage: $0 --cases DIRECTORY --out NEW_DIRECTORY --product-source DIRECTORY [--variant MODE] [--fault-mode MODE] [--omit-request-id ID] [--deadline SECONDS]" >&2
+  echo "usage: $0 --cases DIRECTORY --out NEW_DIRECTORY --product-source DIRECTORY [--variant MODE] [--fault-mode MODE] [--omit-request-id ID] [--deadline SECONDS] [--retain-native-message]" >&2
   exit 2
 }
 
@@ -17,6 +17,7 @@ while (($#)); do
     --product-source) [[ $# -ge 2 ]] || usage; SOURCE="$2"; shift 2 ;;
     --variant|--fault-mode|--omit-request-id|--deadline)
       [[ $# -ge 2 ]] || usage; EXTRA+=("$1" "$2"); shift 2 ;;
+    --retain-native-message) EXTRA+=("$1"); shift ;;
     *) usage ;;
   esac
 done

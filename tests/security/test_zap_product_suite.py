@@ -78,6 +78,15 @@ class ProductSuiteTests(unittest.TestCase):
             self.assertEqual(MODULE.retained_reference(base, "scan/evidence.json"),
                              "scan/evidence.json")
 
+    def test_native_message_retention_is_assessment_only(self):
+        adapter = MODULE.ByteMeAdapter(
+            self.case, Path("/tmp/not-used"), Path("/tmp/not-used"),
+            "upstream-original", "none", None, 1.0, "test-run",
+            retain_native_message=True,
+        )
+        with self.assertRaisesRegex(MODULE.AdapterError, "assessment-run-v3"):
+            adapter.run_scanner()
+
     def test_product_runtime_disables_addon_drift(self):
         self.assertTrue({
             "autoupdate.checkOnStart=false",

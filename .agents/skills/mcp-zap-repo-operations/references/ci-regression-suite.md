@@ -57,6 +57,12 @@ response and alerts back from ZAP history. Its detector control uses a separate 
 product evidence. The committed ByteMe case is `product-qualification`: it qualifies the adapter
 and CSP assertion without pretending the legacy RUN is v3.
 
+Keep every ZAP updater gate disabled in this pinned lane (`autoupdate.checkOnStart` plus the
+`start.*` check/download/install flags); otherwise a downloaded network add-on can change the
+effective scanner and restart its listener. Every non-null result locator must resolve inside the
+retained artifact. If setup fails before the scanner exists, record `evidencePath: null` rather
+than manufacturing evidence or pointing at a missing file.
+
 A real RUN v3 can produce the same product case shape only when its current approved case has
 reviewed support links and an expectation basis compatible with the CSP assertion. Do not turn a
 historical missing-CSP alert into an anti-framing verdict: an effective `X-Frame-Options` policy

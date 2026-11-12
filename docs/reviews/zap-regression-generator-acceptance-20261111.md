@@ -13,12 +13,12 @@ runtime ZAP thật, parser, suite lifecycle, artifact, portable copy và GitHub 
 Stable profile duy nhất là `passive-http-v1`; một case PASS chỉ là kết quả regression test,
 không thay verdict hay trạng thái hoàn tất của assessment.
 
-**Product-transfer BLOCKED bởi cả dữ liệu và implementation.** Runtime registry hiện chỉ chấp
-nhận fixture synthetic `csp-demo`; chưa có versioned product adapter/fixture mapping, disposable
-build lifecycle hay product response/control readback. Vì vậy ngay cả khi được cung cấp RUN v3
-sản phẩm thật, vẫn phải implement và qualification adapter chạy build sản phẩm trước khi chuyển
-case vào stable suite. RUN v3 đã commit chỉ mang nhãn synthetic và chỉ chứng minh contract
-offline; không có tuyên bố end-to-end real assessment transfer.
+**ByteMe adapter qualification COMPLETE; real assessment transfer PENDING.** Registry đã có
+`byteme-v1`, checkout ByteMe ở SHA đầy đủ, dựng database/keys/network disposable, gửi request
+qua ZAP và đọc lại history/alerts thật. Case commit mang nhãn `product-qualification`; nó không
+được đổi nhãn thành assessment. Ba RUN lịch sử không có `criteriaWorkflow` v3 và không được sửa.
+Assessment-to-suite transfer vẫn chờ Gate 2, fresh evidence v3 và một assertion tương thích với
+case đã duyệt; không có tuyên bố end-to-end real assessment transfer.
 
 **B/C experiments:** B1, B2, B3, C1 và C3 có script, controls local/GitHub và vẫn ở mức
 `experimental`. C2 là `blocked` vì image ghim có Firefox nhưng thiếu `geckodriver`. Async,
@@ -31,6 +31,15 @@ OAST, WebSocket, GraphQL và product-specific auth/BOLA vẫn `unsupported`.
   `277a675`); portable fix: `c9d17db`.
 - Build có core + B/C experiments: `b9a0edb55cd36127eb765ba97e13867e9e641201`.
 - Review repair cho fixture lifecycle và commit provenance: `277a6751464f4425367e81272731ddd8470d3bbb`.
+- ByteMe adapter implementation: `1c3a022b8d86e6350c9c169a83bd5129a66ed27b`; checkout-origin
+  normalization: `bee26723cd54dfc0692dec57e690a0d61580a45c`; Linux key-mount và service
+  diagnostics: `19017bfd54abfc5a6ba3c1c219f92352cefc8c6e`; ZAP add-on drift lock:
+  `e4ba996c85fb9df4e6be0b82b42421429d3aa7d8`, completed with all `start.*`
+  updater gates at `7006f0e69b2e38649a9bd17bba03ae34ff0d3ed1`; nullable evidence
+  references for pre-scanner failures: `f8d32d8d47f1e1b10dfef48cb19d229cba5a4131`.
+- ByteMe source: `hehuanglu/ByteMe@510f6415b6af535ceec77213f0b0c7d5082123f7`;
+  case `byteme-swagger-csp.json`:
+  `sha256:ae0ad477dfbc82e4e0108af101d78a7a93673b304173145bbfa8799d08f4d137`.
 - Image: `zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238`
   (ZAP 2.17.0).
 - Case `csp-docs.json`: `sha256:7c1bb4924d6e68bdf4346fc6207ee23c07c37f47755f6a86e4a5310594c9aa4f`.
@@ -54,6 +63,74 @@ Các artifact trên đã được tải vào thư mục local bị ignore `artif
 được parse lại. Push stable chứa đúng `testedCommitSha`; PR stable chứa đúng merge SHA từ
 `refs/pull/1/merge` và `pullRequestHeadSha` riêng. Qualification references đều tồn tại;
 experiment artifact không chứa hai bearer secret canary.
+
+## ByteMe product adapter qualification
+
+### Source, case và giới hạn claim
+
+- Checkout nghiệm thu là clone sạch riêng của `hehuanglu/ByteMe`, full SHA
+  `510f6415b6af535ceec77213f0b0c7d5082123f7`. Adapter ghi lại SHA thực tế, hash
+  `Dockerfile`, application config, schema/seed, patch và image identity.
+- Case là anonymous `GET /swagger-ui/index.html`, response bắt buộc `200 text/html` và assertion
+  CSP ZAP `10038-1`. Căn cứ qualification là report lịch sử `SEC-02` yêu cầu Swagger UI có CSP;
+  expected behavior không được học từ response đang quan sát.
+- Upstream-original trả `X-Frame-Options: DENY` nhưng thiếu CSP. Vì vậy alert missing-CSP không
+  chứng minh tiêu chí anti-framing bị vi phạm. Draft assessment hiện chọn `SEC-A06-06`, Gate 2
+  còn pending; transfer thật cần profile kiểm tra cả `frame-ancestors` và XFO cùng fresh v3
+  receipt-backed evidence.
+- Ba `zap/*/RUN.json` của ByteMe không có `criteriaWorkflow`, approval hay case results v3, và
+  còn bind source SHA lịch sử `e163fbb...`. Chúng chỉ dùng để hiểu bối cảnh, không được relabel,
+  chỉnh sửa hay export như RUN v3.
+
+Adapter tạo RSA 2048-bit và database password riêng mỗi invocation, không mở public port, dùng
+một Docker network có ownership label, và xoá đúng bốn container, network, image cùng key temp.
+Health/readiness traffic tách khỏi evidence. Detector control chạy ở loopback origin riêng trong
+scanner container và chỉ chứng minh rule `10038-1`, không phải evidence ByteMe.
+
+### GitHub runs và artifact readback
+
+| Control | Run / source | Expected và actual | Artifact readback |
+|---|---|---|---|
+| Fixed push | [43131931712](https://github.com/hehuanglu/testing-tool/actions/runs/43131931712), `f8d32d8` | `PASS/CSP_MISSING_ALERT_ABSENT_WITH_CONTROL_AND_NONEMPTY_HEADER`; no add-on drift | ID `13905573006`, digest `sha256:09e13865fc3824b3dbd6942eed0181aa4b97a7c2c59711664b2af11e63490fc8` |
+| Fixed PR | [43131937975](https://github.com/hehuanglu/testing-tool/actions/runs/43131937975), tested merge `3bdb064`, PR head `f8d32d8` | same PASS; merge SHA và head SHA lưu riêng; no add-on drift | ID `13905771761`, digest `sha256:23be0e5678380ef108a13f243d829fc6cec5549d20801dfefa9e8d0243932eae` |
+| Upstream original | [43132022076](https://github.com/hehuanglu/testing-tool/actions/runs/43132022076), no patch | expected red: `REGRESSION/PROTECTED_ALERT_PRESENT` | ID `13906280404`, digest `sha256:acf2d03e70f7697dc38858a1c24aa740872841d93eb8a470d07d814d3b3b869a` |
+| Regression control | [43132026812](https://github.com/hehuanglu/testing-tool/actions/runs/43132026812), fixed then reverse patch | expected red: `REGRESSION/PROTECTED_ALERT_PRESENT` | ID `13905033916`, digest `sha256:cb279c35c1260428ac1d51e08a72ae73e4776d2b2fe81d7fb2aef4ceb6910631` |
+| Missing request | [43132030948](https://github.com/hehuanglu/testing-tool/actions/runs/43132030948), fixed obligation retained | expected red: `MISSING_EVIDENCE/REQUIRED_RESPONSE_MISSING` | ID `13905587095`, digest `sha256:f80d76d175482ec68f3cadeb33f783316d445df744ea02dc0fd8dfa99bdfe9f0` |
+| Full qualification | [43131948517](https://github.com/hehuanglu/testing-tool/actions/runs/43131948517), `f8d32d8` | green harness; expected/actual matched for all 8 scenarios | ID `13906420590`, digest `sha256:35eccd5f878d01d290759de109875d9ea1c9d4b903366a83ebabc408898d2d65` |
+
+Các artifact trên đã được download và parse. Mỗi artifact bind target actual/expected SHA đúng
+`510f641...`; response có ZAP message ID, URL/method/status/media/header witness; alert có
+`alertId`, `alertRef`, method và URL. Fixed có CSP nonempty và alert `10038-1` chỉ ở control;
+original/regression có alert ở cả product và control; missing không có product receipt. Tất cả
+references tồn tại, cleanup đủ sáu record, không có `zap-home`, private key, raw RUN, token,
+database env hay raw response body. Startup failure không tạo scanner nên lưu `evidencePath: null`
+thay vì một locator giả; mọi locator không-null đã được kiểm tra tồn tại. Full qualification không
+có add-on install hay port collision trong ZAP logs; cleanup-failure giữ
+`preCleanupStatus=PASS` sau khi sáu resource thực đã được xoá.
+
+Hai run full-qualification trung gian đã phát hiện lỗi thay vì bị che: `43087907471` bắt được
+add-on auto-update làm network add-on restart/port collision; `43091253537` cho thấy khóa đầu tiên
+chưa đủ. Chúng không được dùng làm acceptance cuối. Bản cuối khóa cả `autoupdate.checkOnStart`
+và bốn `start.*` updater gates, rồi được chứng minh lại bởi run `43131948517`.
+
+### Reproduction
+
+```bash
+PYTHONPATH=.agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src \
+  python3 -m zap_assessment.cli regression generate \
+  --input .agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/examples/regression/byteme-csp-qualification-input.json \
+  --out-dir tests/security/product-cases
+
+python3 tests/security/product/byteme/run_acceptance.py \
+  --product-source /clean/pinned/ByteMe \
+  --out artifacts/byteme-qualification \
+  --scenario all
+```
+
+Exporter unit tests đạt 7/7, runtime tests đạt 18/18. Local live qualification đạt 8/8:
+fixed PASS; original và regression-control REGRESSION; omitted request và wrong response
+MISSING_EVIDENCE; startup, scanner timeout và cleanup failure EXECUTION_ERROR. Cleanup failure
+giữ `preCleanupStatus=PASS`; mọi result do cùng generator/runtime pipeline sinh, không viết tay.
 
 ## Acceptance A — 20/20
 
@@ -128,9 +205,10 @@ bash tests/security/run_zap_suite.sh \
 
 ## Remaining work
 
-1. Implement and qualify a versioned product adapter/fixture mapping, disposable target build
-   lifecycle and product response/control readback; then supply an authorized real RUN v3 and
-   reviewed mapping. Data alone cannot make the current `csp-demo` runtime execute a product case.
+1. Hoàn tất Gate 2 cho assessment ByteMe, chạy fresh assessment v3 và review case/result/evidence.
+   Nếu giữ `SEC-A06-06`, implement và qualify assertion anti-framing hiểu cả CSP `frame-ancestors`
+   và `X-Frame-Options`; sau đó mới export một `assessment-run-v3` case. Case CSP hiện tại chỉ là
+   adapter qualification và không được dùng để tuyên bố transfer thật.
 2. Pin/package a `geckodriver` version matching the image Firefox, then implement the fixed
    open/click/wait and no-click browser controls through the ZAP proxy.
 3. Promote experimental profiles only after their remaining stable-contract gates are met;

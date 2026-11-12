@@ -16,7 +16,7 @@ The supported profile registry is:
 | Status | Profile | Boundary | Qualification |
 |---|---|---|---|
 | supported | `passive-http-v1` | Anonymous literal GET, CSP missing rule `10038-1`, fixed response/control witnesses; synthetic `csp-demo` and registry-bound ByteMe v1 product lane | `tests/security/qualification/run_acceptance.py` LIVE-01 through LIVE-06; `tests/security/product/byteme/run_acceptance.py` |
-| qualification-pending | `anti-framing-http-v1` | ByteMe v1 exact anonymous GET HTML response; ZAP-derived semantics for enforcing CSP `frame-ancestors` and XFO, with unsupported complexity failing closed | `tests/security/product/byteme/run_acceptance.py --profile anti-framing`; promote after local and GitHub artifact readback |
+| supported | `anti-framing-http-v1` | ByteMe v1 exact anonymous GET HTML response; ZAP-derived semantics for enforcing CSP `frame-ancestors` and XFO, with unsupported complexity failing closed | `tests/security/product/byteme/run_acceptance.py --profile anti-framing`; local 9/9 plus GitHub push/PR artifact readback at implementation commit `c77f97a98b5353e9545d669bb583d457db3c0371` |
 | experimental | `openapi-passive-v1` | OpenAPI import and passive API transport only | `tests/security/experiments/openapi-passive/` |
 | experimental | `bearer-passive-v1` | Static bearer injection and auth witness only | `tests/security/experiments/bearer-passive/` |
 | experimental | `active-xss-v1` | One selected native active XSS rule on disposable fixture | `tests/security/experiments/active-xss/` |

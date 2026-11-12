@@ -10,8 +10,8 @@ PR: [#1 — Add deterministic ZAP regression suite](https://github.com/hehuanglu
 
 **A core complete.** Cả 20/20 mục nghiệm thu A đạt trên synthetic fixture, gồm generator,
 runtime ZAP thật, parser, suite lifecycle, artifact, portable copy và GitHub xanh/đỏ thật.
-Stable profile duy nhất là `passive-http-v1`; một case PASS chỉ là kết quả regression test,
-không thay verdict hay trạng thái hoàn tất của assessment.
+Hai profile được hỗ trợ là `passive-http-v1` và ByteMe-bound `anti-framing-http-v1`; một case
+PASS chỉ là kết quả regression test, không thay verdict hay trạng thái hoàn tất của assessment.
 
 **ByteMe adapter qualification COMPLETE; real assessment transfer PENDING.** Registry đã có
 `byteme-v1`, checkout ByteMe ở SHA đầy đủ, dựng database/keys/network disposable, gửi request
@@ -40,6 +40,9 @@ OAST, WebSocket, GraphQL và product-specific auth/BOLA vẫn `unsupported`.
 - ByteMe source: `hehuanglu/ByteMe@510f6415b6af535ceec77213f0b0c7d5082123f7`;
   case `byteme-swagger-csp.json`:
   `sha256:ae0ad477dfbc82e4e0108af101d78a7a93673b304173145bbfa8799d08f4d137`.
+- Anti-framing implementation: `c77f97a98b5353e9545d669bb583d457db3c0371`; case
+  `byteme-swagger-anti-framing-qualification.json`:
+  `sha256:71878f73d6ef577d549f2d18823d568716700c1d90b8cb5c947dcd5758d5171e`.
 - Image: `zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238`
   (ZAP 2.17.0).
 - Case `csp-docs.json`: `sha256:7c1bb4924d6e68bdf4346fc6207ee23c07c37f47755f6a86e4a5310594c9aa4f`.
@@ -66,6 +69,57 @@ experiment artifact không chứa hai bearer secret canary.
 
 ## ByteMe product adapter qualification
 
+### Anti-framing profile qualification (2026-11-12)
+
+`anti-framing-http-v1` is a separate ZAP-derived response-header oracle for the exact anonymous
+ByteMe Swagger HTML GET. It does not reinterpret or replace the historical CSP qualification.
+The profile preserves the ZAP message identity, method, URL, status, media type, body digest,
+Swagger marker and only the allowlisted CSP/Report-Only/XFO values; it stores no raw response
+body and records `browserEnforcementTested=false`.
+
+The narrow parser applies enforcing CSP `frame-ancestors` before XFO, does not treat
+Report-Only, `default-src` or `frame-src` as inbound framing protection, and fails closed for
+unsupported/complex values. Upstream ByteMe was freshly observed with `X-Frame-Options: DENY`
+and no CSP, so it passes this anti-framing oracle even while historical ZAP rule `10038-1`
+still describes missing CSP.
+
+Local qualification at implementation commit `c77f97a98b5353e9545d669bb583d457db3c0371` completed
+9/9 scenarios on ByteMe `510f6415b6af535ceec77213f0b0c7d5082123f7`:
+
+| Control | Expected / actual |
+|---|---|
+| upstream original, XFO `DENY`, no CSP | `PASS / ANTI_FRAMING_POLICY_PROTECTED` |
+| enforcing `frame-ancestors 'none'`, no XFO | `PASS / ANTI_FRAMING_POLICY_PROTECTED` |
+| neither mechanism | `REGRESSION / ANTI_FRAMING_POLICY_UNPROTECTED` |
+| Report-Only only | `REGRESSION / ANTI_FRAMING_POLICY_UNPROTECTED` |
+| enforcing `frame-ancestors *` plus XFO `DENY` | `REGRESSION / ANTI_FRAMING_POLICY_UNPROTECTED` |
+| request omitted | `MISSING_EVIDENCE / REQUIRED_RESPONSE_MISSING` |
+| wrong status | `MISSING_EVIDENCE / RESPONSE_STATUS_MISMATCH` |
+| wrong media type | `MISSING_EVIDENCE / RESPONSE_MEDIA_TYPE_MISMATCH` |
+| malformed/unsupported policy | `MISSING_EVIDENCE / ANTI_FRAMING_POLICY_INDETERMINATE` |
+
+Each scenario retained six owned cleanup records; no `zap-home`, raw body, key or database
+secret was retained. The generated qualification case SHA-256 is
+`71878f73d6ef577d549f2d18823d568716700c1d90b8cb5c947dcd5758d5171e`.
+The full assessment package test suite passed 1,269 tests with 9 skips, and the historical CSP
+fixed-control still passed after the change. GitHub qualification also completed 9/9 on both
+push and pull request artifacts, so the profile is promoted to `supported` for this ByteMe v1
+boundary. This qualifies the profile and adapter only; it does not claim a v3 assessment verdict.
+
+| Anti-framing gate | Run / source | Expected and actual | Artifact readback |
+|---|---|---|---|
+| Full qualification push | [43140187346](https://github.com/hehuanglu/testing-tool/actions/runs/43140187346), `c77f97a` | `success`; all 9 expected/actual pairs matched; original `PASS` | ID `13909940687`, digest `sha256:4f77479481d11c4417c619b8f844ee6862e5f4a611c4cd6f2a29b47a64ca7577` |
+| Full qualification PR | [43140193544](https://github.com/hehuanglu/testing-tool/actions/runs/43140193544), tested merge `f494030`, PR head `c77f97a` | `success`; all 9 expected/actual pairs matched; merge/head provenance separated | ID `13908584581`, digest `sha256:b3c67610b4fd27d11a1c6995ce778eb569fd57fe327b687c1820bd7689cab8a2` |
+| Upstream healthy | [43140212353](https://github.com/hehuanglu/testing-tool/actions/runs/43140212353), no patch | `PASS/ANTI_FRAMING_POLICY_PROTECTED`; XFO `DENY` witness | ID `13909661040`, digest `sha256:3030f696ea93f8df265ce799a38b8765de9996aab61b79ffeb20cd959573a433` |
+| Regression control | [43140217159](https://github.com/hehuanglu/testing-tool/actions/runs/43140217159), remove protection | expected red: `REGRESSION/ANTI_FRAMING_POLICY_UNPROTECTED` | ID `13909013702`, digest `sha256:412333893c5689a4752bbb5eaa44ae9acbd17e542b8eeb8bb3796c5181629aa0` |
+| Missing request | [43140221135](https://github.com/hehuanglu/testing-tool/actions/runs/43140221135), obligation retained | expected red: `MISSING_EVIDENCE/REQUIRED_RESPONSE_MISSING` | ID `13908344391`, digest `sha256:6bd7099ece415e8f8d51ec8e61a6e13757f38870f5610ec83d0aeff39a1e98fb` |
+
+Downloaded artifacts bind expected and actual ByteMe SHA to `510f641...`. The upstream evidence
+contains exact ZAP message `1`, anonymous `GET`, `200 text/html`, Swagger marker and XFO `DENY`;
+it stores only the allowlisted policy headers plus body digest, not the response body. Every
+scenario records six removed owned resources and `retainedRuntimeSecrets=false`. No `zap-home`
+directory, private key, database secret or bearer token is retained in the artifact.
+
 ### Source, case và giới hạn claim
 
 - Checkout nghiệm thu là clone sạch riêng của `hehuanglu/ByteMe`, full SHA
@@ -75,9 +129,9 @@ experiment artifact không chứa hai bearer secret canary.
   CSP ZAP `10038-1`. Căn cứ qualification là report lịch sử `SEC-02` yêu cầu Swagger UI có CSP;
   expected behavior không được học từ response đang quan sát.
 - Upstream-original trả `X-Frame-Options: DENY` nhưng thiếu CSP. Vì vậy alert missing-CSP không
-  chứng minh tiêu chí anti-framing bị vi phạm. Draft assessment hiện chọn `SEC-A06-06`, Gate 2
-  còn pending; transfer thật cần profile kiểm tra cả `frame-ancestors` và XFO cùng fresh v3
-  receipt-backed evidence.
+  chứng minh tiêu chí anti-framing bị vi phạm. Profile kiểm tra cả `frame-ancestors` và XFO đã
+  được qualify, nhưng draft assessment chỉ chọn `SEC-A06-06` và Gate 2 vẫn pending; transfer
+  thật vẫn cần fresh v3 receipt-backed evidence sau approval.
 - Ba `zap/*/RUN.json` của ByteMe không có `criteriaWorkflow`, approval hay case results v3, và
   còn bind source SHA lịch sử `e163fbb...`. Chúng chỉ dùng để hiểu bối cảnh, không được relabel,
   chỉnh sửa hay export như RUN v3.
@@ -205,10 +259,10 @@ bash tests/security/run_zap_suite.sh \
 
 ## Remaining work
 
-1. Hoàn tất Gate 2 cho assessment ByteMe, chạy fresh assessment v3 và review case/result/evidence.
-   Nếu giữ `SEC-A06-06`, implement và qualify assertion anti-framing hiểu cả CSP `frame-ancestors`
-   và `X-Frame-Options`; sau đó mới export một `assessment-run-v3` case. Case CSP hiện tại chỉ là
-   adapter qualification và không được dùng để tuyên bố transfer thật.
+1. Hoàn tất Gate 2 cho draft ByteMe chỉ chọn `SEC-A06-06`, chạy fresh assessment v3 và review
+   case/result/evidence. Assertion anti-framing đã được implement và qualify; chỉ sau fresh
+   reviewed evidence mới export một `assessment-run-v3` case. Hai case qualification hiện tại
+   chỉ nghiệm thu adapter/profile và không được dùng để tuyên bố transfer thật.
 2. Pin/package a `geckodriver` version matching the image Firefox, then implement the fixed
    open/click/wait and no-click browser controls through the ZAP proxy.
 3. Promote experimental profiles only after their remaining stable-contract gates are met;

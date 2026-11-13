@@ -1,0 +1,53 @@
+{
+  "expect": {
+    "assumption": "modern-user-agent-csp3-html-xfo",
+    "basis": "Fixed /Users/hahoangloc/Working/UET/testing-tool/.agents/skills/mcp-zap-repo-operations/references/owasp-2025-security-catalog.json#/requirements/30 (SEC-A06-06 / CWE-1021) distinguishes being embedded from embedding other content and lists X-Frame-Options as an alternative. CSP Level 3 and WHATWG HTML define parsing, enforcement and precedence. The exact-origin trust boundary is proposed for this local Swagger document.",
+    "evaluateOn": "swagger-index",
+    "trustedAncestors": [
+      "'self'"
+    ]
+  },
+  "fixture": "byteme-v1",
+  "id": "byteme-swagger-anti-framing",
+  "profile": "anti-framing-http-v1",
+  "requests": [
+    {
+      "id": "swagger-index",
+      "method": "GET",
+      "origin": "product",
+      "path": "/swagger-ui/index.html"
+    }
+  ],
+  "requireResponses": {
+    "mediaType": "text/html",
+    "status": 200
+  },
+  "schemaVersion": 1,
+  "source": {
+    "assessmentId": "ByteMe-AF-V3-20261112-LIVE-1",
+    "caseId": "byteme-swagger-anti-framing",
+    "criterionIds": [
+      "SEC-A06-06"
+    ],
+    "evidence": [
+      {
+        "operationId": "op-byteme-af-baseline-1",
+        "resultPath": "/semanticReadback/swaggerBaseline",
+        "sha256": "a4074b9b249005dbcf231e4689b4e70e8be5881976f0f720aee9ccceef964c7b"
+      },
+      {
+        "operationId": "op-byteme-af-policy-1",
+        "resultPath": "/semanticReadback/inboundFramingPolicy",
+        "sha256": "aaf31b03d4810d4fafed80d11012b530db92887edf342933a3ab0dc369cc4bf7"
+      }
+    ],
+    "kind": "assessment-run-v3",
+    "planDigest": "4dea2ea045f81dc3e915e611e8a099f0fc0c2229a6a6cdec9fcbce7a0f13d7b5",
+    "planRevision": "ByteMe-P-DRAFT-5"
+  },
+  "target": {
+    "adapter": "byteme-v1",
+    "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
+    "repository": "https://github.com/hehuanglu/ByteMe.git"
+  }
+}

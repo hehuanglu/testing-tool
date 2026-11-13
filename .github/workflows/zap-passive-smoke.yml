@@ -1,0 +1,26 @@
+name: ZAP passive smoke
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  passive-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Run the fixed CSP regression test
+        run: |
+          docker run --rm --network none --hostname localhost -i \
+            zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238 \
+            python3 - < tests/security/zap_passive_smoke.py > zap-report.json
+      - name: Upload the ZAP report
+        if: always() && hashFiles('zap-report.json') != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: zap-passive-smoke-report
+          path: zap-report.json

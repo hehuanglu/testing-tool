@@ -1,0 +1,43 @@
+{
+  "expect": {
+    "absentOn": "swagger-index",
+    "alertRef": "10038-1",
+    "basis": "ByteMe docs/security-report.md SEC-02 retest condition requires the public Swagger HTML responses to carry an appropriate Content-Security-Policy header; this case qualifies the adapter only until a current approved v3 assessment supplies transferable evidence.",
+    "presentOn": "detector-control",
+    "requireNonEmptyCspOn": "swagger-index"
+  },
+  "fixture": "byteme-v1",
+  "id": "byteme-swagger-csp",
+  "profile": "passive-http-v1",
+  "requests": [
+    {
+      "id": "swagger-index",
+      "method": "GET",
+      "origin": "product",
+      "path": "/swagger-ui/index.html"
+    },
+    {
+      "id": "detector-control",
+      "method": "GET",
+      "origin": "detector-control",
+      "path": "/control"
+    }
+  ],
+  "requireResponses": {
+    "mediaType": "text/html",
+    "status": 200
+  },
+  "schemaVersion": 1,
+  "source": {
+    "caseId": "byteme-swagger-csp",
+    "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
+    "kind": "product-qualification",
+    "path": "docs/security-report.md#sec-02--swagger-ui-thieu-content-security-policy",
+    "repository": "https://github.com/hehuanglu/ByteMe.git"
+  },
+  "target": {
+    "adapter": "byteme-v1",
+    "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
+    "repository": "https://github.com/hehuanglu/ByteMe.git"
+  }
+}

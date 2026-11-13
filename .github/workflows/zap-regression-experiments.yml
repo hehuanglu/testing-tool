@@ -1,0 +1,42 @@
+name: ZAP regression experiments
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/zap-regression-generator
+
+permissions:
+  contents: read
+
+jobs:
+  experiments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Run isolated experimental controls
+        run: |
+          mkdir -p artifacts/experiments
+          bash tests/security/experiments/openapi-passive/run.sh --mode good --out artifacts/experiments/openapi-good
+          bash tests/security/experiments/openapi-passive/run.sh --mode missing-route --out artifacts/experiments/openapi-missing
+          bash tests/security/experiments/bearer-passive/run.sh --mode good --out artifacts/experiments/bearer-good
+          bash tests/security/experiments/bearer-passive/run.sh --mode bad --out artifacts/experiments/bearer-bad
+          bash tests/security/experiments/active-xss/run.sh --mode vulnerable --out artifacts/experiments/xss-vulnerable
+          bash tests/security/experiments/active-xss/run.sh --mode fixed --out artifacts/experiments/xss-fixed
+          bash tests/security/experiments/active-xss/run.sh --mode auth-lost --out artifacts/experiments/xss-auth-lost
+          bash tests/security/experiments/form-cookie-csrf/run.sh --mode healthy --out artifacts/experiments/form-healthy
+          bash tests/security/experiments/form-cookie-csrf/run.sh --mode revoke --out artifacts/experiments/form-revoke
+          bash tests/security/experiments/form-cookie-csrf/run.sh --mode bad-csrf --out artifacts/experiments/form-bad-csrf
+          bash tests/security/experiments/bola-two-actor/run.sh --mode fixed --out artifacts/experiments/bola-fixed
+          bash tests/security/experiments/bola-two-actor/run.sh --mode vulnerable --out artifacts/experiments/bola-vulnerable
+          bash tests/security/experiments/bola-two-actor/run.sh --mode auth-lost --out artifacts/experiments/bola-auth-lost
+          bash tests/security/experiments/browser-journey/run.sh --out artifacts/experiments/browser-prerequisites
+      - name: Upload experiment artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: zap-regression-experiments-${{ github.job }}-${{ github.run_attempt }}
+          path: artifacts/experiments
+          if-no-files-found: warn
+          retention-days: 7

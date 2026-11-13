@@ -1,0 +1,115 @@
+import copy
+import importlib.util
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent
+SPEC = importlib.util.spec_from_file_location("run_zap_product_suite",
+                                              ROOT / "run_zap_product_suite.py")
+MODULE = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(MODULE)
+RUNTIME_SPEC = importlib.util.spec_from_file_location(
+    "zap_product_runtime", ROOT / "product/byteme/zap_product_runtime.py")
+RUNTIME = importlib.util.module_from_spec(RUNTIME_SPEC)
+RUNTIME_SPEC.loader.exec_module(RUNTIME)
+
+
+class ProductSuiteTests(unittest.TestCase):
+    def setUp(self):
+        self.case = json.loads((ROOT / "product-cases/byteme-swagger-csp.json").read_text())
+
+    def test_committed_case_matches_registry(self):
+        MODULE.validate_case(self.case, "byteme-swagger-csp.json")
+        registry = json.loads((ROOT / "product_adapters.json").read_text())["adapters"]["byteme-v1"]
+        self.assertEqual(self.case["target"]["commitSha"], registry["commitSha"])
+        self.assertEqual(self.case["target"]["repository"], registry["repository"])
+
+    def test_anti_framing_case_uses_semantic_profile_without_detector_control(self):
+        case_path = ROOT / "product-anti-framing-cases/byteme-swagger-anti-framing-qualification.json"
+        case = json.loads(case_path.read_text())
+        MODULE.validate_case(case, case_path.name)
+        self.assertEqual(case["profile"], "anti-framing-http-v1")
+        self.assertEqual({row["origin"] for row in case["requests"]}, {"product"})
+        self.assertNotIn("alertRef", case["expect"])
+
+    def test_add_delete_discovery_needs_no_manifest(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            first = copy.deepcopy(self.case)
+            second = copy.deepcopy(self.case)
+            second["id"] = "byteme-swagger-csp-copy"
+            second["source"]["caseId"] = second["id"]
+            (folder / (first["id"] + ".json")).write_text(json.dumps(first))
+            (folder / (second["id"] + ".json")).write_text(json.dumps(second))
+            self.assertEqual(len(MODULE.discover_cases(folder)), 2)
+            (folder / (second["id"] + ".json")).unlink()
+            self.assertEqual(len(MODULE.discover_cases(folder)), 1)
+            (folder / (first["id"] + ".json")).unlink()
+            self.assertEqual(MODULE.discover_cases(folder), [])
+
+    def test_product_and_detector_origins_are_both_required(self):
+        changed = copy.deepcopy(self.case)
+        changed["requests"][1]["origin"] = "product"
+        with self.assertRaises(MODULE.AdapterError):
+            MODULE.validate_case(changed, changed["id"] + ".json")
+
+    def test_unpinned_or_dirty_contract_is_rejected_before_runtime(self):
+        changed = copy.deepcopy(self.case)
+        changed["target"]["commitSha"] = "short"
+        with self.assertRaises(MODULE.AdapterError):
+            MODULE.validate_case(changed, changed["id"] + ".json")
+
+    def test_repository_binding_accepts_only_optional_dot_git_suffix(self):
+        canonical = MODULE.canonical_repository_url
+        self.assertEqual(canonical("https://github.com/hehuanglu/ByteMe.git"),
+                         canonical("https://github.com/hehuanglu/ByteMe/"))
+        self.assertNotEqual(canonical("https://github.com/hehuanglu/ByteMe.git"),
+                            canonical("https://github.com/another/ByteMe.git"))
+
+    def test_retained_reference_is_null_until_artifact_exists(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            self.assertIsNone(MODULE.retained_reference(base, "scan/evidence.json"))
+            (base / "scan").mkdir()
+            (base / "scan/evidence.json").write_text("{}\n")
+            self.assertEqual(MODULE.retained_reference(base, "scan/evidence.json"),
+                             "scan/evidence.json")
+
+    def test_native_message_retention_is_assessment_only(self):
+        adapter = MODULE.ByteMeAdapter(
+            self.case, Path("/tmp/not-used"), Path("/tmp/not-used"),
+            "upstream-original", "none", None, 1.0, "test-run",
+            retain_native_message=True,
+        )
+        with self.assertRaisesRegex(MODULE.AdapterError, "assessment-run-v3"):
+            adapter.run_scanner()
+
+    def test_product_runtime_disables_addon_drift(self):
+        self.assertTrue({
+            "autoupdate.checkOnStart=false",
+            "start.checkForUpdates=false",
+            "start.downloadNewRelease=false",
+            "start.checkAddonUpdates=false",
+            "start.installAddonUpdates=false",
+        }.issubset(RUNTIME.ZAP_CONFIG))
+
+    def test_anti_framing_wrong_status_and_media_never_pass(self):
+        case_path = ROOT / "product-anti-framing-cases/byteme-swagger-anti-framing-qualification.json"
+        case = json.loads(case_path.read_text())
+        url = "http://byteme-backend:8080/swagger-ui/index.html"
+        base = {"requestId": "swagger-index", "actualUrl": url, "method": "GET",
+                "status": 200, "mediaType": "text/html", "swaggerUiMarker": True,
+                "policyHeaders": {"x-frame-options": ["DENY"]}}
+        for changed, reason in (({"status": 404}, "RESPONSE_STATUS_MISMATCH"),
+                                ({"mediaType": "application/yaml"},
+                                 "RESPONSE_MEDIA_TYPE_MISMATCH")):
+            witness = {**base, **changed}
+            self.assertEqual(RUNTIME.classify(case, [witness], [], {"swagger-index": url}),
+                             ("MISSING_EVIDENCE", reason))
+
+
+if __name__ == "__main__":
+    unittest.main()

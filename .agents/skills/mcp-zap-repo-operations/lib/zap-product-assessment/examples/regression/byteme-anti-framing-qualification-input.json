@@ -1,0 +1,39 @@
+{
+  "ci": {
+    "expect": {
+      "assumption": "modern-user-agent-csp3-html-xfo",
+      "basis": "SEC-A06-06 requires the browser-rendered Swagger document to prevent framing by untrusted cross-origin ancestors; an enforcing CSP frame-ancestors policy takes precedence over X-Frame-Options, while X-Frame-Options DENY or SAMEORIGIN is sufficient when no enforcing frame-ancestors directive is present.",
+      "evaluateOn": "swagger-index",
+      "trustedAncestors": [
+        "'self'"
+      ]
+    },
+    "fixture": "byteme-v1",
+    "id": "byteme-swagger-anti-framing-qualification",
+    "profile": "anti-framing-http-v1",
+    "requests": [
+      {
+        "id": "swagger-index",
+        "method": "GET",
+        "origin": "product",
+        "path": "/swagger-ui/index.html"
+      }
+    ],
+    "requireResponses": {
+      "mediaType": "text/html",
+      "status": 200
+    },
+    "target": {
+      "adapter": "byteme-v1",
+      "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
+      "repository": "https://github.com/hehuanglu/ByteMe.git"
+    }
+  },
+  "source": {
+    "caseId": "byteme-swagger-anti-framing-qualification",
+    "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
+    "kind": "product-qualification",
+    "path": ".agents/skills/mcp-zap-repo-operations/references/owasp-2025-security-catalog.json#/requirements/30",
+    "repository": "https://github.com/hehuanglu/ByteMe.git"
+  }
+}

@@ -1,0 +1,46 @@
+name: ZAP regression
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - codex/zap-regression-generator
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Run fixed ZAP regression cases
+        env:
+          REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+        run: bash tests/security/run_zap_suite.sh --cases tests/security/cases --out artifacts/zap
+      - name: Write suite summary
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path("artifacts/zap/suite-results.json")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              if not path.is_file():
+                  summary.write("## ZAP regression\n\nSuite result was not created.\n")
+              else:
+                  result = json.loads(path.read_text())
+                  summary.write(f"## ZAP regression: {result['status']}\n\n")
+                  summary.write(f"{result['caseCount']} tests; counts: `{json.dumps(result['counts'], sort_keys=True)}`.\n")
+          PY
+      - name: Upload ZAP regression artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: zap-regression-${{ github.job }}-${{ github.run_attempt }}
+          path: artifacts/zap
+          if-no-files-found: warn
+          retention-days: 7

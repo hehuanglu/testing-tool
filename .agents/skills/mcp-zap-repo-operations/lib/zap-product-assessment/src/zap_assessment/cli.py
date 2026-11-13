@@ -32,8 +32,25 @@ def main():
     p=sub.add_parser('recover'); p.add_argument('run')
     p=sub.add_parser('verify'); p.add_argument('bundle');p.add_argument('--expect-plan-hash')
     p=sub.add_parser('validate'); p.add_argument('kind',choices=['product','workflow','authorization']); p.add_argument('file')
+    p=sub.add_parser('regression')
+    regression_sub=p.add_subparsers(dest='regression_command',required=True)
+    p=regression_sub.add_parser('generate')
+    p.add_argument('--input',required=True)
+    p.add_argument('--out-dir',required=True)
+    p.add_argument('--run')
+    p.add_argument('--case-id')
+    p=regression_sub.add_parser('promote')
+    p.add_argument('--case',required=True)
+    p.add_argument('--target-mode',required=True,choices=['event-checkout'])
+    p.add_argument('--out-dir',required=True)
     args=parser.parse_args(); root=ROOT/'runs';execution_entered=False
     try:
+        if args.command=='regression':
+            if args.regression_command=='generate':
+                from .regression_export import cli_generate
+                return cli_generate(args)
+            from .regression_export import cli_promote
+            return cli_promote(args)
         safety_contract=None
         if getattr(args,'safety_contract',None) or getattr(args,'expect_safety_hash',None):
             if not args.safety_contract or not args.expect_safety_hash:raise Blocked('runtime safety contract and external pin are both required')

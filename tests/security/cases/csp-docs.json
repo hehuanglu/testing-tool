@@ -1,0 +1,34 @@
+{
+  "expect": {
+    "absentOn": "docs",
+    "alertRef": "10038-1",
+    "basis": "The documentation page must send an enforcing CSP header.",
+    "presentOn": "control",
+    "requireNonEmptyCspOn": "docs"
+  },
+  "fixture": "csp-demo",
+  "id": "csp-docs",
+  "profile": "passive-http-v1",
+  "requests": [
+    {
+      "id": "docs",
+      "method": "GET",
+      "path": "/docs"
+    },
+    {
+      "id": "control",
+      "method": "GET",
+      "path": "/control"
+    }
+  ],
+  "requireResponses": {
+    "mediaType": "text/html",
+    "status": 200
+  },
+  "schemaVersion": 1,
+  "source": {
+    "caseId": "csp-docs",
+    "kind": "synthetic-demo",
+    "path": "docs/plans/zap-ci-suite-design-handoff.md"
+  }
+}

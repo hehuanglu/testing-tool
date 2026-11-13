@@ -35,6 +35,11 @@ During intake, retain private reconnaissance and approval records. Once a valid 
 
 Status, setup, reporting and skill-only work do not authorize product traffic or require invented assessment reports. Read [operational validation](references/operational-validation.md) for assigned skill/tool audits and its [subagent acceptance checks](references/operational-validation.md#subagent-operations-acceptance) when qualifying delegation. Source/test inspection is not runtime qualification.
 
+When the user asks to preserve a reviewed case as a fixed repository regression, read
+[CI regression suite](references/ci-regression-suite.md). Export is an offline artifact task:
+it validates reviewed evidence and creates a deterministic candidate, but does not send
+product traffic, change approval/verdict logic, or make the CI result an assessment verdict.
+
 ## Work from approved criteria
 
 Read the canonical workflow for plan approval and stopping rules. Manage accountability by criterion; organize execution by shared questions and compatible work units. Reuse observations, not verdicts.

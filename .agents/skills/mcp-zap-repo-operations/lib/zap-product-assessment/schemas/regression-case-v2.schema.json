@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/zap-assessment/regression-case-v2.schema.json",
+  "title": "ZAP regression case v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "source", "id", "profile", "fixture", "requests", "requireResponses", "expect", "target", "provenance"],
+  "properties": {
+    "schemaVersion": {"const": 2},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "assessmentId", "caseId", "criterionIds", "planRevision", "planDigest", "evidence"],
+      "properties": {
+        "kind": {"const": "assessment-run-v3"},
+        "assessmentId": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "caseId": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "criterionIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "pattern": "\\S"}
+        },
+        "planRevision": {"type": "string", "minLength": 1, "pattern": "\\S"},
+        "planDigest": {"type": "string", "pattern": "^[0-9a-f]{64}$(?![\\s\\S])"},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["operationId", "resultPath", "sha256"],
+            "properties": {
+              "operationId": {"type": "string", "minLength": 1, "pattern": "\\S"},
+              "resultPath": {"type": "string", "pattern": "^/(?:[^~/\\x00-\\x1f]|~[01])+(?:/(?:[^~/\\x00-\\x1f]|~[01])+)*$(?![\\s\\S])"},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$(?![\\s\\S])"}
+            }
+          }
+        }
+      }
+    },
+    "id": {"$ref": "#/$defs/slug"},
+    "profile": {"const": "anti-framing-http-v1"},
+    "fixture": {"const": "byteme-ci-v1"},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter", "repository", "revisionPolicy"],
+      "properties": {
+        "adapter": {"const": "byteme-ci-v1"},
+        "repository": {"const": "https://github.com/hehuanglu/ByteMe.git"},
+        "revisionPolicy": {"const": "event-checkout"}
+      }
+    },
+    "requests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "method", "path", "origin"],
+        "properties": {
+          "id": {"$ref": "#/$defs/slug"},
+          "method": {"const": "GET"},
+          "path": {"type": "string", "pattern": "^/(?!/)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!\\.{1,2}(?:/|$))[^?#\\\\\\x00-\\x20\\x7f]+(?:$(?![\\s\\S]))|^/$(?![\\s\\S])"},
+          "origin": {"const": "product"}
+        }
+      }
+    },
+    "requireResponses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "mediaType"],
+      "properties": {
+        "status": {"const": 200},
+        "mediaType": {"const": "text/html"}
+      }
+    },
+    "expect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basis", "evaluateOn", "trustedAncestors", "assumption"],
+      "properties": {
+        "basis": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "not": {"pattern": "(^|[\\s(])/(?:Users|home|private|tmp)/|[A-Za-z]:[\\\\/]"}
+        },
+        "evaluateOn": {"$ref": "#/$defs/slug"},
+        "trustedAncestors": {"const": ["'self'"]},
+        "assumption": {"const": "modern-user-agent-csp3-html-xfo"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewedProductCommitSha", "parentCaseSha256"],
+      "properties": {
+        "reviewedProductCommitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$(?![\\s\\S])"},
+        "parentCaseSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$(?![\\s\\S])"}
+      }
+    }
+  },
+  "$defs": {
+    "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$(?![\\s\\S])"}
+  }
+}

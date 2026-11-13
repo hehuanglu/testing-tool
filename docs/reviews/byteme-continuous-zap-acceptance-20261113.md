@@ -34,8 +34,9 @@ recovery and cleanup evidence in AC-07 and AC-09 incomplete.
   and after the cancellation fix. Each pair identifies its master commit, the same case and
   the same pinned runner.
 - **AC-03 partial.** The unit test classifies a simulated exact 200 HTML Swagger response with
-  an empty policy header set as `REGRESSION/ANTI_FRAMING_POLICY_UNPROTECTED`. The live control
-  that disables ByteMe's framing protection was excluded. No corresponding ByteMe run exists.
+  an empty policy header set as `REGRESSION/ANTI_FRAMING_POLICY_UNPROTECTED`. The live
+  reproduction would deliberately weaken ByteMe's framing protection and is outside the
+  permitted scope of this implementation. The required hosted regression run remains pending.
 - **AC-04 met.** [PR #3](https://github.com/hehuanglu/ByteMe/pull/3) changed the request path only.
   The PR and push jobs failed as `MISSING_EVIDENCE/RESPONSE_STATUS_MISMATCH`. ZAP read the exact
   new GET response with HTTP 401 and message ID `1`; expected status remained 200.
@@ -74,6 +75,46 @@ recovery and cleanup evidence in AC-07 and AC-09 incomplete.
   13 exporter/promotion, 28 runtime and six anti-framing tests passed.
 
 The four control PRs were closed after readback. Their branches and commits remain available.
+
+## Follow-up evidence review · 2026-11-13
+
+The current ByteMe `master` SHA, workflow runner pin, and v2 case SHA-256 matched the
+implementation snapshot. The [master push](https://github.com/hehuanglu/ByteMe/actions/runs/43371579165)
+and [manual run](https://github.com/hehuanglu/ByteMe/actions/runs/43371583156) still attest
+that version of the workflow and case.
+
+The review recomputed SHA-256 from all 22 retained ByteMe ZIPs and matched their artifact
+IDs and archive digests against the GitHub Actions API. The verifier from runner
+`54766f0182bbdb32d1401f37383b8c3599586877` accepted 21 suite artifacts. The remaining ZIP
+contains the initial cancellation bootstrap diagnostic, which was checked directly
+against the event, commit and run attempt. The review checked the tested PR merge parents,
+the exact Swagger response and `X-Frame-Options: DENY` on successful runs, and complete
+cleanup wherever a case had run.
+
+Two successful checks for the original cancellation-fix commit were also in the retained
+archive set. These precede the checks on the final PR head listed below.
+
+- [Push 43371044257](https://github.com/hehuanglu/ByteMe/actions/runs/43371044257), attempt 1,
+  tested `678e8bd390ded090939279cee63e80b26facb72b`. Artifact `14012527409`, ZIP
+  `sha256:c7efe0ef29c9d8b97653623101e890f1592078a241ed9ae799e7435a154ef740`,
+  manifest SHA-256 `58062ffd280c8f17830f4475fe2db549cc866ea317c3aa7d8219b905c2caa498`.
+- [PR run 43371050632](https://github.com/hehuanglu/ByteMe/actions/runs/43371050632), attempt 1,
+  tested merge `041eb3fae1ba4e9cdff4abcf59413cfffea2ff49` with PR head
+  `678e8bd390ded090939279cee63e80b26facb72b` and base `e5292c26190de31329dbb77172db8a12164ace76`.
+  Artifact `14012582703`, ZIP
+  `sha256:6ed7454003c910d86c9ced484e040b4da6fb86688484409ec38d17d1b06d8808`,
+  manifest SHA-256 `9dee07d0494ff9939a1b9b4762a01ad97468fea4f6d5f1bca35baaae3d36b1b4`.
+
+The [default qualification check](https://github.com/hehuanglu/testing-tool/actions/runs/43371869540)
+already runs the offline oracle test for an absent framing policy. Its job log records
+that test passing. The follow-up ran the 28 runtime tests and six oracle tests locally.
+The proposed automatic live qualification control would apply the same deliberate
+weakening to ByteMe, so C3 remains pending.
+
+AC-03, AC-07 and AC-09 still require the hosted regression and recovery pair, including
+the regression artifact and cleanup readback. The existing missing-evidence recovery
+and cancellation remain evidence for their respective outcomes. Acceptance remains
+7 of 10, and testing-tool PR #3 remains open.
 
 ## Hosted cancellation
 

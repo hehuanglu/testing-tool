@@ -1,7 +1,26 @@
 {
   "adapters": {
-    "byteme-v1": {
+    "byteme-ci-v1": {
       "backendAlias": "byteme-backend",
+      "backendPort": 8080,
+      "databaseAlias": "mysql",
+      "databaseImage": "mysql@sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902",
+      "profile": "anti-framing-http-v1",
+      "readinessPath": "/actuator/health",
+      "repository": "https://github.com/hehuanglu/ByteMe.git",
+      "requiredFiles": [
+        "Dockerfile",
+        "mvnw",
+        ".mvn/wrapper/maven-wrapper.properties",
+        "pom.xml",
+        "src/main/resources/application.yml",
+        "src/main/resources/db/schema.sql",
+        "src/main/resources/db/seed.sql"
+      ],
+      "revisionPolicy": "event-checkout",
+      "version": 1
+    },
+    "byteme-v1": {
       "antiFramingPatches": {
         "anti-csp-none": "product/byteme/patches/anti-csp-none.patch",
         "anti-malformed": "product/byteme/patches/anti-malformed.patch",
@@ -9,6 +28,7 @@
         "anti-report-only": "product/byteme/patches/anti-report-only.patch",
         "anti-wide-csp-xfo": "product/byteme/patches/anti-wide-csp-xfo.patch"
       },
+      "backendAlias": "byteme-backend",
       "commitSha": "510f6415b6af535ceec77213f0b0c7d5082123f7",
       "databaseAlias": "mysql",
       "databaseImage": "mysql:8.4",

@@ -28,6 +28,7 @@ from threading import Thread
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from anti_framing import evaluate_anti_framing
+from byteme_ci_case import validate_case as validate_ci_case
 
 
 ZAP_CONFIG = (
@@ -247,6 +248,13 @@ def run(args):
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     case = json.loads(Path(args.case).read_text(encoding="utf-8"))
+    ci = case.get("schemaVersion") == 2
+    if ci:
+        validate_ci_case(case, case.get("id", "") + ".json")
+        if (args.product_origin != "http://byteme-backend:8080"
+                or args.fault_mode != "none" or args.omit_request_id is not None
+                or args.retain_native_message):
+            raise ValueError("CONTROL_NOT_ALLOWED")
     started = time.monotonic()
     deadline = started + args.deadline
     control = ThreadingHTTPServer(("127.0.0.1", 0), ControlHandler)
@@ -308,15 +316,20 @@ def run(args):
                 actual = product_origin + "/anti-framing-control-not-found"
             message = find_message(messages, actual)
             if message is not None:
-                responses.append(response_witness(message, request["id"], expected))
+                witness = response_witness(message, request["id"], expected)
+                if ci:
+                    witness.pop("responseHeaderNames")
+                responses.append(witness)
                 if args.retain_native_message:
                     native_messages.append({
                         "expectedUrl": expected,
                         "message": message,
                         "requestId": request["id"],
                     })
-        raw_alerts = api(api_origin, "core", "view", "alerts", start=0, count=1000)
-        alerts = [alert_row(row) for row in raw_alerts.get("alerts", [])]
+        alerts = []
+        if not ci:
+            raw_alerts = api(api_origin, "core", "view", "alerts", start=0, count=1000)
+            alerts = [alert_row(row) for row in raw_alerts.get("alerts", [])]
         status, reason = classify(case, responses, alerts, url_by_id)
         atomic_json(out / "zap-history.json", {
             "readback": "ZAP core messages API",
@@ -328,7 +341,7 @@ def run(args):
             "readback": "ZAP core alerts API",
         })
         atomic_json(out / "evidence.json", {
-            "detectorControlOrigin": control_origin,
+            "detectorControlOrigin": None if ci else control_origin,
             "detectorControlPurpose": (
                 "Confirms ZAP rule 10038-1 only; not ByteMe evidence."
                 if case["profile"] == "passive-http-v1" else None),
@@ -375,7 +388,7 @@ def run(args):
             control.server_close()
             control_thread.join(timeout=5)
             shutil.rmtree(zap_home, ignore_errors=True)
-    if not (out / "evidence.json").exists():
+    if not ci and not (out / "evidence.json").exists():
         atomic_json(out / "evidence.json", {"responses": []})
     atomic_json(out / "runtime-result.json", result)
     return 0 if result["status"] == "PASS" else 1

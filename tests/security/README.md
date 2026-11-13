@@ -141,3 +141,28 @@ committed case is explicitly `product-qualification`, not an assessment transfer
 v3 still needs a current approved plan, reviewed evidence and an oracle compatible with the
 exported assertion. A CSP-missing result cannot be promoted into an anti-framing violation when
 an effective `X-Frame-Options` policy satisfies that criterion.
+
+## ByteMe event checkout
+
+`byteme-ci-v1` accepts v2 anti-framing cases from reviewed ByteMe assessment artifacts.
+It binds the product to the full SHA of the checkout event and uses the same HTTP oracle.
+The original case digest and reviewed product SHA stay with the case. The suite records
+the actual checkout and runner SHAs separately, along with the PR head and base when present.
+
+```sh
+zap-assessment regression promote \
+  --case tests/security/product-assessment-cases/byteme-swagger-anti-framing.json \
+  --target-mode event-checkout --out-dir /path/to/ByteMe/tests/security/cases
+
+bash tests/security/run_zap_product_suite.sh \
+  --cases /path/to/ByteMe/tests/security/cases \
+  --product-source /path/to/ByteMe \
+  --expected-product-sha "$(git -C /path/to/ByteMe rev-parse HEAD)" \
+  --require-cases --deadline 600 --out /tmp/new-byteme-zap-output
+```
+
+Use a clean product checkout separate from the runtime checkout and keep the output
+outside both. With `--require-cases`, an empty suite returns `EMPTY_SUITE` and exits 1.
+V2 accepts the original build, with a private Docker network and pinned MySQL/ZAP images.
+Hosted artifacts contain filtered ZAP response witnesses and stage names, elapsed times
+and exit codes. The build stage output itself stays out of the artifact.

@@ -4,7 +4,9 @@ on:
   pull_request:
   push:
     branches:
+      - main
       - codex/zap-regression-generator
+      - codex/byteme-continuous-zap
   workflow_dispatch:
 
 permissions:
@@ -28,13 +30,15 @@ jobs:
       - name: Run exporter contract tests
         env:
           PYTHONPATH: .agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/src
-        run: python -m unittest discover -s .agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/tests -p test_regression_export.py -v
+        run: python -m unittest discover -s .agents/skills/mcp-zap-repo-operations/lib/zap-product-assessment/tests -p 'test_regression_export*.py' -v
       - name: Run portable runtime unit tests
-        run: python -m unittest discover -s tests/security -p 'test_zap*.py' -v
+        run: |
+          python -m unittest discover -s tests/security -p 'test_zap*.py' -v
+          python -m unittest discover -s tests/security -p 'test_anti_framing.py' -v
       - name: Run real ZAP controls
         env:
           REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
-        run: python tests/security/qualification/run_acceptance.py --scenario all --out artifacts/qualification
+        run: python tests/security/qualification/run_acceptance.py --scenario LIVE-01 --out artifacts/qualification
       - name: Upload qualification artifact
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

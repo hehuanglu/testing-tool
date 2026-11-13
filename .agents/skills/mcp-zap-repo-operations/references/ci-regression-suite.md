@@ -105,3 +105,22 @@ python3 tests/security/product/byteme/run_acceptance.py \
 The harness distinguishes upstream-original, fixed-control and regression-control, plus missing
 request, wrong response, startup, scanner-timeout and cleanup failures. Fixed/regression patches
 are versioned in testing-tool and must never be reported as upstream ByteMe behavior.
+
+## ByteMe event-checkout candidate
+
+The separate `byteme-ci-v1` adapter and case schema v2 bind execution to a verified
+ByteMe Git checkout and a full expected event SHA. `byteme-v1` continues to bind
+qualification runs to the historical SHA.
+
+Promote the reviewed, committed v1 artifact offline:
+
+```sh
+zap-assessment regression promote \
+  --case tests/security/product-assessment-cases/byteme-swagger-anti-framing.json \
+  --target-mode event-checkout --out-dir /path/to/ByteMe/tests/security/cases
+```
+
+Promotion carries the request, oracle and evidence digests forward and records the parent
+case digest and reviewed product SHA. The runner keeps the reviewed SHA separate from the
+actual product, expected product and runner SHAs. The product workflow uses
+`--require-cases` and admits only `upstream-original` with the anonymous GET profile.

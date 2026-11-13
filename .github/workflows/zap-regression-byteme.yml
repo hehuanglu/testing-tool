@@ -4,15 +4,18 @@ on:
   pull_request:
   push:
     branches:
+      - main
       - codex/zap-regression-generator
+      - codex/byteme-continuous-zap
   workflow_dispatch:
     inputs:
       scenario:
         description: Product adapter control to execute
         required: true
-        default: anti-all
+        default: ci-qualification
         type: choice
         options:
+          - ci-qualification
           - anti-original
           - anti-csp-none
           - anti-regression
@@ -56,9 +59,15 @@ jobs:
       - name: Run ByteMe adapter scenario
         env:
           REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
-          SCENARIO: ${{ inputs.scenario || 'anti-all' }}
+          SCENARIO: ${{ inputs.scenario || 'ci-qualification' }}
         run: |
           case "$SCENARIO" in
+            ci-qualification)
+              python3 tests/security/product/byteme/run_acceptance.py --profile anti-framing --product-source artifacts/byteme-source --out artifacts/byteme --scenario original --deadline 600
+              python3 tests/security/product/byteme/run_acceptance.py --profile anti-framing --product-source artifacts/byteme-source --out artifacts/byteme-missing --scenario missing --deadline 600
+              python3 tests/security/product/byteme/run_acceptance.py --profile csp --product-source artifacts/byteme-source --out artifacts/byteme-csp --scenario fixed --deadline 600
+              bash tests/security/run_zap_product_suite.sh --cases tests/security/product-assessment-cases --out artifacts/byteme-assessment --product-source artifacts/byteme-source --variant upstream-original --deadline 600
+              ;;
             anti-original)
               bash tests/security/run_zap_product_suite.sh --cases tests/security/product-anti-framing-cases --out artifacts/byteme --product-source artifacts/byteme-source --variant upstream-original --deadline 600
               ;;
@@ -142,5 +151,7 @@ jobs:
           path: |
             artifacts/byteme
             artifacts/byteme-assessment
-          if-no-files-found: warn
+            artifacts/byteme-missing
+            artifacts/byteme-csp
+          if-no-files-found: error
           retention-days: 7

@@ -17,6 +17,11 @@ from .criteria_workflow import approval_digest, review_workflow, validate_workfl
 from .question_evidence import operation_index, read_pointer
 
 
+BYTEME_REPOSITORY = "https://github.com/hehuanglu/ByteMe.git"
+CATALOG = ".agents/skills/mcp-zap-repo-operations/references/owasp-2025-security-catalog.json"
+KNOWN_CATALOG_PREFIX = "/Users/hahoangloc/Working/UET/testing-tool/"
+
+
 class ExportError(ValueError):
     def __init__(self, code: str, field: str, reason: str):
         super().__init__(reason)
@@ -74,7 +79,8 @@ def validate_case(case):
     if isinstance(case, dict) and case.get("profile") not in supported:
         raise ExportError("UNSUPPORTED_OPERATION", "case/profile",
                           "profile is not qualified")
-    for index, request in enumerate(case.get("requests", []) if isinstance(case, dict) else []):
+    requests = case.get("requests") if isinstance(case, dict) else None
+    for index, request in enumerate(requests if isinstance(requests, list) else []):
         if isinstance(request, dict) and request.get("method") != "GET":
             raise ExportError("UNSUPPORTED_OPERATION", f"case/requests/{index}/method",
                               "qualified HTTP profiles support GET only")
@@ -252,9 +258,47 @@ def generate(input_path, out_dir, run_path=None, case_id=None):
     return write_case(case, Path(out_dir))
 
 
-def cli_generate(args):
+def promote(input_path, out_dir, target_mode):
+    if target_mode != "event-checkout":
+        raise ExportError("UNSUPPORTED_OPERATION", "target-mode", "expected event-checkout")
+    path = Path(input_path)
+    if path.is_symlink() or not path.is_file():
+        raise ExportError("INVALID_INPUT", "case", "expected a regular, non-symlink case file")
     try:
-        status, target, payload = generate(args.input, args.out_dir, args.run, args.case_id)
+        raw = path.read_bytes()
+        original = json.loads(raw.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise ExportError("INVALID_INPUT", "case", type(error).__name__) from None
+    validate_case(original)
+    if path.name != original["id"] + ".json":
+        raise ExportError("INVALID_INPUT", "case/id", "filename must equal <id>.json")
+    if (original["source"]["kind"] != "assessment-run-v3"
+            or original["profile"] != "anti-framing-http-v1"
+            or original["fixture"] != "byteme-v1"):
+        raise ExportError("UNSUPPORTED_OPERATION", "case",
+                          "expected a reviewed ByteMe anti-framing assessment case")
+    target = original["target"]
+    if target["repository"] != BYTEME_REPOSITORY:
+        raise ExportError("INVALID_INPUT", "case/target/repository", "unexpected ByteMe repository")
+
+    promoted = copy.deepcopy(original)
+    promoted.update(schemaVersion=2, fixture="byteme-ci-v1", target={
+        "adapter": "byteme-ci-v1",
+        "repository": BYTEME_REPOSITORY,
+        "revisionPolicy": target_mode,
+    }, provenance={
+        "reviewedProductCommitSha": target["commitSha"],
+        "parentCaseSha256": hashlib.sha256(raw).hexdigest(),
+    })
+    promoted["expect"]["basis"] = original["expect"]["basis"].replace(
+        KNOWN_CATALOG_PREFIX + CATALOG + "#", CATALOG + "#")
+    _validate_schema(promoted, "regression-case-v2.schema.json", "case")
+    return write_case(promoted, Path(out_dir))
+
+
+def _report_cli(operation, *args):
+    try:
+        status, target, payload = operation(*args)
         if status == "REVIEW_REQUIRED":
             sys.stdout.buffer.write(payload)
             print(json.dumps({"status": status, "path": str(target)}), file=sys.stderr)
@@ -265,3 +309,11 @@ def cli_generate(args):
     except ExportError as error:
         print(json.dumps(error.as_dict(), sort_keys=True), file=sys.stderr)
         return 2
+
+
+def cli_generate(args):
+    return _report_cli(generate, args.input, args.out_dir, args.run, args.case_id)
+
+
+def cli_promote(args):
+    return _report_cli(promote, args.case, args.out_dir, args.target_mode)

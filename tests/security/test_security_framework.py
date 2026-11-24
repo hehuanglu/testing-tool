@@ -3,6 +3,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+import stat
 from subprocess import CompletedProcess
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -16,6 +17,7 @@ from security_framework.manifest import read_suite
 from security_framework.native_jwt import CONTROL, CONTROL_RULE, MODE, NativeJwt
 from security_framework.receipt import suite_receipt
 from security_framework.run import identity, run_container
+from suites.bus_booking.live.run import http_receipt
 
 
 class FrameworkTest(TestCase):
@@ -218,6 +220,37 @@ class EngineContractTest(TestCase):
                     with self.assertRaises(ExecutionError):
                         run_project(suite, engine, self)
                 self.assertEqual(events, ["cleanup"])
+
+
+class LiveHttpReceiptTest(TestCase):
+    def test_client_mount_grants_write_to_only_the_receipt(self):
+        with TemporaryDirectory() as directory:
+            working = Path(directory)
+            receipt = working / "http-result.json"
+
+            def run(args, **_options):
+                self.assertEqual(stat.S_IMODE(working.stat().st_mode), 0o700)
+                self.assertEqual(stat.S_IMODE(receipt.stat().st_mode), 0o622)
+                writable = [args[index + 1] for index, arg in enumerate(args)
+                            if arg == "--mount" and not args[index + 1].endswith(",readonly")]
+                self.assertEqual(writable,
+                                 [f"type=bind,src={receipt.resolve()},dst=/receipt/result.json"])
+                self.assertIn("--cap-drop", args)
+                self.assertIn("no-new-privileges", args)
+                receipt.write_text('{"runId":"run"}', encoding="utf-8")
+
+            with patch("suites.bus_booking.live.run.command", side_effect=run):
+                self.assertEqual(http_receipt({"runId": "run"}, "container:fixture", "image", {},
+                                              working / "runtime", working / "matrix", working),
+                                 {"runId": "run"})
+
+    def test_empty_writable_receipt_cannot_pass(self):
+        with TemporaryDirectory() as directory:
+            working = Path(directory)
+            with patch("suites.bus_booking.live.run.command"):
+                with self.assertRaisesRegex(ExecutionError, "MISSING_EVIDENCE"):
+                    http_receipt({"runId": "run"}, "container:fixture", "image", {},
+                                 working / "runtime", working / "matrix", working)
 
 
 class NativeJwtTest(TestCase):

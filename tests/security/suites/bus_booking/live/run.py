@@ -189,19 +189,21 @@ def deployed(run_id, runtime, *, mail=False):
 
 def http_receipt(result, namespace, java, credentials, runtime, matrix, working):
     run_id = result["runId"]
-    output = working / "receipt"
-    output.mkdir()
+    receipt = working / "http-result.json"
+    receipt.touch(mode=0o600, exist_ok=False)
+    # The cap-dropped container may see a different UID on native Linux.
+    # The private work directory protects the host copy and only this file is mounted writable.
+    receipt.chmod(0o622)
     env = {**credentials, "BUS_PILOT_MATRIX": "/matrix.txt", "BUS_PILOT_RECEIPT": "/receipt/result.json",
            "BUS_PILOT_RUN_ID": run_id, "JAVA_TOOL_OPTIONS": "-Duser.timezone=Asia/Ho_Chi_Minh"}
     command([*docker_args(f"bus-live-{run_id}-client", run_id, namespace), "--cap-drop", "ALL",
              "--security-opt", "no-new-privileges", "--mount", bind(runtime, "/runtime"),
-             "--mount", bind(matrix, "/matrix.txt"), "--mount", bind(output, "/receipt", writable=True),
+             "--mount", bind(matrix, "/matrix.txt"), "--mount", bind(receipt, "/receipt/result.json", writable=True),
              *[f"--env={key}" for key in env], "--entrypoint", "java", java,
              "-cp", "/runtime/contract:/runtime/classes:/runtime/BOOT-INF/lib/*",
              "com.example.busbooking.api.BusBookingLiveHttp"], env={**HOST_ENV, **env}, timeout=150,
             reason="LIVE_APPLICATION_PROCESS_FAILURE")
-    receipt = output / "result.json"
-    if not receipt.is_file():
+    if not receipt.is_file() or receipt.stat().st_size == 0:
         raise ExecutionError("MISSING_EVIDENCE")
     return json.loads(receipt.read_text(encoding="utf-8"))
 

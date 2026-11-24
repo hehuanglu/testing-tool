@@ -1,0 +1,252 @@
+{
+  "checks": {
+    "BB-LIVE-JWT-PASSIVE": {
+      "authProfile": "scanner-jwt-user",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/runtimeCleanup",
+        "#/evidence/scannerEvents",
+        "#/evidence/scannerExecution",
+        "#/evidence/scannerIdentity-scanner-jwt-user",
+        "#/evidence/scannerOwnership",
+        "#/evidence/zapReport"
+      ],
+      "expected": "ZAP logs in natively, polls and reads the intended verified USER profile, drains passive work and emits a scoped report with a detector control.",
+      "method": "authenticated-passive-dast",
+      "objectiveId": "SEC-A01-01",
+      "reason": "NATIVE_JWT_PASSIVE_VERIFIED",
+      "specification": "specifications/native-jwt-passive.md",
+      "verdict": "PASS"
+    }
+  },
+  "decisiveChecks": {
+    "BB-LIVE-JWT-PASSIVE": "NATIVE_JWT_PASSIVE_VERIFIED"
+  },
+  "evidence": {
+    "provenance": {
+      "data": {
+        "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+        "applicationTransport": "http-1.1",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mailpitImage": "axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "authenticated-passive"
+      },
+      "producer": "runner"
+    },
+    "runtimeCleanup": {
+      "data": {
+        "containersRemoved": true,
+        "temporaryDirectoryRemoved": true
+      },
+      "producer": "runner"
+    },
+    "scannerEvents": {
+      "data": [
+        {
+          "bearer": false,
+          "challenge": true,
+          "phase": "anonymous",
+          "status": 401
+        },
+        {
+          "phase": "passive-control",
+          "status": 200
+        },
+        {
+          "phase": "login-page",
+          "status": 204
+        },
+        {
+          "phase": "login",
+          "status": 200
+        },
+        {
+          "bearer": true,
+          "issuedTokenMatches": true,
+          "phase": "poll",
+          "principalMatches": true,
+          "role": "USER",
+          "status": 200,
+          "verified": true
+        },
+        {
+          "bearer": true,
+          "issuedTokenMatches": true,
+          "phase": "authenticated",
+          "principalMatches": true,
+          "role": "USER",
+          "status": 200,
+          "verified": true
+        }
+      ],
+      "producer": "fixture"
+    },
+    "scannerExecution": {
+      "data": {
+        "execution": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "expectedJobTypes": [
+          "requestor",
+          "requestor",
+          "passiveScan-wait",
+          "report"
+        ],
+        "jobReceipts": [
+          [
+            "requestor",
+            "started"
+          ],
+          [
+            "requestor",
+            "finished"
+          ],
+          [
+            "requestor",
+            "started"
+          ],
+          [
+            "requestor",
+            "finished"
+          ],
+          [
+            "passiveScan-wait",
+            "started"
+          ],
+          [
+            "passiveScan-wait",
+            "finished"
+          ],
+          [
+            "report",
+            "started"
+          ],
+          [
+            "report",
+            "finished"
+          ]
+        ],
+        "mode": "zap-owned-jwt-requestor",
+        "planReportedSuccessful": true,
+        "planSha256": "2426ba972781e5e7d53430cd7607509075eaae2e4240ff58b5fcface53781143",
+        "preflight": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "preflightRequests": 0
+      },
+      "producer": "automation-framework"
+    },
+    "scannerIdentity-scanner-jwt-user": {
+      "data": {
+        "USER": {
+          "actor": "USER",
+          "status": 200
+        }
+      },
+      "producer": "application-identity"
+    },
+    "scannerOwnership": {
+      "data": {
+        "applicationClientLogin": false,
+        "credentialProvisioning": "registration and Mailpit OTP",
+        "mode": "zap-owned-jwt-requestor",
+        "principalEvidence": "backend response",
+        "sessionExpiry": "MISSING",
+        "sessionRenewal": "MISSING"
+      },
+      "producer": "suite-assertion"
+    },
+    "zapReport": {
+      "data": {
+        "capped": false,
+        "ruleInstances": [
+          {
+            "alertRef": "10038-1",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/0/instances/0"
+          },
+          {
+            "alertRef": "10020-1",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/1/instances/0"
+          },
+          {
+            "alertRef": "10021",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/2/instances/0"
+          },
+          {
+            "alertRef": "10111",
+            "method": "POST",
+            "path": "/api/auth/login",
+            "pointer": "/site/0/alerts/3/instances/0"
+          },
+          {
+            "alertRef": "10112",
+            "method": "POST",
+            "path": "/api/auth/login",
+            "pointer": "/site/0/alerts/4/instances/0"
+          },
+          {
+            "alertRef": "10112",
+            "method": "POST",
+            "path": "/api/auth/login",
+            "pointer": "/site/0/alerts/4/instances/1"
+          }
+        ],
+        "sha256": "5404808275bbe0fea62972965da18de12c70d026e15660f3c1ce352d75088d1d",
+        "version": "2.17.0"
+      },
+      "producer": "zap-report"
+    }
+  },
+  "executionEnvironment": "local",
+  "exitCode": 0,
+  "inputSha256": {
+    "security_framework/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security_framework/engine.py": "d7222b772aeb4095449ef232179933c371e3c3dea45c6bac76c0526aaedad4fc",
+    "security_framework/evidence.py": "4d6d7fa1aa962e23d10bc08577a10b8855eaa7771c2ac9890b60955e077522f1",
+    "security_framework/manifest.py": "f8353bb1edcb3e34d85a26150e63c1a00382e04f9e53c6b87f1c04211949943f",
+    "security_framework/native_jwt.py": "bafe69fa1a3586ddcf4429283de613ebe47839fa2aa5a0ce693e85eb1874bafe",
+    "security_framework/run.py": "2067d0b911d0ec8367eb0b8a9a8a958c3c63431fbfefd2fd6ca70be693daf787",
+    "suites/bus_booking/adapter.py": "c72ad8a65964cc6aef19ce90349370c7c9b4746c8f65d3ac924d9183414715d9",
+    "suites/bus_booking/assertions/oracle.py": "84470ffb9f94e88103f2806cad7d81ceba8bad5949c57cd3643ece3c81bbf0ea",
+    "suites/bus_booking/authentication/profiles.json": "4511ced1639c6f1b4f39114c451139617bab8dc3ffeaf042a6b7bdc38bdd6ff1",
+    "suites/bus_booking/cases/cases.json": "58f0974a5547d182cb954d6012caeedef59fde8f19506a69edcbdab3ece0f28b",
+    "suites/bus_booking/live/authenticated.py": "9148b8fba8dbb2df7ec65db05722089ca205b09a68e94006bfb3aafd105ee476",
+    "suites/bus_booking/live/compare.py": "967c98a94943c2f5f4b8e31c309beda5191003dd195bdfdefc58bafad5c3e8c7",
+    "suites/bus_booking/live/run.py": "53deb3ea5a57e99fac30baa4f8e3a16a90985efaa2336ab4cef981c7dd7f25dd",
+    "suites/bus_booking/live/scanner.py": "203ae7bb403eba0a87b4c1d09537352f159bcc60df6735cb3a7f209e4427e07a",
+    "suites/bus_booking/objectives/objectives.json": "b73026bd3c5c91d1cbbff0ff58ddfd16236cc16a270769d0b11b2cfea80b400e",
+    "suites/bus_booking/plans/authorization-matrix.txt": "787a3359eaef94d8d4421ad220f688cae06e14c3ebe018ab1ecd6b205f229f88",
+    "suites/bus_booking/specifications/live-http.md": "5f5baad75a19d885fc919547133f603c4c5983df4b61ae9e114da7ca5425f9a9",
+    "suites/bus_booking/specifications/native-jwt-passive.md": "a43f2ef078e8b0c5fcb75752a9bd3c4d87a98b7947c4074aa67c2179401ca612",
+    "suites/bus_booking/specifications/sec-a01-01.md": "791538d53f8a1409bb19bc878babacac919954b8bda0d0e2f9a0196dd97a6c76",
+    "suites/bus_booking/suite.json": "4ffef07544c97583e6f882b92f91ab0a6f574843d8720ed795a0d68eab6fcc02",
+    "zap-image.txt": "853a8b3f92662ffac6176b34758b4a4ab3d3326c33c0e0d85a91d7fd638e5f63",
+    "zap_report.py": "89fcc0d5242f3a19f07346c5fcb701ac8a4d06358ce090f04addf163eac8b3fb"
+  },
+  "runId": "ef6e55390fca4736a365bafa60dc3ce0",
+  "scannerImage": "zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+  "scenario": "live-authenticated-passive",
+  "schemaVersion": 1,
+  "suite": "bus_booking",
+  "verdict": "PASS"
+}

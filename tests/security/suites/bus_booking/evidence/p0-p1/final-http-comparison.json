@@ -1,0 +1,44 @@
+{
+  "copiedEvidenceControls": [
+    {
+      "control": "missing-http-cell",
+      "exitCode": 2,
+      "reason": "MISSING_EVIDENCE",
+      "verdict": "ERROR"
+    },
+    {
+      "control": "http-state-mismatch",
+      "exitCode": 1,
+      "reason": "APPLICATION_CONTRACT_MISMATCH",
+      "verdict": "FAIL"
+    },
+    {
+      "control": "missing-zap-report",
+      "exitCode": 2,
+      "reason": "INVALID_EVIDENCE",
+      "verdict": "ERROR"
+    }
+  ],
+  "handlerWitnessLane": "mockmvc",
+  "matchedResponseStateAndIdentity": true,
+  "otherConditionCells": 18,
+  "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+  "protectedAuthorizationCells": 102,
+  "runIds": {
+    "httpFirst": "1b6b9bea1cb44dacaac977c01a015836",
+    "httpRepeat": "c3d06b2bbab74e8e8b9c5b0a9555793c",
+    "mockmvc": "6f8a4b21a7404c0e83f46e83427e4a0c",
+    "passive": "c36dedc4f44c436982bcaa5d33d1c3f6"
+  },
+  "sharedCaseIds": [
+    "BB-AUTH",
+    "BB-PROFILE",
+    "BB-USER",
+    "BB-BOOKING",
+    "BB-ADMIN-READ",
+    "BB-ADMIN-WRITE",
+    "BB-ROLE",
+    "BB-ROLE-LIFECYCLE",
+    "BB-ROLE-RULES"
+  ]
+}

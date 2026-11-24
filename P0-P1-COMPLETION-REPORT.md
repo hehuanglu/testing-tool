@@ -2,121 +2,169 @@
 
 24 November 2026, ICT
 
-## Executive summary
+## Closure summary
 
-The shared framework and Bus Booking integration have local, reproducible source revisions. The measured native scanner run passed, and the final shared revision passed its offline contract checks. Docker became unavailable during final runtime regression, leaving several reruns open. The existing live product launcher now provisions a verified USER and runs native ZAP JSON login and Bearer session management through the shared passive engine. ZAP's named Requestor and poll resolve to the fixture identity on the packaged backend. The product-native CI workflow continues to passively analyze archived HTTP exchanges in its offline HAR lane.
+- **Engineering completion.** The bounded native JWT and passive scanner integration and the Active DAST admission contract are committed. The product suite adds a PostgreSQL rollback test to the existing OTP integration tests. The Bus Booking production source, build and deployment files match the prior revision.
+- **Local runtime qualification.** **VERIFIED** for the requested permitted lanes. Native JWT, scanner identity, passive processing and the paired HTTP comparison passed. The wrong-password control and all 16 synthetic scenarios matched their expected outcomes. Bus Booking's final full and long runs passed. Fixture teardown is verified.
+- **Bus Booking security acceptance.** **MISSING**. The matrix has 18 PASS, eight REVIEW and two MISSING. Open release gates also include a compatible approved passive baseline, 12 reviewed API contract discrepancies and authenticated Active DAST qualification. [Product acceptance review](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md)
+- **Authenticated Active DAST.** **BLOCKED** at shared admission and **MISSING** as a product capability and qualification claim. The local proof is the no-dispatch receipt. [Execution contract](ci-verdict-contract.md#authenticated-active-dast)
 
-The product full run reports execution **PASS** and release security acceptance **MISSING**. The review records 18 PASS, eight REVIEW, and two MISSING objectives, with dispositions for both informational login findings and all 12 API contract-drift entries. Shared Authenticated Active DAST is **BLOCKED** at admission, and product Active DAST verification is **MISSING**. [Initial audit](CURRENT-STATE-AUDIT.md) · [Product acceptance matrix](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md)
+## Final committed revisions
 
-## Architecture before and after
+| Repository | Qualified input |
+| --- | --- |
+| Shared framework, `codex/security-framework-p0-p1` | `cc1d753ba3d57fb00b8535a7c26b7bc375d7b803`. Suite tree at the verification input `becd9313ed7d4881d6cdadf49efedd7e59b5a972` and workflow blob `4bd52ec7d2dedb7a007718ea8a6acf289c63a4f1`. The integration landed in `0117bc0defc891d3eb4644c53635e7e547daa5ca`. The final input commit repairs Docker API failure classification. The report and evidence supplement that source pin. |
+| Bus Booking, `codex/bus-booking-security-p0-p1` | `b8de73f2cd35461fdce7564b1f0ce0a539fbaa24`. Production tree `922135afab8cc622ee47092350192ab465b4b347`, identical to `ca45f3a90c453b2db3818c1389e13c4ff788db1e`. The final commit changes the OTP integration test and suite traceability. The earlier `9059a1b0942191a8b23ebdc98873dc36213ffd49` production fix already checks affected rows. |
 
-```mermaid
-flowchart LR
-    subgraph Before
-        A[Shared pilot] --> B[MockMvc and packaged HTTP]
-        A --> C[Anonymous ZAP relay and passive report]
-        D[Exploratory fixture] --> E[Standalone native JWT Requestor receipt]
-        F[Product CI] --> G[Application capture and offline HAR import]
-    end
-    subgraph After
-        H[Shared Bus Booking launcher] --> I[MockMvc and packaged HTTP]
-        H --> J[Anonymous proxy and passive report]
-        H --> K[Fixture provisioning and native JWT profile]
-        K --> L[Scoped loopback relay and backend identity]
-        L --> M[Shared passive drain and report validation]
-        M --> N[Projected identity, lifecycle and cleanup evidence]
-        O[Product CI] --> P[Application capture and offline HAR import]
-    end
-```
+The evidence index binds receipts to source revisions, file and plan SHA-256 digests, the application JAR, runtime versions, and immutable image identities where applicable. Each lane retains its own observed verdict and shell exit. The scanner receipts retain phase, status and identity predicates. Credentials, JWT values, raw scanner reports and HAR traffic were transient. [Final evidence index](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
 
-The new branch of the shared live runner shares the database container's disconnected loopback namespace with the app, Mailpit and ZAP. It publishes zero ports. Provisioning uses ordinary registration and email verification, and the scanner owns the subsequent login. The relay serves ZAP's preliminary login-page GET locally. It forwards the exact login POST and protected profile GET, then correlates the Bearer value against the real login response in memory. A named Requestor and a poll must both match the verified fixture principal and USER role. The archived HAR lane runs ZAP with request sending disabled in a disconnected container. [Shared framework](docs/security-test-framework.md) · [Live runner specification](tests/security/suites/bus_booking/specifications/native-jwt-passive.md) · [Product HAR plan](/Users/hahoangloc/Working/UET/bus-booking-security-ci/tests/security/zap.yaml)
+The shared live launcher builds a Git export and places the application, Mailpit and ZAP on the database container's disconnected loopback namespace with zero published ports. The product-native runner uses its own loopback fixture to capture HTTP and sends the archive to a disconnected ZAP container for passive analysis. [Shared live lane](tests/security/suites/bus_booking/specifications/native-jwt-passive.md) · [Product HAR plan](/Users/hahoangloc/Working/UET/bus-booking-security-ci/tests/security/zap.yaml)
 
-## P0 and P1 completion matrix
+Historical comparisons remain tied to their original inputs. The committed baseline is `a5401a16568bc852e53dd7eaaf92e96a0fcf1041`. The first measured native integration is `546cce391d08a67b0a88f1fbde34c7fd60352d66` with product `56f58a3ed86d22d44bd2007e3a49aeb0c979510f`. Hosted PR #20 measured product head `56f58a3` and merge snapshot `ff5c9e606697ea87a387f60403ef5408fb5bdcb8`. Hosted execution for the final revisions remains unmeasured. [Previous verification index](tests/security/suites/bus_booking/evidence/p0-p1/verification.json) · [Hosted artifact](https://github.com/maaL6/bus-booking-system-phase-2/actions/runs/45236299340/artifacts/14848308972)
 
-| Task | Status | Result |
+## Final-revision runtime and regression results
+
+### Native JWT authentication
+
+**PASS, exit 0.** ZAP performed native JSON login after the disposable USER was registered and email-verified. The backend returned 200 and issued the Bearer token. The independent anonymous control returned 401 and a Bearer challenge. [Positive receipt](tests/security/suites/bus_booking/evidence/p0-p1/final-native-jwt.json)
+
+### Wrong-password negative control
+
+**Expected ERROR, exit 2, `AUTHENTICATION_FAILURE`.** The backend rejected both login attempts with 401. Every poll and named request returned 401 and failed the issued-token and principal checks. The receipt contains no accepted identity or passive report and records completed teardown. [Wrong-password receipt](tests/security/suites/bus_booking/evidence/p0-p1/final-native-jwt-bad-password.json)
+
+### Scanner identity
+
+**PASS.** The poll and named Requestor both received 200. The backend response matched the fixture account ID, email, verified state and USER role. The relay correlated the Bearer token on both requests with the token issued by the backend during native login. The measured scope was one USER and `GET /api/auth/me`. [Backend identity witnesses](tests/security/suites/bus_booking/evidence/p0-p1/final-native-jwt.json)
+
+### Authenticated passive processing
+
+**PASS.** Native plan preflight exited 0 with zero traffic. Both Requestor jobs finished, followed by the passive wait and report jobs. The scoped report recorded positive detector `10038-1` on the synthetic HTML and rules `10111` and `10112` on the login operation. The verified profile emitted no report row in this run. [Passive execution and report receipt](tests/security/suites/bus_booking/evidence/p0-p1/final-native-jwt.json)
+
+### Paired HTTP pilot
+
+**PASS.** Both packaged HTTP runs and the MockMvc run matched for 102 authorization cells across 25 operations and 18 authentication and role conditions. Response, persisted state and identity observations matched. MockMvc supplied the handler witness. The independent anonymous proxy/passive lane passed its product read and detector control. The comparator rejected a missing HTTP cell, a state mismatch and a missing ZAP report with their expected classifications. [Four-run comparison](tests/security/suites/bus_booking/evidence/p0-p1/final-http-comparison.json) · [Lane receipt hashes and provenance](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
+
+### Synthetic regression scenarios
+
+**16/16 matched** on the final framework revision. The earlier post-change attempt matched 8/16. The fresh receipts match verdicts, reason codes and native exits where applicable. The Docker-unavailable control pointed only the test client at an absent socket. Docker Desktop exited 1 before starting a worker. The initial runner classified that as `MISSING_EVIDENCE`. The final runner classifies the connection failure as `INFRASTRUCTURE_FAILURE` and preserves the missing-evidence assertion for worker exits without a receipt. [Scenario receipts and expectations](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
+
+- Baseline, baseline repeat, application-only and anonymous-only passed with exit 0.
+- Public and private CSP and the authorization regression each returned the expected FAIL with exit 1.
+- Bad password, scanner warning, invalid plan, incomplete execution, missing report, invalid report and Docker unavailable each returned the expected ERROR with exit 2.
+- Active DAST and generic JWT admission controls returned the expected BLOCKED with exit 3 and recorded zero dispatch.
+
+### Bus Booking suite
+
+**Full and long execution PASS, release acceptance MISSING.** The clean full run passed 324 Maven tests, 100/100 HTTP situations on 32/32 operations, 12/12 ownership situations and 133/133 reconciled offline HAR exchanges. The clean long run passed 324 Maven tests, 101/101 HTTP situations and 179/179 reconciled HAR exchanges. It covered the 12 seat race invariants, JWT expiry and fresh-login control, quota recovery, and OTP expiry and retry. The new PostgreSQL rollback test passed in both modes. The framework Python suite passed 47 tests. The product Python suite passed 11 tests, and manifest validation found 28 criteria, 32 operations and seven exclusions. [Product and offline evidence](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
+
+### Container and temporary-resource teardown
+
+**PASS.** Final pilot labels and synthetic worker names were absent in Docker after the runs. Both product runs reported container, process and temporary-file cleanup, and independent Docker readback confirmed the two product database volumes were absent. The host temporary parents and the isolated product verification checkout were removed. [Final teardown evidence](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
+
+The earlier interrupted runs had six exited Bus Booking containers. The retained run manifests, exact container names, pinned images and mount inspection identified three Mailpit containers and three PostgreSQL containers. The PostgreSQL mounts were anonymous and attached to their corresponding fixture alone. Exact-name removal and readback confirmed absence of the six containers and the three volumes. The host's prior fixture-temp prefixes were also absent. Docker recovered before this pass began. [Final teardown evidence](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
+
+## Bus Booking security acceptance
+
+The matrix preserves the product's existing release criteria. PASS is scoped to the mapped witnesses. REVIEW requires a recorded technical or product decision. MISSING identifies an unresolved required evidence dependency. The product-native gate evaluates both coverage and release acceptance. [Scope and assertions](/Users/hahoangloc/Working/UET/bus-booking-security-ci/tests/security/scope.json) · [Product acceptance rules](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md) · [Review gates](/Users/hahoangloc/Working/UET/bus-booking-security-ci/tests/security/assessment.py)
+
+| Objective | CWE | Status | Evidence and remaining work |
+| --- | --- | --- | --- |
+| SEC-A01-01 | CWE-862 | PASS | MockMvc exercises the actual security chain. The HTTP matrix checks anonymous rejection, USER/ADMIN/SUPER_ADMIN decisions and persisted role changes. Reuse of a prior token after demotion proves that authorization uses the effective backend role. |
+| SEC-A01-02 | CWE-639 | PASS | Independent owner and second USER cover detail, history and cancel. Both admin roles supply the permitted controls. The booking suite checks owner isolation and restored seats in persisted state. |
+| SEC-A01-07 | CWE-276 | PASS | Registration defaults to USER and rejects privilege fields. Lower-privileged role changes and an unlisted method are denied. |
+| SEC-A02-04 | CWE-260 | PASS | The checked production and development password properties resolve through environment variables. The test profile contains a fixture default. This source acceptance covers the repository configuration. |
+| SEC-A02-05 | CWE-547 | REVIEW | **Missing product policy and deployment evidence.** JWT and OTP keys resolve through environment configuration, and invalid rate limits are rejected. OTP lifetime (10 minutes), resend cooldown (60 seconds), maximum failed attempts (5), and BCrypt cost (10) are fixed in source. **Bus Booking** must approve the effective release values, document the allowed overrides and secret source, and confirm the test profile is excluded. **Framework** must record that disposition against the effective release configuration. |
+| SEC-A03-01 | CWE-1329 | PASS | Maven-managed or explicit dependency versions and Docker image references can be replaced. The requirement evaluates updateability of the in-scope software components. |
+| SEC-A04-05 | CWE-759 | PASS | The unit and runtime checks validate randomized BCrypt salts for equal passwords and successful hash verification. |
+| SEC-A04-06 | CWE-916 | PASS | Runtime BCrypt hashes meet the work factor specified in the suite. The reviewed condition is the algorithm and cost configured for this application. |
+| SEC-A05-01 | CWE-89 | REVIEW | **Missing recorded review evidence.** The final-source trace below covers all 32 operations, and the quoted-name and optional-filter controls cover the declared runtime witnesses. The release gate still requires a disposition for `parameter-binding-review`. **Framework** must reconcile the trace against the effective data-access implementation and record the decision. **Bus Booking** must identify any release-only data-access extension and confirm intended matching semantics for vehicle filters. |
+| SEC-A05-04 | CWE-93 | PASS | Registration and resend reject CR/LF-containing recipient input. Mailpit records no delivery from these cases and verified registration supplies the successful control. |
+| SEC-A06-01 | CWE-598 | PASS | Auth capture traces login and email verification fields in JSON and JWT in the Bearer header. The contract check finds no credential query parameter, and offline HAR reconciles the captured requests. |
+| SEC-A06-03 | CWE-525 | MISSING | **Missing frontend dependency, browser test implementation and evidence.** Backend login, profile and booking cases supply `no-store` evidence. **Bus Booking** must supply the pinned frontend, reproducible start command and fixture access. **Framework** must drive the sensitive views in that build and capture cache, Back navigation and post-logout revisit behavior with a successful navigation control. |
+| SEC-A06-05 | CWE-602 | MISSING | **Missing frontend dependency, browser test implementation and evidence.** Backend coverage exercises authorization, trip state, capacity, pricing and persisted state. **Bus Booking** must supply the pinned frontend and a reproducible bookable and ineligible-trip fixture. **Framework** must drive the paired real booking journeys and correlate UI result, backend decision and resulting booking/seat state. |
+| SEC-A07-01 | CWE-613 | PASS | The product tests cover invalid Bearer input, valid identity and exact JWT expiry at the service boundary. Application-client expiry coverage is independent of scanner session expiry. |
+| SEC-A07-03 | CWE-307 | PASS | Live login throttling and OTP single-use run with accepted-credential controls. Unit and HTTP regressions cover quota boundary, concurrency, reset, and forwarded-header handling. |
+| SEC-A07-05 | CWE-259 | PASS | The bootstrap path uses an external password and explicit opt-in. Disabled bootstrap needs no credential. The backend fixture tests successful bootstrap and failed password verification. |
+| SEC-A08-02 | CWE-427 | REVIEW | **Missing release artifact and deployment evidence.** The committed entrypoint resolves `java` through PATH, and the supplied Dockerfile and Compose file inherit the base image user and PATH. The pinned local Temurin base resolves it to `/opt/java/openjdk/bin/java`. The default UID is 0, and every PATH directory reported writable under that UID. **Bus Booking** must provide the deployed image digest, effective user, PATH, mounts and filesystem/security settings and decide whether the observed ownership is acceptable. **Framework** must confirm ordered resolution and directory writability in that specific deployment. The result establishes the pinned base-image defaults. [PATH probe](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json) |
+| SEC-A08-03 | CWE-502 | REVIEW | **Missing release mapper and signing-key evidence.** Existing controls exercise incorrect DTO types, unexpected fields, HS256 enforcement, wrong issuer/key and malformed claims. The committed source review found no global polymorphic-typing declaration. **Bus Booking** must provide the effective mapper modules/configuration and key ownership, issuance and rotation policy. **Framework** must verify the deployment configuration and repeat the approved DTO/JWT controls there. |
+| SEC-A08-05 | CWE-915 | PASS | Profile and role APIs reject unexpected or privileged fields. DB checks confirm rejected mutations leave state intact and allowed updates touch the intended fields. |
+| SEC-A09-01 | CWE-117 | REVIEW | **Missing sink dependency, sink-specific test implementation and evidence.** The fixture exercised the CR/LF cases and checked its application log for a forged record. The observed application log and source inventory leave connector, access, exception and downstream sink framing open. **Bus Booking** must identify each enabled sink and relevant request field. **Framework** must establish marker reachability, then verify that each sink preserves one correctly framed record with a benign control. |
+| SEC-A09-02 | CWE-532 | REVIEW | **Missing deployment evidence and sink coverage.** The fixture marker scan and redaction tests cover the exercised application paths. **Bus Booking** must provide effective log levels, exception/connector outputs, and the ingestion and retention configuration. **Framework** must verify each configured sink against correlated synthetic credentials, JWTs, OTPs and PII on the relevant success and failure paths. |
+| SEC-A09-03 | CWE-778 | REVIEW | **Observed fixture evidence gap and possible product defect.** The fixture exercised all four events. Its captured application log contains no matching named login, access-denied, rate-limited or role-changed records. **Bus Booking** must identify the event producer and sink, or implement those events if the release has no producer. **Framework** must verify sanitized records against each corresponding action and actor in the effective sink. |
+| SEC-A10-01 | CWE-252 | REVIEW | **Missing final write/lock review evidence.** The seven row-count controls cover booking status, role update and OTP create, update, consume, failure count and replacement. The final PostgreSQL test adds rollback and retry evidence for a zero-row challenge delete after the account update. **Framework** must record the remaining `unchecked-update-review` disposition against role, OTP, booking and seat writes and their lock/transaction boundaries. **Bus Booking** must identify any deployment-specific writers or transaction differences before release acceptance. |
+| SEC-A10-02 | CWE-478 | PASS | Error dispatch, quota mapping and unlisted methods have exercised defaults. Missing and invalid original status return the generic server response. |
+| SEC-A10-03 | CWE-484 | PASS | Scoped dispatch uses arrow switch rules. Error routing, unknown methods and invalid fields exercise separate branches with their expected outcomes. |
+| SEC-A10-04 | CWE-460 | PASS | The JWT filter clears its security context after a downstream exception. Integration controls verify rollback of seat reservations and an already flushed trip update. |
+| SEC-A10-05 | CWE-215 | PASS | Production and development debug settings and redacted representations are checked. Runtime canaries locate no monitored fixture secrets in logs. |
+| SEC-A10-06 | CWE-550 | PASS | MockMvc exercises infrastructure exceptions with generic output. The HTTP suite tests scoped conflict and validation errors, and production configuration excludes exception details. |
+
+### SQL binding trace
+
+The trace covers the 32 method/path pairs in the final manifest. In the inspected source, JDBC operations use fixed statements with positional values. Spring Data uses typed entity operations or fixed JPQL/SQL with named bindings. Pagination uses typed page number and size plus fixed repository ordering. [Controllers](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/main/java/com/example/busbooking/api/controller) · [Repositories](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/main/java/com/example/busbooking/data/repository) · [Adapters](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/main/java/com/example/busbooking/data/adapter)
+
+| Scoped operations | Controller input to persistence |
+| --- | --- |
+| `POST /api/auth/{register,login,verify-email,resend-verification}`, `GET /api/auth/me` | Canonical email goes to declared user lookups or the fixed OTP JDBC account lock. OTP writes bind numeric ID, digest and timestamps. JWT subject is converted to a typed user ID. Other auth fields flow to hashing, verification and mapped writes. |
+| `GET/PUT /api/users/me`, `PUT /api/admin/users/{userId}/role` | The resolved subject and role target are typed IDs. Profile JPQL binds name, phone, ID and active status. Role JDBC binds actor and target IDs, enum-derived role name and resolved role ID. |
+| `POST /api/bookings`, `GET/DELETE /api/bookings/{bookingId}`, `GET /api/users/me/bookings` | Booking form values map to typed domain fields and saved entities. Booking and trip locks, seat delta, status and ownership/history reads use typed, bound IDs and values. History ordering is fixed. |
+| `GET /api/admin/bookings` | Optional user ID, trip ID and enum status become bound predicates and skip flags in fixed content and count queries. `page` and `size` feed `PageRequest`. |
+| `GET /api/locations`, `GET/POST /api/admin/locations`, `PUT /api/admin/locations/{locationId}` | Bound search text feeds fixed `position()` expressions over name, province and address. Bound text and a typed excluded ID serve duplicate checks. Mapped fields flow through entity persistence. |
+| `GET/POST /api/admin/operators`, `PUT /api/admin/operators/{operatorId}` | Operator search uses bound query and status in fixed SQL. Duplicate/reference checks and write locks bind typed IDs and normalized form fields. Writes use mapped entities. |
+| `GET/POST /api/admin/vehicles`, `PUT /api/admin/vehicles/{vehicleId}` | Fixed JPQL binds text into the `LIKE` value, with optional typed operator ID and enum status. Input wildcards can affect text matching within that bound value. Reference and update paths bind typed IDs and persist mapped entities. |
+| `GET/POST /api/admin/routes`, `PUT /api/admin/routes/{routeId}` | Fixed list predicates bind nullable origin/destination IDs and enum status. Reference lookup, duplicate and active-trip checks use typed IDs in fixed queries. Writes map the body to the entity. |
+| `GET /api/trips`, `GET /api/trips/{tripId}` | Fixed list/count queries bind optional origin/destination IDs, temporal bounds, skip flags and a departure cutoff. Detail binds the typed trip ID. Pagination enters `PageRequest`. |
+| `GET/POST /api/admin/trips`, `PUT/DELETE /api/admin/trips/{tripId}` | Fixed list/count queries bind optional route, status and date bounds. Create/update/cancel resolve route, vehicle and trip using typed IDs. Writes use mapped fields and fixed locking/status/seat operations. |
+
+### Transaction review for SEC-A10-01
+
+- Role updates lock actor and target accounts, recheck eligibility and require one affected row for an actual role change. The existing PostgreSQL integration and HTTP tests cover the role recheck and effective-role transition.
+- OTP operations lock the account before reading the challenge. The existing integration tests cover concurrent verification, resend and registration rollback. The new PostgreSQL test makes the second write affect zero rows, checks that the first write rolled back and that the challenge survives, then removes the fixture and verifies a normal retry.
+- Booking creation and cancellation run in transactions. Cancellation checks booking ownership/status under a write lock, locks the trip before restoring seats and requires one booking status update. Seat updates guard against underflow and require one affected row. Existing PostgreSQL tests verify rollback after a seat reservation and the final long run exercises the concurrent seat invariants.
+
+[Role and OTP persistence](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/main/java/com/example/busbooking/data/adapter) · [Booking transaction](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/main/java/com/example/busbooking/business/service/BookingService.java) · [OTP integration tests](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/test/java/com/example/busbooking/integration/AuthServiceIntegrationTest.java)
+
+### Release baseline and API contracts
+
+Two informational login observations are retained as expected behavior. Rule 10111 identifies the login operation. Rule 10112 identifies issuance of the Bearer session token. Count and confidence remain part of baseline review. The older reviewed ARM64 baseline's OpenAPI digest is `fbea8ee16547777a7e190ae2386401404cdda7df50f450216cb2aaf2d9119ffa`. The final full runtime reports `adb60fb6effef029039fa039bae32f902330b8a380516d532cf145f4c40dfb72`. The existing comparator also found a changed suite manifest digest and returned `MISSING / baseline_incompatible`. The final full receipt supplies a candidate for Bus Booking to approve by operation, rule, count and confidence. [Product baseline and dispositions](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md)
+
+All 12 API contract observations remain REVIEW. Bus Booking API owners must reconcile checked-in design/OpenAPI and runtime behavior, or record an explicit decision for each recognized difference. The framework must revalidate the revised contract. [Operation-by-operation dispositions](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md#api-contract-drift)
+
+## Authenticated Active DAST
+
+| Dimension | Status | Evidence and remaining work |
 | --- | --- | --- |
-| P0.1 Shared framework stabilization | VERIFIED | Baseline source, specs, CI contract, and sanitized historical evidence committed. The historical pilot comparison and its evidence controls revalidate against the baseline source. |
-| P0.1 Bus Booking stabilization | VERIFIED | The PR-era revision and mutation fix are versioned. The full product execution and subsequent clean build agree on the application binary and suite-file digests. The exploratory worktree keeps its unrelated modifications and prototype files. |
-| P0.2 Review all 28 requirements, findings and drift | VERIFIED | Each requirement is mapped to its CWE, case or source evidence, disposition and remaining acceptance gate. Fresh product evidence is linked below. |
-| P0.2 Database mutation return values | VERIFIED | Product guards now require exactly one affected row for role, email verification and booking status mutations. Four targeted negative tests pass. The criterion still carries its manual write/lock and transactional review. |
-| P0.2 Release security acceptance | MISSING | Two browser-dependent criteria lack a runnable product frontend. Eight criterion reviews, 12 API drift entries, the current passive baseline and active qualification remain open. |
-| P1.1 Native ZAP JWT session at the measured source snapshot | VERIFIED | The positive lane resolves one USER for one protected GET and compares it with the observed anonymous denial. |
-| P1.1 Final revision repeat and live wrong-password control | IMPLEMENTED_NOT_VERIFIED | The final contract rejects contradictory authentication evidence offline. Docker failed before the final positive and wrong-password runs reached ZAP. |
-| P1.2 Scanner-owned authenticated passive at the measured source snapshot | VERIFIED | Native plan preflight, job receipts, passive wait, scoped report, detector and cleanup passed. The report separates product login observations and synthetic control instances. |
-| P1.2 Externally captured authenticated HAR passive | VERIFIED | The existing product plan and parser reconcile the archived exchanges with ZAP history. Product authentication and role verification remain independently visible. |
-| Final shared transport and synthetic reruns | BLOCKED | The post-change MockMvc gate passed. Readiness deadlines, scanner preflight timeouts and subsequent Docker daemon failure interrupted the full post-change set. |
-| Local Docker verification environment | FAILED | The host exhausted writable space and the Docker API timed out after task-owned build cleanup restored space. |
-| P1.3 Shared Active DAST restriction and receipt | VERIFIED | Schema, admission and CI agree on an explicit no-dispatch receipt and exit 3. Native plan admission is exercised offline. |
-| P1.3 Authenticated Active DAST qualification | BLOCKED | Shared runner admission returns BLOCKED. Local product evidence remains MISSING for active dispatch, identity correlation, lifecycle and results. |
-| P1.3 Hosted shared and updated product workflow evidence | IMPLEMENTED_NOT_VERIFIED | The shared CI definition includes a blocked-case assertion. Local contract checks cover the shared CI admission assertion and the product full run exercises the existing CI entry point. Hosted evidence covers the earlier product source revision. |
+| Implementation | **MISSING** | The shared framework has a case method, schema, admission rule and CI assertion. The passive engine admits fixed Requestor, passive wait and report jobs. Bus Booking's product workflow imports HAR in an offline scanner and has no active adapter. |
+| Integration readiness | **PARTIAL** | The isolated product fixture, approved single-USER native passive profile, passive reporting and cleanup are measured. Integration still requires a reviewed active method and a product-specific scope, identity, lifecycle and results contract. The active component's own session handling is unmeasured. |
+| Execution restriction | **BLOCKED** | Existing admission returned exit 3 and a single case-bound receipt with `dispatched: false` for the product and synthetic selections. The execution restriction remains in force. |
+| Qualification evidence | **MISSING** | Qualification requires an authorized run, exact source/image/configuration and scope, active-component backend identity, dispatch/readback, terminal results and verified teardown. Scanner-owned expiry, re-login and additional roles also require separate evidence where in scope. |
 
-## Changes and source revisions
+[Active execution contract](ci-verdict-contract.md#authenticated-active-dast) · [Local no-dispatch evidence](tests/security/suites/bus_booking/evidence/p0-p1/final-runtime.json)
 
-- **Framework** `e8197caab2d530287214b0e7b8231a3691e0bba8` is the original tracked base. `a5401a16568bc852e53dd7eaaf92e96a0fcf1041` versions the baseline. `0117bc0defc891d3eb4644c53635e7e547daa5ca` adds the native JWT profile, admission, lifecycle and evidence integration, Bus Booking adapter, contract tests and CI declarations. The measured inputs of the successful live receipt were reconstructed byte for byte and committed as `546cce391d08a67b0a88f1fbde34c7fd60352d66` on `codex/security-framework-native-measured`. The final evidence commit on `codex/security-framework-p0-p1` adds this report and the projected verification records. [Native JWT renderer](tests/security/security_framework/native_jwt.py) · [Shared scanner engine](tests/security/security_framework/engine.py) · [Evidence validation](tests/security/security_framework/evidence.py) · [Workflow](.github/workflows/security-suite-framework.yml)
-- **Bus Booking** `56f58a3ed86d22d44bd2007e3a49aeb0c979510f` is the committed CI baseline. `9059a1b0942191a8b23ebdc98873dc36213ffd49` checks affected-row contracts and adds four tests to criterion traceability. `cb83d656424a22bec0a75a4a7919117d8609ddce` adds the acceptance matrix and runbook link on `codex/bus-booking-security-p0-p1`. [Product scope](/Users/hahoangloc/Working/UET/bus-booking-security-ci/tests/security/scope.json) · [Mutation row count tests](/Users/hahoangloc/Working/UET/bus-booking-security-ci/src/test/java/com/example/busbooking/data/adapter/MutationRowCountTest.java)
-- **Exploratory proof** `cc0ac2451227971367de9c7f9153f908c0c8d315` is the tracked base of the dirty lab worktree. Its original runner and plan match the hashes in the retained receipt. The currently present exploratory JAR digest differs from the proof's JAR digest. The integrated lane rebuilds the actual committed product revision through the existing shared launcher. [Sanitized historical session receipt](tests/security/suites/bus_booking/evidence/p0-p1/historical-native-session.json)
-- **Hosted provenance** PR #20's run head was `56f58a3` and its tested merge snapshot was `ff5c9e606697ea87a387f60403ef5408fb5bdcb8`. Artifact `14848308972` had ZIP SHA-256 `f31d959a5ba9eeb55d7a308864710156b4478960a619ec931de758abf910d809`. The initial audit verified it against locally retained results and checked the product suite-file hashes. [Hosted run and artifact](https://github.com/maaL6/bus-booking-system-phase-2/actions/runs/45236299340/artifacts/14848308972)
+## P0/P1 Definition of Done
 
-## Execution results and regression comparison
+### Engineering completion
 
-| Lane | Baseline | P0/P1 result |
-| --- | --- | --- |
-| Shared offline tests | 43 PASS | 46 PASS, with explicit native JWT plan admission and receipt contradiction controls |
-| Shared synthetic suite | 16 expected outcomes in historical qualification | Fresh runs matched six of 16 pre-change outcomes and eight of 16 post-change outcomes. The other fresh attempts did not reproduce their expected outcomes once validation or Docker deadlines intervened. The historical 16/16 qualification and fresh receipts remain separately indexed. |
-| Shared Bus Booking MockMvc and paired packaged HTTP | 102 authorization cells across 25 operations, plus 18 application authentication and role conditions | Fresh pre-change MockMvc and packaged HTTP passed. Post-change MockMvc passed with the same normalized response, state and identity results. Two packaged reruns missed application readiness, so the four-run post-change comparison could not pass. |
-| Anonymous proxy and passive | Bounded product GET and synthetic CSP detective control PASS | The pre-change anonymous proxy/passive run passed. The post-change attempt timed out before a complete scan. |
-| Native JWT Requestor and passive | Standalone lab receipt proves native scanner-owned identity for one USER | At framework snapshot `546cce3` and product `56f58a3`, the native session, passive lifecycle, positive detector and cleanup passed. Final integration revision retries failed during fixture startup. The measured receipt also passes the newer passive and identity checks offline. |
-| Product-native full CI | Hosted execution PASS with 316 Maven results, 100/100 HTTP situations across 32/32 operations, 12/12 ownership situations and 133 reconciled HAR exchanges | Local full execution PASS. All 320 Maven tests, 100/100 HTTP situations, 32/32 operations, 12/12 ownership controls and 133/133 HAR exchanges passed. The runner marked this checkout dirty because of generated Python cache files. A clean retry built an identical JAR and suite inputs and passed 320 Maven tests before Docker prevented backend startup. |
-| Product separate exhaustive HTTP matrix | Historical 130/130 PASS independently of the shared pilot | PASS, 130/130 and fixture cleanup. Executed from the clean product worktree as an independent suite. |
-| Product long mode | Historical exploratory run at dirty source | The fresh long run passed 12 race invariants and the live application-client JWT expiry/fresh-login and quota-recovery checks before the OTP expiry request timed out. The stalled scan was interrupted for cleanup. The long-run execution gate remained MISSING, and the clean retry passed 320 Maven tests before failing backend startup. |
-| Product reporting and contract checks | 11 unit tests PASS, 28 criteria / 32 operations / seven exclusions | 11 PASS and matching scope coverage, with all four new database mutation tests passing in Maven |
-| Shared Active DAST and generic JWT no-dispatch | Both returned exit 3 | Both product suite controls returned BLOCKED/3 with a single no-dispatch receipt. The synthetic equivalents also matched their expected outcomes. |
+- [x] Commit and bind the bounded native JWT and passive scanner implementation.
+- [x] Verify offline result, authentication, scope and Active DAST admission contracts. Preserve separate infrastructure and missing-evidence classifications.
+- [x] Review the 28 product objectives, all 12 API drift records and the two informational login findings.
+- [x] Implement the additional OTP row-count controls and the PostgreSQL rollback regression in the existing suite.
 
-The positive passive detector is `10038-1` on the synthetic HTML control. Native report rows on the login operation identify authentication and session-management behavior. The verified profile produces no finding in this run. The completed passive drain follows the authenticated Requestor. The receipt contains the backend-poll and named-request observations, the ordered scanner jobs, report hash and scope, the resolved role and teardown. The final wrong-password runtime control is unmeasured. Offline receipt controls reject a 401 login, invalid role, mismatched token, missing poll, missing detector and incomplete cleanup. The first implementation attempt correctly rejected ZAP's preliminary login-page GET as outside scope. The final relay accounts for that known GET inside the disposable fixture. [ZAP JSON authentication behavior](https://www.zaproxy.org/docs/desktop/ui/dialogs/session/context-auth/) · [Passive drain job](https://www.zaproxy.org/docs/desktop/addons/passive-scanner/job-pscanwait/)
+### Runtime qualification
 
-The retained verification index carries receipt references, SHA-256 digests, runtime and suite inputs, and the separate shared and product classifications. Full projected outputs are also available under the local artifacts directory. Credential values, JWTs, HAR traffic, raw scanner reports, startup logs and application JARs were transient. [Versioned evidence and provenance](tests/security/suites/bus_booking/evidence/p0-p1/verification.json) · [Local verification artifacts](artifacts/p0-p1-after)
+- [x] Verify native JWT, wrong-password rejection, backend identity and authenticated passive processing on final inputs.
+- [x] Complete two packaged HTTP runs, MockMvc and anonymous passive processing, and reconcile the four receipts.
+- [x] Check all 16 synthetic scenarios against their existing exit and reason expectations, including teardown.
+- [x] Verify final fixture teardown and reconcile the interrupted Docker runs.
+- [x] Verify the new PostgreSQL regression and final product-native suite locally.
+- [ ] Obtain hosted workflow evidence for these final revisions.
 
-## Security objective acceptance
+### Product security acceptance
 
-The product-native release acceptance remains **MISSING**. The [28-row product matrix](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md) identifies each executable or static witness and the gap for each open requirement.
+- [ ] Resolve eight REVIEW and two MISSING objectives using the evidence and ownership described above.
+- [ ] Approve a compatible passive baseline and close the 12 API contract dispositions.
+- [x] Reconfirm the Active DAST admission restriction and the no-dispatch evidence.
+- [ ] Qualify Authenticated Active DAST through an authorized implementation and execution.
 
-- **PASS (18).** SEC-A01-01, SEC-A01-02, SEC-A01-07, SEC-A02-04, SEC-A03-01, SEC-A04-05, SEC-A04-06, SEC-A05-04, SEC-A06-01, SEC-A07-01, SEC-A07-03, SEC-A07-05, SEC-A08-05 and SEC-A10-02 through SEC-A10-06.
-- **REVIEW (8).** SEC-A02-05 needs policy decisions for hard-coded security settings. SEC-A05-01 needs a complete endpoint-to-query binding review. SEC-A08-02 needs effective container PATH evidence. SEC-A08-03 needs deployed DTO and JWT key trust evidence. SEC-A09-01 through SEC-A09-03 need wider log sink validation and the four named security events. SEC-A10-01 needs final review of the scoped write/lock and rollback evidence.
-- **MISSING (2).** SEC-A06-03 and SEC-A06-05 require the real product frontend revision and reproducible browser startup. The backend reports show cache headers and server-side enforcement for their scoped operations.
-- The historical reviewed ARM64 baseline binds runtime OpenAPI digest `fbea8ee16547777a7e190ae2386401404cdda7df50f450216cb2aaf2d9119ffa`. The hosted and clean pre-change source produced `adb60fb6effef029039fa039bae32f902330b8a380516d532cf145f4c40dfb72`. Supplying the older baseline produced `MISSING / baseline_incompatible` at execution. The CI-equivalent run leaves the baseline gate in REVIEW for a new compatible, approved capture. The login findings remain in evidence. Both document expected behavior. [ZAP rule 10111](https://www.zaproxy.org/docs/alerts/10111/) · [ZAP rule 10112](https://www.zaproxy.org/docs/alerts/10112/)
-- All 12 contract drift items remain REVIEW. Their runtime observations are recorded and the API design and OpenAPI correction required for each operation is documented. [Contract drift dispositions](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-acceptance-p0-p1.md)
+## Reproduction
 
-## ZAP capability status and blockers
-
-| Capability | Status | Scope and remaining evidence |
-| --- | --- | --- |
-| Anonymous Requestor, proxy and passive scan | VERIFIED | Disposable loopback relay, public locations and a synthetic detector control. |
-| Native form and cookie passive | VERIFIED | Synthetic form fixture with bounded Requestor and independent actor witness. |
-| Offline HAR passive processing | VERIFIED | Product-native authenticated application-client capture, neither backend access nor request sending by the scanner. |
-| Native JWT Requestor, poll and passive scan | VERIFIED | One verified USER, one protected profile read, expected login findings, synthetic detector, fresh scoped report, cleanup. |
-| JWT expiry and renewal owned by ZAP | MISSING | The measured scanner profile and poll use one freshly issued token. Time-bound expiry and scanner-managed re-login with a second backend-correlated token require separate evidence. Product-native application-client JWT temporal checks are separate. |
-| Additional scanner roles, frontend and product discovery | MISSING | Current scanner profile covers one USER and fixed operation. Product frontend revision and discovery evidence are unavailable. |
-| Authenticated Active DAST dispatcher | BLOCKED | Shared case method maps to a no-dispatch receipt. The passive engine rejects extra jobs. Product CI uses an offline HAR container and has no active adapter. |
-| Bus Booking Active DAST qualification | MISSING | No product active run, active component session observation, scope-aligned request attribution, terminal evidence, report or cleanup for active execution. JWT session behavior outside Requestor and poll, target-input coverage and native active technical limitations remain unmeasured. |
-
-An independent active qualification requires an explicitly authorized mechanism and ownership and isolation for the exact environment. The current result schema and CI checks classify the restriction. The product must separately establish its adapter, scope, execution and evidence contract, effective scanner identity and fixture lifecycle. [Active evidence boundary](ci-verdict-contract.md#authenticated-active-dast)
-
-## Verification environment blocker
-
-The post-change shared packaged HTTP diagnostic timed out waiting for application readiness. Multiple synthetic ZAP preflights hit their 90-second deadline. The host later reported `no space left on device` and the Docker daemon stopped answering its Unix socket and CLI health checks. Removing task-owned build output restored free space. Docker remained unresponsive, so clean product retries could not confirm container teardown. Docker recovery and task-owned cleanup verification are required before final runtime reruns. The index retains failed and incomplete attempts separately from the accepted results.
-
-## Reproduction and dependency record
-
-Use Python 3.13.2, JDK 21.0.13 and Maven Wrapper 3.10.2 to reproduce the local evidence. Docker Engine 29.8.1 ran Linux ARM64 containers. The product POM pins Spring Boot 4.2.0, JJWT 0.13.0 and springdoc 3.2.0. Actual native ZAP and product HAR receipts bind the selected scanner image, and the product report records the bundled add-ons. [Product POM](/Users/hahoangloc/Working/UET/bus-booking-security-ci/pom.xml) · [Shared live commands](tests/security/suites/bus_booking/live/README.md) · [Product runbook](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-runbook.md)
-
-- ZAP 2.17.0 `zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238`.
-- PostgreSQL 16 Alpine `postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857`.
-- Temurin 21 JRE `eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d`.
-- Mailpit 1.27.8 `axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707`.
-
-Run the shared contract tests using `PYTHONPATH=tests/security python3 -m unittest discover -s tests/security -p 'test_*.py'`. Use the recorded revisions in the live launcher for `http`, `passive`, `authenticated-passive` and `authenticated-passive-bad-password`. Use `suites.bus_booking.adapter` for MockMvc and `suites.bus_booking.live.compare` for the four shared pilot receipts. Run the product-native `tests/security/run.py --validate`, reporting tests, `--mode full`, `--mode long`, and the separate `tests/security/authorization_matrix.py` from Bus Booking.
-
-## P2 and P3 handoff
-
-- **P2 candidate scope.** Close the remaining backend and frontend evidence obligations, correct and review API contracts, qualify an approved compatible passive baseline, and add reliable execution paths in product and shared CI for any additional verified lanes.
-- **P3 candidate scope.** Version criterion-to-alert attribution and distinguish risk groups, instances, synthetic controls and unmeasured coverage. Extend native scanner role and session lifecycle evidence as needed. Active dispatch and qualification remain dependent on the explicit execution boundary above. [Exploratory roadmap](/Users/hahoangloc/Working/UET/bus-booking-system-phase-2/docs/security-assessment-status-and-roadmap.md)
+Use the pinned revisions and dependencies in the evidence index. Run the shared unittest contract, the 16 existing synthetic scenarios, the four documented live lanes and the MockMvc adapter and comparator. For the product-native suite use the validated Bus Booking manifest and its long mode. [Shared live commands](tests/security/suites/bus_booking/live/README.md) · [Synthetic suite commands](tests/security/suites/feasibility_fixture/README.md) · [Product runbook](/Users/hahoangloc/Working/UET/bus-booking-security-ci/docs/security-runbook.md)

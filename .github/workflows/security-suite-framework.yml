@@ -1,0 +1,45 @@
+name: Standalone security suite framework
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/security-suite-framework.yml'
+      - 'tests/security/security_framework/**'
+      - 'tests/security/suites/**'
+      - 'tests/security/feasibility/**'
+      - 'tests/security/test_security_framework.py'
+      - 'tests/security/zap-image.txt'
+      - 'tests/security/zap_report.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  framework-example:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: tests/security
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify the runner contract
+        run: python3 -m unittest discover -s tests/security -p 'test_security_framework.py'
+      - name: Pull the pinned ZAP image
+        run: docker pull "$(cat tests/security/zap-image.txt)"
+      - name: Gate on the fixture baseline
+        run: |
+          python3 -m security_framework.run --suite feasibility_fixture --scenario baseline \
+            --out artifacts/security-suite/feasibility_fixture/baseline
+          test -s artifacts/security-suite/feasibility_fixture/baseline/result.json
+          test -s artifacts/security-suite/feasibility_fixture/baseline/report.md
+      - name: Upload projected evidence and report
+        if: ${{ always() && hashFiles('artifacts/security-suite/feasibility_fixture/baseline/result.json') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: security-suite-example-${{ github.run_attempt }}
+          path: artifacts/security-suite/feasibility_fixture/baseline
+          if-no-files-found: error
+          retention-days: 7

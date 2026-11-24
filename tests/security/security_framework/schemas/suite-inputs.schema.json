@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Security suite input documents",
+  "oneOf": [
+    { "$ref": "#/$defs/suite" },
+    { "$ref": "#/$defs/objectives" },
+    { "$ref": "#/$defs/cases" },
+    { "$ref": "#/$defs/profiles" }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+    "ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "suite": {
+      "type": "object",
+      "required": ["schemaVersion", "id", "scenarios"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "scenarios": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "#/$defs/id" },
+          "additionalProperties": { "$ref": "#/$defs/ids" }
+        },
+        "sources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "objectives": {
+      "type": "object",
+      "required": ["schemaVersion", "objectives"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "cwe", "statement"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "statement": { "type": "string", "minLength": 1 },
+              "cwe": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^CWE-[1-9][0-9]*$" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cases": {
+      "type": "object",
+      "required": ["schemaVersion", "cases"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "objectiveId", "method", "specification", "oracle", "authProfile", "expected", "requiredEvidence"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "objectiveId": { "$ref": "#/$defs/id" },
+              "method": {
+                "enum": ["passive-dast", "authenticated-passive-dast", "authorization", "application-assertion", "automation-framework", "authenticated-active-dast"]
+              },
+              "authProfile": { "$ref": "#/$defs/id" },
+              "oracle": { "$ref": "#/$defs/id" },
+              "specification": { "type": "string", "pattern": "^specifications/.+\\.md$" },
+              "expected": { "type": "string", "minLength": 1 },
+              "requiredEvidence": { "$ref": "#/$defs/ids" }
+            }
+          }
+        }
+      }
+    },
+    "profiles": {
+      "type": "object",
+      "required": ["schemaVersion", "profiles"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "profiles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "kind"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "kind": { "enum": ["none", "form-cookie", "jwt-bearer"] },
+              "actors": { "$ref": "#/$defs/ids" }
+            },
+            "if": { "properties": { "kind": { "const": "form-cookie" } } },
+            "then": { "required": ["actors"] }
+          }
+        }
+      }
+    }
+  }
+}

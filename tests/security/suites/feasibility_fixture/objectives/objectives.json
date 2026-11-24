@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "objectives": [
+    {
+      "id": "DEMO-CSP",
+      "cwe": [
+        "CWE-693"
+      ],
+      "statement": "The fixture's protected CSP policy is present on public and authenticated subject pages."
+    },
+    {
+      "id": "DEMO-AUTHZ",
+      "cwe": [
+        "CWE-862"
+      ],
+      "statement": "Only the authorized editor can update the fixture policy revision."
+    }
+  ]
+}

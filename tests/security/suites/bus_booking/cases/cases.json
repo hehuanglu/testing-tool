@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "BB-AUTH",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Real login and identity replay succeed for four fixture accounts. Missing, malformed, expired, duplicate and ineligible credentials receive the expected response.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-AUTH"
+      ]
+    },
+    {
+      "id": "BB-PROFILE",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "All authenticated roles can read and update their own profile. Anonymous requests are denied.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-PROFILE"
+      ]
+    },
+    {
+      "id": "BB-USER",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Booking creation and personal booking history require USER.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-USER"
+      ]
+    },
+    {
+      "id": "BB-BOOKING",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Booking access permits the owner, ADMIN and SUPER_ADMIN. Anonymous and non-owner USER requests are denied.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-BOOKING"
+      ]
+    },
+    {
+      "id": "BB-ADMIN-READ",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Every administrative list operation requires ADMIN or SUPER_ADMIN.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-ADMIN-READ"
+      ]
+    },
+    {
+      "id": "BB-ADMIN-WRITE",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Every administrative resource write requires ADMIN or SUPER_ADMIN. Denial preserves persistent state.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-ADMIN-WRITE"
+      ]
+    },
+    {
+      "id": "BB-ROLE",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Only SUPER_ADMIN can promote an eligible USER. Denied role writes leave all persisted fixture rows unchanged.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-ROLE"
+      ]
+    },
+    {
+      "id": "BB-ROLE-LIFECYCLE",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "Demotion takes effect on the next request using the already-issued JWT, and the principal retains its subject.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-ROLE-LIFECYCLE"
+      ]
+    },
+    {
+      "id": "BB-ROLE-RULES",
+      "objectiveId": "SEC-A01-01",
+      "method": "application-assertion",
+      "authProfile": "app-owned",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "adjudicate",
+      "expected": "The sole SUPER_ADMIN cannot be assigned or demoted through this API. An unverified account cannot be promoted.",
+      "requiredEvidence": [
+        "provenance",
+        "jwtIdentity",
+        "jwtAcquisition",
+        "BB-ROLE-RULES"
+      ]
+    },
+    {
+      "id": "BB-SCANNER-JWT",
+      "objectiveId": "SEC-A01-01",
+      "method": "authenticated-passive-dast",
+      "authProfile": "scanner-jwt",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "capabilityBoundary",
+      "expected": "The shared scanner JWT capability remains blocked without dispatch.",
+      "requiredEvidence": [
+        "BB-SCANNER-JWT"
+      ]
+    },
+    {
+      "id": "BB-ACTIVE",
+      "objectiveId": "SEC-A01-01",
+      "method": "authenticated-active-dast",
+      "authProfile": "scanner-jwt",
+      "specification": "specifications/sec-a01-01.md",
+      "oracle": "capabilityBoundary",
+      "expected": "Active scanner execution remains restricted without dispatch.",
+      "requiredEvidence": [
+        "BB-ACTIVE"
+      ]
+    },
+    {
+      "id": "BB-LIVE-PASSIVE",
+      "objectiveId": "SEC-A01-01",
+      "method": "passive-dast",
+      "authProfile": "public-anonymous",
+      "specification": "specifications/live-http.md",
+      "oracle": "passiveEvidence",
+      "expected": "The anonymous loopback proxy forwards a public Bus Booking request. The scoped passive plan drains and retains a fresh report with a detector control.",
+      "requiredEvidence": [
+        "provenance",
+        "proxyWitness",
+        "scannerExecution",
+        "scannerEvents",
+        "zapReport"
+      ]
+    }
+  ]
+}

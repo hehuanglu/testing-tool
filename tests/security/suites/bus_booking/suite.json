@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "bus_booking",
+  "sources": [
+    "suites/bus_booking/assertions/oracle.py",
+    "suites/bus_booking/plans/authorization-matrix.txt",
+    "suites/bus_booking/live/run.py",
+    "suites/bus_booking/specifications/live-http.md",
+    "suites/bus_booking/live/scanner.py",
+    "suites/bus_booking/live/compare.py"
+  ],
+  "scenarios": {
+    "baseline": [
+      "BB-AUTH",
+      "BB-PROFILE",
+      "BB-USER",
+      "BB-BOOKING",
+      "BB-ADMIN-READ",
+      "BB-ADMIN-WRITE",
+      "BB-ROLE",
+      "BB-ROLE-LIFECYCLE",
+      "BB-ROLE-RULES"
+    ],
+    "jwt-blocked": [
+      "BB-SCANNER-JWT"
+    ],
+    "active-blocked": [
+      "BB-ACTIVE"
+    ],
+    "live-http": [
+      "BB-AUTH",
+      "BB-PROFILE",
+      "BB-USER",
+      "BB-BOOKING",
+      "BB-ADMIN-READ",
+      "BB-ADMIN-WRITE",
+      "BB-ROLE",
+      "BB-ROLE-LIFECYCLE",
+      "BB-ROLE-RULES"
+    ],
+    "live-passive": [
+      "BB-LIVE-PASSIVE"
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "DEMO-CSP-PUBLIC",
+      "objectiveId": "DEMO-CSP",
+      "method": "passive-dast",
+      "authProfile": "anonymous",
+      "oracle": "public-csp",
+      "requiredEvidence": [
+        "publicCsp"
+      ],
+      "expected": "Only the detector control triggers CSP alert 10038-1.",
+      "specification": "specifications/fixture-security.md"
+    },
+    {
+      "id": "DEMO-CSP-FORM",
+      "objectiveId": "DEMO-CSP",
+      "method": "authenticated-passive-dast",
+      "authProfile": "fixture-form",
+      "oracle": "private-csp",
+      "requiredEvidence": [
+        "protectedCsp"
+      ],
+      "expected": "Guest is rejected. The reader's protected sample triggers the CSP rule on the control only.",
+      "specification": "specifications/fixture-security.md"
+    },
+    {
+      "id": "DEMO-POLICY-STATE",
+      "objectiveId": "DEMO-AUTHZ",
+      "method": "application-assertion",
+      "authProfile": "fixture-editor",
+      "oracle": "initial-state",
+      "requiredEvidence": [
+        "initialState"
+      ],
+      "expected": "A verified editor reads initial fixture revision 0.",
+      "specification": "specifications/fixture-security.md"
+    },
+    {
+      "id": "DEMO-POLICY-ROLE",
+      "objectiveId": "DEMO-AUTHZ",
+      "method": "authorization",
+      "authProfile": "fixture-form",
+      "oracle": "authorization",
+      "requiredEvidence": [
+        "policyTransition"
+      ],
+      "expected": "Guest and reader leave revision 0. Editor is allowed and advances it to 1.",
+      "specification": "specifications/fixture-security.md"
+    },
+    {
+      "id": "DEMO-AF",
+      "objectiveId": "DEMO-CSP",
+      "method": "automation-framework",
+      "authProfile": "anonymous",
+      "oracle": "framework-receipt",
+      "requiredEvidence": [
+        "scannerEvents"
+      ],
+      "expected": "Ordered passive jobs, an exact fixture request and a fresh scoped report are present.",
+      "specification": "specifications/fixture-security.md"
+    },
+    {
+      "id": "DEMO-ACTIVE-BLOCKED",
+      "objectiveId": "DEMO-CSP",
+      "method": "authenticated-active-dast",
+      "authProfile": "fixture-form",
+      "oracle": "reserved",
+      "requiredEvidence": [
+        "DEMO-ACTIVE-BLOCKED"
+      ],
+      "expected": "Active scanning stays blocked with no dispatch.",
+      "specification": "specifications/fixture-security.md"
+    },
+    {
+      "id": "DEMO-JWT-BLOCKED",
+      "objectiveId": "DEMO-CSP",
+      "method": "authenticated-passive-dast",
+      "authProfile": "jwt-placeholder",
+      "oracle": "reserved",
+      "requiredEvidence": [
+        "DEMO-JWT-BLOCKED"
+      ],
+      "expected": "Unqualified JWT execution stays blocked with no dispatch.",
+      "specification": "specifications/fixture-security.md"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "checks": {
+    "BB-SCANNER-JWT": {
+      "authProfile": "scanner-jwt",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/BB-SCANNER-JWT"
+      ],
+      "expected": "The shared scanner JWT capability remains blocked without dispatch.",
+      "method": "authenticated-passive-dast",
+      "objectiveId": "SEC-A01-01",
+      "reason": "AUTH_PROFILE_UNQUALIFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "BLOCKED"
+    }
+  },
+  "decisiveChecks": {
+    "BB-SCANNER-JWT": "AUTH_PROFILE_UNQUALIFIED"
+  },
+  "evidence": {
+    "BB-SCANNER-JWT": {
+      "data": {
+        "dispatched": false,
+        "reason": "AUTH_PROFILE_UNQUALIFIED"
+      },
+      "producer": "capability-boundary"
+    }
+  },
+  "executionEnvironment": "local",
+  "exitCode": 3,
+  "inputSha256": {
+    "security_framework/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security_framework/engine.py": "84f177069bc41674d3a22709cd11d33c80f2038f657fa622fedd141311a48cc5",
+    "security_framework/evidence.py": "4fcffe9adcd7e9b6f482551bd1cfe28c5f54027d65888805019771e9a52e4f70",
+    "security_framework/manifest.py": "4fe72fc0f2d286984390af8629812cb35657db30332b8fb34c3c4531a2f47734",
+    "security_framework/run.py": "d83d0f63756ae5e9ffbdbf4d8c390037ab06b0ab2e8d547607b9354c367625c4",
+    "suites/bus_booking/adapter.py": "c72ad8a65964cc6aef19ce90349370c7c9b4746c8f65d3ac924d9183414715d9",
+    "suites/bus_booking/assertions/oracle.py": "84470ffb9f94e88103f2806cad7d81ceba8bad5949c57cd3643ece3c81bbf0ea",
+    "suites/bus_booking/authentication/profiles.json": "68f4e76d9ec7b153a5686644b8fe4410dc1596dc8271557747f22e48429345f7",
+    "suites/bus_booking/cases/cases.json": "ac1b900504adf22060550be33fc5daa296bc19c87927029827bb2936cf983ba4",
+    "suites/bus_booking/live/compare.py": "967c98a94943c2f5f4b8e31c309beda5191003dd195bdfdefc58bafad5c3e8c7",
+    "suites/bus_booking/live/run.py": "0aa879d1711c46c77e940b7b17cbabb0e7c962262fabe3d79bec33a53cb924cd",
+    "suites/bus_booking/live/scanner.py": "012b7c9d364bb0e9a1b0a051a6510f8f7f253fd51d3941b51683d1d34e863d77",
+    "suites/bus_booking/objectives/objectives.json": "b73026bd3c5c91d1cbbff0ff58ddfd16236cc16a270769d0b11b2cfea80b400e",
+    "suites/bus_booking/plans/authorization-matrix.txt": "787a3359eaef94d8d4421ad220f688cae06e14c3ebe018ab1ecd6b205f229f88",
+    "suites/bus_booking/specifications/live-http.md": "5f5baad75a19d885fc919547133f603c4c5983df4b61ae9e114da7ca5425f9a9",
+    "suites/bus_booking/specifications/sec-a01-01.md": "791538d53f8a1409bb19bc878babacac919954b8bda0d0e2f9a0196dd97a6c76",
+    "suites/bus_booking/suite.json": "5bb56e0f8994844007fff34f170e137301898dd89f5e9ea1ac47ea1ccfea1923",
+    "zap-image.txt": "853a8b3f92662ffac6176b34758b4a4ab3d3326c33c0e0d85a91d7fd638e5f63",
+    "zap_report.py": "89fcc0d5242f3a19f07346c5fcb701ac8a4d06358ce090f04addf163eac8b3fb"
+  },
+  "runId": "afd3c10b36724bd5a61fc9429a3e6e6d",
+  "scannerImage": "zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+  "scenario": "jwt-blocked",
+  "schemaVersion": 1,
+  "suite": "bus_booking",
+  "verdict": "BLOCKED"
+}

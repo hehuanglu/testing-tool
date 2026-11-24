@@ -1,0 +1,4713 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "auditDate": "2026-11-24",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "runtimeWindowLocal": [
+      "2026-11-24T11:28:18.959216+07:00",
+      "2026-11-24T11:33:03.936544+07:00"
+    ],
+    "workspaceHead": "e8197caab2d530287214b0e7b8231a3691e0bba8",
+    "mcpEndpoint": "http://127.0.0.1:7456/mcp",
+    "mcpImage": "dtkmn/mcp-zap-server:v0.16.0",
+    "zapVersion": "2.17.0",
+    "zapVersionSource": "@version from MCP JSON report",
+    "fixture": "http://zap-cap-audit-bun4b1te:8080",
+    "runtimeCallPath": "MCP Streamable HTTP",
+    "nativeZapApiUsedDirectly": false
+  },
+  "mcpDiscovery": {
+    "initialize": {
+      "protocolVersion": "2025-03-26",
+      "capabilities": {
+        "completions": {},
+        "logging": {},
+        "prompts": {
+          "listChanged": true
+        },
+        "resources": {
+          "subscribe": false,
+          "listChanged": true
+        },
+        "tools": {
+          "listChanged": true
+        }
+      },
+      "serverInfo": {
+        "name": "mcp-zap-server",
+        "version": "0.16.0"
+      },
+      "instructions": "Use this server to interact with the ZAP API for security testing."
+    },
+    "tools": [
+      {
+        "name": "zap_scan_history_list",
+        "description": "List recent scan history and release-evidence entries, including queued scans, direct scan starts, and generated report artifacts.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "evidenceType": {
+              "type": "string",
+              "description": "Optional evidence type filter: scan_job, scan_run, or report_artifact"
+            },
+            "status": {
+              "type": "string",
+              "description": "Optional status filter such as queued, running, succeeded, failed, cancelled, started, or generated"
+            },
+            "target": {
+              "type": "string",
+              "description": "Optional target or artifact substring filter"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Optional maximum entries to return, bounded by server configuration"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "zap_findings_summary",
+        "description": "Get the first-pass findings view after a scan or passive-scan wait. This returns a concise grouped risk summary for fast triage. Requires a nonblank target baseUrl covered by scan evidence visible to the caller.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "baseUrl": {
+              "type": "string",
+              "description": "Required nonblank target base URL covered by scan evidence visible to the caller, for example https://app.example.com/admin"
+            }
+          },
+          "required": [
+            "baseUrl"
+          ]
+        }
+      },
+      {
+        "name": "zap_attack_status",
+        "description": "Get status for a guided active-scan operation.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "description": "Guided attack operation ID returned by zap_attack_start"
+            }
+          },
+          "required": [
+            "operationId"
+          ]
+        }
+      },
+      {
+        "name": "zap_auth_session_prepare",
+        "description": "Prepare a guided auth session from an operator-managed profile. Use a kind=browser profile for Client Spider, or kind=form for HTTP spider and active scans. The requested target must remain on the profile's authorized origin.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "profileId": {
+              "type": "string",
+              "description": "Operator-configured authentication profile ID"
+            },
+            "targetUrl": {
+              "type": "string",
+              "description": "Target URL on the profile's authorized origin; paths may vary"
+            }
+          },
+          "required": [
+            "profileId",
+            "targetUrl"
+          ]
+        }
+      },
+      {
+        "name": "zap_scan_history_release_evidence",
+        "description": "Export a release or pilot handoff evidence bundle with summary counts, target coverage, warnings, and bounded ledger entries.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "releaseName": {
+              "type": "string",
+              "description": "Optional release, pilot, or handoff label included in the exported bundle"
+            },
+            "target": {
+              "type": "string",
+              "description": "Optional target or artifact substring filter for the evidence window"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Optional maximum entries to export, bounded by server configuration"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "zap_attack_start",
+        "description": "Start a guided active scan for a specific target host or base URL after crawl/import setup. The server decides direct versus queued execution from deployment topology. When authSessionId is supplied, guided attack currently accepts prepared form-login sessions only.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "targetUrl": {
+              "type": "string",
+              "description": "Target host or base URL to attack, for example https://app.example.com or https://app.example.com/api"
+            },
+            "recurse": {
+              "type": "string",
+              "description": "Optional recurse flag (default: true)"
+            },
+            "policy": {
+              "type": "string",
+              "description": "Optional active-scan policy name when you need a non-default rule set"
+            },
+            "idempotencyKey": {
+              "type": "string",
+              "description": "Optional idempotency key used only when guided execution selects queued mode; ignored in direct mode."
+            },
+            "authSessionId": {
+              "type": "string",
+              "description": "Optional prepared auth session ID from zap_auth_session_prepare. Guided attack currently accepts form-login sessions only."
+            }
+          },
+          "required": [
+            "targetUrl"
+          ]
+        }
+      },
+      {
+        "name": "zap_target_import",
+        "description": "Import an OpenAPI/Swagger definition, GraphQL schema, or SOAP WSDL to prepare API endpoints for testing.\nUse when you have an API definition; use zap_crawl_start to discover ordinary web pages.\nRequires a reachable, configured ZAP instance with the matching OpenAPI, GraphQL, or SOAP add-on.\nImport changes the current ZAP session and may send requests to the definition source and API targets;\nuse only authorized targets. It does not start an active scan: after reviewing import messages,\ncall zap_attack_start with the API target URL when active testing is needed.\nContent mode accepts actual OpenAPI JSON/YAML text with a required full HTTP(S) hostOverride\nand an explicitly enabled shared filesystem; it cannot read chat attachments automatically.\nReturns plain text containing definition type, source kind, and import status. URL/file mode\nalso includes source and engine messages; content mode withholds contents, internal paths,\nand raw engine warning text. Review warnings before proceeding.\nInvalid inputs, blocked URLs, and ZAP API failures raise errors.\n",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "definitionType": {
+              "type": "string",
+              "description": "Required definition format: openapi (OpenAPI/Swagger), graphql (GraphQL schema), or soap (WSDL). Case-insensitive."
+            },
+            "sourceKind": {
+              "type": "string",
+              "description": "Required source mode: url for a definition ZAP downloads, file for a definition on ZAP's filesystem, or content for self-contained OpenAPI JSON/YAML text. Content is OpenAPI-only and requires configured shared staging. Case-insensitive."
+            },
+            "source": {
+              "type": "string",
+              "description": "Required definition URL, ZAP-readable file path, or actual JSON/YAML text when sourceKind=content. A chat attachment name, client-local path or inaccessible resource URI is not definition content. Content imports are bounded to 1 MiB and reject external references and YAML aliases."
+            },
+            "endpointUrl": {
+              "type": "string",
+              "description": "Required for graphql: HTTP(S) API endpoint to test, for example https://api.example.com/graphql; must be reachable by ZAP and allowed by server URL policy. Ignored for openapi and soap."
+            },
+            "hostOverride": {
+              "type": "string",
+              "description": "OpenAPI target override allowed by server URL policy. Required full HTTP(S) URL for content imports, for example https://api.example.com/v1. URL/file imports also allow authority/path with an explicit host, for example api.example.com:9090/v1; omit only for trusted definition-derived targets constrained by ZAP egress controls. Ignored for graphql and soap."
+            }
+          },
+          "required": [
+            "definitionType",
+            "sourceKind",
+            "source"
+          ]
+        }
+      },
+      {
+        "name": "zap_report_read",
+        "description": "Preview a generated report artifact through MCP after zap_report_generate. If truncated, use zap_report_read_chunk to retrieve the complete artifact in bounded pages.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "reportPath": {
+              "type": "string",
+              "description": "Report path returned by zap_report_generate"
+            },
+            "maxChars": {
+              "type": "integer",
+              "description": "Maximum characters to return (optional, default: 20000, max: 200000)"
+            }
+          },
+          "required": [
+            "reportPath"
+          ]
+        }
+      },
+      {
+        "name": "zap_report_generate",
+        "description": "Generate a human-shareable report artifact using guided defaults. Use this after passive scan backlog drains when you want an export or handoff artifact; use findings summary/details for interactive triage.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "baseUrl": {
+              "type": "string",
+              "description": "Optional absolute HTTP(S) origin or path prefix. Supplying it publishes a target-scoped report; omission explicitly includes the full ZAP session."
+            },
+            "format": {
+              "type": "string",
+              "description": "Optional report format: html for human reading or json for machine processing"
+            },
+            "theme": {
+              "type": "string",
+              "description": "Optional light/dark theme for full-session HTML. Target-scoped HTML uses the standard template's default appearance; JSON has no theme."
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "zap_attack_stop",
+        "description": "Stop a guided active-scan operation.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "description": "Guided attack operation ID returned by zap_attack_start"
+            }
+          },
+          "required": [
+            "operationId"
+          ]
+        }
+      },
+      {
+        "name": "zap_scan_history_get",
+        "description": "Read one scan history or release-evidence entry by ID.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "entryId": {
+              "type": "string",
+              "description": "Entry ID returned by zap_scan_history_list"
+            }
+          },
+          "required": [
+            "entryId"
+          ]
+        }
+      },
+      {
+        "name": "zap_passive_scan_status",
+        "description": "Get passive scan backlog and completion status.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      },
+      {
+        "name": "zap_report_read_chunk",
+        "description": "Retrieve a generated UTF-8 report in bounded JSON pages. Append content in order, follow nextOffset until endOfFile=true, and supply the first page's artifactSha256 as expectedSha256 on later pages. Offsets and maxChars count Unicode code points. Artifacts are limited to 50 MiB; the SHA-256 identifies the full original UTF-8 file.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "reportPath": {
+              "type": "string",
+              "description": "Report path returned by zap_report_generate"
+            },
+            "offset": {
+              "type": "integer",
+              "description": "Starting Unicode code point offset (default: 0)"
+            },
+            "maxChars": {
+              "type": "integer",
+              "description": "Maximum Unicode code points in this page (default: 20000, maximum: 200000)"
+            },
+            "expectedSha256": {
+              "type": "string",
+              "description": "Full artifact SHA-256 from the first page; subsequent pages reject a changed report"
+            }
+          },
+          "required": [
+            "reportPath"
+          ]
+        }
+      },
+      {
+        "name": "zap_crawl_stop",
+        "description": "Stop a guided crawl operation.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "description": "Guided crawl operation ID returned by zap_crawl_start"
+            }
+          },
+          "required": [
+            "operationId"
+          ]
+        }
+      },
+      {
+        "name": "zap_auth_session_validate",
+        "description": "Validate a prepared guided auth session before authenticated crawl or attack flows.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "description": "Session ID returned by zap_auth_session_prepare"
+            }
+          },
+          "required": [
+            "sessionId"
+          ]
+        }
+      },
+      {
+        "name": "zap_crawl_start",
+        "description": "Start a guided crawl for a target host or root URL. The server decides direct versus queued execution from deployment topology. Use strategy=http for traditional server-rendered sites, strategy=client for JavaScript-driven apps using Client Spider, or strategy=browser for the existing AJAX Spider API. strategy=auto starts with HTTP Spider; only an unauthenticated direct HTTP start failure triggers AJAX fallback. Auto does not detect JavaScript coverage. Client Spider requires the Client Side Integration add-on and headless Firefox. Prepared browser authentication sessions require strategy=client; prepared HTTP form-login sessions require http or auto.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "targetUrl": {
+              "type": "string",
+              "description": "Target host or root URL to crawl, for example https://app.example.com or https://app.example.com/admin"
+            },
+            "strategy": {
+              "type": "string",
+              "description": "Optional crawl strategy: auto starts HTTP (unauthenticated direct mode alone falls back to AJAX on HTTP start failure), http for traditional link discovery, client for Client Spider on JavaScript-driven apps, or browser for the AJAX Spider API. Auto does not detect JavaScript coverage."
+            },
+            "idempotencyKey": {
+              "type": "string",
+              "description": "Optional idempotency key used only when guided execution selects queued mode; ignored in direct mode."
+            },
+            "authSessionId": {
+              "type": "string",
+              "description": "Optional session ID from zap_auth_session_prepare. Use a kind=browser profile with strategy=client, or a kind=form profile with http/auto. The browser strategy means AJAX Spider and rejects authSessionId."
+            }
+          },
+          "required": [
+            "targetUrl"
+          ]
+        }
+      },
+      {
+        "name": "zap_passive_scan_wait",
+        "description": "Wait for the passive scan backlog to drain before reading findings or generating reports.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "timeoutSeconds": {
+              "type": "integer",
+              "description": "Maximum seconds to wait before returning (1-300, optional, default: 60)"
+            },
+            "pollIntervalMs": {
+              "type": "integer",
+              "description": "Polling interval in milliseconds (1-10000, optional, default: 1000)"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "zap_scan_history_export",
+        "description": "Export scan history as inline JSON text for internal evidence processing; no export file is created.\nUse zap_scan_history_list for a readable listing, zap_scan_history_release_evidence for a summary bundle,\nor zap_scan_history_customer_handoff for a customer-facing summary.\nReturns version, generatedAt, retentionDays, entryCount, and entries containing scan/job/artifact records,\nincluding internal IDs, paths, and metadata; review before sharing.\nOnly records accessible to the caller in the current workspace are included, newest first.\nOmitted or blank filters select all accessible records; supplied filters combine with AND.\nThe snapshot is capped by limit, has no pagination, and returns an empty entries array when nothing matches.\nIt does not start scans or contact targets. Querying may delete expired stored ledger entries under\nthe configured retention policy; it does not refresh scan outcomes from ZAP.\n",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "evidenceType": {
+              "type": "string",
+              "description": "Optional case-insensitive exact type filter: scan_job, scan_run, or report_artifact. Omit or leave blank for all types."
+            },
+            "status": {
+              "type": "string",
+              "description": "Optional case-insensitive exact status filter: queued, running, succeeded, failed, or cancelled for jobs; started for direct scans; generated for reports. Omit or leave blank for all statuses."
+            },
+            "target": {
+              "type": "string",
+              "description": "Optional case-insensitive substring of the target URL, target display name, or artifact location, e.g. api.example.com. Omit or leave blank for all targets."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Positive maximum number of entries. Omission uses the configured export maximum (500 by default); larger values are capped to that maximum. Zero or negative values are rejected."
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "zap_crawl_status",
+        "description": "Get status for a guided crawl operation.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "operationId": {
+              "type": "string",
+              "description": "Guided crawl operation ID returned by zap_crawl_start"
+            }
+          },
+          "required": [
+            "operationId"
+          ]
+        }
+      },
+      {
+        "name": "zap_scan_history_customer_handoff",
+        "description": "Generate a customer-safe Markdown handoff summary from scan history without raw internal IDs, backend references, workspace IDs, or metadata.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "handoffName": {
+              "type": "string",
+              "description": "Optional release, pilot, or customer handoff label included in the summary"
+            },
+            "target": {
+              "type": "string",
+              "description": "Optional evidence-window selector used internally; the raw selector is never echoed in customer-facing output"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Optional maximum entries to review, bounded by server configuration"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "zap_findings_details",
+        "description": "Drill into findings after reading the summary. Requires a nonblank target baseUrl covered by scan evidence visible to the caller. By default this returns grouped details for matching alerts. Set includeInstances=true when you need bounded raw alert occurrences with concrete URLs, params, evidence, or attack samples.",
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "baseUrl": {
+              "type": "string",
+              "description": "Required nonblank target base URL covered by scan evidence visible to the caller"
+            },
+            "pluginId": {
+              "type": "string",
+              "description": "Optional plugin ID filter when you already know the ZAP alert/plugin identifier to inspect"
+            },
+            "alertName": {
+              "type": "string",
+              "description": "Optional alert name filter when you want one alert family only"
+            },
+            "includeInstances": {
+              "type": "boolean",
+              "description": "Optional true to include bounded raw instances with concrete URLs and evidence; false returns grouped detail blocks"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Optional instance limit used only when includeInstances is true"
+            }
+          },
+          "required": [
+            "baseUrl"
+          ]
+        }
+      }
+    ],
+    "resources": [],
+    "resourceTemplates": [],
+    "prompts": []
+  },
+  "capabilities": [
+    {
+      "id": "M01",
+      "capability": "MCP transport, tools, schemas, resources and prompts",
+      "nativeZapSupport": "MCP protocol",
+      "mcpTool": "MCP initialize and discovery",
+      "status": "VERIFIED",
+      "evidence": "M01 M02",
+      "ciCdFeasibility": "Build discovery into runner startup"
+    },
+    {
+      "id": "M02",
+      "capability": "ZAP version and engine connectivity",
+      "nativeZapSupport": "core.version",
+      "mcpTool": "zap_report_generate / read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I08",
+      "ciCdFeasibility": "Record live report version"
+    },
+    {
+      "id": "M03",
+      "capability": "Installed or runnable add-ons and versions",
+      "nativeZapSupport": "autoupdate",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M03 M02",
+      "ciCdFeasibility": "Use engine inventory outside MCP"
+    },
+    {
+      "id": "M04",
+      "capability": "Arbitrary ZAP API invocation",
+      "nativeZapSupport": "ZAP component APIs",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 X02",
+      "ciCdFeasibility": "Use typed interfaces"
+    },
+    {
+      "id": "M05",
+      "capability": "Asynchronous start, monitoring and stop",
+      "nativeZapSupport": "Spider and scanner component APIs",
+      "mcpTool": "zap_crawl_start / status / stop",
+      "status": "VERIFIED",
+      "evidence": "C02 C04 C06 C07",
+      "ciCdFeasibility": "Use operation status and fixture evidence"
+    },
+    {
+      "id": "M06",
+      "capability": "File and artifact handling",
+      "nativeZapSupport": "Importer, exports and reports",
+      "mcpTool": "zap_target_import / zap_report_read_chunk",
+      "status": "PARTIAL",
+      "evidence": "C05 C10 I08 M02",
+      "ciCdFeasibility": "Artifact retrieval works; general file management absent"
+    },
+    {
+      "id": "M07",
+      "capability": "Script management",
+      "nativeZapSupport": "script API and Automation Framework script job",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No managed lifecycle"
+    },
+    {
+      "id": "A01",
+      "capability": "Create contexts",
+      "nativeZapSupport": "context API",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 X01",
+      "ciCdFeasibility": "Pre-provisioning or a typed context interface"
+    },
+    {
+      "id": "A02",
+      "capability": "Retrieve contexts",
+      "nativeZapSupport": "context API",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 X01",
+      "ciCdFeasibility": "No context readback"
+    },
+    {
+      "id": "A03",
+      "capability": "Update contexts",
+      "nativeZapSupport": "context API",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 X01",
+      "ciCdFeasibility": "No context update"
+    },
+    {
+      "id": "A04",
+      "capability": "Remove contexts",
+      "nativeZapSupport": "context API",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 X01",
+      "ciCdFeasibility": "No managed cleanup"
+    },
+    {
+      "id": "A05",
+      "capability": "Include URLs",
+      "nativeZapSupport": "context include rules",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Explicit fixture boundaries needed"
+    },
+    {
+      "id": "A06",
+      "capability": "Exclude URLs",
+      "nativeZapSupport": "context exclusion rules",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No caller-managed exclusions"
+    },
+    {
+      "id": "A07",
+      "capability": "Restrict to selected API operations",
+      "nativeZapSupport": "Context URLs and scanner targeting support some cases",
+      "mcpTool": "zap_crawl_start / zap_attack_start",
+      "status": "PARTIAL",
+      "evidence": "M02 C05",
+      "ciCdFeasibility": "Target URL available; method-and-operation allowlist absent"
+    },
+    {
+      "id": "A08",
+      "capability": "Configure and verify ZAP scope",
+      "nativeZapSupport": "context.setContextInScope and context readback",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 P01",
+      "ciCdFeasibility": "Shared scanner scope cannot be managed"
+    },
+    {
+      "id": "A09",
+      "capability": "Isolated ZAP session lifecycle",
+      "nativeZapSupport": "core new, load and save session",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Provision separate engine instances externally"
+    },
+    {
+      "id": "B01",
+      "capability": "JSON-based authentication",
+      "nativeZapSupport": "Native JSON-based authentication",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 B01",
+      "ciCdFeasibility": "Guided schema documents form and browser profiles"
+    },
+    {
+      "id": "B02",
+      "capability": "Form-based authentication",
+      "nativeZapSupport": "Native form-based authentication",
+      "mcpTool": "zap_auth_session_prepare / validate",
+      "status": "BLOCKED",
+      "evidence": "B01 B02 M02",
+      "ciCdFeasibility": "Needs preconfigured local fixture profile and identity check"
+    },
+    {
+      "id": "B03",
+      "capability": "Script-based authentication",
+      "nativeZapSupport": "Script Console and authentication component",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No script or context binding"
+    },
+    {
+      "id": "B04",
+      "capability": "Browser-based authentication",
+      "nativeZapSupport": "Authentication Helper and a browser",
+      "mcpTool": "zap_auth_session_prepare / validate; client strategy",
+      "status": "BLOCKED",
+      "evidence": "B01 B02 M02",
+      "ciCdFeasibility": "Needs configured browser profile and effective identity check"
+    },
+    {
+      "id": "B05",
+      "capability": "JWT Bearer authentication to target",
+      "nativeZapSupport": "Header session management and app-specific token acquisition",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "MCP client API-key auth is independent"
+    },
+    {
+      "id": "B06",
+      "capability": "Cookie-based session management",
+      "nativeZapSupport": "Native cookie session management",
+      "mcpTool": "zap_auth_session_prepare / validate",
+      "status": "PARTIAL",
+      "evidence": "M02 B01 B02",
+      "ciCdFeasibility": "Documented form profile route; no cookie configuration or identity proof"
+    },
+    {
+      "id": "B07",
+      "capability": "Header-based session management",
+      "nativeZapSupport": "Authentication Helper headers session management",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No target-header lifecycle interface"
+    },
+    {
+      "id": "B08",
+      "capability": "Multiple users and roles in a context",
+      "nativeZapSupport": "ZAP users; app assigns roles",
+      "mcpTool": "zap_auth_session_prepare",
+      "status": "PARTIAL",
+      "evidence": "M02 B01 X01",
+      "ciCdFeasibility": "Separate operator profiles can be referenced; no user or role management"
+    },
+    {
+      "id": "B09",
+      "capability": "Automatic authentication",
+      "nativeZapSupport": "ZAP authentication and verification",
+      "mcpTool": "zap_auth_session_prepare / validate",
+      "status": "BLOCKED",
+      "evidence": "B01 B02",
+      "ciCdFeasibility": "No configured fixture profile"
+    },
+    {
+      "id": "B10",
+      "capability": "Automatic reauthentication",
+      "nativeZapSupport": "ZAP verification and reauthentication",
+      "mcpTool": "zap_auth_session_prepare / validate",
+      "status": "BLOCKED",
+      "evidence": "B01 B02",
+      "ciCdFeasibility": "No expired-session and recovery observation"
+    },
+    {
+      "id": "B11",
+      "capability": "Authentication verification",
+      "nativeZapSupport": "ZAP verification strategies",
+      "mcpTool": "zap_auth_session_validate",
+      "status": "BLOCKED",
+      "evidence": "B01 B02",
+      "ciCdFeasibility": "Unknown-session control only"
+    },
+    {
+      "id": "B12",
+      "capability": "Target authentication failure detection",
+      "nativeZapSupport": "Logged-out marker, poll or app identity endpoint",
+      "mcpTool": "zap_auth_session_validate",
+      "status": "BLOCKED",
+      "evidence": "B02",
+      "ciCdFeasibility": "Handle rejection gives no app-layer proof"
+    },
+    {
+      "id": "B13",
+      "capability": "Reuse authenticated state across tool calls",
+      "nativeZapSupport": "ZAP user and context session handling",
+      "mcpTool": "zap_crawl_start / zap_attack_start authSessionId",
+      "status": "BLOCKED",
+      "evidence": "M02 B01 B02",
+      "ciCdFeasibility": "Needs identity readback across multiple requests"
+    },
+    {
+      "id": "C01",
+      "capability": "OpenAPI URL import",
+      "nativeZapSupport": "openapi importer",
+      "mcpTool": "zap_target_import",
+      "status": "VERIFIED",
+      "evidence": "C05 F01",
+      "ciCdFeasibility": "API operation and query observed"
+    },
+    {
+      "id": "C02",
+      "capability": "OpenAPI import from file",
+      "nativeZapSupport": "openapi importer",
+      "mcpTool": "zap_target_import",
+      "status": "VERIFIED",
+      "evidence": "C11 F01",
+      "ciCdFeasibility": "ZAP-readable file supplied by runner; operation and parameter observed"
+    },
+    {
+      "id": "C03",
+      "capability": "OpenAPI import from inline content",
+      "nativeZapSupport": "openapi importer plus MCP staging",
+      "mcpTool": "zap_target_import",
+      "status": "BLOCKED",
+      "evidence": "C10",
+      "ciCdFeasibility": "Dedicated shared staging disabled"
+    },
+    {
+      "id": "C04",
+      "capability": "Traditional Spider",
+      "nativeZapSupport": "spider add-on",
+      "mcpTool": "zap_crawl_start / status",
+      "status": "VERIFIED",
+      "evidence": "C01 C02 C03 C04 F01",
+      "ciCdFeasibility": "Repeated completed crawl with independent access logs"
+    },
+    {
+      "id": "C05",
+      "capability": "AJAX Spider",
+      "nativeZapSupport": "spiderAjax add-on",
+      "mcpTool": "zap_crawl_start / status / stop",
+      "status": "PARTIAL",
+      "evidence": "C06 C09 F01",
+      "ciCdFeasibility": "Observed fixture traffic and lifecycle; coverage/results interface limited"
+    },
+    {
+      "id": "C06",
+      "capability": "Client Spider",
+      "nativeZapSupport": "clientSpider add-on",
+      "mcpTool": "zap_crawl_start / status / stop",
+      "status": "PARTIAL",
+      "evidence": "C07 C08 F01",
+      "ciCdFeasibility": "Observed lifecycle; readiness and coverage require independent evidence"
+    },
+    {
+      "id": "C07",
+      "capability": "Authenticated exploration",
+      "nativeZapSupport": "User-specific spiders",
+      "mcpTool": "zap_auth_session_prepare / zap_crawl_start",
+      "status": "BLOCKED",
+      "evidence": "M02 B01 B02",
+      "ciCdFeasibility": "No authenticated identity sample"
+    },
+    {
+      "id": "C08",
+      "capability": "Register or send selected manual HTTP requests",
+      "nativeZapSupport": "core.sendRequest or Automation Framework requestor",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No deterministic HTTP transport for custom cases"
+    },
+    {
+      "id": "C09",
+      "capability": "Inspect Sites Tree",
+      "nativeZapSupport": "core sites and URLs; import/export add-on",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Report evidence shows a subset"
+    },
+    {
+      "id": "C10",
+      "capability": "Inspect HTTP History",
+      "nativeZapSupport": "core.messages and message",
+      "mcpTool": "zap_scan_history_list / get",
+      "status": "PARTIAL",
+      "evidence": "M02 I07 I10 I08",
+      "ciCdFeasibility": "Scan ledger plus report messages; no arbitrary HTTP history"
+    },
+    {
+      "id": "C11",
+      "capability": "Verify discovered operations and parameters",
+      "nativeZapSupport": "Sites Tree, HTTP History and Params add-on",
+      "mcpTool": "zap_target_import; limited report evidence",
+      "status": "PARTIAL",
+      "evidence": "C05 F01 I08",
+      "ciCdFeasibility": "Independent fixture log confirms one operation and parameter; no full MCP inventory"
+    },
+    {
+      "id": "C12",
+      "capability": "GraphQL and SOAP import",
+      "nativeZapSupport": "graphql and soap add-ons",
+      "mcpTool": "zap_target_import",
+      "status": "EXPOSED_UNTESTED",
+      "evidence": "M02 M03",
+      "ciCdFeasibility": "Requires dedicated fixtures"
+    },
+    {
+      "id": "D01",
+      "capability": "Configure passive scanners",
+      "nativeZapSupport": "pscan and passiveScan-config",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 P01",
+      "ciCdFeasibility": "Operator defaults only"
+    },
+    {
+      "id": "D02",
+      "capability": "Enable or disable individual passive rules",
+      "nativeZapSupport": "pscan and passiveScan-config",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No per-rule control"
+    },
+    {
+      "id": "D03",
+      "capability": "Set passive alert thresholds",
+      "nativeZapSupport": "pscan and passiveScan-config",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No threshold management"
+    },
+    {
+      "id": "D04",
+      "capability": "Monitor passive queue",
+      "nativeZapSupport": "pscan recordsToScan and tasks",
+      "mcpTool": "zap_passive_scan_status",
+      "status": "VERIFIED",
+      "evidence": "P01 P02 P04",
+      "ciCdFeasibility": "Reports remaining work and active tasks"
+    },
+    {
+      "id": "D05",
+      "capability": "Wait for passive completion",
+      "nativeZapSupport": "pscan and passiveScan-wait",
+      "mcpTool": "zap_passive_scan_wait",
+      "status": "VERIFIED",
+      "evidence": "P02 P03 P04 I02 I03",
+      "ciCdFeasibility": "Repeatable bounded wait; queue is shared"
+    },
+    {
+      "id": "D06",
+      "capability": "Retrieve structured passive results",
+      "nativeZapSupport": "alert API and report add-on",
+      "mcpTool": "zap_findings_details / zap_report_generate / read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I02 I03 I08",
+      "ciCdFeasibility": "Machine-readable JSON report"
+    },
+    {
+      "id": "D07",
+      "capability": "Detect a known passive condition with controls",
+      "nativeZapSupport": "Passive rule 10038",
+      "mcpTool": "Crawl, wait and findings tools",
+      "status": "VERIFIED",
+      "evidence": "F01 I02 I03 I08",
+      "ciCdFeasibility": "Missing-CSP predicate reproduced"
+    },
+    {
+      "id": "E01",
+      "capability": "Create custom active scan policies",
+      "nativeZapSupport": "ascan policy operations and activeScan-policy",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Only a named policy selector is exposed"
+    },
+    {
+      "id": "E02",
+      "capability": "Select individual active rules",
+      "nativeZapSupport": "ascan scanners and policy controls",
+      "mcpTool": "zap_attack_start policy",
+      "status": "PARTIAL",
+      "evidence": "M02",
+      "ciCdFeasibility": "Can reference prepared policy; cannot select rules through it"
+    },
+    {
+      "id": "E03",
+      "capability": "Configure active rule strength",
+      "nativeZapSupport": "ascan scanner controls",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No caller-set strength"
+    },
+    {
+      "id": "E04",
+      "capability": "Configure active rule thresholds",
+      "nativeZapSupport": "ascan scanner controls",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No caller-set alert threshold"
+    },
+    {
+      "id": "E05",
+      "capability": "Restrict active scan to specific context",
+      "nativeZapSupport": "ascan context and scope options",
+      "mcpTool": "zap_attack_start",
+      "status": "PARTIAL",
+      "evidence": "M02",
+      "ciCdFeasibility": "Target and recursion controls; no explicit context argument"
+    },
+    {
+      "id": "E06",
+      "capability": "Restrict active scan by API method or operation",
+      "nativeZapSupport": "Partial native URL and parameter restrictions",
+      "mcpTool": "zap_attack_start",
+      "status": "PARTIAL",
+      "evidence": "M02",
+      "ciCdFeasibility": "Target URL and recursion cannot express an operation manifest"
+    },
+    {
+      "id": "E07",
+      "capability": "Authenticated Active Scan",
+      "nativeZapSupport": "ascan and authentication",
+      "mcpTool": "zap_attack_start with authSessionId",
+      "status": "BLOCKED",
+      "evidence": "M02 B01",
+      "ciCdFeasibility": "No runtime active or authenticated proof"
+    },
+    {
+      "id": "E08",
+      "capability": "User-specific Active Scan",
+      "nativeZapSupport": "ascan scanAsUser",
+      "mcpTool": "zap_attack_start with authSessionId",
+      "status": "BLOCKED",
+      "evidence": "M02 B01",
+      "ciCdFeasibility": "Operator profile reference is documented; no runtime actor proof"
+    },
+    {
+      "id": "E09",
+      "capability": "Parameter-specific active scanning",
+      "nativeZapSupport": "ascan input vectors, exclusions and policies",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No parameter selector"
+    },
+    {
+      "id": "E10",
+      "capability": "Configure duration and resource limits at runtime",
+      "nativeZapSupport": "ascan duration, concurrency and related options",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Server defaults are deployment controls"
+    },
+    {
+      "id": "E11",
+      "capability": "Start or monitor active scan",
+      "nativeZapSupport": "ascan scan and status",
+      "mcpTool": "zap_attack_start / status",
+      "status": "BLOCKED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Active execution restricted for this audit"
+    },
+    {
+      "id": "E12",
+      "capability": "Stop running active scan",
+      "nativeZapSupport": "ascan stop",
+      "mcpTool": "zap_attack_stop",
+      "status": "BLOCKED",
+      "evidence": "M02",
+      "ciCdFeasibility": "Active execution restricted for this audit"
+    },
+    {
+      "id": "E13",
+      "capability": "Retrieve active findings with HTTP evidence",
+      "nativeZapSupport": "alert, core messages and reports",
+      "mcpTool": "zap_findings_details / zap_report_generate",
+      "status": "BLOCKED",
+      "evidence": "I08 M02",
+      "ciCdFeasibility": "HTTP evidence proved for passive findings"
+    },
+    {
+      "id": "F01",
+      "capability": "Role-based access-control cases",
+      "nativeZapSupport": "Access Control add-on, app-defined rules",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs explicit role verdict criteria"
+    },
+    {
+      "id": "F02",
+      "capability": "Horizontal authorization cases",
+      "nativeZapSupport": "Partial Access Control support; app ownership semantics",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs per-actor ownership assertions"
+    },
+    {
+      "id": "F03",
+      "capability": "Vertical authorization cases",
+      "nativeZapSupport": "Partial Access Control support; app privilege semantics",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs privilege-level assertions"
+    },
+    {
+      "id": "F04",
+      "capability": "Object-level authorization / BOLA",
+      "nativeZapSupport": "Partial URL rules; app object oracle",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs identity and object ownership evidence"
+    },
+    {
+      "id": "F05",
+      "capability": "Function-level authorization / BFLA",
+      "nativeZapSupport": "Partial URL rules; app function and method oracle",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs method-specific role assertions"
+    },
+    {
+      "id": "F06",
+      "capability": "Unauthenticated access restrictions",
+      "nativeZapSupport": "Access Control can include anonymous user",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs positive and anonymous controls"
+    },
+    {
+      "id": "F07",
+      "capability": "Session isolation tests",
+      "nativeZapSupport": "App-specific oracle over ZAP traffic",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 B02",
+      "ciCdFeasibility": "Needs independent sessions and identity verification"
+    },
+    {
+      "id": "F08",
+      "capability": "Multi-user request workflows",
+      "nativeZapSupport": "Automation Framework requestor and application fixtures",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "Requires deterministic actor-aware orchestration"
+    },
+    {
+      "id": "F09",
+      "capability": "Expected HTTP status assertions",
+      "nativeZapSupport": "Automation Framework requestor responseCode",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 H01 R04",
+      "ciCdFeasibility": "Status alone gives limited business evidence"
+    },
+    {
+      "id": "F10",
+      "capability": "Response content assertions",
+      "nativeZapSupport": "Custom script or application test harness",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Needs stable semantic response assertions"
+    },
+    {
+      "id": "F11",
+      "capability": "Application state verification",
+      "nativeZapSupport": "App-specific readback or fixture oracle",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Requires app-owned reset and state access"
+    },
+    {
+      "id": "G01",
+      "capability": "HTTP Sender scripts",
+      "nativeZapSupport": "Script Console HTTP Sender",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No registration, execution or inspection"
+    },
+    {
+      "id": "G02",
+      "capability": "Authentication scripts",
+      "nativeZapSupport": "Script Console authentication",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No registration, execution or inspection"
+    },
+    {
+      "id": "G03",
+      "capability": "Session management scripts",
+      "nativeZapSupport": "Script Console session management",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No registration, execution or inspection"
+    },
+    {
+      "id": "G04",
+      "capability": "Active scanner scripts",
+      "nativeZapSupport": "Script Console active rules",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No registration, execution or inspection"
+    },
+    {
+      "id": "G05",
+      "capability": "Passive scanner scripts",
+      "nativeZapSupport": "Script Console passive rules",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No registration, execution or inspection"
+    },
+    {
+      "id": "G06",
+      "capability": "Standalone scripts",
+      "nativeZapSupport": "Script Console standalone type",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No registration, execution or inspection"
+    },
+    {
+      "id": "G07",
+      "capability": "Requestor or Requester",
+      "nativeZapSupport": "Automation Framework requestor and Requester add-on",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No configure, execute or inspect interface"
+    },
+    {
+      "id": "G08",
+      "capability": "Replacer",
+      "nativeZapSupport": "Replacer add-on and Automation Framework job",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No configure, execute or inspect interface"
+    },
+    {
+      "id": "G09",
+      "capability": "Fuzzer",
+      "nativeZapSupport": "Fuzzer add-on, primarily desktop",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 M03",
+      "ciCdFeasibility": "No MCP control demonstrated"
+    },
+    {
+      "id": "G10",
+      "capability": "Request sequence management",
+      "nativeZapSupport": "Sequence add-on, HAR import, sequence script",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02",
+      "ciCdFeasibility": "No configure, execute or inspect interface"
+    },
+    {
+      "id": "G11",
+      "capability": "Custom input vectors",
+      "nativeZapSupport": "Script Console variant scripts",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No lifecycle interface"
+    },
+    {
+      "id": "G12",
+      "capability": "Dynamic extraction and reuse",
+      "nativeZapSupport": "Scripts or external harness",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 R04",
+      "ciCdFeasibility": "Requires a typed data-flow and assertion runner"
+    },
+    {
+      "id": "G13",
+      "capability": "Conditional execution",
+      "nativeZapSupport": "Ordered jobs and alwaysRun; richer behavior via scripts or runner",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No MCP branching semantics"
+    },
+    {
+      "id": "G14",
+      "capability": "Custom security assertions",
+      "nativeZapSupport": "Built-in Automation Framework tests and custom assertions outside them",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 H01 R04",
+      "ciCdFeasibility": "Needs app-owned assertions"
+    },
+    {
+      "id": "H01",
+      "capability": "Create an Automation Framework YAML plan",
+      "nativeZapSupport": "Automation Framework templates, GUI or file authoring",
+      "mcpTool": "None",
+      "status": "INDIRECT",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "YAML authoring can live in source control"
+    },
+    {
+      "id": "H02",
+      "capability": "Import Automation Framework plans",
+      "nativeZapSupport": "Automation Framework file input and API",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "Expert source has file or inline submission"
+    },
+    {
+      "id": "H03",
+      "capability": "Export or round-trip Automation Framework plans",
+      "nativeZapSupport": "Automation Framework file/GUI handling",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "Versioned source remains external"
+    },
+    {
+      "id": "H04",
+      "capability": "Validate Automation Framework configuration",
+      "nativeZapSupport": "Automation Framework CLI validation",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "No validation-only MCP path"
+    },
+    {
+      "id": "H05",
+      "capability": "Execute Automation Framework plans",
+      "nativeZapSupport": "automation.runPlan",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "Expert run tool absent in live surface"
+    },
+    {
+      "id": "H06",
+      "capability": "Monitor individual job execution",
+      "nativeZapSupport": "Automation Framework progress, output and job tests",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01",
+      "ciCdFeasibility": "No per-job MCP telemetry"
+    },
+    {
+      "id": "H07",
+      "capability": "Configure dependencies and ordering",
+      "nativeZapSupport": "Ordered jobs, enabled and alwaysRun flags; no general DAG",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "Runner owns dependency graph"
+    },
+    {
+      "id": "H08",
+      "capability": "Configure alert tests",
+      "nativeZapSupport": "Automation Framework alert test",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "No plan submission"
+    },
+    {
+      "id": "H09",
+      "capability": "Configure statistics tests",
+      "nativeZapSupport": "Automation Framework stats test",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "No plan submission"
+    },
+    {
+      "id": "H10",
+      "capability": "Configure monitor tests",
+      "nativeZapSupport": "Automation Framework monitor test",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "No plan submission"
+    },
+    {
+      "id": "H11",
+      "capability": "Configure URL tests",
+      "nativeZapSupport": "Automation Framework URL presence test",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "No plan submission"
+    },
+    {
+      "id": "H12",
+      "capability": "Configure execution failure conditions",
+      "nativeZapSupport": "Automation Framework exitStatus and test failure controls",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "External runner must derive exit verdict"
+    },
+    {
+      "id": "H13",
+      "capability": "Generate machine-readable reports",
+      "nativeZapSupport": "Reports add-on and report job",
+      "mcpTool": "zap_report_generate / read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I08",
+      "ciCdFeasibility": "Structured standalone report; AF report job unverified"
+    },
+    {
+      "id": "H14",
+      "capability": "Run a reproducible noninteractive workflow",
+      "nativeZapSupport": "Headless engine and API or Automation Framework",
+      "mcpTool": "MCP crawl, passive wait and report tools",
+      "status": "PARTIAL",
+      "evidence": "C02 C04 I08 I09",
+      "ciCdFeasibility": "Repeatable passive subset; plan and assertion pipeline unavailable"
+    },
+    {
+      "id": "H15",
+      "capability": "Headless and Docker execution",
+      "nativeZapSupport": "Official ZAP Docker images",
+      "mcpTool": "Current Streamable HTTP deployment",
+      "status": "VERIFIED",
+      "evidence": "M01 M03 C04 I08",
+      "ciCdFeasibility": "Local container deployment observed"
+    },
+    {
+      "id": "H16",
+      "capability": "GitHub Actions compatibility",
+      "nativeZapSupport": "ZAP Docker and published GitHub Actions",
+      "mcpTool": "Streamable HTTP accessible from a runner in principle",
+      "status": "INDIRECT",
+      "evidence": "M01 R06",
+      "ciCdFeasibility": "No Actions job or end-to-end qualification"
+    },
+    {
+      "id": "H17",
+      "capability": "Stop Automation Framework plan and inspect its artifacts",
+      "nativeZapSupport": "automation.stopPlan and report filesystem",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 H01 R05",
+      "ciCdFeasibility": "Expert source only lists artifact previews; no stop tool found"
+    },
+    {
+      "id": "I01",
+      "capability": "Retrieve alerts",
+      "nativeZapSupport": "alert API and reports",
+      "mcpTool": "zap_findings_summary / details",
+      "status": "VERIFIED",
+      "evidence": "I01 I02",
+      "ciCdFeasibility": "Grouped and instance evidence"
+    },
+    {
+      "id": "I02",
+      "capability": "Retrieve CWE identifiers",
+      "nativeZapSupport": "alert fields and report cweid",
+      "mcpTool": "zap_findings_details / zap_report_read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I02 I08",
+      "ciCdFeasibility": "CWE-693 confirmed"
+    },
+    {
+      "id": "I03",
+      "capability": "Retrieve scan rule identifiers",
+      "nativeZapSupport": "alert plugin ID and alert reference",
+      "mcpTool": "zap_findings_details / zap_report_read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I02 I08",
+      "ciCdFeasibility": "Plugin 10038 and alert 10038-1"
+    },
+    {
+      "id": "I04",
+      "capability": "Retrieve affected endpoints and parameters",
+      "nativeZapSupport": "alert instances and report fields",
+      "mcpTool": "zap_findings_details / zap_report_read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I02 I08",
+      "ciCdFeasibility": "JSON included affected routes and header parameters"
+    },
+    {
+      "id": "I05",
+      "capability": "Retrieve sanitized HTTP requests and responses",
+      "nativeZapSupport": "core.messages and HTTP-inclusive report templates",
+      "mcpTool": "zap_report_generate / read_chunk",
+      "status": "PARTIAL",
+      "evidence": "I08 I09",
+      "ciCdFeasibility": "Raw fixture HTTP demonstrated; redaction and arbitrary message retrieval unverified"
+    },
+    {
+      "id": "I06",
+      "capability": "Filter and group findings",
+      "nativeZapSupport": "alert query and summary views",
+      "mcpTool": "zap_findings_summary / details",
+      "status": "VERIFIED",
+      "evidence": "I01 I02 I13",
+      "ciCdFeasibility": "Scope, plugin and limit exercised"
+    },
+    {
+      "id": "I07",
+      "capability": "Configure alert filters",
+      "nativeZapSupport": "alertFilter add-on and alertFilter job",
+      "mcpTool": "None",
+      "status": "UNSUPPORTED",
+      "evidence": "M02 M03",
+      "ciCdFeasibility": "Post-processing filters are separate from ZAP alert rules"
+    },
+    {
+      "id": "I08",
+      "capability": "Generate and retrieve JSON report",
+      "nativeZapSupport": "Report Generation add-on",
+      "mcpTool": "zap_report_generate / read / read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I04 I08 I14",
+      "ciCdFeasibility": "Parsed and digest-checked"
+    },
+    {
+      "id": "I09",
+      "capability": "Generate and retrieve HTML report",
+      "nativeZapSupport": "Report Generation add-on",
+      "mcpTool": "zap_report_generate / read / read_chunk",
+      "status": "VERIFIED",
+      "evidence": "I05 I09",
+      "ciCdFeasibility": "Fixture markers and digest checked"
+    },
+    {
+      "id": "I10",
+      "capability": "Export evidence and handoff",
+      "nativeZapSupport": "ZAP reports plus MCP ledger",
+      "mcpTool": "zap_scan_history_list / get / export / release_evidence / customer_handoff",
+      "status": "VERIFIED",
+      "evidence": "I06 I07 I10 I11 I12",
+      "ciCdFeasibility": "Evidence export works; started ledger rows remain started"
+    },
+    {
+      "id": "I11",
+      "capability": "Map findings to objectives and case IDs",
+      "nativeZapSupport": "CWE and tags; external objective taxonomy",
+      "mcpTool": "Findings and reports as inputs",
+      "status": "INDIRECT",
+      "evidence": "I02 I08 R04",
+      "ciCdFeasibility": "Join in a versioned evidence mapper"
+    }
+  ],
+  "experiments": [
+    {
+      "capabilityId": "M01",
+      "capabilityIds": [
+        "M01",
+        "H15"
+      ],
+      "experimentId": "M01",
+      "mcpToolInvoked": "initialize / notifications/initialized",
+      "sanitizedInput": {
+        "transport": "Streamable HTTP",
+        "endpoint": "http://127.0.0.1:7456/mcp"
+      },
+      "sanitizedOutput": {
+        "protocolVersion": "2025-03-26",
+        "capabilities": {
+          "completions": {},
+          "logging": {},
+          "prompts": {
+            "listChanged": true
+          },
+          "resources": {
+            "subscribe": false,
+            "listChanged": true
+          },
+          "tools": {
+            "listChanged": true
+          }
+        },
+        "serverInfo": {
+          "name": "mcp-zap-server",
+          "version": "0.16.0"
+        },
+        "instructions": "Use this server to interact with the ZAP API for security testing."
+      },
+      "expectedResult": "Authenticate using the deployment’s normal client interface and negotiate an MCP session.",
+      "actualResult": "Initialized MCP 2025-03-26 against mcp-zap-server 0.16.0.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "M01",
+      "capabilityIds": [
+        "M01",
+        "M03",
+        "M04",
+        "M06",
+        "M07",
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B13",
+        "C07",
+        "C08",
+        "C09",
+        "C10",
+        "C12",
+        "D01",
+        "D02",
+        "D03",
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G13",
+        "G14",
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08",
+        "H09",
+        "H10",
+        "H11",
+        "H12",
+        "H17",
+        "I07"
+      ],
+      "experimentId": "M02",
+      "mcpToolInvoked": "tools/list / resources/list / resources/templates/list / prompts/list",
+      "sanitizedInput": {
+        "followCursors": true
+      },
+      "sanitizedOutput": {
+        "toolCount": 21,
+        "resourceCount": 0,
+        "resourceTemplateCount": 0,
+        "promptCount": 0,
+        "toolsWithOutputSchema": 0
+      },
+      "expectedResult": "Read current authenticated discovery and inventory all published schemas.",
+      "actualResult": "Twenty-one guided tools; zero resources, templates and prompts; no advertised output schemas.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "#/mcpDiscovery"
+      ],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "M03",
+      "capabilityIds": [
+        "M03",
+        "C12",
+        "G09",
+        "H15",
+        "I07"
+      ],
+      "experimentId": "M03",
+      "mcpToolInvoked": null,
+      "sanitizedInput": {
+        "mechanism": "Read-only Docker metadata and ZAP add-ons-state.xml projection"
+      },
+      "sanitizedOutput": {
+        "image": "zaproxy/zap-stable:2.17.0",
+        "mcpContainerHealthy": true,
+        "zapContainerHealthy": true,
+        "runnableAddOnCount": 49,
+        "runnableAddOns": [
+          {
+            "id": "alertFilters",
+            "version": "29.0.0"
+          },
+          {
+            "id": "ascanrules",
+            "version": "84.0.0"
+          },
+          {
+            "id": "authhelper",
+            "version": "0.44.0"
+          },
+          {
+            "id": "automation",
+            "version": "0.62.0"
+          },
+          {
+            "id": "bruteforce",
+            "version": "21.0.0"
+          },
+          {
+            "id": "callhome",
+            "version": "0.23.0"
+          },
+          {
+            "id": "client",
+            "version": "0.35.0"
+          },
+          {
+            "id": "commonlib",
+            "version": "1.44.0"
+          },
+          {
+            "id": "database",
+            "version": "0.9.0"
+          },
+          {
+            "id": "diff",
+            "version": "18.0.0"
+          },
+          {
+            "id": "directorylistv1",
+            "version": "9.0.0"
+          },
+          {
+            "id": "domxss",
+            "version": "24.0.0"
+          },
+          {
+            "id": "encoder",
+            "version": "1.9.0"
+          },
+          {
+            "id": "exim",
+            "version": "0.22.0"
+          },
+          {
+            "id": "formhandler",
+            "version": "6.9.0"
+          },
+          {
+            "id": "fuzz",
+            "version": "13.17.0"
+          },
+          {
+            "id": "gettingStarted",
+            "version": "20.0.0"
+          },
+          {
+            "id": "graaljs",
+            "version": "0.14.0"
+          },
+          {
+            "id": "graphql",
+            "version": "0.35.0"
+          },
+          {
+            "id": "help",
+            "version": "23.0.0"
+          },
+          {
+            "id": "hud",
+            "version": "0.19.0"
+          },
+          {
+            "id": "insights",
+            "version": "0.7.0"
+          },
+          {
+            "id": "invoke",
+            "version": "17.0.0"
+          },
+          {
+            "id": "network",
+            "version": "0.33.0"
+          },
+          {
+            "id": "oast",
+            "version": "0.26.0"
+          },
+          {
+            "id": "onlineMenu",
+            "version": "15.0.0"
+          },
+          {
+            "id": "openapi",
+            "version": "58.0.0"
+          },
+          {
+            "id": "params",
+            "version": "0.1.0"
+          },
+          {
+            "id": "postman",
+            "version": "0.10.0"
+          },
+          {
+            "id": "pscan",
+            "version": "0.6.0"
+          },
+          {
+            "id": "pscanrules",
+            "version": "79.0.0"
+          },
+          {
+            "id": "quickstart",
+            "version": "60.0.0"
+          },
+          {
+            "id": "replacer",
+            "version": "22.0.0"
+          },
+          {
+            "id": "reports",
+            "version": "0.46.0"
+          },
+          {
+            "id": "requester",
+            "version": "7.10.0"
+          },
+          {
+            "id": "retest",
+            "version": "0.11.0"
+          },
+          {
+            "id": "retire",
+            "version": "0.69.0"
+          },
+          {
+            "id": "reveal",
+            "version": "10.0.0"
+          },
+          {
+            "id": "scanpolicies",
+            "version": "0.8.0"
+          },
+          {
+            "id": "scripts",
+            "version": "45.20.0"
+          },
+          {
+            "id": "selenium",
+            "version": "15.61.0"
+          },
+          {
+            "id": "sequence",
+            "version": "10.0.0"
+          },
+          {
+            "id": "soap",
+            "version": "32.0.0"
+          },
+          {
+            "id": "spider",
+            "version": "0.20.0"
+          },
+          {
+            "id": "spiderAjax",
+            "version": "23.33.0"
+          },
+          {
+            "id": "tips",
+            "version": "16.0.0"
+          },
+          {
+            "id": "webdriverlinux",
+            "version": "236.0.0"
+          },
+          {
+            "id": "websocket",
+            "version": "38.0.0"
+          },
+          {
+            "id": "zest",
+            "version": "48.14.0"
+          }
+        ],
+        "bundledArchiveCount": 85,
+        "userPluginArchiveCount": 9
+      },
+      "expectedResult": "Read engine metadata and runnable add-on versions without contacting native API.",
+      "actualResult": "ZAP runnable add-on state contained 49 entries. Archive copies were counted separately.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "#/environment",
+        "R01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "M01",
+      "capabilityIds": [
+        "M01"
+      ],
+      "experimentId": "M04",
+      "mcpToolInvoked": "initialize",
+      "sanitizedInput": {
+        "authentication": "omitted once as a negative transport control"
+      },
+      "sanitizedOutput": {
+        "httpStatus": 401,
+        "hostToolRegistryZapNamespaces": 0,
+        "configuredHelperExitCode": 1
+      },
+      "expectedResult": "Anonymous access to the configured MCP endpoint is rejected.",
+      "actualResult": "HTTP 401. The authenticated session used the deployment-documented header and existing client credential.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "C04",
+      "capabilityIds": [
+        "C04"
+      ],
+      "experimentId": "F00",
+      "mcpToolInvoked": null,
+      "sanitizedInput": {
+        "fixture": "static NGINX container",
+        "transport": "private Docker network"
+      },
+      "sanitizedOutput": {
+        "firstStart": "NGINX could not write /run/nginx.pid under the unprivileged user",
+        "recovery": "Set the disposable fixture PID file under /tmp; syntax check and fixture traffic subsequently succeeded."
+      },
+      "expectedResult": "Start a static, isolated fixture and resolve its private DNS name.",
+      "actualResult": "First fixture process exited; subsequent start worked.",
+      "executionStatus": "recovered",
+      "evidenceReferences": [],
+      "failureReason": "Unprivileged fixture PID path",
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "C01",
+      "capabilityIds": [
+        "C01",
+        "C02",
+        "C04",
+        "C05",
+        "C06",
+        "C11",
+        "D07"
+      ],
+      "experimentId": "F01",
+      "mcpToolInvoked": null,
+      "sanitizedInput": {
+        "fixture": "private static HTTP server",
+        "cspPositive": "/without-policy",
+        "cspNegative": "/with-policy"
+      },
+      "sanitizedOutput": {
+        "requests": [
+          {
+            "count": 4,
+            "method": "GET",
+            "path": "/",
+            "http_status": 200
+          },
+          {
+            "count": 1,
+            "method": "GET",
+            "path": "/audit-api-check?sample=audit",
+            "http_status": 200
+          },
+          {
+            "count": 1,
+            "method": "GET",
+            "path": "/audit-api-check?source=file",
+            "http_status": 200
+          },
+          {
+            "count": 1,
+            "method": "GET",
+            "path": "/audit-spec",
+            "http_status": 200
+          },
+          {
+            "count": 2,
+            "method": "GET",
+            "path": "/robots.txt",
+            "http_status": 404
+          },
+          {
+            "count": 2,
+            "method": "GET",
+            "path": "/sitemap.xml",
+            "http_status": 404
+          },
+          {
+            "count": 2,
+            "method": "GET",
+            "path": "/with-policy",
+            "http_status": 200
+          },
+          {
+            "count": 2,
+            "method": "GET",
+            "path": "/with-policy?audit=browser",
+            "http_status": 200
+          },
+          {
+            "count": 1,
+            "method": "GET",
+            "path": "/with-policy?audit=browser-repeat",
+            "http_status": 200
+          },
+          {
+            "count": 1,
+            "method": "GET",
+            "path": "/with-policy?audit=client-repeat",
+            "http_status": 200
+          },
+          {
+            "count": 2,
+            "method": "GET",
+            "path": "/without-policy",
+            "http_status": 200
+          }
+        ],
+        "positiveCspHeaderPresent": false,
+        "negativeCspHeaderPresent": true
+      },
+      "expectedResult": "Independently observe the crawled and imported fixture requests and verify response-header controls.",
+      "actualResult": "Two traditional crawls visited both controls; both OpenAPI fixtures exercised their declared query parameters.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08",
+        "C04.1",
+        "C05",
+        "C11",
+        "R10"
+      ],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "M01",
+      "capabilityIds": [
+        "M01",
+        "H02",
+        "H05"
+      ],
+      "experimentId": "S01",
+      "mcpToolInvoked": null,
+      "sanitizedInput": {
+        "basis": "Tracked bundled MCP server source at e8197caab2d530287214b0e7b8231a3691e0bba8"
+      },
+      "sanitizedOutput": {
+        "registration": "McpServerApplication.java",
+        "expertAutomation": "ExpertAutomationMcpToolsService.java",
+        "planPolicy": "AutomationPlanTargetPolicy.java",
+        "expertPlanJobs": [
+          "requestor",
+          "spider",
+          "activeScan",
+          "passiveScan-config",
+          "passiveScan-wait",
+          "activeScan-config",
+          "activeScan-policy",
+          "report",
+          "exitStatus",
+          "delay"
+        ]
+      },
+      "expectedResult": "Explain difference between repository source and deployed discoverable interfaces.",
+      "actualResult": "Expert methods exist in the source behind a separate tool surface; deployed discovery matched the guided set.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "A08",
+      "capabilityIds": [
+        "A08",
+        "D01",
+        "D04"
+      ],
+      "experimentId": "P01",
+      "mcpToolInvoked": "zap_passive_scan_status",
+      "sanitizedInput": {},
+      "sanitizedOutput": {
+        "lines": [
+          "Completed: yes",
+          "Records remaining: 0",
+          "Active tasks: 0",
+          "Scan only in scope: false"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Read remaining records, active tasks and completion state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:18.959216+00:00"
+    },
+    {
+      "capabilityId": "C04",
+      "capabilityIds": [
+        "C04"
+      ],
+      "experimentId": "C01",
+      "mcpToolInvoked": "zap_crawl_start",
+      "sanitizedInput": {
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "strategy": "http"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: http",
+          "Scan ID: 0"
+        ],
+        "operationHandleReturned": true
+      },
+      "expectedResult": "Start the selected guided crawl against the disposable fixture.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:19.210860+00:00"
+    },
+    {
+      "capabilityId": "D04",
+      "capabilityIds": [
+        "D04",
+        "D05"
+      ],
+      "experimentId": "P02",
+      "mcpToolInvoked": "zap_passive_scan_wait",
+      "sanitizedInput": {
+        "timeoutSeconds": 10,
+        "pollIntervalMs": 200
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Completed: yes",
+          "Records remaining: 0",
+          "Active tasks: 0",
+          "Scan only in scope: false",
+          "Waited: 444 ms"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return queue-drained state or a bounded timeout.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:19.678569+00:00"
+    },
+    {
+      "capabilityId": "I01",
+      "capabilityIds": [
+        "I01",
+        "I06"
+      ],
+      "experimentId": "I01",
+      "mcpToolInvoked": "zap_findings_summary",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "**Total Alerts:** 19",
+          "## 🔴 High Risk",
+          "## 🔴 Medium Risk",
+          "* **Content Security Policy (CSP) Header Not Set** (Systemic; recorded alerts: 4; typically site-wide)",
+          "## 🔴 Low Risk"
+        ]
+      },
+      "expectedResult": "Provide fixture-scoped grouped risk results.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:19.757647+00:00"
+    },
+    {
+      "capabilityId": "D05",
+      "capabilityIds": [
+        "D05",
+        "D06",
+        "D07",
+        "I01",
+        "I02",
+        "I03",
+        "I04",
+        "I06",
+        "I11"
+      ],
+      "experimentId": "I02",
+      "mcpToolInvoked": "zap_findings_details",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "pluginId": "10038",
+        "includeInstances": true,
+        "limit": 12
+      },
+      "sanitizedOutput": {
+        "ruleId": "10038",
+        "valueObserved": "CWE-693",
+        "lines": [
+          "Alert instances returned: 4 of 4",
+          "URL: http://zap-cap-audit-bun4b1te:8080",
+          "Param: <none>",
+          "Method: GET",
+          "URL: http://zap-cap-audit-bun4b1te:8080/robots.txt",
+          "Param: <none>",
+          "Method: GET",
+          "URL: http://zap-cap-audit-bun4b1te:8080/sitemap.xml",
+          "Param: <none>",
+          "Method: GET",
+          "URL: http://zap-cap-audit-bun4b1te:8080/without-policy",
+          "Param: <none>",
+          "Method: GET"
+        ]
+      },
+      "expectedResult": "Return fixture-scoped rule 10038 instances filtered by rule and limit.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:19.817157+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C04",
+        "H14"
+      ],
+      "experimentId": "C02.0",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: http",
+          "Scan ID: 0",
+          "Progress: 100%",
+          "Completed: yes"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:58.264884+00:00"
+    },
+    {
+      "capabilityId": "C04",
+      "capabilityIds": [
+        "C04"
+      ],
+      "experimentId": "C03",
+      "mcpToolInvoked": "zap_crawl_start",
+      "sanitizedInput": {
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "strategy": "http"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: http",
+          "Scan ID: 1"
+        ],
+        "operationHandleReturned": true
+      },
+      "expectedResult": "Start the selected guided crawl against the disposable fixture.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:58.299521+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C04",
+        "H14",
+        "H15"
+      ],
+      "experimentId": "C04.0",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: http",
+          "Scan ID: 1",
+          "Progress: 25%",
+          "Completed: no"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:58.315982+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C04",
+        "H14",
+        "H15"
+      ],
+      "experimentId": "C04.1",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: http",
+          "Scan ID: 1",
+          "Progress: 100%",
+          "Completed: yes"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:59.047046+00:00"
+    },
+    {
+      "capabilityId": "D05",
+      "capabilityIds": [
+        "D05"
+      ],
+      "experimentId": "P03",
+      "mcpToolInvoked": "zap_passive_scan_wait",
+      "sanitizedInput": {
+        "timeoutSeconds": 10,
+        "pollIntervalMs": 200
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Completed: yes",
+          "Records remaining: 0",
+          "Active tasks: 0",
+          "Scan only in scope: false",
+          "Waited: 432 ms"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return queue-drained state or a bounded timeout.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:59.489201+00:00"
+    },
+    {
+      "capabilityId": "D05",
+      "capabilityIds": [
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "experimentId": "I03",
+      "mcpToolInvoked": "zap_findings_details",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "pluginId": "10038",
+        "includeInstances": true,
+        "limit": 12
+      },
+      "sanitizedOutput": {
+        "ruleId": "10038",
+        "valueObserved": "CWE-693",
+        "lines": [
+          "Alert instances returned: 4 of 4",
+          "URL: http://zap-cap-audit-bun4b1te:8080",
+          "Param: <none>",
+          "Method: GET",
+          "URL: http://zap-cap-audit-bun4b1te:8080/robots.txt",
+          "Param: <none>",
+          "Method: GET",
+          "URL: http://zap-cap-audit-bun4b1te:8080/sitemap.xml",
+          "Param: <none>",
+          "Method: GET",
+          "URL: http://zap-cap-audit-bun4b1te:8080/without-policy",
+          "Param: <none>",
+          "Method: GET"
+        ]
+      },
+      "expectedResult": "Return fixture-scoped rule 10038 instances filtered by rule and limit.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:59.516382+00:00"
+    },
+    {
+      "capabilityId": "M06",
+      "capabilityIds": [
+        "M06",
+        "A07",
+        "C01",
+        "C11"
+      ],
+      "experimentId": "C05",
+      "mcpToolInvoked": "zap_target_import",
+      "sanitizedInput": {
+        "definitionType": "openapi",
+        "sourceKind": "url",
+        "source": "http://zap-cap-audit-bun4b1te:8080/audit-spec",
+        "hostOverride": "http://zap-cap-audit-bun4b1te:8080"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Definition Type: openapi",
+          "Source Kind: url",
+          "OpenAPI import completed and is ready to scan."
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Import a self-contained definition and exercise the declared fixture operation.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:28:59.622905+00:00"
+    },
+    {
+      "capabilityId": "D04",
+      "capabilityIds": [
+        "D04",
+        "D05"
+      ],
+      "experimentId": "P04",
+      "mcpToolInvoked": "zap_passive_scan_wait",
+      "sanitizedInput": {
+        "timeoutSeconds": 10,
+        "pollIntervalMs": 200
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Completed: yes",
+          "Records remaining: 0",
+          "Active tasks: 0",
+          "Scan only in scope: false",
+          "Waited: 1947 ms"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return queue-drained state or a bounded timeout.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:01.581035+00:00"
+    },
+    {
+      "capabilityId": "I08",
+      "capabilityIds": [
+        "I08"
+      ],
+      "experimentId": "I04",
+      "mcpToolInvoked": "zap_report_generate",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "format": "json"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Format: json",
+          "Theme: not applicable",
+          "Scope: http://zap-cap-audit-bun4b1te:8080"
+        ],
+        "artifactHandleReturned": true
+      },
+      "expectedResult": "Create the requested fixture-scoped report artifact.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:01.978739+00:00"
+    },
+    {
+      "capabilityId": "I09",
+      "capabilityIds": [
+        "I09"
+      ],
+      "experimentId": "I05",
+      "mcpToolInvoked": "zap_report_generate",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "format": "html"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Format: html",
+          "Theme: engine default",
+          "Scope: http://zap-cap-audit-bun4b1te:8080"
+        ],
+        "artifactHandleReturned": true
+      },
+      "expectedResult": "Create the requested fixture-scoped report artifact.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:02.126084+00:00"
+    },
+    {
+      "capabilityId": "I10",
+      "capabilityIds": [
+        "I10"
+      ],
+      "experimentId": "I06",
+      "mcpToolInvoked": "zap_scan_history_list",
+      "sanitizedInput": {
+        "target": "http://zap-cap-audit-bun4b1te:8080",
+        "limit": 15
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Retention: 180 days",
+          "Entries Returned: 4",
+          "Status: generated",
+          "Status: generated",
+          "Status: started",
+          "Status: started"
+        ]
+      },
+      "expectedResult": "List fixture-scoped ledger entries.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:02.138015+00:00"
+    },
+    {
+      "capabilityId": "C10",
+      "capabilityIds": [
+        "C10",
+        "I10"
+      ],
+      "experimentId": "I07",
+      "mcpToolInvoked": "zap_scan_history_export",
+      "sanitizedInput": {
+        "target": "http://zap-cap-audit-bun4b1te:8080",
+        "limit": 15
+      },
+      "sanitizedOutput": {
+        "entryCount": 4,
+        "typesAndStatuses": [
+          [
+            "report_artifact",
+            "generated"
+          ],
+          [
+            "report_artifact",
+            "generated"
+          ],
+          [
+            "scan_run",
+            "started"
+          ],
+          [
+            "scan_run",
+            "started"
+          ]
+        ]
+      },
+      "expectedResult": "Export fixture-scoped ledger entries as machine-readable JSON.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:02.149887+00:00"
+    },
+    {
+      "capabilityId": "B01",
+      "capabilityIds": [
+        "B01",
+        "B02",
+        "B04",
+        "B06",
+        "B08",
+        "B09",
+        "B10",
+        "B11",
+        "B13",
+        "C07",
+        "E07",
+        "E08"
+      ],
+      "experimentId": "B01",
+      "mcpToolInvoked": "zap_auth_session_prepare",
+      "sanitizedInput": {
+        "profileId": "[synthetic unconfigured profile]",
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080"
+      },
+      "sanitizedOutput": {
+        "isError": true,
+        "message": "Unknown auth profile ID: capability-audit-unconfigured-bun4b1te"
+      },
+      "expectedResult": "Reject an unconfigured synthetic profile.",
+      "actualResult": "Unknown auth profile ID: capability-audit-unconfigured-bun4b1te",
+      "executionStatus": "expected_rejection",
+      "evidenceReferences": [],
+      "failureReason": "Unknown auth profile ID: capability-audit-unconfigured-bun4b1te",
+      "observedAtUtc": "2026-11-24T04:29:02.158920+00:00"
+    },
+    {
+      "capabilityId": "M07",
+      "capabilityIds": [
+        "M07",
+        "B03",
+        "C08",
+        "F08",
+        "F09",
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G11",
+        "G13",
+        "G14",
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08",
+        "H09",
+        "H10",
+        "H11",
+        "H12",
+        "H17"
+      ],
+      "experimentId": "H01",
+      "mcpToolInvoked": "zap_automation_plan_status",
+      "sanitizedInput": {
+        "planId": "capability-audit-unconfigured"
+      },
+      "sanitizedOutput": {
+        "transportError": "tools/call JSON-RPC -32602"
+      },
+      "expectedResult": "Confirm behavior for a tool absent from discovery.",
+      "actualResult": "tools/call JSON-RPC -32602",
+      "executionStatus": "expected_rejection",
+      "evidenceReferences": [],
+      "failureReason": "tools/call JSON-RPC -32602",
+      "observedAtUtc": "2026-11-24T04:29:02.166814+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08P",
+      "mcpToolInvoked": "zap_report_read",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 500
+      },
+      "sanitizedOutput": {
+        "previewReturned": true,
+        "hasTruncationGuidance": true
+      },
+      "expectedResult": "Retrieve a bounded preview.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.778444+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.0",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 0
+      },
+      "sanitizedOutput": {
+        "offset": 0,
+        "nextOffset": 5000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.794525+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.1",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 5000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 5000,
+        "nextOffset": 10000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.810797+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.2",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 10000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 10000,
+        "nextOffset": 15000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.824845+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.3",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 15000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 15000,
+        "nextOffset": 20000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.841165+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.4",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 20000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 20000,
+        "nextOffset": 25000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.854740+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.5",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 25000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 25000,
+        "nextOffset": 30000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.867598+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.6",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 30000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 30000,
+        "nextOffset": 35000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.883008+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.7",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 35000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 35000,
+        "nextOffset": 40000,
+        "charactersReturned": 5000,
+        "endOfFile": false,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.893386+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08.8",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 5000,
+        "offset": 40000,
+        "expectedSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "sanitizedOutput": {
+        "offset": 40000,
+        "nextOffset": null,
+        "charactersReturned": 3901,
+        "endOfFile": true,
+        "totalCharacters": 43901,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.903784+00:00"
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09P",
+      "mcpToolInvoked": "zap_report_read",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 500
+      },
+      "sanitizedOutput": {
+        "previewReturned": true,
+        "hasTruncationGuidance": true
+      },
+      "expectedResult": "Retrieve a bounded preview.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.914728+00:00"
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09.0",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 15000,
+        "offset": 0
+      },
+      "sanitizedOutput": {
+        "offset": 0,
+        "nextOffset": 15000,
+        "charactersReturned": 15000,
+        "endOfFile": false,
+        "totalCharacters": 65051,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.924384+00:00"
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09.1",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 15000,
+        "offset": 15000,
+        "expectedSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "sanitizedOutput": {
+        "offset": 15000,
+        "nextOffset": 30000,
+        "charactersReturned": 15000,
+        "endOfFile": false,
+        "totalCharacters": 65051,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.936995+00:00"
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09.2",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 15000,
+        "offset": 30000,
+        "expectedSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "sanitizedOutput": {
+        "offset": 30000,
+        "nextOffset": 45000,
+        "charactersReturned": 15000,
+        "endOfFile": false,
+        "totalCharacters": 65051,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.953109+00:00"
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09.3",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 15000,
+        "offset": 45000,
+        "expectedSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "sanitizedOutput": {
+        "offset": 45000,
+        "nextOffset": 60000,
+        "charactersReturned": 15000,
+        "endOfFile": false,
+        "totalCharacters": 65051,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.963867+00:00"
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09.4",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "maxChars": 15000,
+        "offset": 60000,
+        "expectedSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "sanitizedOutput": {
+        "offset": 60000,
+        "nextOffset": null,
+        "charactersReturned": 5051,
+        "endOfFile": true,
+        "totalCharacters": 65051,
+        "offsetUnit": "unicodeCodePoints",
+        "artifactSha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3"
+      },
+      "expectedResult": "Return a bounded page of the same fixture artifact.",
+      "actualResult": "A bounded page returned and participated in full digest verification.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.973733+00:00"
+    },
+    {
+      "capabilityId": "C10",
+      "capabilityIds": [
+        "C10",
+        "I10"
+      ],
+      "experimentId": "I10",
+      "mcpToolInvoked": "zap_scan_history_get",
+      "sanitizedInput": {
+        "entryId": "[ledger entry ID]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Evidence Type: report_artifact",
+          "Status: generated"
+        ]
+      },
+      "expectedResult": "Read one listed fixture ledger entry.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.984059+00:00"
+    },
+    {
+      "capabilityId": "I10",
+      "capabilityIds": [
+        "I10"
+      ],
+      "experimentId": "I11",
+      "mcpToolInvoked": "zap_scan_history_release_evidence",
+      "sanitizedInput": {
+        "releaseName": "fixture capability audit",
+        "target": "http://zap-cap-audit-bun4b1te:8080",
+        "limit": 15
+      },
+      "sanitizedOutput": {
+        "entryCount": 4,
+        "byEvidenceType": {
+          "report_artifact": 2,
+          "scan_run": 2
+        },
+        "byStatus": {
+          "generated": 2,
+          "started": 2
+        },
+        "warnings": []
+      },
+      "expectedResult": "Summarize the fixture evidence ledger.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:39.995442+00:00"
+    },
+    {
+      "capabilityId": "I10",
+      "capabilityIds": [
+        "I10"
+      ],
+      "experimentId": "I12",
+      "mcpToolInvoked": "zap_scan_history_customer_handoff",
+      "sanitizedInput": {
+        "handoffName": "fixture capability audit",
+        "target": "http://zap-cap-audit-bun4b1te:8080",
+        "limit": 15
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Readiness: CAVEAT",
+          "- Evidence entries reviewed: 4"
+        ]
+      },
+      "expectedResult": "Produce a scoped handoff summary.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:40.007844+00:00"
+    },
+    {
+      "capabilityId": "A01",
+      "capabilityIds": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "B08"
+      ],
+      "experimentId": "X01",
+      "mcpToolInvoked": "zap_contexts_list",
+      "sanitizedInput": {},
+      "sanitizedOutput": {
+        "transportError": "tools/call JSON-RPC -32602"
+      },
+      "expectedResult": "Confirm behavior for a tool absent from discovery.",
+      "actualResult": "tools/call JSON-RPC -32602",
+      "executionStatus": "expected_rejection",
+      "evidenceReferences": [],
+      "failureReason": "tools/call JSON-RPC -32602",
+      "observedAtUtc": "2026-11-24T04:29:40.013941+00:00"
+    },
+    {
+      "capabilityId": "M04",
+      "capabilityIds": [
+        "M04"
+      ],
+      "experimentId": "X02",
+      "mcpToolInvoked": "zap_version",
+      "sanitizedInput": {},
+      "sanitizedOutput": {
+        "transportError": "tools/call JSON-RPC -32602"
+      },
+      "expectedResult": "Confirm behavior for a tool absent from discovery.",
+      "actualResult": "tools/call JSON-RPC -32602",
+      "executionStatus": "expected_rejection",
+      "evidenceReferences": [],
+      "failureReason": "tools/call JSON-RPC -32602",
+      "observedAtUtc": "2026-11-24T04:29:40.018709+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.start",
+      "mcpToolInvoked": "zap_crawl_start",
+      "sanitizedInput": {
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080/with-policy?audit=browser",
+        "strategy": "browser"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser"
+        ],
+        "operationHandleReturned": true
+      },
+      "expectedResult": "Start the selected guided crawl against the disposable fixture.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:50.875406+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.status0",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: running",
+          "Pages/URLs discovered: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:50.898619+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.status1",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: running",
+          "Pages/URLs discovered: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:51.920198+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.status2",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: running",
+          "Pages/URLs discovered: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:52.946216+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.status3",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: running",
+          "Pages/URLs discovered: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:54.003377+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.status4",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: running",
+          "Pages/URLs discovered: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:55.048972+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.stop",
+      "mcpToolInvoked": "zap_crawl_stop",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider scan stopped successfully"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Request a stop for the audit-owned crawl.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:56.067121+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.poststop",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: stopped",
+          "Pages/URLs discovered: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:56.079600+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.start",
+      "mcpToolInvoked": "zap_crawl_start",
+      "sanitizedInput": {
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080/with-policy?audit=client",
+        "strategy": "client"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0"
+        ],
+        "operationHandleReturned": true
+      },
+      "expectedResult": "Start the selected guided crawl against the disposable fixture.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:56.112153+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.status0",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:56.124277+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.status1",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:57.141000+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.status2",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:58.272420+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.status3",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:29:59.302681+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.status4",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:00.319879+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.stop",
+      "mcpToolInvoked": "zap_crawl_stop",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Request a stop for the audit-owned crawl.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:01.340083+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C06"
+      ],
+      "experimentId": "C07.poststop",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 0",
+          "Progress: 100%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:01.352672+00:00"
+    },
+    {
+      "capabilityId": "M06",
+      "capabilityIds": [
+        "M06",
+        "C03"
+      ],
+      "experimentId": "C10",
+      "mcpToolInvoked": "zap_target_import",
+      "sanitizedInput": {
+        "definitionType": "openapi",
+        "sourceKind": "content",
+        "source": {
+          "openapi": "3.0.3",
+          "path": "/audit-api-check",
+          "method": "GET",
+          "queryParameter": "from"
+        },
+        "hostOverride": "http://zap-cap-audit-bun4b1te:8080"
+      },
+      "sanitizedOutput": {
+        "isError": true,
+        "message": "OpenAPI content import is disabled; configure and enable its dedicated shared filesystem first"
+      },
+      "expectedResult": "Import a self-contained definition and exercise the declared fixture operation.",
+      "actualResult": "OpenAPI content import is disabled; configure and enable its dedicated shared filesystem first",
+      "executionStatus": "blocked",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": "OpenAPI content import is disabled; configure and enable its dedicated shared filesystem first",
+      "observedAtUtc": "2026-11-24T04:30:33.007054+00:00"
+    },
+    {
+      "capabilityId": "B02",
+      "capabilityIds": [
+        "B02",
+        "B04",
+        "B06",
+        "B09",
+        "B10",
+        "B11",
+        "B12",
+        "B13",
+        "C07",
+        "F07"
+      ],
+      "experimentId": "B02",
+      "mcpToolInvoked": "zap_auth_session_validate",
+      "sanitizedInput": {
+        "sessionId": "[synthetic invalid session]"
+      },
+      "sanitizedOutput": {
+        "isError": true,
+        "message": "Unknown auth session ID: capability-audit-invalid-session"
+      },
+      "expectedResult": "Reject a synthetic unknown session handle.",
+      "actualResult": "Unknown auth session ID: capability-audit-invalid-session",
+      "executionStatus": "expected_rejection",
+      "evidenceReferences": [],
+      "failureReason": "Unknown auth session ID: capability-audit-invalid-session",
+      "observedAtUtc": "2026-11-24T04:30:33.095817+00:00"
+    },
+    {
+      "capabilityId": "I06",
+      "capabilityIds": [
+        "I06"
+      ],
+      "experimentId": "I13",
+      "mcpToolInvoked": "zap_findings_details",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "pluginId": "10038",
+        "includeInstances": true,
+        "limit": 1
+      },
+      "sanitizedOutput": {
+        "ruleId": "10038",
+        "valueObserved": "CWE-693",
+        "lines": [
+          "Alert instances returned: 1 of 4",
+          "URL: http://zap-cap-audit-bun4b1te:8080",
+          "Param: <none>",
+          "Method: GET"
+        ]
+      },
+      "expectedResult": "Return fixture-scoped rule 10038 instances filtered by rule and limit.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:33.315478+00:00"
+    },
+    {
+      "capabilityId": "I08",
+      "capabilityIds": [
+        "I08"
+      ],
+      "experimentId": "I14",
+      "mcpToolInvoked": "zap_report_read_chunk",
+      "sanitizedInput": {
+        "reportPath": "[scoped report artifact]",
+        "offset": 5000,
+        "maxChars": 5000,
+        "expectedSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "sanitizedOutput": {
+        "isError": true,
+        "message": "Report SHA-256 changed; restart retrieval from offset zero"
+      },
+      "expectedResult": "Reject a deliberately incorrect expected artifact digest.",
+      "actualResult": "Report SHA-256 changed; restart retrieval from offset zero",
+      "executionStatus": "expected_rejection",
+      "evidenceReferences": [],
+      "failureReason": "Report SHA-256 changed; restart retrieval from offset zero",
+      "observedAtUtc": "2026-11-24T04:30:33.671746+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.start",
+      "mcpToolInvoked": "zap_crawl_start",
+      "sanitizedInput": {
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080/with-policy?audit=client-repeat",
+        "strategy": "client"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1"
+        ],
+        "operationHandleReturned": true
+      },
+      "expectedResult": "Start the selected guided crawl against the disposable fixture.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:34.158301+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status0",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:34.195294+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status1",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:36.297980+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status2",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:38.329708+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status3",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:40.432446+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status4",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:42.515038+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status5",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:44.529522+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.status6",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 0%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:46.721179+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.stop",
+      "mcpToolInvoked": "zap_crawl_stop",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Request a stop for the audit-owned crawl.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:48.816352+00:00"
+    },
+    {
+      "capabilityId": "C06",
+      "capabilityIds": [
+        "C06"
+      ],
+      "experimentId": "C08.poststop",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: client",
+          "Scan ID: 1",
+          "Progress: 100%"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:30:49.019795+00:00"
+    },
+    {
+      "capabilityId": "C05",
+      "capabilityIds": [
+        "C05"
+      ],
+      "experimentId": "C09.start",
+      "mcpToolInvoked": "zap_crawl_start",
+      "sanitizedInput": {
+        "targetUrl": "http://zap-cap-audit-bun4b1te:8080/with-policy?audit=browser-repeat",
+        "strategy": "browser"
+      },
+      "sanitizedOutput": {
+        "isError": true,
+        "message": "ZAP is busy with another AJAX Spider scan"
+      },
+      "expectedResult": "Start the selected guided crawl against the disposable fixture.",
+      "actualResult": "ZAP is busy with another AJAX Spider scan",
+      "executionStatus": "blocked",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": "ZAP is busy with another AJAX Spider scan",
+      "observedAtUtc": "2026-11-24T04:30:50.145253+00:00"
+    },
+    {
+      "capabilityId": "C02",
+      "capabilityIds": [
+        "C02"
+      ],
+      "experimentId": "C11",
+      "mcpToolInvoked": "zap_target_import",
+      "sanitizedInput": {
+        "definitionType": "openapi",
+        "sourceKind": "file",
+        "source": "[staged fixture definition]",
+        "hostOverride": "http://zap-cap-audit-bun4b1te:8080"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Definition Type: openapi",
+          "Source Kind: file",
+          "OpenAPI import completed and is ready to scan."
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Import a self-contained definition and exercise the declared fixture operation.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:33:02.115399+00:00"
+    },
+    {
+      "capabilityId": "D05",
+      "capabilityIds": [
+        "D05"
+      ],
+      "experimentId": "P05",
+      "mcpToolInvoked": "zap_passive_scan_wait",
+      "sanitizedInput": {
+        "timeoutSeconds": 10,
+        "pollIntervalMs": 200
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Completed: yes",
+          "Records remaining: 0",
+          "Active tasks: 0",
+          "Scan only in scope: false",
+          "Waited: 1765 ms"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return queue-drained state or a bounded timeout.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:33:03.918747+00:00"
+    },
+    {
+      "capabilityId": "M05",
+      "capabilityIds": [
+        "M05",
+        "C05"
+      ],
+      "experimentId": "C06.late",
+      "mcpToolInvoked": "zap_crawl_status",
+      "sanitizedInput": {
+        "operationId": "[opaque crawl handle]"
+      },
+      "sanitizedOutput": {
+        "lines": [
+          "Execution Mode: direct",
+          "Strategy: browser",
+          "AJAX Spider Status: stopped",
+          "Pages/URLs discovered: 1"
+        ],
+        "operationHandleReturned": false
+      },
+      "expectedResult": "Return concrete scan progress or terminal state.",
+      "actualResult": "The MCP response supplied the projected values shown in sanitizedOutput.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "F01"
+      ],
+      "failureReason": null,
+      "observedAtUtc": "2026-11-24T04:33:03.936544+00:00"
+    },
+    {
+      "capabilityId": "M02",
+      "capabilityIds": [
+        "M02",
+        "M06",
+        "C10",
+        "C11",
+        "D06",
+        "D07",
+        "E13",
+        "H13",
+        "H14",
+        "H15",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I08",
+        "I11"
+      ],
+      "experimentId": "I08",
+      "mcpToolInvoked": "zap_report_generate / zap_report_read / zap_report_read_chunk",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "format": "json"
+      },
+      "sanitizedOutput": {
+        "format": "json",
+        "pageCount": 9,
+        "characters": 43901,
+        "sha256": "2ba1f20d3700a8af6150fd62939c4115f3d88be5e8d6d8ab9ea03e2bbd216f37",
+        "matchesMcpSha256": true,
+        "engineVersion": "2.17.0",
+        "siteCount": 1,
+        "alertGroupCount": 7,
+        "passiveControl": {
+          "pluginId": "10038",
+          "alertRef": "10038-1",
+          "cwe": "693",
+          "instanceCount": 4,
+          "positiveMatched": true,
+          "negativeMatched": false
+        },
+        "httpEvidence": {
+          "fields": {
+            "request-header": true,
+            "request-body": true,
+            "response-header": true,
+            "response-body": true
+          },
+          "positive": {
+            "path": "/without-policy",
+            "method": "GET",
+            "httpStatus": 200,
+            "cspHeaderPresent": false
+          },
+          "negative": {
+            "path": "/with-policy",
+            "method": "GET",
+            "httpStatus": 200,
+            "cspHeaderPresent": true
+          },
+          "affectedHeaderParameters": [
+            "Content-Security-Policy",
+            "x-content-type-options",
+            "x-frame-options"
+          ],
+          "automaticRedactionVerified": false
+        }
+      },
+      "expectedResult": "Reconstruct all artifact pages, verify digest and validate fixture scope and content.",
+      "actualResult": "Artifact reconstructed and verified locally; raw HTTP fields were projected out of the evidence bundle.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I08P",
+        "I08.0",
+        "I08.1",
+        "I08.2",
+        "I08.3",
+        "I08.4",
+        "I08.5",
+        "I08.6",
+        "I08.7",
+        "I08.8",
+        "F01",
+        "R16"
+      ],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "H14",
+      "capabilityIds": [
+        "H14",
+        "I05",
+        "I09"
+      ],
+      "experimentId": "I09",
+      "mcpToolInvoked": "zap_report_generate / zap_report_read / zap_report_read_chunk",
+      "sanitizedInput": {
+        "baseUrl": "http://zap-cap-audit-bun4b1te:8080",
+        "format": "html"
+      },
+      "sanitizedOutput": {
+        "format": "html",
+        "pageCount": 5,
+        "characters": 65051,
+        "sha256": "a8d71eb383eca8c660c3a7b0d3b3da278b82794963f864bbb1f931fd12c97cf3",
+        "matchesMcpSha256": true,
+        "markers": [
+          "well-formed HTML envelope",
+          "fixture positive path",
+          "CSP finding"
+        ]
+      },
+      "expectedResult": "Reconstruct all artifact pages, verify digest and validate fixture scope and content.",
+      "actualResult": "Artifact reconstructed and verified locally; raw HTTP fields were projected out of the evidence bundle.",
+      "executionStatus": "passed",
+      "evidenceReferences": [
+        "I09P",
+        "I09.0",
+        "I09.1",
+        "I09.2",
+        "I09.3",
+        "I09.4",
+        "F01",
+        "R16"
+      ],
+      "failureReason": null,
+      "observedAtUtc": null
+    },
+    {
+      "capabilityId": "M01",
+      "capabilityIds": [
+        "M01",
+        "C02"
+      ],
+      "experimentId": "F02",
+      "mcpToolInvoked": null,
+      "sanitizedInput": {
+        "resources": [
+          "disposable fixture container",
+          "staged OpenAPI definition"
+        ]
+      },
+      "sanitizedOutput": {
+        "fixtureRemoved": true,
+        "stagedDefinitionRemoved": true,
+        "existingContainersHealthy": true
+      },
+      "expectedResult": "Remove only the audit-created fixture and staged definition.",
+      "actualResult": "Both resources were removed. The existing engine and MCP containers remained healthy.",
+      "executionStatus": "passed",
+      "evidenceReferences": [],
+      "failureReason": null,
+      "observedAtUtc": null
+    }
+  ],
+  "officialReferences": {
+    "R01": {
+      "title": "ZAP API Reference",
+      "url": "https://www.zaproxy.org/docs/api/"
+    },
+    "R02": {
+      "title": "ZAP authentication concepts",
+      "url": "https://www.zaproxy.org/docs/getting-further/authentication/concepts/"
+    },
+    "R03": {
+      "title": "ZAP session handling",
+      "url": "https://www.zaproxy.org/docs/authentication/session-handling/"
+    },
+    "R04": {
+      "title": "ZAP Access Control Testing",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/access-control-testing/"
+    },
+    "R05": {
+      "title": "ZAP Automation Framework CLI and API",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/automation-framework/"
+    },
+    "R06": {
+      "title": "ZAP automation options and GitHub Actions",
+      "url": "https://www.zaproxy.org/docs/getting-further/automation/automation-options/"
+    },
+    "R07": {
+      "title": "ZAP exploration guidance",
+      "url": "https://www.zaproxy.org/docs/getting-further/automation/exploring-your-app/"
+    },
+    "R08": {
+      "title": "ZAP OpenAPI support",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/openapi-support/"
+    },
+    "R09": {
+      "title": "ZAP passive scanner",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/passive-scanner/"
+    },
+    "R10": {
+      "title": "ZAP passive rule 10038-1",
+      "url": "https://www.zaproxy.org/docs/alerts/10038-1/"
+    },
+    "R11": {
+      "title": "ZAP script types",
+      "url": "https://www.zaproxy.org/docs/getting-further/scripting/script-types/"
+    },
+    "R12": {
+      "title": "ZAP script job",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/script-console/automation/"
+    },
+    "R13": {
+      "title": "ZAP requestor job",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/automation-framework/job-requestor/"
+    },
+    "R14": {
+      "title": "ZAP Replacer",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/replacer/"
+    },
+    "R15": {
+      "title": "ZAP Framework jobs",
+      "url": "https://www.zaproxy.org/docs/automate/automation-framework/"
+    },
+    "R16": {
+      "title": "ZAP report generation",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/report-generation/"
+    },
+    "R17": {
+      "title": "ZAP Alert Filters",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/alert-filters/"
+    },
+    "R18": {
+      "title": "ZAP Docker documentation",
+      "url": "https://www.zaproxy.org/docs/docker/"
+    },
+    "R19": {
+      "title": "ZAP Client Spider API",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/client-side-integration/spider-api/"
+    },
+    "R20": {
+      "title": "ZAP authentication methods",
+      "url": "https://www.zaproxy.org/docs/desktop/start/features/authmethods/"
+    }
+  }
+}

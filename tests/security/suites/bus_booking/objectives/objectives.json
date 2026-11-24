@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "objectives": [
+    {
+      "id": "SEC-A01-01",
+      "cwe": [
+        "CWE-862"
+      ],
+      "statement": "Authenticate and authorize all protected operations. Administrative operations require ADMIN or SUPER_ADMIN. Role modification requires SUPER_ADMIN."
+    }
+  ]
+}

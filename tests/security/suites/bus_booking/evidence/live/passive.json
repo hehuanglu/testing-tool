@@ -1,0 +1,185 @@
+{
+  "checks": {
+    "BB-LIVE-PASSIVE": {
+      "authProfile": "public-anonymous",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/proxyWitness",
+        "#/evidence/scannerEvents",
+        "#/evidence/scannerExecution",
+        "#/evidence/zapReport"
+      ],
+      "expected": "The anonymous loopback proxy forwards a public Bus Booking request. The scoped passive plan drains and retains a fresh report with a detector control.",
+      "method": "passive-dast",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PASSIVE_TRANSPORT_VERIFIED",
+      "specification": "specifications/live-http.md",
+      "verdict": "PASS"
+    }
+  },
+  "decisiveChecks": {
+    "BB-LIVE-PASSIVE": "PASSIVE_TRANSPORT_VERIFIED"
+  },
+  "evidence": {
+    "provenance": {
+      "data": {
+        "applicationJarSha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+        "applicationTransport": "http-1.1",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "passive"
+      },
+      "producer": "runner"
+    },
+    "proxyWitness": {
+      "data": {
+        "apiEnabled": false,
+        "bodyMatchesDirect": true,
+        "directStatus": 200,
+        "method": "GET",
+        "mode": "safe",
+        "path": "/api/locations",
+        "status": 200,
+        "upstreamWitnesses": [
+          {
+            "origin": "bus-booking",
+            "route": "/api/locations",
+            "status": 200
+          }
+        ]
+      },
+      "producer": "suite-assertion"
+    },
+    "scannerEvents": {
+      "data": [
+        {
+          "origin": "bus-booking",
+          "route": "/api/locations",
+          "status": 200
+        },
+        {
+          "origin": "synthetic-control",
+          "route": "/__pilot_passive_control",
+          "status": 200
+        }
+      ],
+      "producer": "fixture"
+    },
+    "scannerExecution": {
+      "data": {
+        "execution": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "expectedJobTypes": [
+          "requestor",
+          "passiveScan-wait",
+          "report"
+        ],
+        "jobReceipts": [
+          [
+            "requestor",
+            "started"
+          ],
+          [
+            "requestor",
+            "finished"
+          ],
+          [
+            "passiveScan-wait",
+            "started"
+          ],
+          [
+            "passiveScan-wait",
+            "finished"
+          ],
+          [
+            "report",
+            "started"
+          ],
+          [
+            "report",
+            "finished"
+          ]
+        ],
+        "planReportedSuccessful": true,
+        "planSha256": "480920331632ebf7a07fc7a946c8efa1d7f81aa5b6fd3d65d9065b77dc0b290f",
+        "preflight": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "preflightRequests": 0
+      },
+      "producer": "automation-framework"
+    },
+    "zapReport": {
+      "data": {
+        "capped": false,
+        "ruleInstances": [
+          {
+            "alertRef": "10038-1",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/0/instances/0"
+          },
+          {
+            "alertRef": "10020-1",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/1/instances/0"
+          },
+          {
+            "alertRef": "10021",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/2/instances/0"
+          }
+        ],
+        "sha256": "8c7e1267fb7ddd1a68773c5e338e781b1888412a38e115b98182788040475f53",
+        "version": "2.17.0"
+      },
+      "producer": "zap-report"
+    }
+  },
+  "executionEnvironment": "local",
+  "exitCode": 0,
+  "inputSha256": {
+    "security_framework/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security_framework/engine.py": "84f177069bc41674d3a22709cd11d33c80f2038f657fa622fedd141311a48cc5",
+    "security_framework/evidence.py": "4fcffe9adcd7e9b6f482551bd1cfe28c5f54027d65888805019771e9a52e4f70",
+    "security_framework/manifest.py": "4fe72fc0f2d286984390af8629812cb35657db30332b8fb34c3c4531a2f47734",
+    "security_framework/run.py": "d83d0f63756ae5e9ffbdbf4d8c390037ab06b0ab2e8d547607b9354c367625c4",
+    "suites/bus_booking/adapter.py": "c72ad8a65964cc6aef19ce90349370c7c9b4746c8f65d3ac924d9183414715d9",
+    "suites/bus_booking/assertions/oracle.py": "84470ffb9f94e88103f2806cad7d81ceba8bad5949c57cd3643ece3c81bbf0ea",
+    "suites/bus_booking/authentication/profiles.json": "68f4e76d9ec7b153a5686644b8fe4410dc1596dc8271557747f22e48429345f7",
+    "suites/bus_booking/cases/cases.json": "ac1b900504adf22060550be33fc5daa296bc19c87927029827bb2936cf983ba4",
+    "suites/bus_booking/live/compare.py": "967c98a94943c2f5f4b8e31c309beda5191003dd195bdfdefc58bafad5c3e8c7",
+    "suites/bus_booking/live/run.py": "0aa879d1711c46c77e940b7b17cbabb0e7c962262fabe3d79bec33a53cb924cd",
+    "suites/bus_booking/live/scanner.py": "012b7c9d364bb0e9a1b0a051a6510f8f7f253fd51d3941b51683d1d34e863d77",
+    "suites/bus_booking/objectives/objectives.json": "b73026bd3c5c91d1cbbff0ff58ddfd16236cc16a270769d0b11b2cfea80b400e",
+    "suites/bus_booking/plans/authorization-matrix.txt": "787a3359eaef94d8d4421ad220f688cae06e14c3ebe018ab1ecd6b205f229f88",
+    "suites/bus_booking/specifications/live-http.md": "5f5baad75a19d885fc919547133f603c4c5983df4b61ae9e114da7ca5425f9a9",
+    "suites/bus_booking/specifications/sec-a01-01.md": "791538d53f8a1409bb19bc878babacac919954b8bda0d0e2f9a0196dd97a6c76",
+    "suites/bus_booking/suite.json": "5bb56e0f8994844007fff34f170e137301898dd89f5e9ea1ac47ea1ccfea1923",
+    "zap-image.txt": "853a8b3f92662ffac6176b34758b4a4ab3d3326c33c0e0d85a91d7fd638e5f63",
+    "zap_report.py": "89fcc0d5242f3a19f07346c5fcb701ac8a4d06358ce090f04addf163eac8b3fb"
+  },
+  "runId": "aac31e4200fb46f2884cdb844b3dca9a",
+  "scannerImage": "zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+  "scenario": "live-passive",
+  "schemaVersion": 1,
+  "suite": "bus_booking",
+  "verdict": "PASS"
+}

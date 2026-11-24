@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "anonymous",
+      "kind": "none"
+    },
+    {
+      "id": "fixture-form",
+      "kind": "form-cookie",
+      "actors": [
+        "reader",
+        "editor"
+      ],
+      "loginPath": "/login",
+      "loginRequestBody": "username={%username%}&password={%password%}",
+      "loggedInRegex": "signed-in",
+      "loggedOutRegex": "logged-out",
+      "identityPaths": {
+        "reader": "/identity/reader",
+        "editor": "/identity/editor"
+      },
+      "guestIdentityPath": "/identity/guest",
+      "protectedActor": "reader"
+    },
+    {
+      "id": "fixture-editor",
+      "kind": "form-cookie",
+      "actors": [
+        "editor"
+      ],
+      "loginPath": "/login"
+    },
+    {
+      "id": "jwt-placeholder",
+      "kind": "jwt-bearer"
+    }
+  ]
+}

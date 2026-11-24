@@ -1,0 +1,157 @@
+{
+  "checks": {
+    "BB-ADMIN-READ": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Every administrative list operation requires ADMIN or SUPER_ADMIN.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-ADMIN-WRITE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Every administrative resource write requires ADMIN or SUPER_ADMIN. Denial preserves persistent state.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-AUTH": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Real login and identity replay succeed for four fixture accounts. Missing, malformed, expired, duplicate and ineligible credentials receive the expected response.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-BOOKING": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Booking access permits the owner, ADMIN and SUPER_ADMIN. Anonymous and non-owner USER requests are denied.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-PROFILE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "All authenticated roles can read and update their own profile. Anonymous requests are denied.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-ROLE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Only SUPER_ADMIN can promote an eligible USER. Denied role writes leave all persisted fixture rows unchanged.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-ROLE-LIFECYCLE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Demotion takes effect on the next request using the already-issued JWT, and the principal retains its subject.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-ROLE-RULES": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "The sole SUPER_ADMIN cannot be assigned or demoted through this API. An unverified account cannot be promoted.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    },
+    "BB-USER": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [],
+      "expected": "Booking creation and personal booking history require USER.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "PROJECT_SOURCE_UNAVAILABLE",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "ERROR"
+    }
+  },
+  "decisiveChecks": {
+    "BB-ADMIN-READ": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-ADMIN-WRITE": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-AUTH": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-BOOKING": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-PROFILE": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-ROLE": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-ROLE-LIFECYCLE": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-ROLE-RULES": "PROJECT_SOURCE_UNAVAILABLE",
+    "BB-USER": "PROJECT_SOURCE_UNAVAILABLE"
+  },
+  "evidence": {},
+  "executionEnvironment": "local",
+  "exitCode": 2,
+  "inputSha256": {
+    "security_framework/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security_framework/engine.py": "84f177069bc41674d3a22709cd11d33c80f2038f657fa622fedd141311a48cc5",
+    "security_framework/evidence.py": "4fcffe9adcd7e9b6f482551bd1cfe28c5f54027d65888805019771e9a52e4f70",
+    "security_framework/manifest.py": "4fe72fc0f2d286984390af8629812cb35657db30332b8fb34c3c4531a2f47734",
+    "security_framework/run.py": "d83d0f63756ae5e9ffbdbf4d8c390037ab06b0ab2e8d547607b9354c367625c4",
+    "suites/bus_booking/adapter.py": "c72ad8a65964cc6aef19ce90349370c7c9b4746c8f65d3ac924d9183414715d9",
+    "suites/bus_booking/assertions/oracle.py": "911629c3c71a7eecd49dc11419bbd68b61e7fbfe2517e638f48a1df975f4d057",
+    "suites/bus_booking/authentication/profiles.json": "efb1a6a5ec7822aa5b30b8cf13a5e0c5952319dba3ea81f386f6d97ffe4c3083",
+    "suites/bus_booking/cases/cases.json": "541da86768ac8158b75bd6ec6b28049a409c89a9b4c0d343af76a8bf56646a86",
+    "suites/bus_booking/objectives/objectives.json": "b73026bd3c5c91d1cbbff0ff58ddfd16236cc16a270769d0b11b2cfea80b400e",
+    "suites/bus_booking/plans/authorization-matrix.txt": "787a3359eaef94d8d4421ad220f688cae06e14c3ebe018ab1ecd6b205f229f88",
+    "suites/bus_booking/specifications/sec-a01-01.md": "791538d53f8a1409bb19bc878babacac919954b8bda0d0e2f9a0196dd97a6c76",
+    "suites/bus_booking/suite.json": "d1cafd773d33ac51cabdcea0b2ac035d9daaf532709bcb754a670cd85838a712",
+    "zap-image.txt": "853a8b3f92662ffac6176b34758b4a4ab3d3326c33c0e0d85a91d7fd638e5f63",
+    "zap_report.py": "89fcc0d5242f3a19f07346c5fcb701ac8a4d06358ce090f04addf163eac8b3fb"
+  },
+  "runId": "3823a49ea49c467fa99c6aec6c3bc203",
+  "scenario": "baseline",
+  "schemaVersion": 1,
+  "suite": "bus_booking",
+  "verdict": "ERROR"
+}

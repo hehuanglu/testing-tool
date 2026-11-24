@@ -1,0 +1,1275 @@
+{
+  "checks": {
+    "BB-ADMIN-READ": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-ADMIN-READ"
+      ],
+      "expected": "Every administrative list operation requires ADMIN or SUPER_ADMIN.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-ADMIN-WRITE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-ADMIN-WRITE"
+      ],
+      "expected": "Every administrative resource write requires ADMIN or SUPER_ADMIN. Denial preserves persistent state.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-AUTH": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-AUTH"
+      ],
+      "expected": "Real login and identity replay succeed for four fixture accounts. Missing, malformed, expired, duplicate and ineligible credentials receive the expected response.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-BOOKING": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-BOOKING"
+      ],
+      "expected": "Booking access permits the owner, ADMIN and SUPER_ADMIN. Anonymous and non-owner USER requests are denied.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-PROFILE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-PROFILE"
+      ],
+      "expected": "All authenticated roles can read and update their own profile. Anonymous requests are denied.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-ROLE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-ROLE"
+      ],
+      "expected": "Only SUPER_ADMIN can promote an eligible USER. Denied role writes leave all persisted fixture rows unchanged.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-ROLE-LIFECYCLE": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-ROLE-LIFECYCLE"
+      ],
+      "expected": "Demotion takes effect on the next request using the already-issued JWT, and the principal retains its subject.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-ROLE-RULES": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-ROLE-RULES"
+      ],
+      "expected": "The sole SUPER_ADMIN cannot be assigned or demoted through this API. An unverified account cannot be promoted.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    },
+    "BB-USER": {
+      "authProfile": "app-owned",
+      "cwe": [
+        "CWE-862"
+      ],
+      "evidenceRefs": [
+        "#/evidence/provenance",
+        "#/evidence/jwtIdentity",
+        "#/evidence/jwtAcquisition",
+        "#/evidence/BB-USER"
+      ],
+      "expected": "Booking creation and personal booking history require USER.",
+      "method": "application-assertion",
+      "objectiveId": "SEC-A01-01",
+      "reason": "ASSERTIONS_SATISFIED",
+      "specification": "specifications/sec-a01-01.md",
+      "verdict": "PASS"
+    }
+  },
+  "decisiveChecks": {
+    "BB-ADMIN-READ": "ASSERTIONS_SATISFIED",
+    "BB-ADMIN-WRITE": "ASSERTIONS_SATISFIED",
+    "BB-AUTH": "ASSERTIONS_SATISFIED",
+    "BB-BOOKING": "ASSERTIONS_SATISFIED",
+    "BB-PROFILE": "ASSERTIONS_SATISFIED",
+    "BB-ROLE": "ASSERTIONS_SATISFIED",
+    "BB-ROLE-LIFECYCLE": "ASSERTIONS_SATISFIED",
+    "BB-ROLE-RULES": "ASSERTIONS_SATISFIED",
+    "BB-USER": "ASSERTIONS_SATISFIED"
+  },
+  "evidence": {
+    "BB-ADMIN-READ": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "locations-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "locations-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "locations-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "locations-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "operators-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "operators-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "operators-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "operators-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "routes-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "routes-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "routes-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "routes-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "vehicles-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "vehicles-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "vehicles-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "vehicles-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "trips-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "trips-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "trips-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "trips-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "bookings-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "bookings-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "bookings-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "bookings-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-ADMIN-WRITE": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "location-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "location-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 201,
+          "operation": "location-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 201,
+          "operation": "location-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "location-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "location-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "location-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "location-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "operator-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "operator-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 201,
+          "operation": "operator-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 201,
+          "operation": "operator-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "operator-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "operator-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "operator-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "operator-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "route-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "route-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 201,
+          "operation": "route-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 201,
+          "operation": "route-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "route-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "route-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "route-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "route-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "vehicle-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "vehicle-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 201,
+          "operation": "vehicle-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 201,
+          "operation": "vehicle-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "vehicle-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "vehicle-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "vehicle-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "vehicle-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "trip-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "trip-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 201,
+          "operation": "trip-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 201,
+          "operation": "trip-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "trip-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "trip-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "trip-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "trip-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "trip-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "trip-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "trip-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "trip-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-AUTH": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "missing",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "malformed",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 401,
+          "operation": "expired",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 401,
+          "operation": "duplicate",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "public-invalid",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 200,
+          "operation": "public-no-token",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 401,
+          "operation": "inactive",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 401,
+          "operation": "unverified",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "restored",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 401,
+          "operation": "wrong-password",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-BOOKING": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "booking-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "booking-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "booking-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "booking-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "other-USER",
+          "expectedStatus": 403,
+          "operation": "booking-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "booking-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "booking-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "booking-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "booking-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "other-USER",
+          "expectedStatus": 403,
+          "operation": "booking-cancel",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-PROFILE": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "auth-me",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "auth-me",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "auth-me",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "auth-me",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "profile-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "profile-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "profile-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "profile-read",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "profile-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "profile-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "profile-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "profile-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-ROLE": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "role-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 403,
+          "operation": "role-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 403,
+          "operation": "role-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "role-update",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-ROLE-LIFECYCLE": {
+      "data": [
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "before-demotion",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "demote",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 403,
+          "operation": "old-token-denied",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 200,
+          "operation": "old-token-current-role",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 200,
+          "operation": "restore-admin",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-ROLE-RULES": {
+      "data": [
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 403,
+          "operation": "root-immutable",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 400,
+          "operation": "root-not-assignable",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 400
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 409,
+          "operation": "pending-not-promotable",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 409
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "BB-USER": {
+      "data": [
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "booking-history",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 200,
+          "operation": "booking-history",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 200
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 403,
+          "operation": "booking-history",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 403,
+          "operation": "booking-history",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "anonymous",
+          "expectedStatus": 401,
+          "operation": "booking-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 401
+        },
+        {
+          "actor": "USER",
+          "expectedStatus": 201,
+          "operation": "booking-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 201
+        },
+        {
+          "actor": "ADMIN",
+          "expectedStatus": 403,
+          "operation": "booking-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        },
+        {
+          "actor": "SUPER_ADMIN",
+          "expectedStatus": 403,
+          "operation": "booking-create",
+          "responseMatches": true,
+          "stateMatches": true,
+          "status": 403
+        }
+      ],
+      "producer": "suite-assertion"
+    },
+    "jwtAcquisition": {
+      "data": {
+        "ADMIN": {
+          "loginStatus": 200,
+          "noSession": true
+        },
+        "SUPER_ADMIN": {
+          "loginStatus": 200,
+          "noSession": true
+        },
+        "USER": {
+          "loginStatus": 200,
+          "noSession": true
+        },
+        "other-USER": {
+          "loginStatus": 200,
+          "noSession": true
+        }
+      },
+      "producer": "suite-assertion"
+    },
+    "jwtIdentity": {
+      "data": {
+        "ADMIN": {
+          "actor": "ADMIN",
+          "status": 200
+        },
+        "SUPER_ADMIN": {
+          "actor": "SUPER_ADMIN",
+          "status": 200
+        },
+        "USER": {
+          "actor": "USER",
+          "status": 200
+        },
+        "other-USER": {
+          "actor": "other-USER",
+          "status": 200
+        }
+      },
+      "producer": "application-identity"
+    },
+    "provenance": {
+      "data": {
+        "applicationJarSha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+        "applicationTransport": "http-1.1",
+        "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "http"
+      },
+      "producer": "runner"
+    }
+  },
+  "executionEnvironment": "local",
+  "exitCode": 0,
+  "inputSha256": {
+    "security_framework/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security_framework/engine.py": "84f177069bc41674d3a22709cd11d33c80f2038f657fa622fedd141311a48cc5",
+    "security_framework/evidence.py": "4fcffe9adcd7e9b6f482551bd1cfe28c5f54027d65888805019771e9a52e4f70",
+    "security_framework/manifest.py": "4fe72fc0f2d286984390af8629812cb35657db30332b8fb34c3c4531a2f47734",
+    "security_framework/run.py": "d83d0f63756ae5e9ffbdbf4d8c390037ab06b0ab2e8d547607b9354c367625c4",
+    "suites/bus_booking/adapter.py": "c72ad8a65964cc6aef19ce90349370c7c9b4746c8f65d3ac924d9183414715d9",
+    "suites/bus_booking/assertions/oracle.py": "84470ffb9f94e88103f2806cad7d81ceba8bad5949c57cd3643ece3c81bbf0ea",
+    "suites/bus_booking/authentication/profiles.json": "68f4e76d9ec7b153a5686644b8fe4410dc1596dc8271557747f22e48429345f7",
+    "suites/bus_booking/cases/cases.json": "ac1b900504adf22060550be33fc5daa296bc19c87927029827bb2936cf983ba4",
+    "suites/bus_booking/live/compare.py": "967c98a94943c2f5f4b8e31c309beda5191003dd195bdfdefc58bafad5c3e8c7",
+    "suites/bus_booking/live/run.py": "0aa879d1711c46c77e940b7b17cbabb0e7c962262fabe3d79bec33a53cb924cd",
+    "suites/bus_booking/live/scanner.py": "012b7c9d364bb0e9a1b0a051a6510f8f7f253fd51d3941b51683d1d34e863d77",
+    "suites/bus_booking/objectives/objectives.json": "b73026bd3c5c91d1cbbff0ff58ddfd16236cc16a270769d0b11b2cfea80b400e",
+    "suites/bus_booking/plans/authorization-matrix.txt": "787a3359eaef94d8d4421ad220f688cae06e14c3ebe018ab1ecd6b205f229f88",
+    "suites/bus_booking/specifications/live-http.md": "5f5baad75a19d885fc919547133f603c4c5983df4b61ae9e114da7ca5425f9a9",
+    "suites/bus_booking/specifications/sec-a01-01.md": "791538d53f8a1409bb19bc878babacac919954b8bda0d0e2f9a0196dd97a6c76",
+    "suites/bus_booking/suite.json": "5bb56e0f8994844007fff34f170e137301898dd89f5e9ea1ac47ea1ccfea1923",
+    "zap-image.txt": "853a8b3f92662ffac6176b34758b4a4ab3d3326c33c0e0d85a91d7fd638e5f63",
+    "zap_report.py": "89fcc0d5242f3a19f07346c5fcb701ac8a4d06358ce090f04addf163eac8b3fb"
+  },
+  "runId": "7f91bbe07b5b49b6b459a1793a4cb9f1",
+  "scenario": "live-http",
+  "schemaVersion": 1,
+  "suite": "bus_booking",
+  "verdict": "PASS"
+}

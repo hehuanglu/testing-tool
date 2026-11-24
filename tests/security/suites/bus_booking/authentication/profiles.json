@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "app-owned",
+      "kind": "none",
+      "applicationAuthentication": "JWT Bearer",
+      "identityEvidence": "jwtIdentity",
+      "notes": "The application test owns credentials, Bearer handling and independent current-user verification. The shared scanner has no authentication profile for this lane."
+    },
+    {
+      "id": "scanner-jwt",
+      "kind": "jwt-bearer",
+      "actors": [
+        "USER",
+        "ADMIN",
+        "SUPER_ADMIN"
+      ]
+    },
+    {
+      "id": "public-anonymous",
+      "kind": "none",
+      "notes": "Dedicated public GET evidence lane. The scanner receives neither login credentials nor JWTs."
+    }
+  ]
+}

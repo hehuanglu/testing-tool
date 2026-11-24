@@ -1,0 +1,82 @@
+{
+  "applicationEvidenceMatched": true,
+  "baselineRunIds": [
+    "81aace9305224bba9b77536188a2bcea",
+    "958e17d73ea64c7db9103d439e243631"
+  ],
+  "caseCounts": {
+    "BB-ADMIN-READ": 24,
+    "BB-ADMIN-WRITE": 44,
+    "BB-AUTH": 10,
+    "BB-BOOKING": 10,
+    "BB-PROFILE": 12,
+    "BB-ROLE": 4,
+    "BB-ROLE-LIFECYCLE": 5,
+    "BB-ROLE-RULES": 3,
+    "BB-USER": 8
+  },
+  "controls": [
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 1,
+      "id": "response-status-mismatch",
+      "reason": "APPLICATION_CONTRACT_MISMATCH",
+      "verdict": "FAIL"
+    },
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 1,
+      "id": "persisted-state-mismatch",
+      "reason": "APPLICATION_CONTRACT_MISMATCH",
+      "verdict": "FAIL"
+    },
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 1,
+      "id": "controller-selection-mismatch",
+      "reason": "APPLICATION_CONTRACT_MISMATCH",
+      "verdict": "FAIL"
+    },
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 2,
+      "id": "missing-observation",
+      "reason": "MISSING_EVIDENCE",
+      "verdict": "ERROR"
+    },
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 2,
+      "id": "invalid-observation",
+      "reason": "INVALID_EVIDENCE",
+      "verdict": "ERROR"
+    },
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 2,
+      "id": "wrong-effective-identity",
+      "reason": "AUTHENTICATION_FAILURE",
+      "verdict": "ERROR"
+    },
+    {
+      "case": "BB-ADMIN-WRITE",
+      "exitCode": 2,
+      "id": "stale-receipt",
+      "reason": "INVALID_EVIDENCE",
+      "verdict": "ERROR"
+    }
+  ],
+  "controlsUseCopiedObservations": true,
+  "processControls": {
+    "nonzero-child": {
+      "exitCode": 2,
+      "reason": "APPLICATION_TEST_PROCESS_FAILURE",
+      "verdict": "ERROR"
+    },
+    "timeout-child": {
+      "exitCode": 2,
+      "reason": "PROCESS_TIMEOUT",
+      "verdict": "ERROR"
+    }
+  }
+}

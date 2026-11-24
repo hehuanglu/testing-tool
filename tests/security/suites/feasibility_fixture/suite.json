@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "feasibility_fixture",
+  "sources": [
+    "feasibility/fixture.py",
+    "feasibility/plan.py",
+    "feasibility/app_assertions.py",
+    "feasibility/runner.py",
+    "suites/feasibility_fixture/plans/passive.py",
+    "suites/feasibility_fixture/fixtures/README.md",
+    "suites/feasibility_fixture/assertions/oracles.py"
+  ],
+  "scenarios": {
+    "baseline": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "public-csp-regression": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "private-csp-regression": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "authorization-regression": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "bad-password": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "warning": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "bad-plan": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "incomplete": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "missing-evidence": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "invalid-evidence": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-CSP-FORM",
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE",
+      "DEMO-AF"
+    ],
+    "application-only": [
+      "DEMO-POLICY-STATE",
+      "DEMO-POLICY-ROLE"
+    ],
+    "anonymous-only": [
+      "DEMO-CSP-PUBLIC",
+      "DEMO-AF"
+    ],
+    "active-blocked": [
+      "DEMO-ACTIVE-BLOCKED"
+    ],
+    "jwt-blocked": [
+      "DEMO-JWT-BLOCKED"
+    ]
+  }
+}

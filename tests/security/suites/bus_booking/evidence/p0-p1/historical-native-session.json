@@ -1,0 +1,31 @@
+{
+  "started_utc": "2026-11-23T17:33:37.142724+00:00",
+  "run_id": "bus-zap-session-3cad12964d",
+  "jar_sha256": "e080cdfabe4612897611bf247d9cfe96cb0a5c1da69dd9ca58e682a18afcd40c",
+  "runner_sha256": "dcedd4dd73f17c6d89ec0a13b6e844626cf5a2f002a7f6b5b349ca846ff4a2ef",
+  "plan_sha256": "9296b4caf30a5d9736d77a9da5406ca9f8ba0c9b498e8e4d0f18a33e2ab6f6b5",
+  "active_scan": "MISSING",
+  "image_ids": {
+    "java": "sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+    "postgres": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+    "mailpit": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+    "zap": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238"
+  },
+  "status": "PASS",
+  "network_internal": true,
+  "rendered_plan_sha256": "581f88ded1a5dda977593cb9d1882a5b16462e8a95da2458e4600a6a0ca9e99c",
+  "zap_exit": 0,
+  "zap_version": "2.17.0",
+  "anonymous_http": 401,
+  "authenticated_http": 200,
+  "bearer_observed": true,
+  "principal_matches_fixture": true,
+  "role": "USER",
+  "backend_login_http_200_count": 1,
+  "backend_profile_http_200_count": 2,
+  "containers_removed": true,
+  "network_removed": true,
+  "temporary_files_removed": true,
+  "cleanup_ok": true,
+  "finished_utc": "2026-11-23T17:34:34.646094+00:00"
+}

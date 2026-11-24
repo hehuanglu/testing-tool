@@ -1,0 +1,4219 @@
+{
+  "exploratoryReceipt": {
+    "path": "tests/security/suites/bus_booking/evidence/p0-p1/historical-native-session.json",
+    "sha256": "db74728a67b5c45b031c42d9919d7dec3cc3aaa4eff262522a07c9254967112e"
+  },
+  "frameworkSource": {
+    "baseline": "a5401a16568bc852e53dd7eaaf92e96a0fcf1041",
+    "integrationCommit": "0117bc0defc891d3eb4644c53635e7e547daa5ca",
+    "measuredNativeInputs": "546cce391d08a67b0a88f1fbde34c7fd60352d66"
+  },
+  "historicalPilotComparisonRevalidation": {
+    "copiedEvidenceControls": [
+      {
+        "control": "missing-http-cell",
+        "exitCode": 2,
+        "reason": "MISSING_EVIDENCE",
+        "verdict": "ERROR"
+      },
+      {
+        "control": "http-state-mismatch",
+        "exitCode": 1,
+        "reason": "APPLICATION_CONTRACT_MISMATCH",
+        "verdict": "FAIL"
+      },
+      {
+        "control": "missing-zap-report",
+        "exitCode": 2,
+        "reason": "INVALID_EVIDENCE",
+        "verdict": "ERROR"
+      }
+    ],
+    "handlerWitnessLane": "mockmvc",
+    "matchedResponseStateAndIdentity": true,
+    "otherConditionCells": 18,
+    "path": "artifacts/p0-p1-after/historical-pilot-comparison.json",
+    "postChangeMockMvcMatchesHistoricalHttpResponseStateAndIdentity": true,
+    "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+    "protectedAuthorizationCells": 102,
+    "runIds": {
+      "httpFirst": "d2208e7c6c05450996d3ed2046d24160",
+      "httpRepeat": "7f91bbe07b5b49b6b459a1793a4cb9f1",
+      "mockmvc": "38e3469cea7e4fd6a60d188adbc85024",
+      "passive": "aac31e4200fb46f2884cdb844b3dca9a"
+    },
+    "sha256": "6cd55aaf8ba9f428a1889d779fa659c6f92bd342b27e541e9edb9d0faf924bb2",
+    "sharedCaseIds": [
+      "BB-AUTH",
+      "BB-PROFILE",
+      "BB-USER",
+      "BB-BOOKING",
+      "BB-ADMIN-READ",
+      "BB-ADMIN-WRITE",
+      "BB-ROLE",
+      "BB-ROLE-LIFECYCLE",
+      "BB-ROLE-RULES"
+    ]
+  },
+  "historicalSynthetic": {
+    "path": "artifacts/framework-qualification/summary.json",
+    "sha256": "080ee820ba77b015fc99dbc1c00a9d8cf835b2098c430dd76d2f889be7c9779d"
+  },
+  "intermediateRuns": {
+    "httpReadinessDiagnostic": {
+      "cleanup": null,
+      "decisiveChecks": {
+        "BB-ADMIN-READ": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-ADMIN-WRITE": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-AUTH": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-BOOKING": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-PROFILE": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-ROLE": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-ROLE-LIFECYCLE": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-ROLE-RULES": "LIVE_APPLICATION_PROCESS_FAILURE",
+        "BB-USER": "LIVE_APPLICATION_PROCESS_FAILURE"
+      },
+      "exitCode": 2,
+      "observedError": "application readiness check did not pass",
+      "path": "artifacts/p0-p1-after/http-diagnostic/result.json",
+      "provenance": {
+        "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+        "applicationTransport": "http-1.1",
+        "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "http"
+      },
+      "report": null,
+      "runId": "5d54069632884ad1bf17f1b5d592a8ff",
+      "scanner": null,
+      "scenario": "live-http",
+      "sha256": "30f25590d630c4613d8a25f0d4b92ec9bcdb1fa2a0537e0f55b385273f84f6e1",
+      "verdict": "ERROR"
+    },
+    "nativePreliminaryLoginPageRejected": {
+      "cleanup": {
+        "containersRemoved": true,
+        "temporaryDirectoryRemoved": true
+      },
+      "decisiveChecks": {
+        "BB-LIVE-JWT-PASSIVE": "SCANNER_WITNESS_MISMATCH"
+      },
+      "exitCode": 2,
+      "path": "artifacts/p0-p1-after/native-first/result.json",
+      "provenance": {
+        "applicationJarSha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+        "applicationTransport": "http-1.1",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mailpitImage": "axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "authenticated-passive"
+      },
+      "report": null,
+      "runId": "992e0a3a7df74f9a934170b7ded9ebe0",
+      "scanner": {
+        "execution": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "expectedJobTypes": [
+          "requestor",
+          "requestor",
+          "passiveScan-wait",
+          "report"
+        ],
+        "jobReceipts": [
+          [
+            "requestor",
+            "started"
+          ],
+          [
+            "requestor",
+            "finished"
+          ],
+          [
+            "requestor",
+            "started"
+          ],
+          [
+            "requestor",
+            "finished"
+          ],
+          [
+            "passiveScan-wait",
+            "started"
+          ],
+          [
+            "passiveScan-wait",
+            "finished"
+          ],
+          [
+            "report",
+            "started"
+          ],
+          [
+            "report",
+            "finished"
+          ]
+        ],
+        "mode": "zap-owned-jwt-requestor",
+        "planReportedSuccessful": true,
+        "planSha256": "871292a4c3ea8049295d42092808e109dae575b3a8a05dc475bf78fe925fa8dc",
+        "preflight": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "preflightRequests": 0
+      },
+      "scenario": "live-authenticated-passive",
+      "sha256": "32742f7432149bd60f2dc7386d9ddb7d2d3f4cfd671320006fc8c9c06144f32d",
+      "verdict": "ERROR"
+    }
+  },
+  "measuredNative": {
+    "cleanup": {
+      "containersRemoved": true,
+      "temporaryDirectoryRemoved": true
+    },
+    "decisiveChecks": {
+      "BB-LIVE-JWT-PASSIVE": "NATIVE_JWT_PASSIVE_VERIFIED"
+    },
+    "exitCode": 0,
+    "inputsVerifiedAt": "546cce391d08a67b0a88f1fbde34c7fd60352d66",
+    "passesFinalPassiveAndIdentityEvidenceChecks": true,
+    "path": "artifacts/p0-p1-after/native-login-page/result.json",
+    "provenance": {
+      "applicationJarSha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+      "applicationTransport": "http-1.1",
+      "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+      "javaBuildVersion": "21.0.13",
+      "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+      "mailpitImage": "axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+      "mavenWrapperVersion": "3.10.2",
+      "namespace": "disconnected-docker-loopback",
+      "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+      "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+      "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+      "publishedPorts": 0,
+      "springProfile": "default",
+      "testLane": "authenticated-passive"
+    },
+    "report": {
+      "capped": false,
+      "ruleInstances": [
+        {
+          "alertRef": "10038-1",
+          "method": "GET",
+          "path": "/__pilot_passive_control",
+          "pointer": "/site/0/alerts/0/instances/0"
+        },
+        {
+          "alertRef": "10020-1",
+          "method": "GET",
+          "path": "/__pilot_passive_control",
+          "pointer": "/site/0/alerts/1/instances/0"
+        },
+        {
+          "alertRef": "10021",
+          "method": "GET",
+          "path": "/__pilot_passive_control",
+          "pointer": "/site/0/alerts/2/instances/0"
+        },
+        {
+          "alertRef": "10111",
+          "method": "POST",
+          "path": "/api/auth/login",
+          "pointer": "/site/0/alerts/3/instances/0"
+        },
+        {
+          "alertRef": "10112",
+          "method": "POST",
+          "path": "/api/auth/login",
+          "pointer": "/site/0/alerts/4/instances/0"
+        }
+      ],
+      "sha256": "688b2b6b292a0cfeb9eb086bf9f3cd46d02db18acafdd25e0232f2b4ebd2e7d0",
+      "version": "2.17.0"
+    },
+    "retainedReceipt": {
+      "path": "tests/security/suites/bus_booking/evidence/p0-p1/measured-native-passive.json",
+      "sha256": "26e93903a32b654a3759a91f57ee00ae9ad0beb22a1b7f6d964bf1daa20169d8"
+    },
+    "runId": "2791de73c86d4ea38e7169d23ccdb309",
+    "scanner": {
+      "execution": {
+        "exit": 0,
+        "timedOut": false
+      },
+      "expectedJobTypes": [
+        "requestor",
+        "requestor",
+        "passiveScan-wait",
+        "report"
+      ],
+      "jobReceipts": [
+        [
+          "requestor",
+          "started"
+        ],
+        [
+          "requestor",
+          "finished"
+        ],
+        [
+          "requestor",
+          "started"
+        ],
+        [
+          "requestor",
+          "finished"
+        ],
+        [
+          "passiveScan-wait",
+          "started"
+        ],
+        [
+          "passiveScan-wait",
+          "finished"
+        ],
+        [
+          "report",
+          "started"
+        ],
+        [
+          "report",
+          "finished"
+        ]
+      ],
+      "mode": "zap-owned-jwt-requestor",
+      "planReportedSuccessful": true,
+      "planSha256": "92e34f71f4c2e1b9608b40ff339c08ab97cbfc0b712f25cbb3cdc4feb6324b9d",
+      "preflight": {
+        "exit": 0,
+        "timedOut": false
+      },
+      "preflightRequests": 0
+    },
+    "scenario": "live-authenticated-passive",
+    "sha256": "26e93903a32b654a3759a91f57ee00ae9ad0beb22a1b7f6d964bf1daa20169d8",
+    "verdict": "PASS"
+  },
+  "noDispatch": {
+    "active": {
+      "cleanup": null,
+      "decisiveChecks": {
+        "BB-ACTIVE": "ACTIVE_EXECUTION_RESTRICTED"
+      },
+      "exitCode": 3,
+      "path": "artifacts/p0-p1-after/no-dispatch-product-active/result.json",
+      "provenance": null,
+      "report": null,
+      "runId": "da0783277220484dacacaf0a0702f92a",
+      "scanner": null,
+      "scenario": "active-blocked",
+      "sha256": "cca97812c51736a3104939665870ab9ccc1f9c7c1caf1b05ca36498e6d51be6e",
+      "verdict": "BLOCKED"
+    },
+    "jwt": {
+      "cleanup": null,
+      "decisiveChecks": {
+        "BB-SCANNER-JWT": "AUTH_PROFILE_UNQUALIFIED"
+      },
+      "exitCode": 3,
+      "path": "artifacts/p0-p1-after/no-dispatch-product-jwt/result.json",
+      "provenance": null,
+      "report": null,
+      "runId": "0c8a4f759cad40ac982d4469e74230b6",
+      "scanner": null,
+      "scenario": "jwt-blocked",
+      "sha256": "2b27d816a84205ec9ff883628e28c747499a589e33a1fd1a31a4565b46ea3952",
+      "verdict": "BLOCKED"
+    }
+  },
+  "offline": {
+    "productAfterPassed": 11,
+    "productBeforePassed": 11,
+    "productScope": {
+      "criteria": 28,
+      "exclusions": 7,
+      "operations": 32
+    },
+    "sharedAfterPassed": 46,
+    "sharedBeforePassed": 43
+  },
+  "product": {
+    "cleanFullAttempt": {
+      "acceptance": "MISSING",
+      "backend_jar_sha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+      "baseline": {
+        "reason": "no_reviewed_baseline",
+        "status": "REVIEW"
+      },
+      "cleanup": "FAIL",
+      "cleanup_checks": {
+        "containers": false,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contract_drift": [
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "GET /api/auth/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "GET /api/users/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/locations",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/operators",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/routes",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/vehicles",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "POST /api/auth/login",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/bookings",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "PUT /api/admin/users/{userId}/role",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "PUT /api/users/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Auth controller class annotations declare 429. The rate-limit filter covers exactly four POST auth operations.",
+          "observed_http": [],
+          "openapi_error": 429,
+          "operation": "GET /api/auth/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Authorization guards emit 401/403 on protected routes. Most OpenAPI operations omit one or both response declarations.",
+          "observed_http": [],
+          "operation": "GET /api/admin/bookings",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        }
+      ],
+      "coverage": {
+        "criteria": {
+          "declared": 28,
+          "observed": 4,
+          "statuses": {
+            "MISSING": 24,
+            "PASS": 2,
+            "REVIEW": 2
+          }
+        },
+        "http_operations": {
+          "declared": null,
+          "missing": [],
+          "observed": 0
+        },
+        "http_situations": {
+          "declared": 100,
+          "missing": [
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "other",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "root",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/bookings",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/bookings",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/bookings",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/locations",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/locations",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/locations",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/operators",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/operators",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/operators",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/routes",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/routes",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/routes",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/vehicles",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/vehicles",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/vehicles",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "invalid",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "other",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "root",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/locations",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/trips",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/trips/{tripId}",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/trips/{tripId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/users/me",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "other",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "root",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/locations",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/locations",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/locations",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/operators",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/operators",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/operators",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/routes",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/routes",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/routes",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/trips",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/trips",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/trips",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/vehicles",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/vehicles",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/vehicles",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/login",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/login",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/register",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/register",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/resend-verification",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/resend-verification",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/verify-email",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/verify-email",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "root",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/locations/{locationId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/locations/{locationId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/locations/{locationId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/operators/{operatorId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/operators/{operatorId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/operators/{operatorId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/routes/{routeId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/routes/{routeId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/routes/{routeId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/trips/{tripId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/trips/{tripId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/trips/{tripId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "root",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "root",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/vehicles/{vehicleId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/vehicles/{vehicleId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/vehicles/{vehicleId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/users/me",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/users/me",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/users/me",
+              "persona": "public",
+              "status_group": 4
+            }
+          ],
+          "observed": 0
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [
+            "booking-cancel-admin",
+            "booking-cancel-other",
+            "booking-cancel-other-owned",
+            "booking-cancel-owner",
+            "booking-cancel-root",
+            "booking-history-other",
+            "booking-history-owner",
+            "booking-history-owner-isolated",
+            "booking-read-admin",
+            "booking-read-other",
+            "booking-read-owner",
+            "booking-read-root"
+          ],
+          "observed": 0
+        },
+        "zap_operations": {
+          "declared": null,
+          "missing": [],
+          "observed": 0
+        }
+      },
+      "criteria": {
+        "SEC-A01-01": "MISSING",
+        "SEC-A01-02": "MISSING",
+        "SEC-A01-07": "MISSING",
+        "SEC-A02-04": "PASS",
+        "SEC-A02-05": "REVIEW",
+        "SEC-A03-01": "PASS",
+        "SEC-A04-05": "MISSING",
+        "SEC-A04-06": "MISSING",
+        "SEC-A05-01": "MISSING",
+        "SEC-A05-04": "MISSING",
+        "SEC-A06-01": "MISSING",
+        "SEC-A06-03": "MISSING",
+        "SEC-A06-05": "MISSING",
+        "SEC-A07-01": "MISSING",
+        "SEC-A07-03": "MISSING",
+        "SEC-A07-05": "MISSING",
+        "SEC-A08-02": "REVIEW",
+        "SEC-A08-03": "MISSING",
+        "SEC-A08-05": "MISSING",
+        "SEC-A09-01": "MISSING",
+        "SEC-A09-02": "MISSING",
+        "SEC-A09-03": "MISSING",
+        "SEC-A10-01": "MISSING",
+        "SEC-A10-02": "MISSING",
+        "SEC-A10-03": "MISSING",
+        "SEC-A10-04": "MISSING",
+        "SEC-A10-05": "MISSING",
+        "SEC-A10-06": "MISSING"
+      },
+      "dirty": false,
+      "docker_version": "29.8.1",
+      "focusedChecks": {},
+      "gate": "MISSING",
+      "har": {
+        "addons_bundled": null,
+        "alerts": null,
+        "exported": null,
+        "self_check": null,
+        "sent": null,
+        "status": null,
+        "version": null
+      },
+      "httpSessions": {
+        "ADMIN": "MISSING",
+        "SUPER_ADMIN": "MISSING",
+        "USER": "MISSING",
+        "guest": "MISSING"
+      },
+      "images": {
+        "mailpit": {
+          "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "reference": "axllent/mailpit:v1.27.8"
+        },
+        "postgres": {
+          "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "reference": "postgres:16-alpine"
+        },
+        "zap": {
+          "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+          "reference": "zaproxy/zap-stable:2.17.0"
+        }
+      },
+      "incompleteStages": {
+        "backend": {
+          "category": "fixture",
+          "error": "FixtureError",
+          "reason": null,
+          "seconds": 13.76,
+          "status": "MISSING",
+          "timeout_seconds": 100
+        },
+        "cleanup": {
+          "category": "cleanup",
+          "seconds": 90.39,
+          "status": "FAIL"
+        }
+      },
+      "interrupted": false,
+      "java_version": "21.0.13",
+      "manifest_sha256": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+      "mavenTestResults": {
+        "PASS": 320
+      },
+      "maven_distribution": "3.10.2",
+      "mode": "full",
+      "mutationTests": {
+        "MutationRowCountTest#bookingStatusRequiresExactlyOneAffectedRow": "PASS",
+        "MutationRowCountTest#pendingAccountCannotSucceedWhenChallengeWasNotInserted": "PASS",
+        "MutationRowCountTest#roleUpdateCannotReturnAnUnchangedAccountAsSuccess": "PASS",
+        "MutationRowCountTest#verificationCannotSucceedWhenChallengeWasNotConsumed": "PASS"
+      },
+      "openapi_sha256": null,
+      "path": "artifacts/p0-p1-after/product-full-clean/results.json",
+      "python_version": "3.13.2",
+      "repository_openapi_sha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "run_id": "bus-security-336a88ff268d",
+      "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+      "sha": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+      "sha256": "280d8240c43eb2142fd4206ef746d02e9af4809d43aad5b90e47d34c6dba76d1",
+      "suite_files_sha256": {
+        "tests/security/README.md": "33b28b2395329d3f7b19876b3c2861d8cbe2a8e86e8fe2e0e659467512a9bfb9",
+        "tests/security/assessment.py": "4a111ae93aac0039520ed9847142fad855ab1ecc3362aaba14eec5ddc9dd43eb",
+        "tests/security/authorization_matrix.py": "25bc5c92d5b26082cf51c9c4cf67264e1bd977dd94b41a99d5578c81585797ec",
+        "tests/security/journeys.py": "8008af55d3fd7acc87b0872b33235f761496a41a3a36b4fe45c7b3103c1a3c66",
+        "tests/security/run.py": "95205846e3477ed46b9ea8a71117d1b7c676f045a6e13e844e4ed3479ef551e8",
+        "tests/security/scope.json": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+        "tests/security/test_report.py": "77b75643228b2ac5588af8ed8079311f84d900fb33c40023b9f2dd3c9a801211",
+        "tests/security/traffic.py": "d17d8080084c649eb05ce3b3d82069d236cd028b1a85b3c02fdb353ab660b8d7",
+        "tests/security/zap.yaml": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+    },
+    "cleanLongAttempt": {
+      "acceptance": "MISSING",
+      "backend_jar_sha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+      "baseline": {
+        "reason": "no_reviewed_baseline",
+        "status": "REVIEW"
+      },
+      "cleanup": "FAIL",
+      "cleanup_checks": {
+        "containers": false,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contract_drift": [
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "GET /api/auth/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "GET /api/users/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/locations",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/operators",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/routes",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/vehicles",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "POST /api/auth/login",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/bookings",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "PUT /api/admin/users/{userId}/role",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [],
+          "openapi_success": [],
+          "operation": "PUT /api/users/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Auth controller class annotations declare 429. The rate-limit filter covers exactly four POST auth operations.",
+          "observed_http": [],
+          "openapi_error": 429,
+          "operation": "GET /api/auth/me",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Authorization guards emit 401/403 on protected routes. Most OpenAPI operations omit one or both response declarations.",
+          "observed_http": [],
+          "operation": "GET /api/admin/bookings",
+          "runtime_status": "MISSING",
+          "status": "REVIEW"
+        }
+      ],
+      "coverage": {
+        "criteria": {
+          "declared": 28,
+          "observed": 4,
+          "statuses": {
+            "MISSING": 24,
+            "PASS": 2,
+            "REVIEW": 2
+          }
+        },
+        "http_operations": {
+          "declared": null,
+          "missing": [],
+          "observed": 0
+        },
+        "http_situations": {
+          "declared": 101,
+          "missing": [
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/admin/trips/{tripId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "other",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "DELETE /api/bookings/{bookingId}",
+              "persona": "root",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/bookings",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/bookings",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/bookings",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/locations",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/locations",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/locations",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/operators",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/operators",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/operators",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/routes",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/routes",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/routes",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/trips",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/vehicles",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/admin/vehicles",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/admin/vehicles",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "expired",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "invalid",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/auth/me",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "other",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/bookings/{bookingId}",
+              "persona": "root",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/locations",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/trips",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/trips/{tripId}",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/trips/{tripId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/users/me",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "other",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "GET /api/users/me/bookings",
+              "persona": "root",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/locations",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/locations",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/locations",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/operators",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/operators",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/operators",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/routes",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/routes",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/routes",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/trips",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/trips",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/trips",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/vehicles",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/admin/vehicles",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/admin/vehicles",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/login",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/login",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/register",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/register",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/resend-verification",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/resend-verification",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/auth/verify-email",
+              "persona": "public",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/auth/verify-email",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "POST /api/bookings",
+              "persona": "root",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/locations/{locationId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/locations/{locationId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/locations/{locationId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/operators/{operatorId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/operators/{operatorId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/operators/{operatorId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/routes/{routeId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/routes/{routeId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/routes/{routeId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/trips/{tripId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/trips/{tripId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/trips/{tripId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "admin",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "root",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/users/{userId}/role",
+              "persona": "root",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/vehicles/{vehicleId}",
+              "persona": "admin",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/admin/vehicles/{vehicleId}",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/admin/vehicles/{vehicleId}",
+              "persona": "public",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/users/me",
+              "persona": "owner",
+              "status_group": 2
+            },
+            {
+              "operation": "PUT /api/users/me",
+              "persona": "owner",
+              "status_group": 4
+            },
+            {
+              "operation": "PUT /api/users/me",
+              "persona": "public",
+              "status_group": 4
+            }
+          ],
+          "observed": 0
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [
+            "booking-cancel-admin",
+            "booking-cancel-other",
+            "booking-cancel-other-owned",
+            "booking-cancel-owner",
+            "booking-cancel-root",
+            "booking-history-other",
+            "booking-history-owner",
+            "booking-history-owner-isolated",
+            "booking-read-admin",
+            "booking-read-other",
+            "booking-read-owner",
+            "booking-read-root"
+          ],
+          "observed": 0
+        },
+        "zap_operations": {
+          "declared": null,
+          "missing": [],
+          "observed": 0
+        }
+      },
+      "criteria": {
+        "SEC-A01-01": "MISSING",
+        "SEC-A01-02": "MISSING",
+        "SEC-A01-07": "MISSING",
+        "SEC-A02-04": "PASS",
+        "SEC-A02-05": "REVIEW",
+        "SEC-A03-01": "PASS",
+        "SEC-A04-05": "MISSING",
+        "SEC-A04-06": "MISSING",
+        "SEC-A05-01": "MISSING",
+        "SEC-A05-04": "MISSING",
+        "SEC-A06-01": "MISSING",
+        "SEC-A06-03": "MISSING",
+        "SEC-A06-05": "MISSING",
+        "SEC-A07-01": "MISSING",
+        "SEC-A07-03": "MISSING",
+        "SEC-A07-05": "MISSING",
+        "SEC-A08-02": "REVIEW",
+        "SEC-A08-03": "MISSING",
+        "SEC-A08-05": "MISSING",
+        "SEC-A09-01": "MISSING",
+        "SEC-A09-02": "MISSING",
+        "SEC-A09-03": "MISSING",
+        "SEC-A10-01": "MISSING",
+        "SEC-A10-02": "MISSING",
+        "SEC-A10-03": "MISSING",
+        "SEC-A10-04": "MISSING",
+        "SEC-A10-05": "MISSING",
+        "SEC-A10-06": "MISSING"
+      },
+      "dirty": false,
+      "docker_version": "29.8.1",
+      "focusedChecks": {
+        "jwt-fresh-control": "MISSING",
+        "jwt-live-after-expiry": "MISSING",
+        "jwt-live-before-expiry": "MISSING",
+        "login-after-window": "MISSING",
+        "login-fresh-after-expiry": "MISSING",
+        "otp-live-after-expiry": "MISSING",
+        "race-invariant-0": "MISSING",
+        "race-invariant-1": "MISSING",
+        "race-invariant-10": "MISSING",
+        "race-invariant-11": "MISSING",
+        "race-invariant-2": "MISSING",
+        "race-invariant-3": "MISSING",
+        "race-invariant-4": "MISSING",
+        "race-invariant-5": "MISSING",
+        "race-invariant-6": "MISSING",
+        "race-invariant-7": "MISSING",
+        "race-invariant-8": "MISSING",
+        "race-invariant-9": "MISSING"
+      },
+      "gate": "MISSING",
+      "har": {
+        "addons_bundled": null,
+        "alerts": null,
+        "exported": null,
+        "self_check": null,
+        "sent": null,
+        "status": null,
+        "version": null
+      },
+      "httpSessions": {
+        "ADMIN": "MISSING",
+        "SUPER_ADMIN": "MISSING",
+        "USER": "MISSING",
+        "guest": "MISSING"
+      },
+      "images": {
+        "mailpit": {
+          "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "reference": "axllent/mailpit:v1.27.8"
+        },
+        "postgres": {
+          "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "reference": "postgres:16-alpine"
+        },
+        "zap": {
+          "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+          "reference": "zaproxy/zap-stable:2.17.0"
+        }
+      },
+      "incompleteStages": {
+        "backend": {
+          "category": "fixture",
+          "error": "FixtureError",
+          "reason": null,
+          "seconds": 17.87,
+          "status": "MISSING",
+          "timeout_seconds": 100
+        },
+        "cleanup": {
+          "category": "cleanup",
+          "seconds": 90.37,
+          "status": "FAIL"
+        }
+      },
+      "interrupted": false,
+      "java_version": "21.0.13",
+      "manifest_sha256": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+      "mavenTestResults": {
+        "PASS": 320
+      },
+      "maven_distribution": "3.10.2",
+      "mode": "long",
+      "mutationTests": {
+        "MutationRowCountTest#bookingStatusRequiresExactlyOneAffectedRow": "PASS",
+        "MutationRowCountTest#pendingAccountCannotSucceedWhenChallengeWasNotInserted": "PASS",
+        "MutationRowCountTest#roleUpdateCannotReturnAnUnchangedAccountAsSuccess": "PASS",
+        "MutationRowCountTest#verificationCannotSucceedWhenChallengeWasNotConsumed": "PASS"
+      },
+      "openapi_sha256": null,
+      "path": "artifacts/p0-p1-after/product-long-clean/results.json",
+      "python_version": "3.13.2",
+      "repository_openapi_sha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "run_id": "bus-security-09e829de3e02",
+      "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+      "sha": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+      "sha256": "2d57bf8cc3dd9eb5074c1dad76d27353ccc896792168f560f224b044e3e3f0ed",
+      "suite_files_sha256": {
+        "tests/security/README.md": "33b28b2395329d3f7b19876b3c2861d8cbe2a8e86e8fe2e0e659467512a9bfb9",
+        "tests/security/assessment.py": "4a111ae93aac0039520ed9847142fad855ab1ecc3362aaba14eec5ddc9dd43eb",
+        "tests/security/authorization_matrix.py": "25bc5c92d5b26082cf51c9c4cf67264e1bd977dd94b41a99d5578c81585797ec",
+        "tests/security/journeys.py": "8008af55d3fd7acc87b0872b33235f761496a41a3a36b4fe45c7b3103c1a3c66",
+        "tests/security/run.py": "95205846e3477ed46b9ea8a71117d1b7c676f045a6e13e844e4ed3479ef551e8",
+        "tests/security/scope.json": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+        "tests/security/test_report.py": "77b75643228b2ac5588af8ed8079311f84d900fb33c40023b9f2dd3c9a801211",
+        "tests/security/traffic.py": "d17d8080084c649eb05ce3b3d82069d236cd028b1a85b3c02fdb353ab660b8d7",
+        "tests/security/zap.yaml": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+    },
+    "explicitPriorBaselineTest": {
+      "acceptance": "MISSING",
+      "backend_jar_sha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+      "baseline": {
+        "reason": "baseline_incompatible",
+        "status": "MISSING"
+      },
+      "cleanup": "PASS",
+      "cleanup_checks": {
+        "containers": true,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contract_drift": [
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/locations",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/operators",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/routes",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/vehicles",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401,
+            429
+          ],
+          "openapi_success": [],
+          "operation": "POST /api/auth/login",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            400,
+            401,
+            403,
+            409
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401,
+            403
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/admin/users/{userId}/role",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Auth controller class annotations declare 429. The rate-limit filter covers exactly four POST auth operations.",
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_error": 429,
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Authorization guards emit 401/403 on protected routes. Most OpenAPI operations omit one or both response declarations.",
+          "observed_http": [
+            200,
+            401,
+            403
+          ],
+          "operation": "GET /api/admin/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        }
+      ],
+      "coverage": {
+        "criteria": {
+          "declared": 28,
+          "observed": 26,
+          "statuses": {
+            "MISSING": 2,
+            "PASS": 18,
+            "REVIEW": 8
+          }
+        },
+        "http_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        },
+        "http_situations": {
+          "declared": 100,
+          "missing": [],
+          "observed": 100
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [],
+          "observed": 12
+        },
+        "zap_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        }
+      },
+      "criteria": {
+        "SEC-A01-01": "PASS",
+        "SEC-A01-02": "PASS",
+        "SEC-A01-07": "PASS",
+        "SEC-A02-04": "PASS",
+        "SEC-A02-05": "REVIEW",
+        "SEC-A03-01": "PASS",
+        "SEC-A04-05": "PASS",
+        "SEC-A04-06": "PASS",
+        "SEC-A05-01": "REVIEW",
+        "SEC-A05-04": "PASS",
+        "SEC-A06-01": "PASS",
+        "SEC-A06-03": "MISSING",
+        "SEC-A06-05": "MISSING",
+        "SEC-A07-01": "PASS",
+        "SEC-A07-03": "PASS",
+        "SEC-A07-05": "PASS",
+        "SEC-A08-02": "REVIEW",
+        "SEC-A08-03": "REVIEW",
+        "SEC-A08-05": "PASS",
+        "SEC-A09-01": "REVIEW",
+        "SEC-A09-02": "REVIEW",
+        "SEC-A09-03": "REVIEW",
+        "SEC-A10-01": "REVIEW",
+        "SEC-A10-02": "PASS",
+        "SEC-A10-03": "PASS",
+        "SEC-A10-04": "PASS",
+        "SEC-A10-05": "PASS",
+        "SEC-A10-06": "PASS"
+      },
+      "dirty": true,
+      "docker_version": "29.8.1",
+      "focusedChecks": {},
+      "gate": "MISSING",
+      "har": {
+        "addons_bundled": [
+          "automation-beta-0.58.0.zap",
+          "automation-beta-0.61.0.zap",
+          "exim-beta-0.16.0.zap",
+          "exim-beta-0.22.0.zap",
+          "pscan-alpha-0.6.0.zap",
+          "pscanrules-release-70.zap",
+          "pscanrules-release-77.zap",
+          "reports-release-0.43.0.zap",
+          "reports-release-0.46.0.zap"
+        ],
+        "alerts": [
+          {
+            "baseline": "UNCLASSIFIED",
+            "confidence": 3,
+            "instances": 1,
+            "operation": "POST /api/auth/login",
+            "risk": 0,
+            "rule_id": "10111",
+            "status": "REVIEW",
+            "triage": {
+              "basis": "passive_observation",
+              "owner": "p0-p1-local",
+              "recheck": "repeat_full_and_verify_the_rule_on_the_mapped_operation",
+              "status": "REVIEW"
+            }
+          },
+          {
+            "baseline": "UNCLASSIFIED",
+            "confidence": 2,
+            "instances": 2,
+            "operation": "POST /api/auth/login",
+            "risk": 0,
+            "rule_id": "10112",
+            "status": "REVIEW",
+            "triage": {
+              "basis": "passive_observation",
+              "owner": "p0-p1-local",
+              "recheck": "repeat_full_and_verify_the_rule_on_the_mapped_operation",
+              "status": "REVIEW"
+            }
+          }
+        ],
+        "exported": 133,
+        "self_check": true,
+        "sent": 133,
+        "status": "PASS",
+        "version": "2.17.0"
+      },
+      "httpSessions": {
+        "ADMIN": "PASS",
+        "SUPER_ADMIN": "PASS",
+        "USER": "PASS",
+        "guest": "PASS"
+      },
+      "images": {
+        "mailpit": {
+          "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "reference": "axllent/mailpit:v1.27.8"
+        },
+        "postgres": {
+          "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "reference": "postgres:16-alpine"
+        },
+        "zap": {
+          "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+          "reference": "zaproxy/zap-stable:2.17.0"
+        }
+      },
+      "incompleteStages": {},
+      "interrupted": false,
+      "java_version": "21.0.13",
+      "manifest_sha256": "89c86db257a0883cf29b620f2be07be7165a094e1384b44673591cb1681768ef",
+      "mavenTestResults": {
+        "PASS": 316
+      },
+      "maven_distribution": "3.10.2",
+      "mode": "full",
+      "mutationTests": {},
+      "openapi_sha256": "adb60fb6effef029039fa039bae32f902330b8a380516d532cf145f4c40dfb72",
+      "path": "artifacts/p0-p1-before/product/results.json",
+      "python_version": "3.13.2",
+      "repository_openapi_sha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "run_id": "bus-security-50b62f3d864d",
+      "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+      "sha": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+      "sha256": "38bb712ab925ede628496c9a1f7dece1b3a8d050b869f8390c0c681bc664a8e4",
+      "suite_files_sha256": {
+        "tests/security/README.md": "33b28b2395329d3f7b19876b3c2861d8cbe2a8e86e8fe2e0e659467512a9bfb9",
+        "tests/security/assessment.py": "4a111ae93aac0039520ed9847142fad855ab1ecc3362aaba14eec5ddc9dd43eb",
+        "tests/security/authorization_matrix.py": "25bc5c92d5b26082cf51c9c4cf67264e1bd977dd94b41a99d5578c81585797ec",
+        "tests/security/journeys.py": "8008af55d3fd7acc87b0872b33235f761496a41a3a36b4fe45c7b3103c1a3c66",
+        "tests/security/run.py": "95205846e3477ed46b9ea8a71117d1b7c676f045a6e13e844e4ed3479ef551e8",
+        "tests/security/scope.json": "89c86db257a0883cf29b620f2be07be7165a094e1384b44673591cb1681768ef",
+        "tests/security/test_report.py": "77b75643228b2ac5588af8ed8079311f84d900fb33c40023b9f2dd3c9a801211",
+        "tests/security/traffic.py": "d17d8080084c649eb05ce3b3d82069d236cd028b1a85b3c02fdb353ab660b8d7",
+        "tests/security/zap.yaml": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+    },
+    "full": {
+      "acceptance": "MISSING",
+      "backend_jar_sha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+      "baseline": {
+        "reason": "no_reviewed_baseline",
+        "status": "REVIEW"
+      },
+      "cleanup": "PASS",
+      "cleanup_checks": {
+        "containers": true,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contract_drift": [
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/locations",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/operators",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/routes",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/vehicles",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401,
+            429
+          ],
+          "openapi_success": [],
+          "operation": "POST /api/auth/login",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            400,
+            401,
+            403,
+            409
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401,
+            403
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/admin/users/{userId}/role",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Auth controller class annotations declare 429. The rate-limit filter covers exactly four POST auth operations.",
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_error": 429,
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Authorization guards emit 401/403 on protected routes. Most OpenAPI operations omit one or both response declarations.",
+          "observed_http": [
+            200,
+            401,
+            403
+          ],
+          "operation": "GET /api/admin/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        }
+      ],
+      "coverage": {
+        "criteria": {
+          "declared": 28,
+          "observed": 26,
+          "statuses": {
+            "MISSING": 2,
+            "PASS": 18,
+            "REVIEW": 8
+          }
+        },
+        "http_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        },
+        "http_situations": {
+          "declared": 100,
+          "missing": [],
+          "observed": 100
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [],
+          "observed": 12
+        },
+        "zap_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        }
+      },
+      "criteria": {
+        "SEC-A01-01": "PASS",
+        "SEC-A01-02": "PASS",
+        "SEC-A01-07": "PASS",
+        "SEC-A02-04": "PASS",
+        "SEC-A02-05": "REVIEW",
+        "SEC-A03-01": "PASS",
+        "SEC-A04-05": "PASS",
+        "SEC-A04-06": "PASS",
+        "SEC-A05-01": "REVIEW",
+        "SEC-A05-04": "PASS",
+        "SEC-A06-01": "PASS",
+        "SEC-A06-03": "MISSING",
+        "SEC-A06-05": "MISSING",
+        "SEC-A07-01": "PASS",
+        "SEC-A07-03": "PASS",
+        "SEC-A07-05": "PASS",
+        "SEC-A08-02": "REVIEW",
+        "SEC-A08-03": "REVIEW",
+        "SEC-A08-05": "PASS",
+        "SEC-A09-01": "REVIEW",
+        "SEC-A09-02": "REVIEW",
+        "SEC-A09-03": "REVIEW",
+        "SEC-A10-01": "REVIEW",
+        "SEC-A10-02": "PASS",
+        "SEC-A10-03": "PASS",
+        "SEC-A10-04": "PASS",
+        "SEC-A10-05": "PASS",
+        "SEC-A10-06": "PASS"
+      },
+      "dirty": true,
+      "docker_version": "29.8.1",
+      "focusedChecks": {},
+      "gate": "PASS",
+      "har": {
+        "addons_bundled": [
+          "automation-beta-0.58.0.zap",
+          "automation-beta-0.61.0.zap",
+          "exim-beta-0.16.0.zap",
+          "exim-beta-0.22.0.zap",
+          "pscan-alpha-0.6.0.zap",
+          "pscanrules-release-70.zap",
+          "pscanrules-release-77.zap",
+          "reports-release-0.43.0.zap",
+          "reports-release-0.46.0.zap"
+        ],
+        "alerts": [
+          {
+            "baseline": "UNCLASSIFIED",
+            "confidence": 3,
+            "instances": 1,
+            "operation": "POST /api/auth/login",
+            "risk": 0,
+            "rule_id": "10111",
+            "status": "REVIEW",
+            "triage": {
+              "basis": "passive_observation",
+              "owner": "p0-p1-local",
+              "recheck": "repeat_full_and_verify_the_rule_on_the_mapped_operation",
+              "status": "REVIEW"
+            }
+          },
+          {
+            "baseline": "UNCLASSIFIED",
+            "confidence": 2,
+            "instances": 1,
+            "operation": "POST /api/auth/login",
+            "risk": 0,
+            "rule_id": "10112",
+            "status": "REVIEW",
+            "triage": {
+              "basis": "passive_observation",
+              "owner": "p0-p1-local",
+              "recheck": "repeat_full_and_verify_the_rule_on_the_mapped_operation",
+              "status": "REVIEW"
+            }
+          }
+        ],
+        "exported": 133,
+        "self_check": true,
+        "sent": 133,
+        "status": "PASS",
+        "version": "2.17.0"
+      },
+      "httpSessions": {
+        "ADMIN": "PASS",
+        "SUPER_ADMIN": "PASS",
+        "USER": "PASS",
+        "guest": "PASS"
+      },
+      "images": {
+        "mailpit": {
+          "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "reference": "axllent/mailpit:v1.27.8"
+        },
+        "postgres": {
+          "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "reference": "postgres:16-alpine"
+        },
+        "zap": {
+          "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+          "reference": "zaproxy/zap-stable:2.17.0"
+        }
+      },
+      "incompleteStages": {},
+      "interrupted": false,
+      "java_version": "21.0.13",
+      "manifest_sha256": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+      "mavenTestResults": {
+        "PASS": 320
+      },
+      "maven_distribution": "3.10.2",
+      "mode": "full",
+      "mutationTests": {
+        "MutationRowCountTest#bookingStatusRequiresExactlyOneAffectedRow": "PASS",
+        "MutationRowCountTest#pendingAccountCannotSucceedWhenChallengeWasNotInserted": "PASS",
+        "MutationRowCountTest#roleUpdateCannotReturnAnUnchangedAccountAsSuccess": "PASS",
+        "MutationRowCountTest#verificationCannotSucceedWhenChallengeWasNotConsumed": "PASS"
+      },
+      "openapi_sha256": "adb60fb6effef029039fa039bae32f902330b8a380516d532cf145f4c40dfb72",
+      "path": "artifacts/p0-p1-after/product-full/results.json",
+      "python_version": "3.13.2",
+      "repository_openapi_sha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "run_id": "bus-security-113bc75e6a64",
+      "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+      "sha": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+      "sha256": "9aaeabb44862ae66f2b3e95204eaecdbb40b80301404fa59f4fedbfd9476932c",
+      "suite_files_sha256": {
+        "tests/security/README.md": "33b28b2395329d3f7b19876b3c2861d8cbe2a8e86e8fe2e0e659467512a9bfb9",
+        "tests/security/assessment.py": "4a111ae93aac0039520ed9847142fad855ab1ecc3362aaba14eec5ddc9dd43eb",
+        "tests/security/authorization_matrix.py": "25bc5c92d5b26082cf51c9c4cf67264e1bd977dd94b41a99d5578c81585797ec",
+        "tests/security/journeys.py": "8008af55d3fd7acc87b0872b33235f761496a41a3a36b4fe45c7b3103c1a3c66",
+        "tests/security/run.py": "95205846e3477ed46b9ea8a71117d1b7c676f045a6e13e844e4ed3479ef551e8",
+        "tests/security/scope.json": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+        "tests/security/test_report.py": "77b75643228b2ac5588af8ed8079311f84d900fb33c40023b9f2dd3c9a801211",
+        "tests/security/traffic.py": "d17d8080084c649eb05ce3b3d82069d236cd028b1a85b3c02fdb353ab660b8d7",
+        "tests/security/zap.yaml": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+    },
+    "hostedBaseline": {
+      "acceptance": "MISSING",
+      "backend_jar_sha256": "12c854a681168c8c07e8ff3bcbf73bd0247e749e67290d97ed34b55c56fad85d",
+      "baseline": {
+        "reason": "no_reviewed_baseline",
+        "status": "REVIEW"
+      },
+      "cleanup": "PASS",
+      "cleanup_checks": {
+        "containers": true,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contract_drift": [
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/locations",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/operators",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/routes",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/vehicles",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401,
+            429
+          ],
+          "openapi_success": [],
+          "operation": "POST /api/auth/login",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            400,
+            401,
+            403,
+            409
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401,
+            403
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/admin/users/{userId}/role",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Auth controller class annotations declare 429. The rate-limit filter covers exactly four POST auth operations.",
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_error": 429,
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Authorization guards emit 401/403 on protected routes. Most OpenAPI operations omit one or both response declarations.",
+          "observed_http": [
+            200,
+            401,
+            403
+          ],
+          "operation": "GET /api/admin/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        }
+      ],
+      "coverage": {
+        "criteria": {
+          "declared": 28,
+          "observed": 26,
+          "statuses": {
+            "MISSING": 2,
+            "PASS": 18,
+            "REVIEW": 8
+          }
+        },
+        "http_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        },
+        "http_situations": {
+          "declared": 100,
+          "missing": [],
+          "observed": 100
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [],
+          "observed": 12
+        },
+        "zap_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        }
+      },
+      "criteria": {
+        "SEC-A01-01": "PASS",
+        "SEC-A01-02": "PASS",
+        "SEC-A01-07": "PASS",
+        "SEC-A02-04": "PASS",
+        "SEC-A02-05": "REVIEW",
+        "SEC-A03-01": "PASS",
+        "SEC-A04-05": "PASS",
+        "SEC-A04-06": "PASS",
+        "SEC-A05-01": "REVIEW",
+        "SEC-A05-04": "PASS",
+        "SEC-A06-01": "PASS",
+        "SEC-A06-03": "MISSING",
+        "SEC-A06-05": "MISSING",
+        "SEC-A07-01": "PASS",
+        "SEC-A07-03": "PASS",
+        "SEC-A07-05": "PASS",
+        "SEC-A08-02": "REVIEW",
+        "SEC-A08-03": "REVIEW",
+        "SEC-A08-05": "PASS",
+        "SEC-A09-01": "REVIEW",
+        "SEC-A09-02": "REVIEW",
+        "SEC-A09-03": "REVIEW",
+        "SEC-A10-01": "REVIEW",
+        "SEC-A10-02": "PASS",
+        "SEC-A10-03": "PASS",
+        "SEC-A10-04": "PASS",
+        "SEC-A10-05": "PASS",
+        "SEC-A10-06": "PASS"
+      },
+      "dirty": false,
+      "docker_version": "28.0.4",
+      "focusedChecks": {},
+      "gate": "PASS",
+      "har": {
+        "addons_bundled": [
+          "automation-beta-0.58.0.zap",
+          "automation-beta-0.62.0.zap",
+          "exim-beta-0.16.0.zap",
+          "exim-beta-0.22.0.zap",
+          "pscan-alpha-0.6.0.zap",
+          "pscanrules-release-70.zap",
+          "pscanrules-release-77.zap",
+          "reports-release-0.43.0.zap",
+          "reports-release-0.46.0.zap"
+        ],
+        "alerts": [
+          {
+            "baseline": "UNCLASSIFIED",
+            "confidence": 3,
+            "instances": 1,
+            "operation": "POST /api/auth/login",
+            "risk": 0,
+            "rule_id": "10111",
+            "status": "REVIEW",
+            "triage": {
+              "basis": "passive_observation",
+              "owner": "bus-booking-security",
+              "recheck": "repeat_full_and_verify_the_rule_on_the_mapped_operation",
+              "status": "REVIEW"
+            }
+          },
+          {
+            "baseline": "UNCLASSIFIED",
+            "confidence": 2,
+            "instances": 1,
+            "operation": "POST /api/auth/login",
+            "risk": 0,
+            "rule_id": "10112",
+            "status": "REVIEW",
+            "triage": {
+              "basis": "passive_observation",
+              "owner": "bus-booking-security",
+              "recheck": "repeat_full_and_verify_the_rule_on_the_mapped_operation",
+              "status": "REVIEW"
+            }
+          }
+        ],
+        "exported": 133,
+        "self_check": true,
+        "sent": 133,
+        "status": "PASS",
+        "version": "2.17.0"
+      },
+      "httpSessions": {
+        "ADMIN": "PASS",
+        "SUPER_ADMIN": "PASS",
+        "USER": "PASS",
+        "guest": "PASS"
+      },
+      "images": {
+        "mailpit": {
+          "id": "sha256:1d52617d0450ec517d4868a9f452feb7c864f6dd1db9a45308325178981d399e",
+          "reference": "axllent/mailpit:v1.27.8"
+        },
+        "postgres": {
+          "id": "sha256:a3c40a6a77a9a545ed6d766860c45f82ab8bc254148266e56c4139f91beec635",
+          "reference": "postgres:16-alpine"
+        },
+        "zap": {
+          "id": "sha256:52ea8d2e5e4d6334337cd9037b297e62b01b36e63e0274417693797420450f32",
+          "reference": "zaproxy/zap-stable:2.17.0"
+        }
+      },
+      "incompleteStages": {},
+      "interrupted": false,
+      "java_version": "21.0.13",
+      "manifest_sha256": "89c86db257a0883cf29b620f2be07be7165a094e1384b44673591cb1681768ef",
+      "mavenTestResults": {
+        "PASS": 316
+      },
+      "maven_distribution": "3.10.2",
+      "mode": "full",
+      "mutationTests": {},
+      "openapi_sha256": "adb60fb6effef029039fa039bae32f902330b8a380516d532cf145f4c40dfb72",
+      "path": "/Users/hahoangloc/Working/UET/bus-booking-security-ci/target/security/ci-pr-20/results.json",
+      "python_version": "3.12.3",
+      "repository_openapi_sha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "run_id": "bus-security-5b84d9b6ae54",
+      "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+      "sha": "ff5c9e606697ea87a387f60403ef5408fb5bdcb8",
+      "sha256": "3811bf6aa8d13f9b3e86a523efa1f5d6ed3dad7d780919eb29c0d67b3713b0fb",
+      "suite_files_sha256": {
+        "tests/security/README.md": "33b28b2395329d3f7b19876b3c2861d8cbe2a8e86e8fe2e0e659467512a9bfb9",
+        "tests/security/assessment.py": "4a111ae93aac0039520ed9847142fad855ab1ecc3362aaba14eec5ddc9dd43eb",
+        "tests/security/authorization_matrix.py": "25bc5c92d5b26082cf51c9c4cf67264e1bd977dd94b41a99d5578c81585797ec",
+        "tests/security/journeys.py": "8008af55d3fd7acc87b0872b33235f761496a41a3a36b4fe45c7b3103c1a3c66",
+        "tests/security/run.py": "95205846e3477ed46b9ea8a71117d1b7c676f045a6e13e844e4ed3479ef551e8",
+        "tests/security/scope.json": "89c86db257a0883cf29b620f2be07be7165a094e1384b44673591cb1681768ef",
+        "tests/security/test_report.py": "77b75643228b2ac5588af8ed8079311f84d900fb33c40023b9f2dd3c9a801211",
+        "tests/security/traffic.py": "d17d8080084c649eb05ce3b3d82069d236cd028b1a85b3c02fdb353ab660b8d7",
+        "tests/security/zap.yaml": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+    },
+    "longAttempt": {
+      "acceptance": "MISSING",
+      "backend_jar_sha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+      "baseline": {
+        "reason": "no_reviewed_baseline",
+        "status": "REVIEW"
+      },
+      "cleanup": "FAIL",
+      "cleanup_checks": {
+        "containers": false,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contract_drift": [
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "GET /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/locations",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/operators",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/routes",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            401,
+            403
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/admin/vehicles",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            401,
+            429
+          ],
+          "openapi_success": [],
+          "operation": "POST /api/auth/login",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 201,
+          "observed_http": [
+            201,
+            400,
+            401,
+            403,
+            409
+          ],
+          "openapi_success": [
+            200
+          ],
+          "operation": "POST /api/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401,
+            403
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/admin/users/{userId}/role",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_success": 200,
+          "observed_http": [
+            200,
+            400,
+            401
+          ],
+          "openapi_success": [],
+          "operation": "PUT /api/users/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Auth controller class annotations declare 429. The rate-limit filter covers exactly four POST auth operations.",
+          "observed_http": [
+            200,
+            401
+          ],
+          "openapi_error": 429,
+          "operation": "GET /api/auth/me",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        },
+        {
+          "contract_note": "Authorization guards emit 401/403 on protected routes. Most OpenAPI operations omit one or both response declarations.",
+          "observed_http": [
+            200,
+            401,
+            403
+          ],
+          "operation": "GET /api/admin/bookings",
+          "runtime_status": "REVIEW",
+          "status": "REVIEW"
+        }
+      ],
+      "coverage": {
+        "criteria": {
+          "declared": 28,
+          "observed": 24,
+          "statuses": {
+            "MISSING": 4,
+            "PASS": 16,
+            "REVIEW": 8
+          }
+        },
+        "http_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        },
+        "http_situations": {
+          "declared": 101,
+          "missing": [],
+          "observed": 101
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [],
+          "observed": 12
+        },
+        "zap_operations": {
+          "declared": 32,
+          "missing": [
+            "DELETE /api/admin/trips/{tripId}",
+            "DELETE /api/bookings/{bookingId}",
+            "GET /api/admin/bookings",
+            "GET /api/admin/locations",
+            "GET /api/admin/operators",
+            "GET /api/admin/routes",
+            "GET /api/admin/trips",
+            "GET /api/admin/vehicles",
+            "GET /api/auth/me",
+            "GET /api/bookings/{bookingId}",
+            "GET /api/locations",
+            "GET /api/trips",
+            "GET /api/trips/{tripId}",
+            "GET /api/users/me",
+            "GET /api/users/me/bookings",
+            "POST /api/admin/locations",
+            "POST /api/admin/operators",
+            "POST /api/admin/routes",
+            "POST /api/admin/trips",
+            "POST /api/admin/vehicles",
+            "POST /api/auth/login",
+            "POST /api/auth/register",
+            "POST /api/auth/resend-verification",
+            "POST /api/auth/verify-email",
+            "POST /api/bookings",
+            "PUT /api/admin/locations/{locationId}",
+            "PUT /api/admin/operators/{operatorId}",
+            "PUT /api/admin/routes/{routeId}",
+            "PUT /api/admin/trips/{tripId}",
+            "PUT /api/admin/users/{userId}/role",
+            "PUT /api/admin/vehicles/{vehicleId}",
+            "PUT /api/users/me"
+          ],
+          "observed": 0
+        }
+      },
+      "criteria": {
+        "SEC-A01-01": "PASS",
+        "SEC-A01-02": "PASS",
+        "SEC-A01-07": "PASS",
+        "SEC-A02-04": "PASS",
+        "SEC-A02-05": "REVIEW",
+        "SEC-A03-01": "PASS",
+        "SEC-A04-05": "PASS",
+        "SEC-A04-06": "PASS",
+        "SEC-A05-01": "REVIEW",
+        "SEC-A05-04": "PASS",
+        "SEC-A06-01": "MISSING",
+        "SEC-A06-03": "MISSING",
+        "SEC-A06-05": "MISSING",
+        "SEC-A07-01": "PASS",
+        "SEC-A07-03": "MISSING",
+        "SEC-A07-05": "PASS",
+        "SEC-A08-02": "REVIEW",
+        "SEC-A08-03": "REVIEW",
+        "SEC-A08-05": "PASS",
+        "SEC-A09-01": "REVIEW",
+        "SEC-A09-02": "REVIEW",
+        "SEC-A09-03": "REVIEW",
+        "SEC-A10-01": "REVIEW",
+        "SEC-A10-02": "PASS",
+        "SEC-A10-03": "PASS",
+        "SEC-A10-04": "PASS",
+        "SEC-A10-05": "PASS",
+        "SEC-A10-06": "PASS"
+      },
+      "dirty": true,
+      "docker_version": "29.8.1",
+      "focusedChecks": {
+        "jwt-fresh-control": "PASS",
+        "jwt-live-after-expiry": "PASS",
+        "jwt-live-before-expiry": "PASS",
+        "login-after-window": "PASS",
+        "login-fresh-after-expiry": "PASS",
+        "otp-live-after-expiry": "MISSING",
+        "race-invariant-0": "PASS",
+        "race-invariant-1": "PASS",
+        "race-invariant-10": "PASS",
+        "race-invariant-11": "PASS",
+        "race-invariant-2": "PASS",
+        "race-invariant-3": "PASS",
+        "race-invariant-4": "PASS",
+        "race-invariant-5": "PASS",
+        "race-invariant-6": "PASS",
+        "race-invariant-7": "PASS",
+        "race-invariant-8": "PASS",
+        "race-invariant-9": "PASS"
+      },
+      "gate": "MISSING",
+      "har": {
+        "addons_bundled": null,
+        "alerts": null,
+        "exported": null,
+        "self_check": null,
+        "sent": null,
+        "status": null,
+        "version": null
+      },
+      "httpSessions": {
+        "ADMIN": "PASS",
+        "SUPER_ADMIN": "PASS",
+        "USER": "PASS",
+        "guest": "PASS"
+      },
+      "images": {
+        "mailpit": {
+          "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "reference": "axllent/mailpit:v1.27.8"
+        },
+        "postgres": {
+          "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "reference": "postgres:16-alpine"
+        },
+        "zap": {
+          "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+          "reference": "zaproxy/zap-stable:2.17.0"
+        }
+      },
+      "incompleteStages": {
+        "assessment": {
+          "category": "tool",
+          "reason": "stage_incomplete",
+          "seconds": 1468.63,
+          "status": "MISSING",
+          "timeout_seconds": null
+        },
+        "cleanup": {
+          "category": "cleanup",
+          "seconds": 121.95,
+          "status": "FAIL"
+        },
+        "http_long_temporal": {
+          "category": "fixture",
+          "error": "TimeoutError",
+          "reason": null,
+          "seconds": 605.15,
+          "status": "MISSING",
+          "timeout_seconds": 680
+        },
+        "zap": {
+          "category": "tool",
+          "reason": "stage_incomplete",
+          "seconds": 637.1,
+          "status": "MISSING",
+          "timeout_seconds": 730
+        }
+      },
+      "interrupted": true,
+      "java_version": "21.0.13",
+      "manifest_sha256": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+      "mavenTestResults": {
+        "PASS": 320
+      },
+      "maven_distribution": "3.10.2",
+      "mode": "long",
+      "mutationTests": {
+        "MutationRowCountTest#bookingStatusRequiresExactlyOneAffectedRow": "PASS",
+        "MutationRowCountTest#pendingAccountCannotSucceedWhenChallengeWasNotInserted": "PASS",
+        "MutationRowCountTest#roleUpdateCannotReturnAnUnchangedAccountAsSuccess": "PASS",
+        "MutationRowCountTest#verificationCannotSucceedWhenChallengeWasNotConsumed": "PASS"
+      },
+      "openapi_sha256": "adb60fb6effef029039fa039bae32f902330b8a380516d532cf145f4c40dfb72",
+      "path": "artifacts/p0-p1-after/product-long/results.json",
+      "python_version": "3.13.2",
+      "repository_openapi_sha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+      "run_id": "bus-security-9333bb91948b",
+      "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+      "sha": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+      "sha256": "89903e4e633d1173fa2cdefee9c2ffd67838672d5ee852ad61c525b0b15e7068",
+      "suite_files_sha256": {
+        "tests/security/README.md": "33b28b2395329d3f7b19876b3c2861d8cbe2a8e86e8fe2e0e659467512a9bfb9",
+        "tests/security/assessment.py": "4a111ae93aac0039520ed9847142fad855ab1ecc3362aaba14eec5ddc9dd43eb",
+        "tests/security/authorization_matrix.py": "25bc5c92d5b26082cf51c9c4cf67264e1bd977dd94b41a99d5578c81585797ec",
+        "tests/security/journeys.py": "8008af55d3fd7acc87b0872b33235f761496a41a3a36b4fe45c7b3103c1a3c66",
+        "tests/security/run.py": "95205846e3477ed46b9ea8a71117d1b7c676f045a6e13e844e4ed3479ef551e8",
+        "tests/security/scope.json": "476f934608ace73e51d184b07b8b520c47985402fdcca551a49639eaf6f381fa",
+        "tests/security/test_report.py": "77b75643228b2ac5588af8ed8079311f84d900fb33c40023b9f2dd3c9a801211",
+        "tests/security/traffic.py": "d17d8080084c649eb05ce3b3d82069d236cd028b1a85b3c02fdb353ab660b8d7",
+        "tests/security/zap.yaml": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+    },
+    "separateAuthMatrix": {
+      "cleanup": {
+        "containers": true,
+        "processes": true
+      },
+      "completed_cases": 130,
+      "expected_cases": 130,
+      "path": "artifacts/p0-p1-after/product-matrix-clean.json",
+      "sha256": "c735907029bdbc767051802b0f36e7bc76111c3d61ebf4357cbc9eebf72c96a9",
+      "status": "PASS"
+    }
+  },
+  "productSource": {
+    "acceptanceReview": "cb83d656424a22bec0a75a4a7919117d8609ddce",
+    "baseline": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+    "verifiedCode": "9059a1b0942191a8b23ebdc98873dc36213ffd49"
+  },
+  "schemaVersion": 1,
+  "sharedAfter": {
+    "authenticated-passive": [
+      {
+        "cleanup": null,
+        "decisiveChecks": {
+          "BB-LIVE-JWT-PASSIVE": "DATABASE_START_FAILURE"
+        },
+        "exitCode": 2,
+        "matched": false,
+        "path": "artifacts/p0-p1-after/authenticated-passive/result.json",
+        "provenance": null,
+        "report": null,
+        "runId": "a0e50f922736482abb6caba2f9e91a4c",
+        "scanner": null,
+        "scenario": "live-authenticated-passive",
+        "sha256": "efbf7756270439ffac03f86abac90b5d02e6899034b854758acc57a6ada012b1",
+        "verdict": "ERROR"
+      }
+    ],
+    "authenticated-passive-repeat": [
+      {
+        "cleanup": null,
+        "decisiveChecks": {
+          "BB-LIVE-JWT-PASSIVE": "LIVE_EXECUTION_FAILURE"
+        },
+        "exitCode": 2,
+        "matched": false,
+        "path": "artifacts/p0-p1-after/authenticated-passive-repeat/result.json",
+        "provenance": null,
+        "report": null,
+        "runId": "05b42c5e6755440b9badb80d581bf22e",
+        "scanner": null,
+        "scenario": "live-authenticated-passive",
+        "sha256": "fd6cc1f4e935ff6a179eb3e94e3012c8fee5d3d690750f31d6c12211bae46f69",
+        "verdict": "ERROR"
+      }
+    ],
+    "http": [
+      {
+        "cleanup": null,
+        "decisiveChecks": {
+          "BB-ADMIN-READ": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ADMIN-WRITE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-AUTH": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-BOOKING": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-PROFILE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ROLE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ROLE-LIFECYCLE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ROLE-RULES": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-USER": "LIVE_APPLICATION_PROCESS_FAILURE"
+        },
+        "exitCode": 2,
+        "matched": false,
+        "path": "artifacts/p0-p1-after/http/result.json",
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "http"
+        },
+        "report": null,
+        "runId": "075cd5d935d74966a4c70c54292dcea8",
+        "scanner": null,
+        "scenario": "live-http",
+        "sha256": "b85a4c4670927c858c1f01355edf0d9d1fb6b78063d0eb57e55cf63304ab893a",
+        "verdict": "ERROR"
+      }
+    ],
+    "http-repeat": [
+      {
+        "cleanup": null,
+        "decisiveChecks": {
+          "BB-ADMIN-READ": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ADMIN-WRITE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-AUTH": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-BOOKING": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-PROFILE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ROLE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ROLE-LIFECYCLE": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-ROLE-RULES": "LIVE_APPLICATION_PROCESS_FAILURE",
+          "BB-USER": "LIVE_APPLICATION_PROCESS_FAILURE"
+        },
+        "exitCode": 2,
+        "matched": false,
+        "path": "artifacts/p0-p1-after/http-repeat/result.json",
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "http"
+        },
+        "report": null,
+        "runId": "92208537e77b4061bad54771941e7a03",
+        "scanner": null,
+        "scenario": "live-http",
+        "sha256": "a2b0d6682cb965658a9b48e5381cea4fd0b70267630ba2c83f3de5a4eddf52d2",
+        "verdict": "ERROR"
+      }
+    ],
+    "mockmvc": [
+      {
+        "cleanup": null,
+        "decisiveChecks": {
+          "BB-ADMIN-READ": "ASSERTIONS_SATISFIED",
+          "BB-ADMIN-WRITE": "ASSERTIONS_SATISFIED",
+          "BB-AUTH": "ASSERTIONS_SATISFIED",
+          "BB-BOOKING": "ASSERTIONS_SATISFIED",
+          "BB-PROFILE": "ASSERTIONS_SATISFIED",
+          "BB-ROLE": "ASSERTIONS_SATISFIED",
+          "BB-ROLE-LIFECYCLE": "ASSERTIONS_SATISFIED",
+          "BB-ROLE-RULES": "ASSERTIONS_SATISFIED",
+          "BB-USER": "ASSERTIONS_SATISFIED"
+        },
+        "exitCode": 0,
+        "matched": true,
+        "path": "artifacts/p0-p1-after/mockmvc/result.json",
+        "provenance": {
+          "applicationTransport": "mockmvc-in-process",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "databaseBinding": "ephemeral-loopback",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaVersion": "21.0.13",
+          "mavenWrapperVersion": "3.10.2",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "postgresVersion": "postgres (PostgreSQL) 16.16",
+          "projectCommit": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+          "scannerDispatched": false
+        },
+        "report": null,
+        "runId": "7ca53ab4d21c4f108df00f833a9cffef",
+        "scanner": null,
+        "scenario": "baseline",
+        "sha256": "f11ef6a094d7848554f70615f3c64d366ea98cacc3222bb905707fddbd4b29b1",
+        "verdict": "PASS"
+      }
+    ],
+    "passive": [
+      {
+        "cleanup": null,
+        "decisiveChecks": {
+          "BB-LIVE-PASSIVE": "INCOMPLETE_EXECUTION"
+        },
+        "exitCode": 2,
+        "matched": false,
+        "path": "artifacts/p0-p1-after/passive/result.json",
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "9059a1b0942191a8b23ebdc98873dc36213ffd49",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "passive"
+        },
+        "report": null,
+        "runId": "71db7964b1454fc2bffece0c922746a0",
+        "scanner": null,
+        "scenario": "live-passive",
+        "sha256": "7bd9c9f876777e0b88663d8c7cc3fdf9ca2bb99f445aaab587de767e6e9c5605",
+        "verdict": "ERROR"
+      }
+    ]
+  },
+  "sharedBefore": {
+    "http": {
+      "cleanup": null,
+      "decisiveChecks": {
+        "BB-ADMIN-READ": "ASSERTIONS_SATISFIED",
+        "BB-ADMIN-WRITE": "ASSERTIONS_SATISFIED",
+        "BB-AUTH": "ASSERTIONS_SATISFIED",
+        "BB-BOOKING": "ASSERTIONS_SATISFIED",
+        "BB-PROFILE": "ASSERTIONS_SATISFIED",
+        "BB-ROLE": "ASSERTIONS_SATISFIED",
+        "BB-ROLE-LIFECYCLE": "ASSERTIONS_SATISFIED",
+        "BB-ROLE-RULES": "ASSERTIONS_SATISFIED",
+        "BB-USER": "ASSERTIONS_SATISFIED"
+      },
+      "exitCode": 0,
+      "path": "artifacts/p0-p1-before/http/result.json",
+      "provenance": {
+        "applicationJarSha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+        "applicationTransport": "http-1.1",
+        "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "http"
+      },
+      "report": null,
+      "runId": "ed9d959af50d413aab5ae0a51c399ed0",
+      "scanner": null,
+      "scenario": "live-http",
+      "sha256": "10ab06fd76b8fd26534615bbee65d2e9353c829d03646648fdf08c2963a2c24e",
+      "verdict": "PASS"
+    },
+    "mockmvc": {
+      "cleanup": null,
+      "decisiveChecks": {
+        "BB-ADMIN-READ": "ASSERTIONS_SATISFIED",
+        "BB-ADMIN-WRITE": "ASSERTIONS_SATISFIED",
+        "BB-AUTH": "ASSERTIONS_SATISFIED",
+        "BB-BOOKING": "ASSERTIONS_SATISFIED",
+        "BB-PROFILE": "ASSERTIONS_SATISFIED",
+        "BB-ROLE": "ASSERTIONS_SATISFIED",
+        "BB-ROLE-LIFECYCLE": "ASSERTIONS_SATISFIED",
+        "BB-ROLE-RULES": "ASSERTIONS_SATISFIED",
+        "BB-USER": "ASSERTIONS_SATISFIED"
+      },
+      "exitCode": 0,
+      "path": "artifacts/p0-p1-before/mockmvc/result.json",
+      "provenance": {
+        "applicationTransport": "mockmvc-in-process",
+        "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+        "databaseBinding": "ephemeral-loopback",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "javaVersion": "21.0.13",
+        "mavenWrapperVersion": "3.10.2",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "postgresVersion": "postgres (PostgreSQL) 16.16",
+        "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+        "scannerDispatched": false
+      },
+      "report": null,
+      "runId": "3cf2ef2ba55b43ed9ed3a6a89ceb3ac8",
+      "scanner": null,
+      "scenario": "baseline",
+      "sha256": "20c684e1c28d9f0287326efebb80e6ec3e2c924f1bf647f8c82a517ddca1710c",
+      "verdict": "PASS"
+    },
+    "passive": {
+      "cleanup": null,
+      "decisiveChecks": {
+        "BB-LIVE-PASSIVE": "PASSIVE_TRANSPORT_VERIFIED"
+      },
+      "exitCode": 0,
+      "path": "artifacts/p0-p1-before/passive/result.json",
+      "provenance": {
+        "applicationJarSha256": "aa2e99d17e900284cb01d809abba615adbed75a9af5bba36bab68291636f01aa",
+        "applicationTransport": "http-1.1",
+        "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+        "javaBuildVersion": "21.0.13",
+        "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+        "mavenWrapperVersion": "3.10.2",
+        "namespace": "disconnected-docker-loopback",
+        "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+        "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+        "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+        "projectCommit": "56f58a3ed86d22d44bd2007e3a49aeb0c979510f",
+        "publishedPorts": 0,
+        "springProfile": "default",
+        "testLane": "passive"
+      },
+      "report": {
+        "capped": false,
+        "ruleInstances": [
+          {
+            "alertRef": "10038-1",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/0/instances/0"
+          },
+          {
+            "alertRef": "10020-1",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/1/instances/0"
+          },
+          {
+            "alertRef": "10021",
+            "method": "GET",
+            "path": "/__pilot_passive_control",
+            "pointer": "/site/0/alerts/2/instances/0"
+          }
+        ],
+        "sha256": "606cfcff1dc4efa43bfc403b97ca37057cd7675d675d5da54601172e28343114",
+        "version": "2.17.0"
+      },
+      "runId": "7b5ecf19b30e4fa2891f5df9fa35cab3",
+      "scanner": {
+        "execution": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "expectedJobTypes": [
+          "requestor",
+          "passiveScan-wait",
+          "report"
+        ],
+        "jobReceipts": [
+          [
+            "requestor",
+            "started"
+          ],
+          [
+            "requestor",
+            "finished"
+          ],
+          [
+            "passiveScan-wait",
+            "started"
+          ],
+          [
+            "passiveScan-wait",
+            "finished"
+          ],
+          [
+            "report",
+            "started"
+          ],
+          [
+            "report",
+            "finished"
+          ]
+        ],
+        "planReportedSuccessful": true,
+        "planSha256": "73ea474f6b0f844b0e56e4854fbc32f33516a380c973f372ee3ae0756ef389c8",
+        "preflight": {
+          "exit": 0,
+          "timedOut": false
+        },
+        "preflightRequests": 0
+      },
+      "scenario": "live-passive",
+      "sha256": "8589210ceb8ccc73c6d8eeab8d951e2198b3cf9652fb81e594ccedf0dd6066be",
+      "verdict": "PASS"
+    }
+  },
+  "synthetic": {
+    "after": {
+      "active-blocked": {
+        "exit": 3,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-ACTIVE-BLOCKED": "ACTIVE_EXECUTION_RESTRICTED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/active-blocked/result.json",
+          "sha256": "a75882f1f843b59914ff92ca850a6f80ea012503daaa0330162b5ccb0b05be91"
+        },
+        "verdict": "BLOCKED"
+      },
+      "anonymous-only": {
+        "exit": 0,
+        "matched": true,
+        "nativeExit": 0,
+        "reasons": {
+          "DEMO-AF": "ASSERTIONS_SATISFIED",
+          "DEMO-CSP-PUBLIC": "ASSERTIONS_SATISFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/anonymous-only/result.json",
+          "sha256": "e93b99cce9c03985c5493ed7013fd1a141331974d878f6f36507876b9f2ab8b9"
+        },
+        "verdict": "PASS"
+      },
+      "application-only": {
+        "exit": 0,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-POLICY-ROLE": "ASSERTIONS_SATISFIED",
+          "DEMO-POLICY-STATE": "ASSERTIONS_SATISFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/application-only/result.json",
+          "sha256": "e79243861432394f4cc5730f3307423387b23666379e53ae0392e41cf2721f21"
+        },
+        "verdict": "PASS"
+      },
+      "authorization-regression": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-FORM": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-PUBLIC": "INCOMPLETE_EXECUTION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/authorization-regression/result.json",
+          "sha256": "64944ffca7acb2e8c33aec4fe9ec97898e15427b3a6a16c15fd33e9196afe0f4"
+        },
+        "verdict": "ERROR"
+      },
+      "bad-password": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-FORM": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-PUBLIC": "INCOMPLETE_EXECUTION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/bad-password/result.json",
+          "sha256": "02c33a6fe97f7fb3be0e69c661f7e9b78c8f104b09c0196d619ad80a27836097"
+        },
+        "verdict": "ERROR"
+      },
+      "bad-plan": {
+        "exit": 2,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "PLAN_VALIDATION_FAILURE",
+          "DEMO-CSP-FORM": "PLAN_VALIDATION_FAILURE",
+          "DEMO-CSP-PUBLIC": "PLAN_VALIDATION_FAILURE"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/bad-plan/result.json",
+          "sha256": "4289ae1fcab77bf46e647b167fa30e3e214706e9430e84b5fc25d99562bec0ef"
+        },
+        "verdict": "ERROR"
+      },
+      "baseline": {
+        "exit": 0,
+        "matched": true,
+        "nativeExit": 0,
+        "reasons": {
+          "DEMO-AF": "ASSERTIONS_SATISFIED",
+          "DEMO-CSP-FORM": "ASSERTIONS_SATISFIED",
+          "DEMO-CSP-PUBLIC": "ASSERTIONS_SATISFIED",
+          "DEMO-POLICY-ROLE": "ASSERTIONS_SATISFIED",
+          "DEMO-POLICY-STATE": "ASSERTIONS_SATISFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/baseline/result.json",
+          "sha256": "647e0f11ca06655ac12933daeca707303585845c8e39b3ae297920ac714185f0"
+        },
+        "verdict": "PASS"
+      },
+      "baseline-repeat": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/baseline-repeat/result.json",
+          "sha256": "dba98515d06c401ab9a52056b448aec9d40687fa5fc6d1eefeaec9d7e34fc5fc"
+        },
+        "verdict": "ERROR"
+      },
+      "docker-unavailable": {
+        "exit": 2,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INFRASTRUCTURE_FAILURE",
+          "DEMO-CSP-FORM": "INFRASTRUCTURE_FAILURE",
+          "DEMO-CSP-PUBLIC": "INFRASTRUCTURE_FAILURE",
+          "DEMO-POLICY-ROLE": "INFRASTRUCTURE_FAILURE",
+          "DEMO-POLICY-STATE": "INFRASTRUCTURE_FAILURE"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/docker-unavailable/result.json",
+          "sha256": "9a79eb3f7d5b042b7e03c8ffc3c82573d8cfa7fa39fb08357999f76b47a79162"
+        },
+        "verdict": "ERROR"
+      },
+      "incomplete": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-FORM": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-PUBLIC": "INCOMPLETE_EXECUTION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/incomplete/result.json",
+          "sha256": "d3cf27f8ad43e6d1585ba0d77f72311aebe6ebd14da4152dfeca4dd171ee55cd"
+        },
+        "verdict": "ERROR"
+      },
+      "invalid-evidence": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/invalid-evidence/result.json",
+          "sha256": "1c299ccac0f149bda46359d07ddecd31c3c775369ad7958c192552b0fc98f4e2"
+        },
+        "verdict": "ERROR"
+      },
+      "jwt-blocked": {
+        "exit": 3,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-JWT-BLOCKED": "AUTH_PROFILE_UNQUALIFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/jwt-blocked/result.json",
+          "sha256": "1362b70688d982efb6075c984c0414e3783d8c61cdfab6d271008d6ecb3e807e"
+        },
+        "verdict": "BLOCKED"
+      },
+      "missing-evidence": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-FORM": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-PUBLIC": "INCOMPLETE_EXECUTION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/missing-evidence/result.json",
+          "sha256": "e118469c53f3d45046bc281557ed56b3aed839d4d03fa4e81466fdaf072dce58"
+        },
+        "verdict": "ERROR"
+      },
+      "private-csp-regression": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-FORM": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-PUBLIC": "INCOMPLETE_EXECUTION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/private-csp-regression/result.json",
+          "sha256": "29a3fd7a295f0f6722ab6509eeeff32a1e20f7ca9c35d7760d22bd3d77bc7a0a"
+        },
+        "verdict": "ERROR"
+      },
+      "public-csp-regression": {
+        "exit": 1,
+        "matched": true,
+        "nativeExit": 0,
+        "reasons": {
+          "DEMO-CSP-PUBLIC": "CSP_REGRESSION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/public-csp-regression/result.json",
+          "sha256": "b73a5612ea4de7a616b950ca2c632cf3a126d7c5da52dd992296bc3aa7dd9439"
+        },
+        "verdict": "FAIL"
+      },
+      "warning": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-FORM": "INCOMPLETE_EXECUTION",
+          "DEMO-CSP-PUBLIC": "INCOMPLETE_EXECUTION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-after/qualified-synthetic/warning/result.json",
+          "sha256": "cda5b1b8411535d16bcb413de07166c68d2d33f9c1f09dfd2dea5e04beadc3a4"
+        },
+        "verdict": "ERROR"
+      }
+    },
+    "before": {
+      "active-blocked": {
+        "exit": 3,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-ACTIVE-BLOCKED": "ACTIVE_EXECUTION_RESTRICTED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/active-blocked/result.json",
+          "sha256": "0082641679f67c562485c733d095986836cfabb1a0fa885452ab009030c55546"
+        },
+        "verdict": "BLOCKED"
+      },
+      "anonymous-only": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/anonymous-only/result.json",
+          "sha256": "1fc34140c442c546919ba06a6071528a2ce1b2a80ac4057a75b181b351d084cb"
+        },
+        "verdict": "ERROR"
+      },
+      "application-only": {
+        "exit": 0,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-POLICY-ROLE": "ASSERTIONS_SATISFIED",
+          "DEMO-POLICY-STATE": "ASSERTIONS_SATISFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/application-only/result.json",
+          "sha256": "2887dc109e610ab74603bf14738ff6b3145df641f8affff530fd3b25aaf1c05a"
+        },
+        "verdict": "PASS"
+      },
+      "authorization-regression": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/authorization-regression/result.json",
+          "sha256": "ddaf2bb256e5a96201f6b788c6efa88ce75ce4e116d32a569a54602e32d9ae29"
+        },
+        "verdict": "ERROR"
+      },
+      "bad-password": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/bad-password/result.json",
+          "sha256": "6f545ac01510b8b3c32ed60d9ace59fe7fa9ee1a7212165e9aa4a2c10e8d2fe7"
+        },
+        "verdict": "ERROR"
+      },
+      "bad-plan": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/bad-plan/result.json",
+          "sha256": "a37632ed9d923aad9b2f4adcfc3f041cbaae5c258b4c7fe1615b1907a8b6a39c"
+        },
+        "verdict": "ERROR"
+      },
+      "baseline": {
+        "exit": 0,
+        "matched": true,
+        "nativeExit": 0,
+        "reasons": {
+          "DEMO-AF": "ASSERTIONS_SATISFIED",
+          "DEMO-CSP-FORM": "ASSERTIONS_SATISFIED",
+          "DEMO-CSP-PUBLIC": "ASSERTIONS_SATISFIED",
+          "DEMO-POLICY-ROLE": "ASSERTIONS_SATISFIED",
+          "DEMO-POLICY-STATE": "ASSERTIONS_SATISFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/synthetic/baseline/result.json",
+          "sha256": "0219b321f44b45d903945d0f364d910f42749de5e650ce2ca547ec10fc102582"
+        },
+        "verdict": "PASS"
+      },
+      "baseline-repeat": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/baseline-repeat/result.json",
+          "sha256": "8808b1f291c5c368c665c319e2061891f92af2039909052eebb751a5816db848"
+        },
+        "verdict": "ERROR"
+      },
+      "docker-unavailable": {
+        "exit": 2,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "INFRASTRUCTURE_FAILURE",
+          "DEMO-CSP-FORM": "INFRASTRUCTURE_FAILURE",
+          "DEMO-CSP-PUBLIC": "INFRASTRUCTURE_FAILURE",
+          "DEMO-POLICY-ROLE": "INFRASTRUCTURE_FAILURE",
+          "DEMO-POLICY-STATE": "INFRASTRUCTURE_FAILURE"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/docker-unavailable/result.json",
+          "sha256": "ea2b77d8302255bd472493d94ab19644f2ea87119450679e9b6ba29929aae6ca"
+        },
+        "verdict": "ERROR"
+      },
+      "incomplete": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/incomplete/result.json",
+          "sha256": "6ff8c06b741ea3ca27ccd6aaf671903892b9c48ab1d22088ea148618bba70004"
+        },
+        "verdict": "ERROR"
+      },
+      "invalid-evidence": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/invalid-evidence/result.json",
+          "sha256": "b729df248052799f197012297156f42792d6c8306c9bf6d25ccf7389aef1742d"
+        },
+        "verdict": "ERROR"
+      },
+      "jwt-blocked": {
+        "exit": 3,
+        "matched": true,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-JWT-BLOCKED": "AUTH_PROFILE_UNQUALIFIED"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/jwt-blocked/result.json",
+          "sha256": "dc2e01fa448e4e1059de4cac2467f85151c385da0031f39806b46ac2f6f939c9"
+        },
+        "verdict": "BLOCKED"
+      },
+      "missing-evidence": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/missing-evidence/result.json",
+          "sha256": "ac47f14847e071c64409e38985188804bd5eca9255bcc6589135031298c6bd46"
+        },
+        "verdict": "ERROR"
+      },
+      "private-csp-regression": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/private-csp-regression/result.json",
+          "sha256": "ef15d748cea3ce699abb3c3ea8ca9c880ed0969a4f2cc3cb9c82daca2e1aaa38"
+        },
+        "verdict": "ERROR"
+      },
+      "public-csp-regression": {
+        "exit": 1,
+        "matched": true,
+        "nativeExit": 0,
+        "reasons": {
+          "DEMO-CSP-PUBLIC": "CSP_REGRESSION"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/synthetic/public-csp-regression/result.json",
+          "sha256": "1613c8b49cd53aa0c45343e3b67c8c81d8a235f82aaafdbb2776572d5752fb4f"
+        },
+        "verdict": "FAIL"
+      },
+      "warning": {
+        "exit": 2,
+        "matched": false,
+        "nativeExit": null,
+        "reasons": {
+          "DEMO-AF": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-FORM": "CONTAINER_TIMEOUT",
+          "DEMO-CSP-PUBLIC": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-ROLE": "CONTAINER_TIMEOUT",
+          "DEMO-POLICY-STATE": "CONTAINER_TIMEOUT"
+        },
+        "receipt": {
+          "path": "artifacts/p0-p1-before/qualified-synthetic/warning/result.json",
+          "sha256": "34c0831da37502089745971cb4872be7c03d67a0b3fe1eaa8538bebbde4aa18d"
+        },
+        "verdict": "ERROR"
+      }
+    }
+  }
+}

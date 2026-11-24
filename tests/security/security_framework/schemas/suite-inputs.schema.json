@@ -95,11 +95,19 @@
             "required": ["id", "kind"],
             "properties": {
               "id": { "$ref": "#/$defs/id" },
-              "kind": { "enum": ["none", "form-cookie", "jwt-bearer"] },
+              "kind": { "enum": ["none", "form-cookie", "jwt-bearer", "native-jwt-requestor"] },
               "actors": { "$ref": "#/$defs/ids" }
             },
-            "if": { "properties": { "kind": { "const": "form-cookie" } } },
-            "then": { "required": ["actors"] }
+            "allOf": [
+              {
+                "if": { "properties": { "kind": { "const": "form-cookie" } } },
+                "then": { "required": ["actors"] }
+              },
+              {
+                "if": { "properties": { "kind": { "const": "native-jwt-requestor" } } },
+                "then": { "required": ["actors"], "properties": { "actors": { "maxItems": 1 } } }
+              }
+            ]
           }
         }
       }

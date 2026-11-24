@@ -186,7 +186,14 @@ def scanner(result):
 def main():
     result = {"runId": sys.argv[1], "evidence": {}}
     try:
-        result["reason"] = scanner(result)
+        lane = sys.argv[2] if len(sys.argv) > 2 else "passive"
+        if lane == "passive":
+            result["reason"] = scanner(result)
+        else:
+            from .authenticated import run
+            if lane not in ("authenticated-passive", "authenticated-passive-bad-password"):
+                raise ValueError("unknown scanner lane")
+            result["reason"] = run(result, bad_password=lane.endswith("-bad-password"))
     except TimeoutError:
         result["reason"] = "INCOMPLETE_EXECUTION"
     except (OSError, ValueError, KeyError, HTTPException, subprocess.SubprocessError):

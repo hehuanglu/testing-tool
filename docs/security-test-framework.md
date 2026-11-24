@@ -48,7 +48,23 @@ The output directory must be new. The workflow uses a fresh checkout and its bas
 
 Profiles live under the suite. The framework checks the expected actor aliases and observed HTTP status. The suite knows how to establish sessions and obtain independent application evidence of the effective actor. The example supports anonymous and form-and-cookie profiles. Its credentials belong to the disposable fixture. A new product adapter should read known fixture credentials at runtime, avoid publishing them, and test anonymous access, wrong credentials and actor separation against the actual product authentication path.
 
-JWT Bearer has its own unqualified profile kind. Selecting it returns `BLOCKED / AUTH_PROFILE_UNQUALIFIED`. It needs an independently exercised token acquisition and replay path, effective subject and role evidence, and defined negative and lifecycle controls before admission. Authenticated Active DAST remains `BLOCKED / ACTIVE_EXECUTION_RESTRICTED`; the admission layer rejects active and other unsupported ZAP jobs. Expert Mode remains useful for fixture development within its released surface. The standalone workflow calls no MCP tools and changes no MCP server code. [Expert audit](../mcp-zap-expert-capability-report.md) · [Expert evidence B01](../mcp-zap-expert-capability-evidence.json)
+The reviewed Bus Booking live profile uses native ZAP JSON login, extraction of the login response token into
+header-based session state, and an authenticated poll plus a named Requestor profile read for one USER.
+The separate application client still owns authentication for the 102-case authorization pilot. The generic
+`jwt-bearer` profile remains unqualified and returns `BLOCKED / AUTH_PROFILE_UNQUALIFIED`.
+The `native-jwt-requestor` kind is admitted only for authenticated passive cases using the product fixture entry point.
+[Native authentication specification](../tests/security/suites/bus_booking/specifications/native-jwt-passive.md) ·
+[ZAP header session management](https://www.zaproxy.org/docs/desktop/addons/authentication-helper/session-header/)
+
+Two passive modes have different evidence. Bus Booking product CI imports authenticated application-client HAR with request
+sending disabled in an offline ZAP container. The shared pilot's native JWT lane has the scanner generate the login and
+authenticated traffic on a disconnected loopback namespace. The backend-resolved identity, native passive drain and report
+detector are required. The lab session check informed the native profile and evidence but is outside the shared CI entry point.
+[Bus Booking live runbook](../tests/security/suites/bus_booking/live/README.md)
+
+Authenticated Active DAST returns `BLOCKED / ACTIVE_EXECUTION_RESTRICTED`. The engine admits only its bounded passive plans.
+The CI definition checks the no-dispatch receipt. Product-native scanner qualification remains missing. See the execution
+and evidence boundary in the [CI verdict contract](../ci-verdict-contract.md#authenticated-active-dast).
 
 ## Local run and GitHub Actions
 
@@ -65,8 +81,8 @@ The GitHub Actions workflow prepares the same baseline gate with read-only repos
 
 **Implemented.** The framework, schemas, reporting, example adapter and GitHub Actions workflow use Python's standard library and the existing pinned scanner image.
 
-**Verified locally.** On Docker Engine 29.8.1 with a Linux ARM64 container, all 16 invocations matched their expected verdicts. Two clean baselines agreed, and the application-only and anonymous-only lanes passed. The three intentional CSP and authorization regressions exited 1 while ZAP exited 0. Authentication, evidence and infrastructure controls exited 2. Active and JWT selections exited 3 without dispatch. Nine framework contract tests passed and all emitted results validated against the evidence schema.
+**Historical baseline.** On Docker Engine 29.8.1 with a Linux ARM64 container, all 16 invocations matched their expected verdicts. Two clean baselines agreed, and the application-only and anonymous-only lanes passed. The three intentional CSP and authorization regressions exited 1 while ZAP exited 0. Authentication, evidence and infrastructure controls exited 2. Active and JWT selections exited 3 without dispatch. Nine framework contract tests passed and all emitted results validated against the evidence schema.
 
-**Unqualified.** The workflow definition and shell commands were checked locally. Hosted GitHub Actions execution, JWT Bearer, Active DAST, browser and API exploration, external targets, and new project adapters remain unqualified for this framework.
+**Current qualification.** See the [P0 and P1 evidence and reproduction record](../P0-P1-COMPLETION-REPORT.md) for the status of the native JWT, shared CI, and product verification lanes.
 
 [Implementation guidelines](security-test-implementation.md) · [Specification template](../tests/security/security_framework/templates/security-test-specification.md) · [Example suite](../tests/security/suites/feasibility_fixture/README.md)

@@ -3,7 +3,8 @@
 import json
 import re
 
-from .manifest import ACTIVE, SCANNER_METHODS
+from .manifest import NATIVE_JWT, SCANNER_METHODS, restriction_reason
+from .native_jwt import CONTROL, CONTROL_RULE, MODE, identity_status
 
 EXIT = {"PASS": 0, "FAIL": 1, "ERROR": 2, "BLOCKED": 3}
 PRECEDENCE = ("ERROR", "BLOCKED", "FAIL", "PASS")
@@ -79,6 +80,8 @@ def evidence_keys(case, profile):
     keys = list(case["requiredEvidence"])
     if case["method"] in SCANNER_METHODS:
         keys.extend(("scannerExecution", "zapReport"))
+        if profile["kind"] == NATIVE_JWT:
+            keys.extend(("scannerEvents", "scannerOwnership", "runtimeCleanup"))
         if profile["kind"] != "none":
             keys.append("scannerIdentity-" + profile["id"])
     elif profile["kind"] != "none":
@@ -104,6 +107,25 @@ def validate_scan_evidence(evidence):
             or report["capped"] is not False or report["version"] != "2.17.0"
             or not isinstance(report["ruleInstances"], list)):
         raise ValueError("invalid native execution or report evidence")
+
+
+def validate_native_jwt_evidence(evidence, profile):
+    actor, = profile["actors"]
+    execution = evidence["scannerExecution"]["data"]
+    events = evidence["scannerEvents"]
+    ownership = evidence["scannerOwnership"]
+    cleanup = evidence["runtimeCleanup"]
+    rows = evidence["zapReport"]["data"]["ruleInstances"]
+    if (execution.get("mode") != MODE or events["producer"] != "fixture"
+            or identity_status(events["data"], actor)
+            or [row for row in events["data"] if row["phase"] == "passive-control"]
+                != [{"phase": "passive-control", "status": 200}]
+            or ownership["producer"] != "suite-assertion" or ownership["data"].get("mode") != MODE
+            or ownership["data"].get("applicationClientLogin") is not False
+            or cleanup != {"producer": "runner", "data": {
+                "containersRemoved": True, "temporaryDirectoryRemoved": True}}
+            or not any(row["path"] == CONTROL and row["alertRef"] == CONTROL_RULE for row in rows)):
+        raise ValueError("invalid native JWT witness")
 
 
 def validate_identity_evidence(evidence, key, profile):
@@ -148,11 +170,7 @@ def validate_child(child, suite, run_id, process_exit):
             keys.append(key)
         case = suite.cases[case_id]
         profile = suite.profiles[case["authProfile"]]
-        restricted_reason = None
-        if case["method"] == ACTIVE:
-            restricted_reason = "ACTIVE_EXECUTION_RESTRICTED"
-        elif profile["kind"] == "jwt-bearer":
-            restricted_reason = "AUTH_PROFILE_UNQUALIFIED"
+        restricted_reason = restriction_reason(case["method"], profile["kind"])
         if restricted_reason:
             if ((check["verdict"], check["reason"]) != ("BLOCKED", restricted_reason)
                     or keys != [case_id] or evidence[case_id] != {
@@ -170,6 +188,8 @@ def validate_child(child, suite, run_id, process_exit):
             if profile["kind"] != "none":
                 identity_key = "scannerIdentity-" + profile["id"] if scanner else case_id + "-identity"
                 validate_identity_evidence(evidence, identity_key, profile)
+            if profile["kind"] == NATIVE_JWT:
+                validate_native_jwt_evidence(evidence, profile)
         add_check(verification, suite, case_id, outcome(check["verdict"], check["reason"]), keys)
         if verification["checks"][case_id] != check:
             raise ValueError("mismatched check metadata")

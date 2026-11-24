@@ -21,6 +21,14 @@
       "id": "public-anonymous",
       "kind": "none",
       "notes": "Dedicated public GET evidence lane. The scanner receives neither login credentials nor JWTs."
+    },
+    {
+      "id": "scanner-jwt-user",
+      "kind": "native-jwt-requestor",
+      "actors": [
+        "USER"
+      ],
+      "notes": "Native JSON authentication and Bearer session for one verified USER in the disconnected live fixture."
     }
   ]
 }

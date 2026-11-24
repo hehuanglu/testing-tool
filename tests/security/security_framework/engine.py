@@ -13,6 +13,7 @@ from zap_report import ReportError, load_fresh_report
 
 from .evidence import put_evidence
 from .manifest import digest, require
+from .native_jwt import CONTROL, MODE, NativeJwt
 
 VERSION = "2.17.0"
 JOBS = {"requestor", "passiveScan-wait", "report"}
@@ -30,9 +31,13 @@ def validate_loopback(origin):
             and origin == f"http://127.0.0.1:{address.port}", "fixture origin")
 
 
-def validate_plan(plan, origin, directory):
+def validate_plan(plan, origin, directory, *, native_jwt=None):
     """Admit the tested job subset and bind every request to the owned fixture."""
     validate_loopback(origin)
+    if native_jwt is not None:
+        require(type(native_jwt) is NativeJwt and plan == native_jwt.plan(origin, directory),
+                "bounded native JWT plan")
+        return [job["type"] for job in plan["jobs"]]
 
     def local(url):
         actual = urlsplit(url)
@@ -92,7 +97,7 @@ def validate_plan(plan, origin, directory):
     return types
 
 
-def run_zap(directory, flag, plan):
+def run_zap(directory, flag, plan, extra_environment=None):
     home = directory / ("preflight-home" if flag == "-autocheck" else "run-home")
     home.mkdir()
     log = home / "console"
@@ -101,7 +106,9 @@ def run_zap(directory, flag, plan):
         args.extend(("-config", key + "=false"))
     timeout = False
     with log.open("wb") as stream:
-        process = subprocess.Popen(args, start_new_session=True, stdout=stream, stderr=subprocess.STDOUT)
+        environment = {**os.environ, **extra_environment} if extra_environment else None
+        process = subprocess.Popen(args, env=environment, start_new_session=True, stdout=stream,
+                                   stderr=subprocess.STDOUT)
         try:
             process.wait(timeout=90)
         except subprocess.TimeoutExpired:
@@ -114,18 +121,28 @@ def run_zap(directory, flag, plan):
     return {"exit": process.returncode, "timedOut": timeout}, log.read_text(errors="replace")
 
 
-def execute_plan(result, directory, origin, definition, observe, identity_check=None, after_report=None):
+def execute_plan(result, directory, origin, definition, observe, identity_check=None, after_report=None,
+                 *, native_jwt=None, extra_environment=None):
     """Return an error reason, or None when scanner and native report are usable."""
     try:
-        types = validate_plan(definition, origin, directory)
+        types = validate_plan(definition, origin, directory, native_jwt=native_jwt)
+        if native_jwt is not None:
+            require(extra_environment is not None
+                    and set(extra_environment) == {"FIXTURE_USER_EMAIL", "FIXTURE_USER_PASSWORD"},
+                    "native JWT environment")
+        else:
+            require(extra_environment is None, "scanner environment")
     except (KeyError, TypeError, ValueError, AttributeError):
         return "PLAN_VALIDATION_FAILURE"
 
     plan = directory / "plan.json"
     plan.write_text(json.dumps(definition, allow_nan=False), encoding="utf-8")
     native = {"planSha256": digest(plan)}
+    if native_jwt is not None:
+        native["mode"] = MODE
     put_evidence(result, "scannerExecution", "automation-framework", native)
-    preflight, _ = run_zap(directory, "-autocheck", plan)
+    zap_options = {"extra_environment": extra_environment} if extra_environment else {}
+    preflight, _ = run_zap(directory, "-autocheck", plan, **zap_options)
     native["preflight"] = preflight
     native["preflightRequests"] = len(observe())
     if preflight["timedOut"]:
@@ -134,7 +151,7 @@ def execute_plan(result, directory, origin, definition, observe, identity_check=
         return "PLAN_VALIDATION_FAILURE"
 
     started = time.time_ns()
-    execution, console = run_zap(directory, "-autorun", plan)
+    execution, console = run_zap(directory, "-autorun", plan, **zap_options)
     receipts = TRANSITION.findall(console)
     native.update(execution=execution, jobReceipts=[list(receipt) for receipt in receipts],
                   expectedJobTypes=types, planReportedSuccessful="Automation plan succeeded" in console)
@@ -170,8 +187,16 @@ def execute_plan(result, directory, origin, definition, observe, identity_check=
     except (ReportError, KeyError, OSError, ValueError, TypeError):
         return "INVALID_EVIDENCE"
 
+    if native_jwt is None:
+        rows = [row for row in report.instances if row.origin == origin and row.method == "GET" and "?" not in row.path]
+    else:
+        allowed = {("GET", native_jwt.profile_path), ("GET", CONTROL),
+                   ("GET", native_jwt.login_path), ("POST", native_jwt.login_path)}
+        if any(row.origin != origin or (row.method, row.path) not in allowed for row in report.instances):
+            return "SCANNER_REPORT_SCOPE_MISMATCH"
+        rows = report.instances
     rows = [{"path": row.path, "method": row.method, "alertRef": row.alert_ref, "pointer": row.pointer}
-            for row in report.instances if row.origin == origin and row.method == "GET" and "?" not in row.path]
+            for row in rows]
     put_evidence(result, "zapReport", "zap-report",
                  {"sha256": report_hash, "version": report.version, "capped": report.capped,
                   "ruleInstances": rows})

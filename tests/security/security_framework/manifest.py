@@ -12,10 +12,19 @@ APP_METHODS = {"authorization", "application-assertion"}
 ACTIVE = "authenticated-active-dast"
 AUTHENTICATED = {"authenticated-passive-dast", "authorization", ACTIVE}
 METHODS = SCANNER_METHODS | APP_METHODS | {ACTIVE}
-AUTH_KINDS = {"none", "form-cookie", "jwt-bearer"}
+NATIVE_JWT = "native-jwt-requestor"
+AUTH_KINDS = {"none", "form-cookie", "jwt-bearer", NATIVE_JWT}
 IDENTIFIER = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,63}\Z")
 SUITE_NAME = re.compile(r"[a-z][a-z0-9_]{0,63}\Z")
 CWE = re.compile(r"CWE-[1-9][0-9]*\Z")
+
+
+def restriction_reason(method, kind):
+    if method == ACTIVE:
+        return "ACTIVE_EXECUTION_RESTRICTED"
+    if kind == "jwt-bearer":
+        return "AUTH_PROFILE_UNQUALIFIED"
+    return None
 
 
 def digest(path):
@@ -86,6 +95,8 @@ def read_suite(name, scenario):
         require(profile.get("kind") in AUTH_KINDS, "auth profile kind")
         if profile["kind"] == "form-cookie":
             identifiers(profile.get("actors"), "form-cookie actors")
+        if profile["kind"] == NATIVE_JWT:
+            require(len(identifiers(profile.get("actors"), "native JWT actors")) == 1, "native JWT actor")
 
     cases = records("cases/cases.json", "cases")
     for case in cases.values():
@@ -95,6 +106,7 @@ def read_suite(name, scenario):
         kind = profiles[case["authProfile"]]["kind"]
         require(method not in AUTHENTICATED or kind != "none", "case authenticated method")
         require(method != "passive-dast" or kind == "none", "case anonymous method")
+        require(kind != NATIVE_JWT or method == "authenticated-passive-dast", "native JWT method")
         identifiers(case.get("requiredEvidence"), "required evidence")
         require(isinstance(case.get("oracle"), str) and IDENTIFIER.fullmatch(case["oracle"]), "oracle")
         require(isinstance(case.get("expected"), str) and case["expected"].strip(), "expected")

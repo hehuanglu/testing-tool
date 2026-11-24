@@ -1,4 +1,4 @@
-"""Run the Bus Booking contract or an anonymous ZAP check in a disconnected Docker namespace."""
+"""Run the Bus Booking contract and passive ZAP checks in a disconnected Docker namespace."""
 
 import argparse
 from contextlib import contextmanager
@@ -33,6 +33,9 @@ DIRECTORY = Path(__file__).resolve().parent
 HTTP_CLIENT = DIRECTORY / "BusBookingLiveHttp.java"
 JAVA_TAG = "eclipse-temurin:21-jre"
 CASE_ID = "BB-LIVE-PASSIVE"
+NATIVE_CASE_ID = "BB-LIVE-JWT-PASSIVE"
+NATIVE_LANES = ("authenticated-passive", "authenticated-passive-bad-password")
+MAILPIT_TAG = "axllent/mailpit:v1.27.8"
 
 
 def pinned_local_image(tag, repository):
@@ -114,11 +117,12 @@ def docker_args(name, run_id, namespace):
 
 
 @contextmanager
-def deployed(run_id, runtime):
+def deployed(run_id, runtime, *, mail=False):
     db_name = f"bus-live-{run_id}-db"
     app_name = f"bus-live-{run_id}-app"
     label = f"bus-booking-live={run_id}"
     postgres = pinned_local_image(PG_TAG, "postgres")
+    mail_image = pinned_local_image(MAILPIT_TAG, "axllent/mailpit") if mail else None
     java = pinned_local_image(JAVA_TAG, "eclipse-temurin")
     password = secrets.token_hex(24)
     jwt_key = base64.b64encode(secrets.token_bytes(32)).decode()
@@ -129,6 +133,8 @@ def deployed(run_id, runtime):
         "BOOTSTRAP_SUPER_ADMIN_ENABLED": "false", "API_DOCS_ENABLED": "false",
         "SERVER_ADDRESS": "127.0.0.1", "JAVA_TOOL_OPTIONS": "-Duser.timezone=Asia/Ho_Chi_Minh",
     }
+    if mail:
+        app_env.update(SMTP_HOST="127.0.0.1", SMTP_PORT="1025", SMTP_AUTH="false", SMTP_STARTTLS="false")
     try:
         database = command([*docker_args(db_name, run_id, "none"), "-d",
                             "--tmpfs", "/var/lib/postgresql/data", "--env", "POSTGRES_PASSWORD",
@@ -150,6 +156,12 @@ def deployed(run_id, runtime):
                 time.sleep(0.5)
 
         namespace = "container:" + database
+        if mail_image:
+            mail_name = f"bus-live-{run_id}-mail"
+            command([*docker_args(mail_name, run_id, namespace), "-d", "--cap-drop", "ALL",
+                     "--security-opt", "no-new-privileges", mail_image], timeout=30,
+                    reason="MAIL_FIXTURE_START_FAILURE")
+            verify_namespace(mail_name, namespace)
         command([*docker_args(app_name, run_id, namespace), "-d", "--cap-drop", "ALL",
                  "--security-opt", "no-new-privileges", "--mount", bind(runtime / "app.jar", "/app/app.jar"),
                  *[f"--env={key}" for key in app_env], "--entrypoint", "java", java, "-jar", "/app/app.jar"],
@@ -158,17 +170,21 @@ def deployed(run_id, runtime):
         yield namespace, java, {"DB_PASSWORD": password, "JWT_SECRET": jwt_key}, {
             "javaRuntimeImage": java, "postgresImage": postgres, "namespace": "disconnected-docker-loopback",
             "publishedPorts": 0, "springProfile": "default", "applicationTransport": "http-1.1",
+            **({"mailpitImage": mail_image} if mail_image else {}),
         }
     finally:
         # Remove dependants first, including an attached client that exceeded its host deadline.
         listed = command(["docker", "ps", "-a", "--filter", f"label={label}", "--format", "{{.Names}}"],
                          reason="DOCKER_TEARDOWN_FAILURE").decode().splitlines()
-        allowed = [f"bus-live-{run_id}-{suffix}" for suffix in ("client", "zap", "app", "db")]
+        allowed = [f"bus-live-{run_id}-{suffix}" for suffix in ("client", "zap", "app", "mail", "db")]
         if set(listed) - set(allowed):
             raise ExecutionError("DOCKER_TEARDOWN_FAILURE")
         for name in allowed:
             if name in listed:
                 command(["docker", "rm", "-f", "-v", name], reason="DOCKER_TEARDOWN_FAILURE")
+        if command(["docker", "ps", "-a", "--filter", f"label={label}", "--format", "{{.Names}}"],
+                   reason="DOCKER_TEARDOWN_FAILURE").strip():
+            raise ExecutionError("DOCKER_TEARDOWN_FAILURE")
 
 
 def http_receipt(result, namespace, java, credentials, runtime, matrix, working):
@@ -190,16 +206,19 @@ def http_receipt(result, namespace, java, credentials, runtime, matrix, working)
     return json.loads(receipt.read_text(encoding="utf-8"))
 
 
-def scanner_receipt(result, namespace):
+def scanner_receipt(result, namespace, lane):
     run_id = result["runId"]
     image = (ROOT / "zap-image.txt").read_text(encoding="utf-8").strip()
     if not IMAGE_PIN.fullmatch(image):
         raise ExecutionError("SCANNER_IMAGE_UNAVAILABLE")
     result["scannerImage"] = image
-    raw = command([*docker_args(f"bus-live-{run_id}-zap", run_id, namespace), "--cap-drop", "ALL",
+    name = f"bus-live-{run_id}-zap"
+    # The same disconnected namespace is also verified at the database and backend.
+    raw = command([*docker_args(name, run_id, namespace), "--cap-drop", "ALL",
                    "--security-opt", "no-new-privileges", "--mount", bind(ROOT, "/suite"),
                    "--env", "PYTHONPATH=/suite", "--entrypoint", "python3", image,
-                   "-m", "suites.bus_booking.live.scanner", run_id], timeout=240, reason="SCANNER_PROCESS_FAILURE")
+                   "-m", "suites.bus_booking.live.scanner", run_id, lane], timeout=260, reason="SCANNER_PROCESS_FAILURE")
+    verify_namespace(name, namespace)
     child = json.loads(raw)
     if (not isinstance(child, dict) or set(child) != {"runId", "reason", "evidence"}
             or child["runId"] != run_id or not isinstance(child["evidence"], dict)
@@ -207,11 +226,17 @@ def scanner_receipt(result, namespace):
         raise ExecutionError("INVALID_EVIDENCE")
     for key, record in child["evidence"].items():
         put_evidence(result, key, record["producer"], record["data"])
-    return child["reason"] or verify_witnesses(result["evidence"])
+    if child["reason"]:
+        return child["reason"]
+    if lane in NATIVE_LANES:
+        from .authenticated import verify
+        return verify(result)
+    return verify_witnesses(result["evidence"])
 
 
 def execute(result, suite, args):
     http = args.lane == "http"
+    native = args.lane in NATIVE_LANES
     try:
         with TemporaryDirectory(prefix="bus-booking-live-") as temporary:
             working = Path(temporary)
@@ -225,19 +250,24 @@ def execute(result, suite, args):
             operations, expected = matrix_plan(matrix)
             contract = verify_contract(project, operations)
             runtime, build = build_revision(project, working, http)
-            with deployed(result["runId"], runtime) as (namespace, java, credentials, deployment):
+            with deployed(result["runId"], runtime, mail=native) as (namespace, java, credentials, deployment):
                 put_evidence(result, "provenance", "runner", {
                     **contract, **build, **deployment, "projectCommit": revision, "testLane": args.lane,
                 })
                 if http:
                     observed = http_receipt(result, namespace, java, credentials, runtime, matrix, working)
                 else:
-                    reason = scanner_receipt(result, namespace)
+                    reason = scanner_receipt(result, namespace, args.lane)
         if http:
             return adjudicate(result, suite, observed, expected, observe_handler=False)
-        status = outcome("ERROR", reason) if reason else outcome("PASS", "PASSIVE_TRANSPORT_VERIFIED")
-        refs = set(suite.cases[CASE_ID]["requiredEvidence"]) & result["evidence"].keys()
-        add_check(result, suite, CASE_ID, status, sorted(refs))
+        case_id = NATIVE_CASE_ID if native else CASE_ID
+        if native:
+            put_evidence(result, "runtimeCleanup", "runner",
+                         {"containersRemoved": True, "temporaryDirectoryRemoved": not working.exists()})
+        status = (outcome("ERROR", reason) if reason else
+                  outcome("PASS", "NATIVE_JWT_PASSIVE_VERIFIED" if native else "PASSIVE_TRANSPORT_VERIFIED"))
+        refs = set(suite.cases[case_id]["requiredEvidence"]) & result["evidence"].keys()
+        add_check(result, suite, case_id, status, sorted(refs))
         return finish(result)
     except ExecutionError as error:
         return fail_run(result, suite, error.args[0])
@@ -256,7 +286,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
     parser.add_argument("--revision", default="HEAD")
-    parser.add_argument("--lane", choices=("http", "passive"), default="http")
+    parser.add_argument("--lane", choices=("http", "passive", *NATIVE_LANES), default="http")
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     if args.out.exists():

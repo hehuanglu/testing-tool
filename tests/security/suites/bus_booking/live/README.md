@@ -47,6 +47,24 @@ python3 -m suites.bus_booking.live.compare \
 
 The comparison consumes current-source receipts and verifies the response, state and identity results. The original in-process report retains its historical artifacts.
 
+## Scanner-owned JWT passive analysis
+
+Use the same project revision, local Java and Docker setup. Also cache the recorded Mailpit image with
+`docker pull axllent/mailpit:v1.27.8`. The launcher resolves its immutable local digest.
+
+```sh
+python3 -m suites.bus_booking.live.run --lane authenticated-passive \
+  --project "$BUS_PROJECT" --revision "$BUS_REV" --out "$BUS_OUT/native-jwt"
+```
+
+The negative control is `--lane authenticated-passive-bad-password` with a distinct output directory.
+Expect exit 2, `AUTHENTICATION_FAILURE`, and a cleanup receipt. Native ZAP fetches a fixture-local login
+page, submits the JSON login to the scoped relay and sends a verified profile poll and named request.
+Provisioning uses registration and Mailpit. The relay forwards the login and the exact protected GET
+to the real backend. There are zero published ports and the database owns a disconnected Docker loopback
+namespace. The suite's generic launcher reports `PRODUCT_FIXTURE_REQUIRED` for this case because the
+product launcher provides the isolated packaged runtime. [Specification](../specifications/native-jwt-passive.md)
+
 ## GitHub Actions integration
 
 On an Ubuntu runner with Docker, install Java 21 and Python 3.12+ and cache Maven dependencies using the application's POM. Check out the target application commit into `bus-booking` and a fixed, reviewed framework revision containing this suite into `security-framework`. Set `permissions: contents: read` and use separate required steps or jobs for application gates. The following is the live HTTP job's shell step.
@@ -61,6 +79,6 @@ PYTHONPATH=security-framework/tests/security python3 -m suites.bus_booking.live.
   --lane http --project bus-booking --revision "$revision" --out pilot-evidence/http
 ```
 
-Keep the [in-process gate](../README.md#ci-integration) in its own step or job. For a separate passive evidence job, also pull the existing scanner image from `security-framework/tests/security/zap-image.txt` during setup and invoke `--lane passive --out pilot-evidence/passive` with the same application revision. Use an artifact upload step that runs on failure and retains only `pilot-evidence/**/result.json` and `pilot-evidence/**/report.md`. Preserve the launcher status and require a receipt for each enabled gate. Use the existing [artifact upload pattern](../../../../../.github/workflows/security-suite-framework.yml). JWT scanner and active-scanner controls are invoked separately through the existing shared CLI, with exit 3 expected.
+Keep the [in-process gate](../README.md#ci-integration) in its own step or job. For a separate passive evidence job, also pull the existing scanner image from `security-framework/tests/security/zap-image.txt` during setup and invoke `--lane passive --out pilot-evidence/passive` with the same application revision. Use an artifact upload step that runs on failure and retains only `pilot-evidence/**/result.json` and `pilot-evidence/**/report.md`. Preserve the launcher status and require a receipt for each enabled gate. Use the existing [artifact upload pattern](../../../../../.github/workflows/security-suite-framework.yml). To qualify the scanner-owned passive profile, cache Mailpit too and use the lane above in its own job. Use the shared CLI for the generic JWT and Active DAST no-dispatch controls, with exit 3 expected.
 
 The CI integration instructions were prepared from the local workflow. Hosted GitHub Actions execution remains unverified.

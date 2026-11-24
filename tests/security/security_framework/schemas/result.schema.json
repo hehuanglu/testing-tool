@@ -59,6 +59,12 @@
       "type": "object",
       "required": ["verdict", "reason", "objectiveId", "cwe", "method", "specification", "authProfile", "expected", "evidenceRefs"],
       "additionalProperties": false,
+      "if": { "properties": { "method": { "const": "authenticated-active-dast" } } },
+      "then": { "properties": {
+        "verdict": { "const": "BLOCKED" },
+        "reason": { "const": "ACTIVE_EXECUTION_RESTRICTED" },
+        "evidenceRefs": { "minItems": 1, "maxItems": 1 }
+      } },
       "properties": {
         "verdict": { "$ref": "#/$defs/verdict" },
         "reason": { "$ref": "#/$defs/reason" },

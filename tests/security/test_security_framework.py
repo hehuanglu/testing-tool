@@ -11,6 +11,7 @@ from security_framework.engine import execute_plan, validate_plan
 from security_framework.evidence import (add_check, fail_run, finish, outcome, put_evidence,
                                          start, validate_child)
 from security_framework.manifest import read_suite
+from security_framework.native_jwt import CONTROL, CONTROL_RULE, MODE, NativeJwt
 from security_framework.run import identity, run_container
 
 
@@ -137,3 +138,93 @@ class FrameworkTest(TestCase):
                 mutated["jobs"][0]["requests"][0]["url"] = "http://127.0.0.1:1234/health"
             with self.subTest(hazard=hazard), self.assertRaises(ValueError):
                 validate_plan(mutated, origin, directory)
+
+
+
+class NativeJwtTest(TestCase):
+    def test_admission_is_limited_to_the_rendered_loopback_plan(self):
+        directory = Path("/private/fixture")
+        origin = "http://127.0.0.1:9876"
+        native = NativeJwt("/login", "/me", "email", "password", "token", 7)
+        plan = native.plan(origin, directory)
+        self.assertEqual(validate_plan(plan, origin, directory, native_jwt=native),
+                         ["requestor", "requestor", "passiveScan-wait", "report"])
+        with self.assertRaises(ValueError):
+            validate_plan(plan, origin, directory)
+        for field in ("extra-job", "other-route", "header", "session", "poll-url", "credentials"):
+            changed = deepcopy(plan)
+            context = changed["env"]["contexts"][0]
+            if field == "extra-job":
+                changed["jobs"].insert(2, {"type": "activeScan"})
+            elif field == "other-route":
+                changed["jobs"][1]["requests"][0]["url"] = origin + "/other"
+            elif field == "header":
+                changed["jobs"][1]["requests"][0]["headers"].append("Authorization: Bearer injected")
+            elif field == "session":
+                context["sessionManagement"]["parameters"]["Authorization"] = "Bearer external"
+            elif field == "poll-url":
+                context["authentication"]["verification"]["pollUrl"] = "http://192.0.2.1/me"
+            else:
+                context["users"][0]["credentials"]["password"] = "inline"
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                validate_plan(changed, origin, directory, native_jwt=native)
+
+    def test_native_jwt_requires_product_fixture_entry_point(self):
+        suite = read_suite("bus_booking", "live-authenticated-passive")
+        with patch("security_framework.run.subprocess.run") as process:
+            result = run_container(suite, "run", "image")
+        process.assert_not_called()
+        self.assertEqual(result["decisiveChecks"], {"BB-LIVE-JWT-PASSIVE": "PRODUCT_FIXTURE_REQUIRED"})
+
+    def test_missing_or_conflicting_native_evidence_cannot_pass(self):
+        suite = read_suite("bus_booking", "live-authenticated-passive")
+        case, = suite.cases.values()
+        child = start(suite, "run")
+        jobs = ["requestor", "requestor", "passiveScan-wait", "report"]
+        put_evidence(child, "scannerExecution", "automation-framework", {
+            "mode": MODE, "expectedJobTypes": jobs, "preflight": {"exit": 0, "timedOut": False},
+            "execution": {"exit": 0, "timedOut": False}, "preflightRequests": 0,
+            "jobReceipts": [[job, state] for job in jobs for state in ("started", "finished")],
+            "planReportedSuccessful": True, "planSha256": "a" * 64,
+        })
+        profile = {"status": 200, "bearer": True, "issuedTokenMatches": True,
+                   "principalMatches": True, "verified": True, "role": "USER"}
+        put_evidence(child, "scannerEvents", "fixture", [
+            {"phase": "anonymous", "status": 401, "bearer": False, "challenge": True},
+            {"phase": "passive-control", "status": 200}, {"phase": "login-page", "status": 204},
+            {"phase": "login", "status": 200}, {"phase": "poll", **profile},
+            {"phase": "authenticated", **profile},
+        ])
+        put_evidence(child, "scannerIdentity-scanner-jwt-user", "application-identity",
+                     {"USER": {"actor": "USER", "status": 200}})
+        put_evidence(child, "scannerOwnership", "suite-assertion", {"mode": MODE, "applicationClientLogin": False})
+        put_evidence(child, "zapReport", "zap-report", {
+            "sha256": "b" * 64, "version": "2.17.0", "capped": False,
+            "ruleInstances": [{"path": CONTROL, "method": "GET", "alertRef": CONTROL_RULE}],
+        })
+        put_evidence(child, "runtimeCleanup", "runner", {"containersRemoved": True, "temporaryDirectoryRemoved": True})
+        add_check(child, suite, case["id"], outcome("PASS", "NATIVE_JWT_PASSIVE_VERIFIED"), case["requiredEvidence"])
+        finish(child)
+        self.assertEqual(validate_child(child, suite, "run", 0), child)
+        for contradiction in ("mode", "role", "token", "login", "poll", "detector", "cleanup", "external-client"):
+            changed = deepcopy(child)
+            evidence = changed["evidence"]
+            events = evidence["scannerEvents"]["data"]
+            if contradiction == "mode":
+                del evidence["scannerExecution"]["data"]["mode"]
+            elif contradiction == "role":
+                events[-1]["role"] = "ADMIN"
+            elif contradiction == "token":
+                events[-1]["issuedTokenMatches"] = False
+            elif contradiction == "login":
+                events[3]["status"] = 401
+            elif contradiction == "poll":
+                del events[4]
+            elif contradiction == "detector":
+                evidence["zapReport"]["data"]["ruleInstances"].clear()
+            elif contradiction == "cleanup":
+                evidence["runtimeCleanup"]["data"]["containersRemoved"] = False
+            else:
+                evidence["scannerOwnership"]["data"]["applicationClientLogin"] = True
+            with self.subTest(contradiction=contradiction), self.assertRaises(ValueError):
+                validate_child(changed, suite, "run", 0)

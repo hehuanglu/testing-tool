@@ -23,3 +23,18 @@ A reviewed `suites/<suite>/adapter.py` provides the following hooks.
 Only trusted, reviewed suite code should run in this framework. The fixture adapter owns its operations and data contract. The standard runner mounts the test tree read-only and uses Docker networking mode `none`. Passive plan admission supports fixed GET requests, form login, passive drain and a ZAP report. State writes in the example belong to the deterministic application test against its own synthetic revision endpoint.
 
 For branch and CI decisions, inspect the exact `checks` record for a case and its `evidenceRefs`. The generated Markdown report is a projection of the JSON result. An empty or absent result and an unsuccessful workflow step are both non-passing. [Architecture and schemas](security-test-framework.md) · [CI contract](../ci-verdict-contract.md)
+
+
+## Native JWT profile adapter
+
+Declare an authenticated passive case with a `native-jwt-requestor` profile and exactly one actor. The product
+fixture supplies the known account and a loopback relay. The shared `NativeJwt` contract renders the exact
+JSON login and poll context, Bearer header mapping, explicit anonymous and named GETs, passive drain and report.
+Pass the contract alongside the definition to `execute_plan`. Arbitrary JSON authentication configurations,
+script execution, crawling, external origins, caller-supplied Authorization headers and extra jobs are outside admission.
+The renderer uses runtime credential placeholders. Scanner preflight and execution have separate private work directories.
+
+Correlate the protected response and poll to the original issued token and a backend-resolved fixture identity.
+The adapter projects only statuses and predicates under `scannerEvents`, plus identity, ownership and cleanup
+observations. Use the existing contract validator before emitting the receipt. Expiry, renewal and shared session
+use by other components have their own evidence requirements. [Bus Booking specification](../tests/security/suites/bus_booking/specifications/native-jwt-passive.md)

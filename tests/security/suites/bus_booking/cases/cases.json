@@ -175,6 +175,23 @@
         "scannerEvents",
         "zapReport"
       ]
+    },
+    {
+      "id": "BB-LIVE-JWT-PASSIVE",
+      "objectiveId": "SEC-A01-01",
+      "method": "authenticated-passive-dast",
+      "specification": "specifications/native-jwt-passive.md",
+      "authProfile": "scanner-jwt-user",
+      "oracle": "native-jwt-passive",
+      "expected": "ZAP logs in natively, polls and reads the intended verified USER profile, drains passive work and emits a scoped report with a detector control.",
+      "requiredEvidence": [
+        "scannerExecution",
+        "scannerEvents",
+        "scannerIdentity-scanner-jwt-user",
+        "scannerOwnership",
+        "zapReport",
+        "runtimeCleanup"
+      ]
     }
   ]
 }

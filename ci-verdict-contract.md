@@ -37,3 +37,20 @@ For the qualified workload, enforcement follows the order of acquisition. The ru
 - Native CLI codes are engine telemetry. With the pinned Automation Framework CLI, 0 means no reported warnings or errors, 1 indicates errors, and 2 indicates warnings. The fixtures use no `exitStatus` override. [ZAP Automation Framework CLI](https://www.zaproxy.org/docs/desktop/addons/automation-framework/)
 
 The reusable entry points are in [tests/security/feasibility](tests/security/feasibility/README.md). The measured results are in [security-testing-feasibility-evidence.json](security-testing-feasibility-evidence.json).
+
+
+## Authenticated Active DAST
+
+The framework accepts `authenticated-active-dast` as a case method for traceability. Its sole receipt is
+`BLOCKED / ACTIVE_EXECUTION_RESTRICTED` with exit 3 for a fully blocked selection and a single case-bound
+`capability-boundary` observation containing `dispatched: false` and the same reason. The result schema,
+admission and result validator enforce that contract. CI checks the receipt without starting a scanner.
+The shared native JWT Requestor evidence qualifies only its specific passive lane. Product-native Active DAST
+has status `MISSING`.
+
+An independent qualification, if authorized, needs a separately reviewed interface and approval for the exact
+owned environment, operation scope, actors and data boundaries. Its evidence record would need a source and
+configuration identity, fixture and scanner image identity, admitted scope and exclusions, verified backend
+principal and effective role, correlated dispatch and terminal completion, checked scope and outcome evidence,
+and cleanup. Separate configuration review, missing evidence, and any execution outcome. Product integration
+and authorized qualification of the active component's own session behavior remain open.

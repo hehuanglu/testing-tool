@@ -15,7 +15,7 @@ from uuid import uuid4
 from .engine import execute_plan, validate_loopback
 from .evidence import (EXIT, add_check, evidence_keys, fail_run, finish, markdown, outcome, put_evidence,
                        start, valid_outcome, validate_child)
-from .manifest import ACTIVE, ROOT, SCANNER_METHODS, read_suite
+from .manifest import NATIVE_JWT, ROOT, SCANNER_METHODS, read_suite, restriction_reason
 
 CONTAINER_TIMEOUT = 220
 IMAGE_PIN = re.compile(r"[a-z0-9./_-]+@sha256:[0-9a-f]{64}\Z")
@@ -24,11 +24,8 @@ IMAGE_PIN = re.compile(r"[a-z0-9./_-]+@sha256:[0-9a-f]{64}\Z")
 def blocked(result, suite):
     for case_id, case in suite.cases.items():
         kind = suite.profiles[case["authProfile"]]["kind"]
-        if case["method"] == ACTIVE:
-            reason = "ACTIVE_EXECUTION_RESTRICTED"
-        elif kind == "jwt-bearer":
-            reason = "AUTH_PROFILE_UNQUALIFIED"
-        else:
+        reason = restriction_reason(case["method"], kind)
+        if reason is None:
             continue
         put_evidence(result, case_id, "capability-boundary",
                      {"dispatched": False, "reason": reason})
@@ -128,8 +125,11 @@ def worker(suite, run_id):
 
 def run_container(suite, run_id, image):
     result = start(suite, run_id)
-    if not blocked(result, suite):
+    cases = blocked(result, suite)
+    if not cases:
         return finish(result)
+    if any(suite.profiles[case["authProfile"]]["kind"] == NATIVE_JWT for case in cases):
+        return fail_run(result, suite, "PRODUCT_FIXTURE_REQUIRED")
     name = f"security-suite-{run_id}"
     command = [
         "docker", "run", "--rm", "--name", name, "--pull", "never", "--network", "none",

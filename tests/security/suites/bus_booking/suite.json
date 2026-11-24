@@ -7,7 +7,8 @@
     "suites/bus_booking/live/run.py",
     "suites/bus_booking/specifications/live-http.md",
     "suites/bus_booking/live/scanner.py",
-    "suites/bus_booking/live/compare.py"
+    "suites/bus_booking/live/compare.py",
+    "suites/bus_booking/live/authenticated.py"
   ],
   "scenarios": {
     "baseline": [
@@ -40,6 +41,12 @@
     ],
     "live-passive": [
       "BB-LIVE-PASSIVE"
+    ],
+    "live-authenticated-passive": [
+      "BB-LIVE-JWT-PASSIVE"
+    ],
+    "live-authenticated-passive-bad-password": [
+      "BB-LIVE-JWT-PASSIVE"
     ]
   }
 }

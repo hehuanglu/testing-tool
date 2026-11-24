@@ -35,11 +35,23 @@ jobs:
             --out artifacts/security-suite/feasibility_fixture/baseline
           test -s artifacts/security-suite/feasibility_fixture/baseline/result.json
           test -s artifacts/security-suite/feasibility_fixture/baseline/report.md
+      - name: Verify the Active DAST restriction without starting a scanner
+        run: |
+          out=artifacts/security-suite/feasibility_fixture/active-blocked
+          code=0
+          python3 -m security_framework.run --suite feasibility_fixture --scenario active-blocked \
+            --out "$out" || code=$?
+          test "$code" = 3
+          jq -e '.verdict == "BLOCKED"
+            and (.evidence | length == 1 and all(.[]; .producer == "capability-boundary"
+              and .data == {"dispatched": false, "reason": "ACTIVE_EXECUTION_RESTRICTED"}))' "$out/result.json"
       - name: Upload projected evidence and report
-        if: ${{ always() && hashFiles('artifacts/security-suite/feasibility_fixture/baseline/result.json') != '' }}
+        if: ${{ always() && hashFiles('artifacts/security-suite/feasibility_fixture/*/result.json') != '' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: security-suite-example-${{ github.run_attempt }}
-          path: artifacts/security-suite/feasibility_fixture/baseline
+          path: |
+            artifacts/security-suite/feasibility_fixture/*/result.json
+            artifacts/security-suite/feasibility_fixture/*/report.md
           if-no-files-found: error
           retention-days: 7

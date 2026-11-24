@@ -11,8 +11,10 @@ from unittest.mock import patch
 from security_framework.engine import execute_plan, validate_plan
 from security_framework.evidence import (add_check, fail_run, finish, outcome, put_evidence,
                                          start, validate_child)
+from security_framework.execution import APPLICATION, Engine, ExecutionError, run_project
 from security_framework.manifest import read_suite
 from security_framework.native_jwt import CONTROL, CONTROL_RULE, MODE, NativeJwt
+from security_framework.receipt import suite_receipt
 from security_framework.run import identity, run_container
 
 
@@ -72,6 +74,27 @@ class FrameworkTest(TestCase):
     def test_fixture_failure_after_assertions_cannot_pass(self):
         child = fail_run(self.passing_child(), self.suite, "SUITE_EXECUTION_FAILURE")
         self.assertEqual((child["verdict"], child["exitCode"]), ("ERROR", 2))
+
+    def test_receipt_separates_assertion_failure_from_execution_and_acceptance(self):
+        original = self.passing_child()
+        key = next(iter(original["checks"]))
+        original["checks"][key].update(verdict="FAIL", reason="AUTHORIZATION_ASSERTION_VIOLATED")
+        result = suite_receipt(finish(original), self.suite, 1, "a" * 64, {"clean": True})
+        self.assertEqual(result["execution"]["status"], "COMPLETED")
+        self.assertEqual(result["acceptance"]["status"], "NOT_EVALUATED")
+        objective = result["objectives"][original["checks"][key]["objectiveId"]]
+        self.assertEqual(objective["checks"][key]["status"], "FAIL")
+        self.assertEqual({item["producer"] for item in objective["checks"][key]["witnesses"]},
+                         {"application-identity", "suite-assertion"})
+        with self.assertRaises(ValueError):
+            suite_receipt(original, self.suite, 0, "a" * 64, {"clean": True})
+
+    def test_receipt_preserves_execution_error_classes(self):
+        for reason in ("INFRASTRUCTURE_FAILURE", "MISSING_EVIDENCE", "INVALID_EVIDENCE"):
+            with self.subTest(reason=reason):
+                child = fail_run(start(self.suite, "run"), self.suite, reason)
+                receipt = suite_receipt(child, self.suite, 2, "b" * 64, {"clean": True})
+                self.assertEqual(receipt["execution"]["classification"], reason)
 
     def test_wrong_identity_takes_precedence_over_a_missing_actor(self):
         profile = self.suite.profiles["fixture-form"]
@@ -152,6 +175,49 @@ class FrameworkTest(TestCase):
             with self.subTest(hazard=hazard), self.assertRaises(ValueError):
                 validate_plan(mutated, origin, directory)
 
+
+
+class EngineContractTest(TestCase):
+    def test_restriction_precedes_product_startup(self):
+        for scenario, reason in (("active-blocked", "ACTIVE_EXECUTION_RESTRICTED"),
+                                 ("jwt-blocked", "AUTH_PROFILE_UNQUALIFIED"),
+                                 ("anonymous-only", "ENGINE_CAPABILITY_MISMATCH")):
+            suite = read_suite("feasibility_fixture", scenario)
+            with self.subTest(scenario=scenario), patch.object(self, "prepare", create=True) as prepare:
+                with self.assertRaisesRegex(ExecutionError, reason):
+                    run_project(suite, Engine("mockmvc", APPLICATION, self.fail), self)
+                prepare.assert_not_called()
+
+    def test_teardown_on_adapter_or_engine_failure(self):
+        suite = read_suite("feasibility_fixture", "application-only")
+        for phase in ("prepare", "execute", "cleanup", "success"):
+            events = []
+
+            def close():
+                events.append("cleanup")
+                if phase == "cleanup":
+                    raise ExecutionError("TEARDOWN_FAILURE")
+
+            def prepare(resources):
+                resources.callback(close)
+                if phase == "prepare":
+                    raise ExecutionError("FIXTURE_FAILURE")
+                return "ready"
+
+            def execute(fixture):
+                self.assertEqual(fixture, "ready")
+                if phase == "execute":
+                    raise ExecutionError("ENGINE_FAILURE")
+                return "observed"
+
+            with self.subTest(phase=phase), patch.object(self, "prepare", create=True, side_effect=prepare):
+                engine = Engine("mockmvc", APPLICATION, execute)
+                if phase == "success":
+                    self.assertEqual(run_project(suite, engine, self), "observed")
+                else:
+                    with self.assertRaises(ExecutionError):
+                        run_project(suite, engine, self)
+                self.assertEqual(events, ["cleanup"])
 
 
 class NativeJwtTest(TestCase):

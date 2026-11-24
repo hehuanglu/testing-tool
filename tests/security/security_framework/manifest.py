@@ -53,9 +53,9 @@ class Suite:
     inputs: dict
 
 
-def read_suite(name, scenario):
+def read_suite(name, scenario, *, root=ROOT):
     require(isinstance(name, str) and SUITE_NAME.fullmatch(name), "suite")
-    directory = ROOT / "suites" / name
+    directory = root / "suites" / name
     require(directory.resolve() == directory, "suite directory")
     inputs = {}
 
@@ -64,7 +64,7 @@ def read_suite(name, scenario):
         path = (base / candidate).resolve()
         require(not candidate.is_absolute() and path.is_relative_to(base)
                 and path.suffix in {".json", ".md", ".py", ".txt"} and path.is_file(), "input files")
-        inputs[path.relative_to(ROOT).as_posix()] = digest(path)
+        inputs[path.relative_to(root).as_posix()] = digest(path)
         return path
 
     def document(path):
@@ -124,13 +124,13 @@ def read_suite(name, scenario):
 
     record("adapter.py")
     for file in ("zap-image.txt", "zap_report.py"):
-        record(file, ROOT)
-    for relative in sorted((ROOT / "security_framework").glob("*.py")):
-        record(relative.relative_to(ROOT).as_posix(), ROOT)
+        record(file, root)
+    for relative in sorted((root / "security_framework").glob("*.py")):
+        record(relative.relative_to(root).as_posix(), root)
     sources = suite.get("sources", [])
     require(isinstance(sources, list) and all(isinstance(item, str) for item in sources), "sources")
     for source in sources:
-        record(source, ROOT)
+        record(source, root)
 
     return Suite(name, scenario, {key: cases[key] for key in declared[scenario]},
                  objectives, profiles, inputs)

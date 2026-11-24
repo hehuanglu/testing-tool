@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Security framework evidence receipt",
+  "type": "object",
+  "required": ["schemaVersion", "sourceFormat", "runId", "artifacts", "provenance", "execution", "acceptance", "objectives", "capabilities"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "sourceFormat": { "enum": ["shared-suite-v1", "bus-booking-native-v1"] },
+    "runId": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+    "artifacts": {
+      "type": "object", "required": ["result"], "additionalProperties": false,
+      "properties": {
+        "result": { "$ref": "#/$defs/digest" },
+        "manifest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "provenance": { "type": "object", "minProperties": 2 },
+    "execution": {
+      "type": "object", "required": ["status", "sourceStatus", "exitCode", "classification"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["COMPLETED", "INCOMPLETE", "BLOCKED"] },
+        "sourceStatus": { "enum": ["PASS", "FAIL", "ERROR", "BLOCKED", "MISSING"] },
+        "exitCode": { "enum": [0, 1, 2, 3] },
+        "classification": { "enum": [null, "INFRASTRUCTURE_FAILURE", "MISSING_EVIDENCE", "INVALID_EVIDENCE", "EXECUTION_FAILURE", "ADMISSION_RESTRICTED"] },
+        "cleanup": { "enum": ["PASS", "FAIL"] }
+      }
+    },
+    "acceptance": {
+      "type": "object", "required": ["status"], "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/decision" },
+        "policy": { "type": "string", "minLength": 1 },
+        "checks": { "type": "object", "additionalProperties": { "$ref": "#/$defs/decision" } }
+      }
+    },
+    "objectives": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "required": ["acceptance", "checks"], "additionalProperties": false,
+        "properties": {
+          "acceptance": { "$ref": "#/$defs/decision" },
+          "checks": { "type": "object", "additionalProperties": { "$ref": "#/$defs/check" } }
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "required": ["qualification", "checks"], "additionalProperties": false,
+        "properties": {
+          "qualification": { "enum": ["NOT_EVALUATED", "MISSING", "BLOCKED"] },
+          "checks": { "type": "object", "additionalProperties": { "$ref": "#/$defs/status" } }
+        }
+      }
+    }
+  },
+  "if": { "properties": { "sourceFormat": { "const": "bus-booking-native-v1" } } },
+  "then": { "properties": { "artifacts": { "required": ["manifest"] }, "acceptance": { "required": ["policy", "checks"] } } },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "decision": { "enum": ["PASS", "FAIL", "MISSING", "REVIEW", "NOT_EVALUATED"] },
+    "status": { "enum": ["PASS", "FAIL", "MISSING", "REVIEW", "ERROR", "BLOCKED"] },
+    "check": {
+      "type": "object", "required": ["status", "witnesses"], "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/status" },
+        "reason": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,79}$" },
+        "witnesses": { "type": "array", "items": { "$ref": "#/$defs/witness" } }
+      }
+    },
+    "witness": {
+      "type": "object", "required": ["producer", "artifact", "pointer", "status"], "additionalProperties": false,
+      "properties": {
+        "producer": { "type": "string", "pattern": "^[a-z][a-z_-]*$" },
+        "artifact": { "enum": ["result", "manifest"] },
+        "pointer": { "type": "string", "pattern": "^#/" },
+        "status": { "enum": ["OBSERVED", "PASS", "FAIL", "MISSING", "REVIEW", "ERROR", "BLOCKED"] }
+      }
+    }
+  }
+}

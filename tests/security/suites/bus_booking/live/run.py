@@ -3,6 +3,7 @@
 import argparse
 from contextlib import contextmanager
 import base64
+from dataclasses import dataclass
 import json
 import os
 from pathlib import Path
@@ -11,7 +12,6 @@ import secrets
 import shutil
 import sys
 import tarfile
-from tempfile import TemporaryDirectory
 import time
 from uuid import uuid4
 from zipfile import BadZipFile, ZipFile
@@ -19,14 +19,14 @@ from zipfile import BadZipFile, ZipFile
 from security_framework.evidence import (
     EXIT, add_check, fail_run, finish, markdown, outcome, put_evidence, start, validate_child,
 )
+from security_framework.execution import APPLICATION, PASSIVE, Engine, run_project
 from security_framework.manifest import ROOT, read_suite
 from security_framework.run import IMAGE_PIN
 
 from ..adapter import (
-    FIXTURE, HOST_ENV, MATRIX, MATRIX_INPUT, PG_TAG, ExecutionError,
-    cached_maven, command, export_project, sha256, verify_contract,
+    FIXTURE, HOST_ENV, PG_TAG, ExecutionError, cached_maven, command, prepare_source, sha256,
 )
-from ..assertions.oracle import adjudicate, matrix_plan
+from ..assertions.oracle import adjudicate
 from .scanner import verify_witnesses
 
 DIRECTORY = Path(__file__).resolve().parent
@@ -234,32 +234,58 @@ def scanner_receipt(result, namespace, lane):
     return verify_witnesses(result["evidence"])
 
 
+class LiveAdapter:
+    def __init__(self, result, suite, args):
+        self.result, self.suite, self.args = result, suite, args
+
+    def prepare(self, resources):
+        lane = self.args.lane
+        working, project, matrix, expected, provenance = prepare_source(
+            resources, self.suite, self.args.project, self.args.revision, prefix="bus-booking-live-")
+        runtime, build = build_revision(project, working, lane == "http")
+        namespace, java, credentials, deployment = resources.enter_context(
+            deployed(self.result["runId"], runtime, mail=lane in NATIVE_LANES))
+        put_evidence(self.result, "provenance", "runner", {
+            **provenance, **build, **deployment, "testLane": lane,
+        })
+        return LiveFixture(self.result, lane, working, namespace, java, credentials, runtime, matrix, expected)
+
+
+@dataclass(frozen=True)
+class LiveFixture:
+    result: dict
+    lane: str
+    working: Path
+    namespace: str
+    java: str
+    credentials: dict
+    runtime: Path
+    matrix: Path
+    expected: dict
+
+
+def observe_http(fixture):
+    observation = http_receipt(fixture.result, fixture.namespace, fixture.java, fixture.credentials,
+                               fixture.runtime, fixture.matrix, fixture.working)
+    return observation, fixture.expected
+
+
+def observe_passive(fixture):
+    return scanner_receipt(fixture.result, fixture.namespace, fixture.lane), fixture.working
+
+
+LIVE_HTTP = Engine("live-http", APPLICATION, observe_http)
+ZAP_PASSIVE = Engine("zap-passive", PASSIVE, observe_passive)
+
+
 def execute(result, suite, args):
-    http = args.lane == "http"
     native = args.lane in NATIVE_LANES
     try:
-        with TemporaryDirectory(prefix="bus-booking-live-") as temporary:
-            working = Path(temporary)
-            project = working / "app"
-            project.mkdir()
-            revision = export_project(args.project, args.revision, project)
-            matrix = working / MATRIX.name
-            shutil.copyfile(MATRIX, matrix)
-            if sha256(matrix) != suite.inputs[MATRIX_INPUT]:
-                raise ExecutionError("MATRIX_INPUT_CHANGED")
-            operations, expected = matrix_plan(matrix)
-            contract = verify_contract(project, operations)
-            runtime, build = build_revision(project, working, http)
-            with deployed(result["runId"], runtime, mail=native) as (namespace, java, credentials, deployment):
-                put_evidence(result, "provenance", "runner", {
-                    **contract, **build, **deployment, "projectCommit": revision, "testLane": args.lane,
-                })
-                if http:
-                    observed = http_receipt(result, namespace, java, credentials, runtime, matrix, working)
-                else:
-                    reason = scanner_receipt(result, namespace, args.lane)
-        if http:
+        adapter = LiveAdapter(result, suite, args)
+        if args.lane == "http":
+            observed, expected = run_project(suite, LIVE_HTTP, adapter)
             return adjudicate(result, suite, observed, expected, observe_handler=False)
+        reason, working = run_project(suite, ZAP_PASSIVE, adapter)
         case_id = NATIVE_CASE_ID if native else CASE_ID
         if native:
             put_evidence(result, "runtimeCleanup", "runner",

@@ -9,12 +9,12 @@ from pathlib import Path
 import re
 import subprocess
 import sys
-from tempfile import TemporaryDirectory
 from uuid import uuid4
 
 from .engine import execute_plan, validate_loopback
 from .evidence import (EXIT, add_check, evidence_keys, fail_run, finish, markdown, outcome, put_evidence,
                        start, valid_outcome, validate_child)
+from .execution import APPLICATION, PASSIVE, Engine, ExecutionError
 from .manifest import NATIVE_JWT, ROOT, SCANNER_METHODS, read_suite, restriction_reason
 
 CONTAINER_TIMEOUT = 220
@@ -58,6 +58,19 @@ def identity(result, key, profile, observed):
                  if reason in reasons), None)
 
 
+def scan_fixture(request):
+    return execute_plan(*request)
+
+
+def observe_application(request):
+    evaluate, case, origin, evidence, profile = request
+    return evaluate(case, origin, evidence, profile)
+
+
+FIXTURE_PASSIVE = Engine("zap-passive", PASSIVE, scan_fixture)
+FIXTURE_HTTP = Engine("live-http", APPLICATION, observe_application)
+
+
 def worker(suite, run_id):
     result = start(suite, run_id)
     cases = blocked(result, suite)
@@ -66,10 +79,12 @@ def worker(suite, run_id):
     try:
         adapter = import_module(f"suites.{suite.name}.adapter")
         with ExitStack() as resources:
-            directory = Path(resources.enter_context(TemporaryDirectory()))
-            fixture, origin = resources.enter_context(adapter.start_fixture(suite.scenario))
-            validate_loopback(origin)
             scanner_cases = [case for case in cases if case["method"] in SCANNER_METHODS]
+            application_cases = [case for case in cases if case["method"] not in SCANNER_METHODS]
+            FIXTURE_PASSIVE.admit(suite, scanner_cases)
+            FIXTURE_HTTP.admit(suite, application_cases)
+            directory, origin, observe = adapter.Adapter(suite.scenario).prepare(resources)
+            validate_loopback(origin)
             scan_error = None
             if scanner_cases:
                 profiles = {case["authProfile"]: suite.profiles[case["authProfile"]]
@@ -85,11 +100,11 @@ def worker(suite, run_id):
 
                 definition = adapter.build_plan(origin, directory, suite.scenario, profiles)
                 after_report = getattr(adapter, "after_report", None)
-                scan_error = execute_plan(
-                    result, directory, origin, definition, lambda: list(fixture.events),
+                scan_error = FIXTURE_PASSIVE.run(suite, scanner_cases, (
+                    result, directory, origin, definition, observe,
                     scanner_identity if profiles else None,
                     (lambda path: after_report(path, suite.scenario)) if after_report else None,
-                )
+                ))
 
             for case in cases:
                 case_id = case["id"]
@@ -101,7 +116,11 @@ def worker(suite, run_id):
                                if key in result["evidence"]])
                     continue
                 try:
-                    status, rows, identities = adapter.evaluate(case, origin, result["evidence"], profile)
+                    if case in scanner_cases:
+                        status, rows, identities = adapter.evaluate(case, origin, result["evidence"], profile)
+                    else:
+                        status, rows, identities = FIXTURE_HTTP.run(
+                            suite, [case], (adapter.evaluate, case, origin, result["evidence"], profile))
                     for key, data in rows.items():
                         put_evidence(result, key, "suite-assertion", data)
                     if case["method"] not in SCANNER_METHODS and profile["kind"] != "none":
@@ -115,6 +134,8 @@ def worker(suite, run_id):
                     status = outcome("ERROR", "APPLICATION_EVIDENCE_FAILURE")
                 add_check(result, suite, case_id, status,
                           [key for key in required if key in result["evidence"]])
+    except ExecutionError as error:
+        return fail_run(result, suite, error.args[0])
     except (OSError, subprocess.SubprocessError):
         return fail_run(result, suite, "INFRASTRUCTURE_FAILURE")
     except Exception:

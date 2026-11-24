@@ -1,0 +1,1238 @@
+{
+  "ci": {
+    "hostedVerified": false,
+    "isolatedDetachedSnapshot": "fef15823609e8ef1d508c62f883d3ca42c2f000e",
+    "localPinnedImageCacheUsed": true,
+    "localStepsPassed": true,
+    "runs": {
+      "active-blocked": {
+        "artifact": {
+          "path": "artifacts/p2/ci-checkout/artifacts/security-suite/publish/active-blocked/result.json",
+          "sha256": "aa2d7f8d88ca436c24f172b9899c6a85dc8beb2d4c78cecf0fcb0d03748c4b21"
+        },
+        "exitCode": 3,
+        "reasons": [
+          "ACTIVE_EXECUTION_RESTRICTED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/ci-checkout/artifacts/security-suite/publish/active-blocked/receipt.json",
+          "sha256": "95812aa512f71a6b98ae557baf0c8446d84a4514680458307e89183418836c2f"
+        },
+        "runId": "78c00d931f9b4265b297d58114b67d1f",
+        "verdict": "BLOCKED"
+      },
+      "baseline": {
+        "artifact": {
+          "path": "artifacts/p2/ci-checkout/artifacts/security-suite/publish/baseline/result.json",
+          "sha256": "abd43b29e7399246a3b018d970fed35a03f0d4bc151a4641490fd705aa06ce4b"
+        },
+        "exitCode": 0,
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/ci-checkout/artifacts/security-suite/publish/baseline/receipt.json",
+          "sha256": "96fc9b007cbaa5e93ffe9bb0e8078419e046278ee9d060e92196e7c51b8c16dd"
+        },
+        "runId": "1fc71842cfdb45dab2b7ff21dff3669a",
+        "verdict": "PASS"
+      }
+    },
+    "stagedRuntime": {
+      "path": "artifacts/p2/ci-checkout/artifacts/security-suite/publish/runtime.json",
+      "sha256": "7c6e5dfb3a3349b25d144fa026a9d84ad31ec2563ce867e3aff9f6e9d8952368"
+    }
+  },
+  "inputs": {
+    "changedExecutionFilesSha256": {
+      ".github/workflows/security-suite-framework.yml": "d06650f593c853f711d77f261fcb5fce065f0273885807b5386d58ef6a941f8a",
+      "tests/security/security_framework/ci.py": "2f160e2d8e50b02b00c9a139e925faeace8b5e4d08f7d699ce319e98373b979d",
+      "tests/security/security_framework/execution.py": "f07a6669c6ee182dde48b82f694f0af43c6b831f58016dc1b413e6962adb241d",
+      "tests/security/security_framework/manifest.py": "802e7c2c66fcda26d9ba7249b9c95a80477514f33c0fba83fe7fd4ed211df077",
+      "tests/security/security_framework/project.py": "87f4678fc6cad515e94fa893924a570e59ce2b4eb0ff878877d7e9bf4d175e4d",
+      "tests/security/security_framework/receipt.py": "db86cbc0f47fb68ef7a29eb1afcab1c71322a23825fc2a7948f999c9b262446f",
+      "tests/security/security_framework/run.py": "aee96a3865848e99d081fef1e91bdf1c536551d2c9d3878a7f3f164dd88faf6e",
+      "tests/security/security_framework/schemas/receipt.schema.json": "69acb6f5c5aab82ff31b3c54deeb841262b531f017a7c891ec5679559b5ec417",
+      "tests/security/suites/bus_booking/adapter.py": "14b5bf998ee15dceba4b6a40da59c188495a7c9b03780854c784bff9cb43ab51",
+      "tests/security/suites/bus_booking/live/run.py": "790d26f3bdf6af263f0d6bb50c8ad9645e2266dddaf76fbd7b4c92ebacfa9080",
+      "tests/security/suites/bus_booking/native_evidence.py": "fb969e2304cef005c0121b4c15ee7e5f3714a54ba6f1bc9b00a2f53d6af24234",
+      "tests/security/suites/feasibility_fixture/adapter.py": "19aa1ed851b5cf16aaedb0277ddb04c2037bdeddddf746b1638be36559bc49e3",
+      "tests/security/test_security_framework.py": "80e59676110ded74294e5c42799d357a4bcd7362a7c05de377f7c90b5a485e6a"
+    },
+    "productProductionTree": "922135afab8cc622ee47092350192ab465b4b347",
+    "productRevision": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+    "qualifiedFrameworkRevision": "cc1d753ba3d57fb00b8535a7c26b7bc375d7b803",
+    "qualifiedFrameworkSuiteTree": "becd9313ed7d4881d6cdadf49efedd7e59b5a972",
+    "workingTreeBase": "12bc67c1c64417d8ee5a6979deff758a33973f2b"
+  },
+  "offline": {
+    "frameworkTests": {
+      "all": 51,
+      "frameworkContracts": 17
+    },
+    "productCompatibility": {
+      "acceptanceExitProjection": 3,
+      "controls": [
+        {
+          "control": "wrong-exit",
+          "rejected": true
+        },
+        {
+          "control": "wrong-mode",
+          "rejected": true
+        },
+        {
+          "control": "mismatched-source-digest",
+          "rejected": true
+        },
+        {
+          "control": "unverified-cleanup",
+          "rejected": true
+        },
+        {
+          "control": "missing-har-witness",
+          "rejected": true
+        },
+        {
+          "control": "omitted-release-check",
+          "rejected": true
+        },
+        {
+          "control": "omitted-objective-witness",
+          "rejected": true
+        }
+      ]
+    },
+    "productTests": 11,
+    "sharedV1AndV2Pairs": 25,
+    "validatedScope": {
+      "criteria": 28,
+      "exclusions": 7,
+      "operations": 32
+    }
+  },
+  "pilot": {
+    "comparison": {
+      "artifact": {
+        "path": "artifacts/p2/pilot/comparison.json",
+        "sha256": "7c416523b81cbf710c9c0922827f96442d1aff33fc715f6137811c59ec7bca45"
+      },
+      "result": {
+        "copiedEvidenceControls": [
+          {
+            "control": "missing-http-cell",
+            "exitCode": 2,
+            "reason": "MISSING_EVIDENCE",
+            "verdict": "ERROR"
+          },
+          {
+            "control": "http-state-mismatch",
+            "exitCode": 1,
+            "reason": "APPLICATION_CONTRACT_MISMATCH",
+            "verdict": "FAIL"
+          },
+          {
+            "control": "missing-zap-report",
+            "exitCode": 2,
+            "reason": "INVALID_EVIDENCE",
+            "verdict": "ERROR"
+          }
+        ],
+        "handlerWitnessLane": "mockmvc",
+        "matchedResponseStateAndIdentity": true,
+        "otherConditionCells": 18,
+        "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+        "protectedAuthorizationCells": 102,
+        "runIds": {
+          "httpFirst": "743b39365b6a4fc394885bfe1cccd7cf",
+          "httpRepeat": "a789036a37b542fda23d1d24ae341da0",
+          "mockmvc": "537d2346004d46f3b45bd8cf54fbe7f5",
+          "passive": "6d30c0013e114f429b2cac8aaa941366"
+        },
+        "sharedCaseIds": [
+          "BB-AUTH",
+          "BB-PROFILE",
+          "BB-USER",
+          "BB-BOOKING",
+          "BB-ADMIN-READ",
+          "BB-ADMIN-WRITE",
+          "BB-ROLE",
+          "BB-ROLE-LIFECYCLE",
+          "BB-ROLE-RULES"
+        ]
+      }
+    },
+    "mockMvcControls": {
+      "artifact": {
+        "path": "artifacts/p2/pilot/mockmvc-controls.json",
+        "sha256": "aed67a0e957cb8d53841649e881b01d6a6820ddc3c1c79d146bfa2b3f850dc01"
+      },
+      "result": {
+        "applicationEvidenceMatched": true,
+        "baselineRunIds": [
+          "537d2346004d46f3b45bd8cf54fbe7f5",
+          "0761f8cea5cc4ddd962cae739d6372da"
+        ],
+        "caseCounts": {
+          "BB-ADMIN-READ": 24,
+          "BB-ADMIN-WRITE": 44,
+          "BB-AUTH": 10,
+          "BB-BOOKING": 10,
+          "BB-PROFILE": 12,
+          "BB-ROLE": 4,
+          "BB-ROLE-LIFECYCLE": 5,
+          "BB-ROLE-RULES": 3,
+          "BB-USER": 8
+        },
+        "controls": [
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 1,
+            "id": "response-status-mismatch",
+            "reason": "APPLICATION_CONTRACT_MISMATCH",
+            "verdict": "FAIL"
+          },
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 1,
+            "id": "persisted-state-mismatch",
+            "reason": "APPLICATION_CONTRACT_MISMATCH",
+            "verdict": "FAIL"
+          },
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 1,
+            "id": "controller-selection-mismatch",
+            "reason": "APPLICATION_CONTRACT_MISMATCH",
+            "verdict": "FAIL"
+          },
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 2,
+            "id": "missing-observation",
+            "reason": "MISSING_EVIDENCE",
+            "verdict": "ERROR"
+          },
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 2,
+            "id": "invalid-observation",
+            "reason": "INVALID_EVIDENCE",
+            "verdict": "ERROR"
+          },
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 2,
+            "id": "wrong-effective-identity",
+            "reason": "AUTHENTICATION_FAILURE",
+            "verdict": "ERROR"
+          },
+          {
+            "case": "BB-ADMIN-WRITE",
+            "exitCode": 2,
+            "id": "stale-receipt",
+            "reason": "INVALID_EVIDENCE",
+            "verdict": "ERROR"
+          }
+        ],
+        "controlsUseCopiedObservations": true,
+        "processControls": {
+          "nonzero-child": {
+            "exitCode": 2,
+            "reason": "APPLICATION_TEST_PROCESS_FAILURE",
+            "verdict": "ERROR"
+          },
+          "timeout-child": {
+            "exitCode": 2,
+            "reason": "PROCESS_TIMEOUT",
+            "verdict": "ERROR"
+          }
+        }
+      }
+    },
+    "qualifiedComparisonMatched": true,
+    "qualifiedNativeOutcomeAndWitnessesMatched": true,
+    "results": {
+      "anonymous-passive": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/anonymous-passive/result.json",
+          "sha256": "18666897f392708f071e44d8d17e05fdc8cb9b1f5e8435870ed28cd6f7774774"
+        },
+        "exitCode": 0,
+        "projectedReportSha256": "aef48982b1fe78716f5bf05763439c99e7ef2e18390f6906c0a1e4b14d96dbf4",
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "passive"
+        },
+        "reasons": [
+          "PASSIVE_TRANSPORT_VERIFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/anonymous-passive/receipt.json",
+          "sha256": "ee241346a5218a4da0ddbde674a2b7da9dac77c86930f398d7338e143b99f7af"
+        },
+        "ruleRefs": [
+          "10020-1",
+          "10021",
+          "10038-1"
+        ],
+        "runId": "6d30c0013e114f429b2cac8aaa941366",
+        "scannerExecution": {
+          "execution": {
+            "exit": 0,
+            "timedOut": false
+          },
+          "expectedJobTypes": [
+            "requestor",
+            "passiveScan-wait",
+            "report"
+          ],
+          "jobReceipts": [
+            [
+              "requestor",
+              "started"
+            ],
+            [
+              "requestor",
+              "finished"
+            ],
+            [
+              "passiveScan-wait",
+              "started"
+            ],
+            [
+              "passiveScan-wait",
+              "finished"
+            ],
+            [
+              "report",
+              "started"
+            ],
+            [
+              "report",
+              "finished"
+            ]
+          ],
+          "planReportedSuccessful": true,
+          "planSha256": "717c3143f8284e906de6010c325e7b289e23016d85c8487ca1c4fbb6afb36631",
+          "preflight": {
+            "exit": 0,
+            "timedOut": false
+          },
+          "preflightRequests": 0
+        },
+        "verdict": "PASS"
+      },
+      "http-first": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/http-first/result.json",
+          "sha256": "fb511fcf4c484873e9b199394064fe5fef03044ce4d889aa5d22ff1232fd8bae"
+        },
+        "exitCode": 0,
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "http"
+        },
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/http-first/receipt.json",
+          "sha256": "ef8f9493088d43ea303bd6f05ebcf197475e981da8866e6cc8dc2a4c43ada497"
+        },
+        "runId": "743b39365b6a4fc394885bfe1cccd7cf",
+        "verdict": "PASS"
+      },
+      "http-repeat": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/http-repeat/result.json",
+          "sha256": "d5d0ada4e70ba691f28d4591c3147e6166711110c44138f39e68fa59ac6b94da"
+        },
+        "exitCode": 0,
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "httpClientSha256": "7d5ab4d41e4a83c53d5d53869a75434079b61cb87af4c3381beb78fa7bcf685a",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "http"
+        },
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/http-repeat/receipt.json",
+          "sha256": "40f3cb22d0d65e595340bd80958258f042c2240e4323d733961b4d4b47785d97"
+        },
+        "runId": "a789036a37b542fda23d1d24ae341da0",
+        "verdict": "PASS"
+      },
+      "mockmvc": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/mockmvc/result.json",
+          "sha256": "28e99ff34aa31bc5ee09b7fe79a5bc6e1a534d29bac8f66b90be1c67e80ed8bf"
+        },
+        "exitCode": 0,
+        "provenance": {
+          "applicationTransport": "mockmvc-in-process",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "databaseBinding": "ephemeral-loopback",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaVersion": "21.0.13",
+          "mavenWrapperVersion": "3.10.2",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "postgresVersion": "postgres (PostgreSQL) 16.16",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "scannerDispatched": false
+        },
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/mockmvc/receipt.json",
+          "sha256": "ce91981c0eb5334674ebbc974bb9e247d3e2ecf86ccbffb2894114ab03ab2c2b"
+        },
+        "runId": "537d2346004d46f3b45bd8cf54fbe7f5",
+        "verdict": "PASS"
+      },
+      "mockmvc-repeat": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/mockmvc-repeat/result.json",
+          "sha256": "423b7d32485711cd853ac25bbcc10790ba854df3d58097b772d4863175b5a7de"
+        },
+        "exitCode": 0,
+        "provenance": {
+          "applicationTransport": "mockmvc-in-process",
+          "authorizationFixtureSha256": "4217690a5d46db77d51141fc3f7cd20d3eba2709d7748d5236742b88726e26f8",
+          "databaseBinding": "ephemeral-loopback",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaVersion": "21.0.13",
+          "mavenWrapperVersion": "3.10.2",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "postgresVersion": "postgres (PostgreSQL) 16.16",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "scannerDispatched": false
+        },
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/mockmvc-repeat/receipt.json",
+          "sha256": "e184af80a06d7da5c65d9b7470f44e56924b48a6f9defa8e5938aace023fee05"
+        },
+        "runId": "0761f8cea5cc4ddd962cae739d6372da",
+        "verdict": "PASS"
+      },
+      "native-jwt": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/native-jwt/result.json",
+          "sha256": "9fa184cee1ebfb8abebf0560ab425d8047c514d7124485dd7b88f6e536382837"
+        },
+        "cleanup": {
+          "containersRemoved": true,
+          "temporaryDirectoryRemoved": true
+        },
+        "exitCode": 0,
+        "projectedReportSha256": "ce6ea78c1af1deffb9996d50db29364c602e2e930d14f87e7e2a51f6a11f33e1",
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mailpitImage": "axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "authenticated-passive"
+        },
+        "reasons": [
+          "NATIVE_JWT_PASSIVE_VERIFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/native-jwt/receipt.json",
+          "sha256": "4d95e833aa2cc39f2ed5e9bf48229ffff97d11fc20e8f824db213ed2b6ed7b8d"
+        },
+        "ruleRefs": [
+          "10020-1",
+          "10021",
+          "10038-1",
+          "10111",
+          "10112"
+        ],
+        "runId": "621f154ec3f1429ea4987294163e9b1f",
+        "scannerExecution": {
+          "execution": {
+            "exit": 0,
+            "timedOut": false
+          },
+          "expectedJobTypes": [
+            "requestor",
+            "requestor",
+            "passiveScan-wait",
+            "report"
+          ],
+          "jobReceipts": [
+            [
+              "requestor",
+              "started"
+            ],
+            [
+              "requestor",
+              "finished"
+            ],
+            [
+              "requestor",
+              "started"
+            ],
+            [
+              "requestor",
+              "finished"
+            ],
+            [
+              "passiveScan-wait",
+              "started"
+            ],
+            [
+              "passiveScan-wait",
+              "finished"
+            ],
+            [
+              "report",
+              "started"
+            ],
+            [
+              "report",
+              "finished"
+            ]
+          ],
+          "mode": "zap-owned-jwt-requestor",
+          "planReportedSuccessful": true,
+          "planSha256": "563b91cd8038750b6236b88a0da37350e60cbfe007c7794ee05db0d72ac219e2",
+          "preflight": {
+            "exit": 0,
+            "timedOut": false
+          },
+          "preflightRequests": 0
+        },
+        "verdict": "PASS"
+      },
+      "native-jwt-bad-password": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/native-jwt-bad-password/result.json",
+          "sha256": "4a5671d2a057f408fa6201b105ddd786f2e208337c9f38d4710d24fdd7aebd81"
+        },
+        "cleanup": {
+          "containersRemoved": true,
+          "temporaryDirectoryRemoved": true
+        },
+        "exitCode": 2,
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mailpitImage": "axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "authenticated-passive-bad-password"
+        },
+        "reasons": [
+          "INCOMPLETE_EXECUTION"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/native-jwt-bad-password/receipt.json",
+          "sha256": "b906b07016c6ee83698ea98bd0ba3b0b3fd1989c0df4c7d5a87c9bb9b30bb2ee"
+        },
+        "runId": "91b3dc3b3648403c9674e68d99fd18d6",
+        "verdict": "ERROR"
+      },
+      "native-jwt-bad-password-repeat": {
+        "artifact": {
+          "path": "artifacts/p2/pilot/native-jwt-bad-password-repeat/result.json",
+          "sha256": "8e5028a6035a99215db52e2a9fa20f485bcccc3978c3f9b1f0eee5969503d48b"
+        },
+        "cleanup": {
+          "containersRemoved": true,
+          "temporaryDirectoryRemoved": true
+        },
+        "exitCode": 2,
+        "provenance": {
+          "applicationJarSha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+          "applicationTransport": "http-1.1",
+          "designSha256": "4a21f73e2f715d0b5c89b8bbdd006e9ced9497d80f34c4093e7c400d67315389",
+          "javaBuildVersion": "21.0.13",
+          "javaRuntimeImage": "eclipse-temurin@sha256:d77e090ae1f6970c047b443c6f0a6c1358b0426d44432bb5a7753408cd43de0d",
+          "mailpitImage": "axllent/mailpit@sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+          "mavenWrapperVersion": "3.10.2",
+          "namespace": "disconnected-docker-loopback",
+          "openApiSha256": "7a4a95a5eee79bb8588ac6cbda7260e09d51f2f67ae80221ba26ae27684305cc",
+          "pomSha256": "3c6610d367f1b7b8c438fd7b24e905f1859d383c76bb284ae1bd007c79203264",
+          "postgresImage": "postgres@sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+          "projectCommit": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+          "publishedPorts": 0,
+          "springProfile": "default",
+          "testLane": "authenticated-passive-bad-password"
+        },
+        "reasons": [
+          "AUTHENTICATION_FAILURE"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/pilot/native-jwt-bad-password-repeat/receipt.json",
+          "sha256": "0ad4821670cfc7066f7d2e2725f06d30ac43e41b84f4c17636fb59f29d448364"
+        },
+        "runId": "e43842f6a3dd4674afc8a9d30d62c833",
+        "scannerExecution": {
+          "execution": {
+            "exit": 2,
+            "timedOut": false
+          },
+          "expectedJobTypes": [
+            "requestor",
+            "requestor",
+            "passiveScan-wait",
+            "report"
+          ],
+          "jobReceipts": [
+            [
+              "requestor",
+              "started"
+            ],
+            [
+              "requestor",
+              "finished"
+            ],
+            [
+              "requestor",
+              "started"
+            ],
+            [
+              "requestor",
+              "finished"
+            ],
+            [
+              "passiveScan-wait",
+              "started"
+            ],
+            [
+              "passiveScan-wait",
+              "finished"
+            ],
+            [
+              "report",
+              "started"
+            ],
+            [
+              "report",
+              "finished"
+            ]
+          ],
+          "mode": "zap-owned-jwt-requestor",
+          "planReportedSuccessful": false,
+          "planSha256": "48422213102668a9f22fe6e443dba6ec478514d494fa8e50ea38dcf580c3f682",
+          "preflight": {
+            "exit": 0,
+            "timedOut": false
+          },
+          "preflightRequests": 0
+        },
+        "verdict": "ERROR"
+      }
+    }
+  },
+  "product": {
+    "full": {
+      "acceptance": "MISSING",
+      "artifact": {
+        "path": "artifacts/p2/product-full/results.json",
+        "sha256": "4a787a804b01290b1b717e48150778e971f9b9c5d1ec83c7bd561e5b7421ae28"
+      },
+      "baselineArtifact": {
+        "path": "artifacts/p0-p1-final/final-product/full/results.json",
+        "sha256": "694b4b433ea5f11e358b779750bccf532a95562d9edabcd218825b0e6607e02b"
+      },
+      "baselineStatus": "REVIEW",
+      "cleanup": {
+        "containers": true,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contractDrift": {
+        "REVIEW": 12
+      },
+      "coverage": {
+        "http_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        },
+        "http_situations": {
+          "declared": 100,
+          "missing": [],
+          "observed": 100
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [],
+          "observed": 12
+        },
+        "zap_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        }
+      },
+      "criteria": {
+        "MISSING": 2,
+        "PASS": 18,
+        "REVIEW": 8
+      },
+      "execution": "PASS",
+      "exitCode": 0,
+      "har": {
+        "exit_code": 0,
+        "exported": 133,
+        "missing": 0,
+        "self_check": true,
+        "sent": 133,
+        "version": "2.17.0"
+      },
+      "manifest": {
+        "path": "artifacts/p2/product-full/manifest.json",
+        "sha256": "9138e9c3f98f1e0d403a02b46e86b5019f2e166e585212256f4d99c9b5a4a724"
+      },
+      "maven": {
+        "PASS": 324
+      },
+      "provenance": {
+        "backend_jar_sha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+        "dirty": false,
+        "docker_version": "29.8.1",
+        "images": {
+          "mailpit": {
+            "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+            "reference": "axllent/mailpit:v1.27.8"
+          },
+          "postgres": {
+            "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+            "reference": "postgres:16-alpine"
+          },
+          "zap": {
+            "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+            "reference": "zaproxy/zap-stable:2.17.0"
+          }
+        },
+        "java_version": "21.0.13",
+        "manifest_sha256": "5dccf33fa3e7d4c197ffd73687165093e23d9631a313d8cce230062bc8777387",
+        "maven_distribution": "3.10.2",
+        "python_version": "3.13.2",
+        "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+        "sha": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+        "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "qualifiedBaselineMatched": true,
+      "receipt": {
+        "path": "artifacts/p2/product-full/receipt-verified.json",
+        "sha256": "142dfc2b2c511ba01e1d6aaa53cfcee4d720766bfe50dfdd307c39bd0e7687fb"
+      },
+      "runId": "bus-security-44f3717c3932"
+    },
+    "long": {
+      "acceptance": "MISSING",
+      "artifact": {
+        "path": "artifacts/p2/product-long/results.json",
+        "sha256": "971b7dfcb1d8f7e3b64920632ad0d2714cabd7a9e6d14f2c9b9ebf3c5f6eef54"
+      },
+      "baselineArtifact": {
+        "path": "artifacts/p0-p1-final/final-product/long/results.json",
+        "sha256": "4a683d56b4e55ee7fea86e49a39332e09f938a56cfb8819119a1a0a76fc8e6c1"
+      },
+      "baselineStatus": "REVIEW",
+      "cleanup": {
+        "containers": true,
+        "processes": true,
+        "temporary_files": true
+      },
+      "contractDrift": {
+        "REVIEW": 12
+      },
+      "coverage": {
+        "http_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        },
+        "http_situations": {
+          "declared": 101,
+          "missing": [],
+          "observed": 101
+        },
+        "ownership_situations": {
+          "declared": 12,
+          "missing": [],
+          "observed": 12
+        },
+        "zap_operations": {
+          "declared": 32,
+          "missing": [],
+          "observed": 32
+        }
+      },
+      "criteria": {
+        "MISSING": 2,
+        "PASS": 18,
+        "REVIEW": 8
+      },
+      "execution": "PASS",
+      "exitCode": 0,
+      "har": {
+        "exit_code": 0,
+        "exported": 179,
+        "missing": 0,
+        "self_check": true,
+        "sent": 179,
+        "version": "2.17.0"
+      },
+      "manifest": {
+        "path": "artifacts/p2/product-long/manifest.json",
+        "sha256": "76c08dccf55c45cc65d25bb6dcffa49d71fb3fb4e7e5bc0f36844b2b17d301e8"
+      },
+      "maven": {
+        "PASS": 324
+      },
+      "provenance": {
+        "backend_jar_sha256": "fe4b033459aed83c13dda7f34570f1ea8d7d5b91c1aabf5a401ec6e6d2243a9f",
+        "dirty": false,
+        "docker_version": "29.8.1",
+        "images": {
+          "mailpit": {
+            "id": "sha256:6abc8e633df15eaf785cfcf38bae48e66f64beecdc03121e249d0f9ec15f0707",
+            "reference": "axllent/mailpit:v1.27.8"
+          },
+          "postgres": {
+            "id": "sha256:1d5b02d3a9941fbd52437db4107f8c52d6297dac553ca1e5c299ebb3756b4857",
+            "reference": "postgres:16-alpine"
+          },
+          "zap": {
+            "id": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+            "reference": "zaproxy/zap-stable:2.17.0"
+          }
+        },
+        "java_version": "21.0.13",
+        "manifest_sha256": "5dccf33fa3e7d4c197ffd73687165093e23d9631a313d8cce230062bc8777387",
+        "maven_distribution": "3.10.2",
+        "python_version": "3.13.2",
+        "scope_sha256": "879d01926eee9e8dcc34cdbdc9fbbd03f7f144193c2969c5a6cb76a9a782b7e9",
+        "sha": "b8de73f2cd35461fdce7564b1f0ce0a539fbaa24",
+        "zap_plan_sha256": "c1b7d5c6502e801d1d924c428abcecc0cf62d06119e7da2d81848c21ba326a32"
+      },
+      "qualifiedBaselineMatched": true,
+      "receipt": {
+        "path": "artifacts/p2/product-long/receipt.json",
+        "sha256": "a8f4a3a92967476c5f567770c15cfccd861c0687254409280015ca8d81b041a2"
+      },
+      "runId": "bus-security-6b3a1c05f0eb"
+    }
+  },
+  "productNoDispatch": {
+    "active-blocked": {
+      "artifact": {
+        "path": "artifacts/p2/product-active-blocked/result.json",
+        "sha256": "1d3b5bd9f03642f734715de2ed07e9823a2fe84f3dbebdfc0b62f388443b1c5f"
+      },
+      "dispatched": false,
+      "exitCode": 3,
+      "reason": "ACTIVE_EXECUTION_RESTRICTED",
+      "receipt": {
+        "path": "artifacts/p2/product-active-blocked/receipt.json",
+        "sha256": "b75c48da91831ce9b542819c4542093eb77dd898a1d42c8fea6faccfca8376fe"
+      },
+      "runId": "891e8003b55c4571b1211d940edf0b9a",
+      "verdict": "BLOCKED"
+    },
+    "jwt-blocked": {
+      "artifact": {
+        "path": "artifacts/p2/product-jwt-blocked/result.json",
+        "sha256": "6961cabc93e9aaab13548adad1238e8699b2adbf4ddf3768a727f8c026a4c129"
+      },
+      "dispatched": false,
+      "exitCode": 3,
+      "reason": "AUTH_PROFILE_UNQUALIFIED",
+      "receipt": {
+        "path": "artifacts/p2/product-jwt-blocked/receipt.json",
+        "sha256": "584200cdaafa084669cb088cb97c0f256b7d52aad3eb7d5f1924797e75b6272c"
+      },
+      "runId": "5b0f9258c8b74410a85f4d9eb281a132",
+      "verdict": "BLOCKED"
+    }
+  },
+  "recordedAt": "2026-11-24T13:31:46.727249+00:00",
+  "runtime": {
+    "fixture": {
+      "dockerServer": "29.8.1",
+      "image": "zaproxy/zap-stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+      "imageId": "sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238",
+      "platform": "linux/arm64"
+    },
+    "hostArchitecture": "arm64",
+    "hostSystem": "Darwin",
+    "python": "3.13.2"
+  },
+  "schemaVersion": 1,
+  "synthetic": {
+    "freshMatched": 15,
+    "historicalReceiptValidated": 1,
+    "results": {
+      "active-blocked": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/active-blocked/result.json",
+          "sha256": "a81dc267f6973ca34ebf94dc829b0e33f25a1a19d44a71f327364533e9aac52e"
+        },
+        "dispatched": false,
+        "exitCode": 3,
+        "measurement": "FRESH",
+        "nativeExit": null,
+        "reasons": [
+          "ACTIVE_EXECUTION_RESTRICTED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/active-blocked/receipt.json",
+          "sha256": "84c4eb56aa931bd90fa60e39fddf33fa1a9bc5b597ffae7ae7785452f1b9127e"
+        },
+        "runId": "d04ef9d3a2304148a49adfc3c186bf51",
+        "verdict": "BLOCKED"
+      },
+      "anonymous-only": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/anonymous-only/result.json",
+          "sha256": "c35c564a9dd6456d7a4007a13c00604d0601c6248d1eeb37615f752b5b009759"
+        },
+        "exitCode": 0,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/anonymous-only/receipt.json",
+          "sha256": "8e377ef0a67954ff930fbb137f589158cf73cddfef07d87942adea016843e561"
+        },
+        "runId": "0ec7f270029b4f84afe3d395c42e1587",
+        "verdict": "PASS"
+      },
+      "application-only": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/application-only/result.json",
+          "sha256": "aa099e74645e546f7adef87006c20033b316af13c3be0600c901d06612fa0990"
+        },
+        "exitCode": 0,
+        "measurement": "FRESH",
+        "nativeExit": null,
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/application-only/receipt.json",
+          "sha256": "674a0cd9764ad61df943c1ef953db6251acb1d9cdfaecf23bfe8750514e36045"
+        },
+        "runId": "b07aed24f2dd4ff8bf8b4c74dc506ab3",
+        "verdict": "PASS"
+      },
+      "authorization-regression": {
+        "baselineArtifact": {
+          "path": "artifacts/p0-p1-final/synthetic/authorization-regression/result.json",
+          "sha256": "21d84bb862a227e75c0b3ee4318aabf285c0cee525018013bd5931b51a04f862"
+        },
+        "exitCode": 1,
+        "measurement": "P0/P1_RECEIPT_REVALIDATED",
+        "nativeExit": 0,
+        "reasons": [
+          "AUTHORIZATION_ASSERTION_VIOLATED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/historical-authorization-receipt.json",
+          "sha256": "6c694df69639aa41606db14646ffc72670ab2246b2f406db77f55b96d82eea78"
+        },
+        "verdict": "FAIL"
+      },
+      "bad-password": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/bad-password/result.json",
+          "sha256": "92db20af89053c3383da1b3af925599a42f96e42ce100aa3ca7ad1eeb2cb3c06"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": 2,
+        "reasons": [
+          "AUTHENTICATION_FAILURE"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/bad-password/receipt.json",
+          "sha256": "b962eaa222ee9c4608243c3e5d0b2a862ce1eca8ed26152c9600f4358b8529f4"
+        },
+        "runId": "61cb5b714c7a4005a035ac7ac7064904",
+        "verdict": "ERROR"
+      },
+      "bad-plan": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/bad-plan/result.json",
+          "sha256": "9496af6557a630889567595eba0723a07c5a807075972ee089a9d2ed8cd9d21b"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": null,
+        "reasons": [
+          "PLAN_VALIDATION_FAILURE"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/bad-plan/receipt.json",
+          "sha256": "af952742d4848832c5f73916a28cb990cb3c65f6a6ac05a14e35847b70c49c37"
+        },
+        "runId": "17e6d8cd964a4ef09daa93ad681e6f5a",
+        "verdict": "ERROR"
+      },
+      "baseline": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/baseline/result.json",
+          "sha256": "b7b8b386d0b0a4c3d1ad6183efc7a3ea18cd6e11e70b103b849793ae0c576fe8"
+        },
+        "exitCode": 0,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/baseline/receipt.json",
+          "sha256": "eac821f4242896f0cf218603fb4714a79d7bed5e789654844608bbbd7b011297"
+        },
+        "runId": "17f9d718ae714194a9f4d1f96f78bb14",
+        "verdict": "PASS"
+      },
+      "baseline-repeat": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/baseline-repeat/result.json",
+          "sha256": "09e4225cf88ca47f2f59e068a5af03a34acd13f9325dd48bc3c6d496ec10f953"
+        },
+        "exitCode": 0,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "ASSERTIONS_SATISFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/baseline-repeat/receipt.json",
+          "sha256": "687c8beb6471b8a1dba15d8a933695420418ed8f5f85adf75877b9718398d100"
+        },
+        "runId": "770955e6a17a424d89d08e8bed1503e2",
+        "verdict": "PASS"
+      },
+      "docker-unavailable": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/docker-unavailable/result.json",
+          "sha256": "3a0a55a7667d5377c4830fe56fd59f0655e62ef3e024825344d214959758be37"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": null,
+        "reasons": [
+          "INFRASTRUCTURE_FAILURE"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/docker-unavailable/receipt.json",
+          "sha256": "fdfae9d10164b601467d967f71f2a07ac8b306c81c43b5f981ff203bce882058"
+        },
+        "runId": "18ac1215b7ce4c599f027db7c93e1cca",
+        "verdict": "ERROR"
+      },
+      "incomplete": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/incomplete/result.json",
+          "sha256": "3ec325cc988b7ad2b17fb76237f765acbff3924451f81e95816cabc2d6ab6156"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "INCOMPLETE_EXECUTION"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/incomplete/receipt.json",
+          "sha256": "8177fbdcffc2106812c27e2fe6333d36cd95eb4e920f616f2453d0cc84edcf7d"
+        },
+        "runId": "fa2be3ac105249f19c7f7e6a9fae77fe",
+        "verdict": "ERROR"
+      },
+      "invalid-evidence": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/invalid-evidence/result.json",
+          "sha256": "6717c51af1263e2768919b7161519ccb59866c84766ba28ba314ed5a7c85da76"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "INVALID_EVIDENCE"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/invalid-evidence/receipt.json",
+          "sha256": "ed7cfe91eb0f3e5620f3eb9ed4f4d0e9a29c4261aaa6c67cad7043c68527aeff"
+        },
+        "runId": "5c9650e42c1e44f9aeab0453f74ad765",
+        "verdict": "ERROR"
+      },
+      "jwt-blocked": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/jwt-blocked/result.json",
+          "sha256": "708ba45b0b0d6d599d3b141bd4619bc957f5d4cde76974768adf01ad5e033fa7"
+        },
+        "dispatched": false,
+        "exitCode": 3,
+        "measurement": "FRESH",
+        "nativeExit": null,
+        "reasons": [
+          "AUTH_PROFILE_UNQUALIFIED"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/jwt-blocked/receipt.json",
+          "sha256": "3a6baeb7d36f4b392c1958938f2da53d10e7285332a1eea19445a72f6861e975"
+        },
+        "runId": "bada9bf754e14625977b0b576271399e",
+        "verdict": "BLOCKED"
+      },
+      "missing-evidence": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/missing-evidence/result.json",
+          "sha256": "b99f15efa6ba3568f80ba5f8c8a0b8ef99139ad4cd7c2ab2fa1ccefc2b4a8d64"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "MISSING_EVIDENCE"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/missing-evidence/receipt.json",
+          "sha256": "5f10c9412ab65c7f4bbf14046d093efbfad6692c79638b2084cc74ed9629eae1"
+        },
+        "runId": "efb8be5d536a4acb9db988b37f3ab8af",
+        "verdict": "ERROR"
+      },
+      "private-csp-regression": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/private-csp-regression/result.json",
+          "sha256": "12fb75c77ff145cd3f26862bc0ec80b46853dbdd2e0750d63967a5b2e1afadd9"
+        },
+        "exitCode": 1,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "CSP_REGRESSION"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/private-csp-regression/receipt.json",
+          "sha256": "0d72549bbd411d121dab6309e347c35ecb2923ea7e7abf9791da4f27eae67556"
+        },
+        "runId": "7604170d66cd41a49611e57aece54342",
+        "verdict": "FAIL"
+      },
+      "public-csp-regression": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/public-csp-regression/result.json",
+          "sha256": "b106688f8914e9b96e745add814dc42a587e857081a7a94e0731cb364b4da973"
+        },
+        "exitCode": 1,
+        "measurement": "FRESH",
+        "nativeExit": 0,
+        "reasons": [
+          "CSP_REGRESSION"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/public-csp-regression/receipt.json",
+          "sha256": "ccd49c56695ec160cc601cc423f43ccf75173f3872ba0a59ef31ee58d994238a"
+        },
+        "runId": "08785e8269c5406788b9cdb375a2452e",
+        "verdict": "FAIL"
+      },
+      "warning": {
+        "artifact": {
+          "path": "artifacts/p2/synthetic/warning/result.json",
+          "sha256": "307e82ed34df967a18088a647662909c6cf64580eee6ffd06820af85af3f9f5e"
+        },
+        "exitCode": 2,
+        "measurement": "FRESH",
+        "nativeExit": 2,
+        "reasons": [
+          "SCANNER_WARNING"
+        ],
+        "receipt": {
+          "path": "artifacts/p2/synthetic/warning/receipt.json",
+          "sha256": "e881aaa94773bcd5bdd1a091cfc5d74ee674802541b39b736239ac259884749b"
+        },
+        "runId": "678027db58964f329b09e4bd05038cd1",
+        "verdict": "ERROR"
+      }
+    }
+  },
+  "teardown": {
+    "fixtureDirectoriesAbsent": true,
+    "independentlyCorrelatedProductDatabaseVolumesAbsent": [
+      "bus-security-6b3a1c05f0eb-postgres"
+    ],
+    "pilotContainersAbsent": true,
+    "productContainersAbsent": true,
+    "syntheticContainersAbsent": true
+  }
+}

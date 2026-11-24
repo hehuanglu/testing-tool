@@ -1,6 +1,6 @@
-# Standalone security test suite framework
+# Security testing framework
 
-The framework runs reviewed regression cases against disposable loopback fixtures in a network-disabled ZAP container. A suite supplies its objectives, cases, authentication, fixtures, plan and application oracles. The framework owns process isolation, plan admission, evidence and CI exit status.
+The framework runs reviewed regression cases against owned fixtures. A suite supplies objectives, cases, authentication profiles and oracles. Its project adapter acquires the fixtures. The selected engine executes within its reviewed scope, and the evidence layer validates and records the decision for each case.
 
 The runner carries forward the feasibility PoC's native validation, fresh ZAP homes, bounded subprocesses, ordered job receipts and scoped report checks. It shares the original ZAP report parser. The example reuses the original fixture, Requestor plan steps and application oracles directly. The digest-bound feasibility source and evidence are preserved. [Feasibility report](../security-testing-feasibility.md) · [Qualification evidence](../security-testing-feasibility-evidence.json) · [CI verdict contract](../ci-verdict-contract.md)
 
@@ -10,9 +10,12 @@ The runner carries forward the feasibility PoC's native validation, fresh ZAP ho
 tests/security/
   security_framework/
     manifest.py                  input and traceability checks
-    engine.py                    native Automation Framework execution
-    evidence.py                  evidence validation, verdict and Markdown report
-    run.py                       host launcher and isolated worker
+    execution.py                 project adapter, engine admission and resource scope
+    project.py                   immutable Git materialization
+    engine.py                    ZAP Automation Framework execution
+    evidence.py                  v1 evidence validation, verdict and Markdown report
+    receipt.py, ci.py            v2 compatibility receipts and CI entry point
+    run.py                       synthetic fixture host launcher and isolated worker
     schemas/                     input and evidence JSON schemas
     templates/                   test specification template
   suites/<suite>/
@@ -33,7 +36,24 @@ artifacts/security-suite/<suite>/<scenario>/<run>/
   security-suite-framework.yml   standalone hosted workflow
 ```
 
-The output directory must be new. The workflow uses a fresh checkout and its baseline directory represents one execution. The receipt schema is specific to this framework and uses the exit codes from the existing CI contract. [Suite input schema](../tests/security/security_framework/schemas/suite-inputs.schema.json) · [Evidence schema](../tests/security/security_framework/schemas/result.schema.json)
+The output directory must be new. A v1 result is the original evidence and exit contract. A v2 receipt references those original bytes by SHA-256 and records execution, objective acceptance and capability qualification independently. [Suite input schema](../tests/security/security_framework/schemas/suite-inputs.schema.json) · [Result schema](../tests/security/security_framework/schemas/result.schema.json) · [Receipt schema](../tests/security/security_framework/schemas/receipt.schema.json)
+
+## Project adapter contract
+
+`ProjectAdapter.prepare(resources)` materializes the intended source, checks configuration and dependencies, builds and starts the fixture, and registers cleanup with the provided `ExitStack` as resources are acquired. The adapter returns the fixture shape the selected engine already needs. The fixture can contain an owned origin, provisioning or observation functions, build and runtime identities, or a local in-process test target. Checks that require the engine's isolated network namespace remain with the reviewed lane at its first use of the fixture. Register cleanup before advancing to the next acquisition wherever partial startup can leave resources behind. Adjudicate and publish after the stack has unwound. [Adapter contract](../tests/security/security_framework/execution.py)
+
+The synthetic adapter wraps the qualified fixture and supplies its event observer. Both Bus Booking pilot adapters reuse committed-source export, copied-matrix validation and API inventory checks. Bus Booking retains the Spring build, PostgreSQL and Mailpit lifecycle, account provisioning and identities, SQL fixture, application assertions and readback. The native product suite owns a separate fixture and continues to run through its own entry point. The shared framework validates its filtered evidence through a versioned compatibility adapter. ByteMe and the historical feasibility launcher keep their existing workflow and formats. [Bus Booking adapter](../tests/security/suites/bus_booking/adapter.py) · [Live adapter](../tests/security/suites/bus_booking/live/run.py) · [Native evidence adapter](../tests/security/suites/bus_booking/native_evidence.py)
+
+## Engine contract
+
+An `Engine` declares a capability and the suite methods it accepts. Admission rejects unsupported methods and applies authentication and Active DAST restrictions before any project preparation. The engine validates its own scope and prerequisites before dispatch. It returns an observation or a stable classification to the suite adjudicator. Project cleanup belongs to the adapter. Engine-owned processes, reports, temporary homes and captures live within the engine's existing bounded execution or the adapter's resource scope. [Engine contract](../tests/security/security_framework/execution.py)
+
+- **MockMvc** invokes the reviewed in-process fixture. Its observations include controller selection and persisted state.
+- **Live HTTP** uses the synthetic fixture or the packaged Bus Booking backend. It verifies application session identity and response and state expectations. The live Bus Booking pilot compares these observations with MockMvc.
+- **Native ZAP passive** validates a fixed, loopback-only plan, runs native validation and passive processing, and checks the fresh report and independent identity witnesses. Form/cookie and bounded native JWT retain their respective reviewed profiles.
+- **HAR passive** runs in the native product workflow with networking disabled and request sending disabled. The evidence engine validates the resulting HAR reconciliation, source identity, teardown and release gate. It consumes the filtered product bundle.
+
+Future engines can use the same adapter lifecycle and supply their own prerequisites, admission rules, evidence producer and reviewed case methods. Source analysis and runtime inspection can use immutable local inputs. Browser evidence and log assertions need fixture-owned scope and independently verifiable observations. Adding a case method requires an explicit manifest, validation and test change.
 
 ## Execution and evidence
 
@@ -68,7 +88,7 @@ and evidence boundary in the [CI verdict contract](../ci-verdict-contract.md#aut
 
 ## Local run and GitHub Actions
 
-From the repository root, use Python 3.10 or newer and the pinned Docker image.
+From the repository root, use Python 3.13.2 and the pinned Docker image. Git source materialization requires Python 3.12 or later for filtered archive extraction.
 
 ```sh
 docker pull "$(cat tests/security/zap-image.txt)"
@@ -77,12 +97,12 @@ PYTHONPATH=tests/security python3 -m security_framework.run \
   --out artifacts/security-suite/feasibility_fixture/baseline/local-01
 ```
 
-The GitHub Actions workflow prepares the same baseline gate with read-only repository permissions and retains projected evidence when a run bundle exists. Its gate propagates the runner exit. A failed scanner image pull or missing output also fails the job. The pin and retained evidence support comparison between local and hosted runs. [GitHub Actions workflow](../.github/workflows/security-suite-framework.yml) · [GitHub artifact documentation](https://docs.github.com/en/actions/tutorials/store-and-share-data)
+The GitHub Actions workflow pins the checkout to the triggering SHA and validates it before publication. It records Python, Docker, image and platform identity, checks the execution gate and owned-container teardown, and stages the original projected evidence with its normalized receipt. The product workflow can pass its filtered bundle to the same verifier while retaining its independent acceptance gate. [GitHub Actions workflow](../.github/workflows/security-suite-framework.yml) · [P2 migration guide](security-test-p2-migration.md)
 
 **Implemented.** The framework, schemas, reporting, example adapter and GitHub Actions workflow use Python's standard library and the existing pinned scanner image.
 
 **Historical baseline.** On Docker Engine 29.8.1 with a Linux ARM64 container, all 16 invocations matched their expected verdicts. Two clean baselines agreed, and the application-only and anonymous-only lanes passed. The three intentional CSP and authorization regressions exited 1 while ZAP exited 0. Authentication, evidence and infrastructure controls exited 2. Active and JWT selections exited 3 without dispatch. Nine framework contract tests passed and all emitted results validated against the evidence schema.
 
-**Current qualification.** See the [P0 and P1 evidence and reproduction record](../P0-P1-COMPLETION-REPORT.md) for the status of the native JWT, shared CI, and product verification lanes.
+**Current qualification.** See the [P2 completion report](../P2-COMPLETION-REPORT.md) and the [P0 and P1 evidence and reproduction record](../P0-P1-COMPLETION-REPORT.md).
 
 [Implementation guidelines](security-test-implementation.md) · [Specification template](../tests/security/security_framework/templates/security-test-specification.md) · [Example suite](../tests/security/suites/feasibility_fixture/README.md)

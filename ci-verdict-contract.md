@@ -1,6 +1,8 @@
-# Standalone security CI verdict contract
+# Security framework CI verdict contract
 
 The gate exits zero only when every required assertion has valid evidence and evaluates to PASS. ZAP process exit, plan completion and a report each establish part of the evidence needed for a security verdict.
+
+The v2 compatibility receipt preserves the original exit in `execution.exitCode` and distinguishes completed assertions, incomplete execution and admission restrictions. A completed run can contain a failed test. Shared suite tests leave release `acceptance` unevaluated. The Bus Booking product reader preserves its separate execution gate, criterion decisions, baseline review, drift review and Active DAST evidence dependency. Capability qualification remains independently recorded. [Receipt and migration guide](docs/security-test-p2-migration.md)
 
 ## Exit codes
 

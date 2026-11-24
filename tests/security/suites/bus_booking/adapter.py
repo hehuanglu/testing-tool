@@ -3,7 +3,6 @@
 import argparse
 from contextlib import contextmanager
 import hashlib
-import io
 import json
 import os
 from pathlib import Path
@@ -14,12 +13,13 @@ import signal
 import subprocess
 import sys
 import tarfile
-from tempfile import TemporaryDirectory
 import time
 from uuid import uuid4
 
 from security_framework.evidence import EXIT, fail_run, markdown, put_evidence, start, validate_child
+from security_framework.execution import APPLICATION, Engine, ExecutionError, run_project
 from security_framework.manifest import read_suite
+from security_framework.project import materialize
 
 from .assertions.oracle import adjudicate, matrix_plan
 
@@ -29,17 +29,12 @@ FIXTURE = DIRECTORY / "fixtures" / f"{JAVA_TEST}.java"
 MATRIX = DIRECTORY / "plans/authorization-matrix.txt"
 MATRIX_INPUT = "suites/bus_booking/plans/authorization-matrix.txt"
 PG_TAG = "postgres:16-alpine"
-REVISION = re.compile(r"[0-9a-f]{40}\Z")
 DIGEST = re.compile(r"postgres@sha256:[0-9a-f]{64}\Z")
 METHODS = {"get", "post", "put", "delete", "patch", "head", "options", "trace"}
 HOST_ENV = {
     key: value for key, value in os.environ.items()
     if key in {"HOME", "PATH", "JAVA_HOME", "TMPDIR", "LANG", "LC_ALL", "USERPROFILE", "SYSTEMROOT"}
 }
-
-
-class ExecutionError(Exception):
-    """A stable classification whose arguments contain no raw subprocess output."""
 
 
 def command(args, *, cwd=None, env=None, timeout=20, reason="INFRASTRUCTURE_FAILURE"):
@@ -64,20 +59,6 @@ def command(args, *, cwd=None, env=None, timeout=20, reason="INFRASTRUCTURE_FAIL
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def export_project(repository, revision, destination):
-    git = ["git", "-C", str(repository)]
-    rev = command([*git, "rev-parse", "--verify", "--end-of-options", revision + "^{commit}"],
-                  reason="PROJECT_SOURCE_UNAVAILABLE").decode().strip()
-    if not REVISION.fullmatch(rev):
-        raise ExecutionError("PROJECT_SOURCE_UNAVAILABLE")
-    archive = command([*git, "archive", "--format=tar", rev], reason="PROJECT_SOURCE_UNAVAILABLE")
-    with tarfile.open(fileobj=io.BytesIO(archive)) as snapshot:
-        if any(not (member.isfile() or member.isdir()) for member in snapshot):
-            raise ExecutionError("UNSUPPORTED_PROJECT_ARCHIVE")
-        snapshot.extractall(destination, filter="data")
-    return rev
 
 
 def verify_contract(project, matrix):
@@ -176,37 +157,55 @@ def read_application(project, working, result, database_env, maven, matrix):
         raise ExecutionError("INVALID_EVIDENCE") from None
 
 
+def prepare_source(resources, suite, repository, revision, *, prefix):
+    working, project, commit = materialize(resources, repository, revision, prefix=prefix, command=command)
+    matrix = working / MATRIX.name
+    shutil.copyfile(MATRIX, matrix)
+    if sha256(matrix) != suite.inputs[MATRIX_INPUT]:
+        raise ExecutionError("MATRIX_INPUT_CHANGED")
+    inventory, expected = matrix_plan(matrix)
+    return working, project, matrix, expected, {**verify_contract(project, inventory), "projectCommit": commit}
+
+
+class MockMvcAdapter:
+    def __init__(self, suite, result, repository, revision):
+        self.suite, self.result = suite, result
+        self.repository, self.revision = repository, revision
+
+    def prepare(self, resources):
+        working, project, matrix, expected, provenance = prepare_source(
+            resources, self.suite, self.repository, self.revision, prefix="bus-booking-pilot-")
+        fixture = working / FIXTURE.name
+        shutil.copyfile(FIXTURE, fixture)
+        if not HOST_ENV.get("JAVA_HOME"):
+            raise ExecutionError("JAVA_HOME_REQUIRED")
+        release = Path(HOST_ENV["JAVA_HOME"]) / "release"
+        java_version = re.search(r'^JAVA_VERSION="([0-9.]+)"$', release.read_text(), re.MULTILINE)
+        if not java_version or not java_version.group(1).startswith("21."):
+            raise ExecutionError("JAVA_21_REQUIRED")
+        maven, maven_version = cached_maven(project)
+        image, database_version, env = resources.enter_context(database(self.result["runId"]))
+        put_evidence(self.result, "provenance", "runner", {
+            **provenance, "authorizationFixtureSha256": sha256(fixture),
+            "javaVersion": java_version.group(1), "mavenWrapperVersion": maven_version, "postgresImage": image,
+            "postgresVersion": database_version, "applicationTransport": "mockmvc-in-process",
+            "databaseBinding": "ephemeral-loopback", "scannerDispatched": False,
+        })
+        return (project, working, self.result, env, maven, matrix), expected
+
+
+def observe_mockmvc(request):
+    arguments, expected = request
+    return read_application(*arguments), expected
+
+
+MOCKMVC = Engine("mockmvc", APPLICATION, observe_mockmvc)
+
+
 def run_application(suite, result, repository, revision):
     try:
-        with TemporaryDirectory(prefix="bus-booking-pilot-") as temporary:
-            working = Path(temporary)
-            project = working / "app"
-            project.mkdir()
-            source = export_project(repository, revision, project)
-            matrix = working / MATRIX.name
-            shutil.copyfile(MATRIX, matrix)
-            if sha256(matrix) != suite.inputs[MATRIX_INPUT]:
-                raise ExecutionError("MATRIX_INPUT_CHANGED")
-            fixture = working / FIXTURE.name
-            shutil.copyfile(FIXTURE, fixture)
-            inventory, expected = matrix_plan(matrix)
-            contract = verify_contract(project, inventory)
-            if not HOST_ENV.get("JAVA_HOME"):
-                raise ExecutionError("JAVA_HOME_REQUIRED")
-            release = Path(HOST_ENV["JAVA_HOME"]) / "release"
-            java_version = re.search(r'^JAVA_VERSION="([0-9.]+)"$', release.read_text(), re.MULTILINE)
-            if not java_version or not java_version.group(1).startswith("21."):
-                raise ExecutionError("JAVA_21_REQUIRED")
-            maven, maven_version = cached_maven(project)
-            with database(result["runId"]) as (image, database_version, env):
-                put_evidence(result, "provenance", "runner", {
-                    **contract, "projectCommit": source, "authorizationFixtureSha256": sha256(fixture),
-                    "javaVersion": java_version.group(1), "mavenWrapperVersion": maven_version, "postgresImage": image,
-                    "postgresVersion": database_version, "applicationTransport": "mockmvc-in-process",
-                    "databaseBinding": "ephemeral-loopback", "scannerDispatched": False,
-                })
-                observation = read_application(project, working, result, env, maven, matrix)
-            return adjudicate(result, suite, observation, expected)
+        observed, expected = run_project(suite, MOCKMVC, MockMvcAdapter(suite, result, repository, revision))
+        return adjudicate(result, suite, observed, expected)
     except ExecutionError as error:
         return fail_run(result, suite, error.args[0])
     except (OSError, ValueError, TypeError, KeyError, tarfile.TarError):

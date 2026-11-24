@@ -1,6 +1,7 @@
 """Regressions for restricted admission and fail-closed evidence validation."""
 
 from copy import deepcopy
+import json
 from pathlib import Path
 from subprocess import CompletedProcess
 from tempfile import TemporaryDirectory
@@ -81,12 +82,24 @@ class FrameworkTest(TestCase):
 
     def test_missing_container_evidence_and_infrastructure_error(self):
         for process, expected in ((CompletedProcess([], 0, b"", b""), "MISSING_EVIDENCE"),
+                                  (CompletedProcess([], 1, b"", b"worker failed"), "MISSING_EVIDENCE"),
                                   (CompletedProcess([], 0, b"{}", b""), "INVALID_EVIDENCE"),
                                   (CompletedProcess([], 125, b"", b""), "INFRASTRUCTURE_FAILURE")):
             with self.subTest(expected=expected), patch("security_framework.run.subprocess.run", return_value=process):
                 result = run_container(self.suite, "run", "image")
                 self.assertEqual((result["verdict"], result["exitCode"]), ("ERROR", 2))
                 self.assertEqual(set(result["decisiveChecks"].values()), {expected})
+
+    def test_docker_connection_error_with_exit_one_is_an_infrastructure_failure(self):
+        for message in (b"failed to connect to the docker API at unix:///private/fixture.sock",
+                        b"Cannot connect to the Docker daemon at unix:///private/fixture.sock"):
+            process = CompletedProcess([], 1, b"", message)
+            with self.subTest(message=message), patch("security_framework.run.subprocess.run", return_value=process):
+                result = run_container(self.suite, "run", "image")
+                self.assertEqual((result["verdict"], result["exitCode"]), ("ERROR", 2))
+                self.assertEqual(set(result["decisiveChecks"].values()), {"INFRASTRUCTURE_FAILURE"})
+                self.assertEqual(result["evidence"]["containerExit"]["data"], {"exit": 1})
+                self.assertNotIn("/private/fixture.sock", json.dumps(result))
 
     def test_unqualified_cases_never_dispatch(self):
         for scenario, reason in (("active-blocked", "ACTIVE_EXECUTION_RESTRICTED"),

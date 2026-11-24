@@ -148,7 +148,16 @@ def run_container(suite, run_id, image):
     except OSError:
         return fail_run(result, suite, "INFRASTRUCTURE_FAILURE")
 
-    if process.returncode not in EXIT.values():
+    # Docker Desktop can exit 1 before starting the worker when its API is unreachable.
+    daemon_unreachable = (
+        process.returncode == 1
+        and not process.stdout.strip()
+        and process.stderr.lower().startswith((
+            b"failed to connect to the docker api at ",
+            b"cannot connect to the docker daemon at ",
+        ))
+    )
+    if process.returncode not in EXIT.values() or daemon_unreachable:
         put_evidence(result, "containerExit", "runner", {"exit": process.returncode})
         return fail_run(result, suite, "INFRASTRUCTURE_FAILURE")
     if not process.stdout.strip():

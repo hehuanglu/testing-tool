@@ -24,6 +24,7 @@
     ],
     "requireResponses": {
       "mediaType": "text/html",
+      "protectedBodyMarker": "zap-ci-docs-page",
       "status": 200
     }
   },

@@ -116,7 +116,8 @@
       "required": ["status", "mediaType"],
       "properties": {
         "status": {"type": "integer", "minimum": 100, "maximum": 599},
-        "mediaType": {"type": "string", "minLength": 1}
+        "mediaType": {"type": "string", "minLength": 1},
+        "protectedBodyMarker": {"$ref": "#/$defs/slug"}
       }
     },
     "expect": {

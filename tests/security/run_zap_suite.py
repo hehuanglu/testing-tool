@@ -121,7 +121,14 @@ def validate_case(value, filename=None):
         ids.append(request["id"])
     if len(ids) != len(set(ids)):
         raise CaseError("request IDs must be unique")
-    _exact(value["requireResponses"], RESPONSE_FIELDS, "requireResponses")
+    response_fields = RESPONSE_FIELDS
+    response_requirements = value["requireResponses"]
+    if isinstance(response_requirements, dict) and "protectedBodyMarker" in response_requirements:
+        if source["kind"] != "synthetic-demo":
+            raise CaseError("protectedBodyMarker requires a synthetic case")
+        _slug(response_requirements["protectedBodyMarker"], "protectedBodyMarker")
+        response_fields = response_fields | {"protectedBodyMarker"}
+    _exact(response_requirements, response_fields, "requireResponses")
     status = value["requireResponses"]["status"]
     media = value["requireResponses"]["mediaType"]
     if type(status) is not int or not 100 <= status <= 599:
@@ -247,8 +254,8 @@ def _ensure_failure_artifacts(case_dir: Path, records, error_name: str):
         (case_dir / "zap.log").write_text(error_name + "\n", encoding="utf-8")
 
 
-def classify(case, origin, records, report, *, response_marker=None,
-             require_alert_response_id=False):
+def classify(case, origin, records, report):
+    response_marker = case["requireResponses"].get("protectedBodyMarker")
     by_id = {}
     for row in records:
         by_id.setdefault(row.get("requestId"), []).append(row)
@@ -285,8 +292,6 @@ def classify(case, origin, records, report, *, response_marker=None,
     if response_marker:
         control_witness = by_id[control["id"]][0]
         control_response_ids = {control_witness.get("responseId")}
-        if not require_alert_response_id:
-            control_response_ids.add(None)
         if not control_witness.get("responseId") or any(
                 row.response_id not in control_response_ids for row in control_hits):
             return "MISSING_EVIDENCE", "CONTROL_ALERT_RESPONSE_UNBOUND"
@@ -297,12 +302,10 @@ def classify(case, origin, records, report, *, response_marker=None,
             return "MISSING_EVIDENCE", "RESPONSE_ID_MISSING"
         protected_response_ids = {row.get("responseId") for row in protected_witnesses}
         protected_response_ids.discard(None)
-        if not require_alert_response_id and len(protected_witnesses) == 1:
-            protected_response_ids.add(None)
         if any(row.response_id not in protected_response_ids for row in protected_hits):
             return "MISSING_EVIDENCE", "PROTECTED_ALERT_RESPONSE_UNBOUND"
         protected_hits = [row for row in protected_hits
-                          if row.response_id in (None, protected_witness["responseId"])]
+                          if row.response_id == protected_witness["responseId"]]
         if protected["id"] == expect["requireNonEmptyCspOn"]:
             csp_witnesses = [protected_witness]
     if protected_hits:
@@ -314,7 +317,8 @@ def classify(case, origin, records, report, *, response_marker=None,
 
 def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
                  omit_request_id: str | None, deadline: float, *,
-                 repeat_request_id=None, response_marker=None):
+                 repeat_request_id=None):
+    response_marker = case["requireResponses"].get("protectedBodyMarker")
     case_payload = canonical_bytes(case)
     case_hash = hashlib.sha256(case_payload).hexdigest()
     case_dir = out_dir / case["id"]
@@ -377,9 +381,7 @@ def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
                                            if row.alert_ref == case["expect"]["alertRef"]]}
                        if response_marker else {}),
                 })
-                status, reason = classify(case, fixture.origin, records, parsed,
-                                          response_marker=response_marker,
-                                          require_alert_response_id=bool(response_marker))
+                status, reason = classify(case, fixture.origin, records, parsed)
                 result = _case_result(case, case_hash, status, reason, native_exit,
                                       case_dir, out_dir, report_exists)
     except Exception as error:
@@ -440,7 +442,6 @@ def main(argv=None):
     parser.add_argument("--omit-request-id")
     parser.add_argument("--deadline", type=float, default=180.0)
     parser.add_argument("--repeat-request-id")
-    parser.add_argument("--response-marker")
     args = parser.parse_args(argv)
     home = os.environ.get("HOME")
     if home:
@@ -454,9 +455,6 @@ def main(argv=None):
     results = []
     try:
         discovered = discover_cases(Path(args.cases))
-        if args.response_marker and (len(discovered) != 1 or
-                                     discovered[0][1]["source"]["kind"] != "synthetic-demo"):
-            raise CaseError("response-marker requires exactly one synthetic case")
     except (OSError, CaseError) as error:
         result = suite_result(run_id, [], suite_error=str(error))
         atomic_json(out_dir / "suite-results.json", result)
@@ -468,8 +466,6 @@ def main(argv=None):
         options = {}
         if args.repeat_request_id:
             options["repeat_request_id"] = args.repeat_request_id
-        if args.response_marker:
-            options["response_marker"] = args.response_marker
         results.append(execute_case(case, out_dir, run_id, args.fixture_mode,
                                     args.omit_request_id, args.deadline, **options))
     result = suite_result(run_id, results)

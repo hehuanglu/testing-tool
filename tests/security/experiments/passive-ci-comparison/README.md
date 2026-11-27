@@ -24,9 +24,10 @@ For C04, open `comparison-results.json`, then the `artifact` and `locators` in t
 primary record. The case gate exits 1 with `MISSING_EVIDENCE / RESPONSE_CONTENT_MISMATCH`.
 Open the fixture receipt (`evidencePath` or `receipt`) and find the docs response ID and
 login marker. C01 has a docs marker plus a nonempty enforcing CSP and a control alert. C02
-and C05 provide pointers into the ZAP report. For the suite, join those pointers to fixture
-receipts by the emitted response ID. The direct AF plan's traditional report keeps the alert
-ID and path. C05 is a measured limit for that plan, so the case gate fails closed.
+and C05 provide pointers into the ZAP report. Both runners use `traditional-json-plus`
+and join those pointers to fixture receipts by the emitted response ID. On repeated
+URLs, use the message-linked alert as the evidence for C05. The AF URL tests reflect
+the site node and retain their independent outcomes in the artifact.
 
 The harness exits 0 when every actual status, case exit and required artifact matches the
 qualification oracle. A case can exit 1 as intended while qualification succeeds.

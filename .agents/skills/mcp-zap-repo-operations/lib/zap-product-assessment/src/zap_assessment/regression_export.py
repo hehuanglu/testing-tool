@@ -85,6 +85,11 @@ def validate_case(case):
             raise ExportError("UNSUPPORTED_OPERATION", f"case/requests/{index}/method",
                               "qualified HTTP profiles support GET only")
     _validate_schema(case, "regression-case-v1.schema.json", "case")
+    if ("protectedBodyMarker" in case["requireResponses"]
+            and (case["source"]["kind"], case["profile"], case["fixture"]) !=
+            ("synthetic-demo", "passive-http-v1", "csp-demo")):
+        raise ExportError("INVALID_INPUT", "case/requireResponses/protectedBodyMarker",
+                          "protectedBodyMarker requires the synthetic passive HTTP fixture")
     request_ids = []
     for index, request in enumerate(case["requests"]):
         request_ids.append(request["id"])

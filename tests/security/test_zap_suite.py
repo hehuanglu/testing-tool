@@ -17,6 +17,12 @@ def stable_case():
     return json.loads((ROOT / "cases" / "csp-docs.json").read_text(encoding="utf-8"))
 
 
+def legacy_case():
+    case = stable_case()
+    del case["requireResponses"]["protectedBodyMarker"]
+    return case
+
+
 def parsed(paths):
     return parse_report({"site": [{"@name": "http://127.0.0.1:8080", "alerts": [{
         "alertRef": "10038-1",
@@ -69,7 +75,7 @@ class SuiteTests(unittest.TestCase):
                 validate_case(value, "csp-docs.json")
 
     def test_classification_order(self):
-        case = stable_case()
+        case = legacy_case()
         origin = "http://127.0.0.1:8080"
         self.assertEqual(classify(case, origin, responses(case), parsed(["/control"])),
                          ("PASS", "CSP_MISSING_ALERT_ABSENT_WITH_CONTROL_AND_NONEMPTY_HEADER"))
@@ -88,21 +94,21 @@ class SuiteTests(unittest.TestCase):
         case = stable_case()
         origin = "http://127.0.0.1:8080"
         docs, control = responses(case, csp=False)
-        docs.update(responseId="fixture-1", bodyMarkers=["docs-marker"])
+        docs.update(responseId="fixture-1", bodyMarkers=[case["requireResponses"]["protectedBodyMarker"]])
         wrong_page = dict(docs, responseId="fixture-2", bodyMarkers=["login"], cspNonEmpty=True)
         control["responseId"] = "fixture-3"
         report = parsed(["/control", "/docs"])
         control_hit, docs_hit = report.instances
+        control_hit = replace(control_hit, response_id="fixture-3")
+        report = replace(report, instances=(control_hit, docs_hit))
         witnesses = [docs, wrong_page, control]
         self.assertEqual(
-            classify(case, origin, witnesses, report, response_marker="docs-marker"),
+            classify(case, origin, witnesses, report),
             ("MISSING_EVIDENCE", "PROTECTED_ALERT_RESPONSE_UNBOUND"),
         )
-        bound = replace(report, instances=(replace(control_hit, response_id="fixture-3"),
-                                          replace(docs_hit, response_id="fixture-1")))
+        bound = replace(report, instances=(control_hit, replace(docs_hit, response_id="fixture-1")))
         self.assertEqual(
-            classify(case, origin, witnesses, bound, response_marker="docs-marker",
-                     require_alert_response_id=True),
+            classify(case, origin, witnesses, bound),
             ("REGRESSION", "PROTECTED_ALERT_PRESENT"),
         )
 
@@ -153,7 +159,7 @@ class SuiteTests(unittest.TestCase):
             self.assertEqual(result["counts"]["PASS"], 1)
 
     def test_fixture_initialization_failure_is_recorded_and_later_case_runs(self):
-        first = stable_case()
+        first = legacy_case()
         second = copy.deepcopy(first); second["id"] = "z-csp-docs"
         second["source"]["caseId"] = "z-csp-docs"
         calls = []
@@ -184,7 +190,7 @@ class SuiteTests(unittest.TestCase):
             self.assertTrue((out / "csp-docs" / "zap.log").is_file())
 
     def test_fixture_cleanup_failure_is_recorded_and_later_case_runs(self):
-        first = stable_case()
+        first = legacy_case()
         second = copy.deepcopy(first); second["id"] = "z-csp-docs"
         second["source"]["caseId"] = "z-csp-docs"
         fixtures = []

@@ -22,11 +22,12 @@ SECURITY = EXPERIMENT.parents[1]
 REPO = SECURITY.parents[1]
 sys.path.insert(0, str(SECURITY))
 
-from fixtures.csp_demo import DOCS_MARKER, FixtureServer
+from fixtures.csp_demo import FixtureServer
 from run_zap_suite import STATUSES, atomic_json, classify, render_plan, run_process
 from zap_report import ReportError, load_fresh_report
 
 CASE = json.loads((SECURITY / "cases/csp-docs.json").read_text())
+PROTECTED_REQUEST = next(request for request in CASE["requests"] if request["id"] == CASE["expect"]["absentOn"])
 IMAGE = (SECURITY / "zap-image.txt").read_text().strip()
 ACTION_SHA = "c41784dfded31e10c69d78896700f48e5fd5fa3a"
 ZAP_OPTIONS = [
@@ -80,7 +81,8 @@ def prepare_plan(root, fixture, scenario, report_dir):
     plan["env"] = suite_plan["env"]
     plan["jobs"][1]["requests"] = suite_plan["jobs"][1]["requests"]
     for test in plan["jobs"][2]["tests"]:
-        test.update(url=fixture.origin + "/docs", responseBodyRegex=DOCS_MARKER)
+        test.update(url=fixture.origin + PROTECTED_REQUEST["path"],
+                    responseBodyRegex=re.escape(CASE["requireResponses"]["protectedBodyMarker"]))
     plan["jobs"][3]["parameters"]["reportDir"] = str(report_dir)
     atomic_json(root / "af-plan.yaml", plan)
 
@@ -179,12 +181,15 @@ def read_af(root, scenario, trial, native_exit, started_ns, *, timed_out=False, 
             locators["instances"] = "af-instances.json"
             if set(tests) != {"docs-content", "docs-csp"}:
                 raise ReportError("AF_URL_TEST_RESULTS_MISSING")
-            actual, reason = classify(CASE, receipt["origin"], receipt["responses"], report,
-                                      response_marker=DOCS_MARKER)
+            responses = receipt["responses"]
+            actual, reason = classify(CASE, receipt["origin"], responses, report)
             if actual == "PASS" and not all(item["passed"] for item in tests.values()):
                 actual, reason = "MISSING_EVIDENCE", "AF_URL_TEST_NOT_SATISFIED"
-            if actual == "REGRESSION" and (not tests["docs-content"]["passed"] or tests["docs-csp"]["passed"]):
-                actual, reason = "MISSING_EVIDENCE", "AF_URL_TEST_INCONSISTENT"
+            if actual == "REGRESSION":
+                protected_count = sum(item["requestId"] == PROTECTED_REQUEST["id"] for item in responses)
+                # URL tests report the site node, which can represent a different response on repeated GETs.
+                if protected_count == 1 and (not tests["docs-content"]["passed"] or tests["docs-csp"]["passed"]):
+                    actual, reason = "MISSING_EVIDENCE", "AF_URL_TEST_INCONSISTENT"
         except ReportError as exc:
             actual, reason = "EXECUTION_ERROR", str(exc)
     row(root, "af", scenario, trial, actual, reason, native_exit, int(actual != "PASS"),
@@ -247,7 +252,7 @@ def local_trial(root, implementation, scenario, trial):
     root.mkdir(parents=True, exist_ok=False)
     env = dict(os.environ, REGRESSION_TESTED_COMMIT_SHA=tested_sha())
     if implementation == "suite":
-        options = ["--fixture-mode", mode, "--response-marker", DOCS_MARKER]
+        options = ["--fixture-mode", mode]
         if omit:
             options.extend(["--omit-request-id", "docs"])
         if repeat:
@@ -314,13 +319,11 @@ def qualify(root, implementation, scenarios):
                 required |= {"reportPath"} if implementation == "suite" else {"report", "jobTests", "instances"}
             missing.extend(sorted(required - set(locators)))
             expected_reason = "TIMEOUT" if force_timeout(scenario, trial) else None
-            if scenario == "C05" and implementation == "af":
-                expected_reason = "PROTECTED_ALERT_RESPONSE_UNBOUND"
-            elif scenario == "C05":
-                expected_reason = "PROTECTED_ALERT_PRESENT"
-            elif scenario in ("C02", "C03", "C04", "C06"):
-                expected_reason = {"C02": "PROTECTED_ALERT_PRESENT", "C03": "REQUIRED_RESPONSE_MISSING",
-                                   "C04": "RESPONSE_CONTENT_MISMATCH", "C06": "CONTROL_ALERT_MISSING"}[scenario]
+            expected_reason = {
+                "C02": "PROTECTED_ALERT_PRESENT", "C03": "REQUIRED_RESPONSE_MISSING",
+                "C04": "RESPONSE_CONTENT_MISMATCH", "C05": "PROTECTED_ALERT_PRESENT",
+                "C06": "CONTROL_ALERT_MISSING",
+            }.get(scenario, expected_reason)
             accepted = (expected in STATUSES and result["actual"] == expected and
                         (expected_reason is None or result["reason"] == expected_reason) and
                         result["caseGateExit"] == int(expected != "PASS") and result["cleanup"] and not missing and
@@ -335,8 +338,7 @@ def qualify(root, implementation, scenarios):
                 accepted = accepted and result["actionSha"] == ACTION_SHA and result["actionOutcome"] in ("success", "failure")
             rows.append(dict(result, expected=expected, expectedReason=expected_reason,
                              missingArtifacts=missing, qualification="matched" if accepted else "mismatch",
-                             equivalence="measured-limit" if accepted and scenario == "C05" and implementation == "af"
-                             else "equivalent" if accepted else "unverified",
+                             equivalence="equivalent" if accepted else "unverified",
                              artifact=(str(path.relative_to(root)) if path.is_file() else None)))
     passed = bool(rows) and all(result["qualification"] == "matched" for result in rows)
     atomic_json(root / "comparison-results.json", {"qualification": "passed" if passed else "failed",

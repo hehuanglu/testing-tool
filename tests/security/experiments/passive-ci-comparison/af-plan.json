@@ -39,7 +39,7 @@
     {
       "type": "report",
       "parameters": {
-        "template": "traditional-json",
+        "template": "traditional-json-plus",
         "reportFile": "zap-report"
       }
     }

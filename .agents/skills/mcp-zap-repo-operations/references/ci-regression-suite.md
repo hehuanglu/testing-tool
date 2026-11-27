@@ -29,6 +29,11 @@ ZAP exposing a feature or add-on does not make it supported by this skill.
 
 ## Export and review
 
+Use the [passive CI capability reference](passive-ci-capabilities.md) to trace the reviewed
+criterion, case, obligation and observations in both directions. Bind a hand-authored AF plan
+to the same reviewed case and mapping before accepting it. Record the tested checkout SHA in
+the CI output separately from the case's reviewed build and assessment plan binding.
+
 For a synthetic contract fixture:
 
 ```sh

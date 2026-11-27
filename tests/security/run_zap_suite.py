@@ -121,7 +121,14 @@ def validate_case(value, filename=None):
         ids.append(request["id"])
     if len(ids) != len(set(ids)):
         raise CaseError("request IDs must be unique")
-    _exact(value["requireResponses"], RESPONSE_FIELDS, "requireResponses")
+    response_fields = RESPONSE_FIELDS
+    response_requirements = value["requireResponses"]
+    if isinstance(response_requirements, dict) and "protectedBodyMarker" in response_requirements:
+        if source["kind"] != "synthetic-demo":
+            raise CaseError("protectedBodyMarker requires a synthetic case")
+        _slug(response_requirements["protectedBodyMarker"], "protectedBodyMarker")
+        response_fields = response_fields | {"protectedBodyMarker"}
+    _exact(response_requirements, response_fields, "requireResponses")
     status = value["requireResponses"]["status"]
     media = value["requireResponses"]["mediaType"]
     if type(status) is not int or not 100 <= status <= 599:
@@ -164,12 +171,15 @@ def discover_cases(directory: Path):
     return cases
 
 
-def render_plan(case, origin, case_dir: Path, omit_request_id=None):
+def render_plan(case, origin, case_dir: Path, omit_request_id=None, *,
+                repeat_request_id=None, include_messages=False):
     requests = []
     for request in case["requests"]:
         if request["id"] == omit_request_id:
             continue
         requests.append({"url": origin + request["path"], "method": request["method"]})
+        if request["id"] == repeat_request_id:
+            requests.append(dict(requests[-1]))
     return {
         "env": {
             "contexts": [{"name": "fixture", "urls": [origin]}],
@@ -180,7 +190,7 @@ def render_plan(case, origin, case_dir: Path, omit_request_id=None):
             {"type": "requestor", "requests": requests},
             {"type": "passiveScan-wait", "parameters": {"maxDuration": 0}},
             {"type": "report", "parameters": {
-                "template": "traditional-json",
+                "template": "traditional-json-plus" if include_messages else "traditional-json",
                 "reportDir": str(case_dir),
                 "reportFile": "zap-report",
             }},
@@ -245,14 +255,22 @@ def _ensure_failure_artifacts(case_dir: Path, records, error_name: str):
 
 
 def classify(case, origin, records, report):
+    response_marker = case["requireResponses"].get("protectedBodyMarker")
     by_id = {}
     for row in records:
         by_id.setdefault(row.get("requestId"), []).append(row)
     request_by_id = {row["id"]: row for row in case["requests"]}
+    expect = case["expect"]
     for request in case["requests"]:
         witnesses = by_id.get(request["id"], [])
         if not witnesses:
             return "MISSING_EVIDENCE", "REQUIRED_RESPONSE_MISSING"
+        if response_marker and request["id"] == expect["absentOn"]:
+            witnesses = [row for row in witnesses if response_marker in row.get("bodyMarkers", [])]
+            if not witnesses:
+                return "MISSING_EVIDENCE", "RESPONSE_CONTENT_MISMATCH"
+        if response_marker and len(witnesses) != 1:
+            return "MISSING_EVIDENCE", "AMBIGUOUS_RESPONSE_WITNESS"
         witness = witnesses[-1]
         if witness.get("path") != request["path"] or witness.get("method") != request["method"]:
             return "MISSING_EVIDENCE", "RESPONSE_IDENTITY_MISMATCH"
@@ -262,7 +280,6 @@ def classify(case, origin, records, report):
             return "MISSING_EVIDENCE", "RESPONSE_MEDIA_TYPE_MISMATCH"
     if report.capped:
         return "MISSING_EVIDENCE", "REPORT_INSTANCES_INCOMPLETE"
-    expect = case["expect"]
     control = request_by_id[expect["presentOn"]]
     protected = request_by_id[expect["absentOn"]]
     control_hits = matching_instances(report, origin=origin, method=control["method"],
@@ -271,16 +288,37 @@ def classify(case, origin, records, report):
         return "MISSING_EVIDENCE", "CONTROL_ALERT_MISSING"
     protected_hits = matching_instances(report, origin=origin, method=protected["method"],
                                         path=protected["path"], alert_ref=expect["alertRef"])
+    csp_witnesses = by_id.get(expect["requireNonEmptyCspOn"], [])
+    if response_marker:
+        control_witness = by_id[control["id"]][0]
+        control_response_ids = {control_witness.get("responseId")}
+        if not control_witness.get("responseId") or any(
+                row.response_id not in control_response_ids for row in control_hits):
+            return "MISSING_EVIDENCE", "CONTROL_ALERT_RESPONSE_UNBOUND"
+        protected_witnesses = by_id[protected["id"]]
+        protected_witness = next(row for row in protected_witnesses
+                                 if response_marker in row.get("bodyMarkers", []))
+        if not protected_witness.get("responseId"):
+            return "MISSING_EVIDENCE", "RESPONSE_ID_MISSING"
+        protected_response_ids = {row.get("responseId") for row in protected_witnesses}
+        protected_response_ids.discard(None)
+        if any(row.response_id not in protected_response_ids for row in protected_hits):
+            return "MISSING_EVIDENCE", "PROTECTED_ALERT_RESPONSE_UNBOUND"
+        protected_hits = [row for row in protected_hits
+                          if row.response_id == protected_witness["responseId"]]
+        if protected["id"] == expect["requireNonEmptyCspOn"]:
+            csp_witnesses = [protected_witness]
     if protected_hits:
         return "REGRESSION", "PROTECTED_ALERT_PRESENT"
-    csp_witnesses = by_id.get(expect["requireNonEmptyCspOn"], [])
     if not csp_witnesses or not csp_witnesses[-1].get("cspNonEmpty"):
         return "MISSING_EVIDENCE", "INCONSISTENT_OBSERVATION"
     return "PASS", "CSP_MISSING_ALERT_ABSENT_WITH_CONTROL_AND_NONEMPTY_HEADER"
 
 
 def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
-                 omit_request_id: str | None, deadline: float):
+                 omit_request_id: str | None, deadline: float, *,
+                 repeat_request_id=None):
+    response_marker = case["requireResponses"].get("protectedBodyMarker")
     case_payload = canonical_bytes(case)
     case_hash = hashlib.sha256(case_payload).hexdigest()
     case_dir = out_dir / case["id"]
@@ -298,7 +336,8 @@ def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
         fixture = FIXTURES[case["fixture"]](case, run_id, fixture_mode)
         fixture.start()
         fixture_started = True
-        plan = render_plan(case, fixture.origin, case_dir, omit_request_id)
+        plan = render_plan(case, fixture.origin, case_dir, omit_request_id,
+                           repeat_request_id=repeat_request_id, include_messages=bool(response_marker))
         plan_path = case_dir / "plan.yaml"
         plan_path.write_bytes(canonical_bytes(plan))
         command = [
@@ -337,6 +376,10 @@ def execute_case(case, out_dir: Path, run_id: str, fixture_mode: str,
                     "responses": records,
                     "matchedAlertPointers": [row.pointer for row in parsed.instances
                                               if row.alert_ref == case["expect"]["alertRef"]],
+                    **({"alertResponses": [{"pointer": row.pointer, "responseId": row.response_id}
+                                           for row in parsed.instances
+                                           if row.alert_ref == case["expect"]["alertRef"]]}
+                       if response_marker else {}),
                 })
                 status, reason = classify(case, fixture.origin, records, parsed)
                 result = _case_result(case, case_hash, status, reason, native_exit,
@@ -398,6 +441,7 @@ def main(argv=None):
     parser.add_argument("--fixture-mode", default="healthy")
     parser.add_argument("--omit-request-id")
     parser.add_argument("--deadline", type=float, default=180.0)
+    parser.add_argument("--repeat-request-id")
     args = parser.parse_args(argv)
     home = os.environ.get("HOME")
     if home:
@@ -419,8 +463,11 @@ def main(argv=None):
         })
         return 1
     for _path, case in discovered:
+        options = {}
+        if args.repeat_request_id:
+            options["repeat_request_id"] = args.repeat_request_id
         results.append(execute_case(case, out_dir, run_id, args.fixture_mode,
-                                    args.omit_request_id, args.deadline))
+                                    args.omit_request_id, args.deadline, **options))
     result = suite_result(run_id, results)
     atomic_json(out_dir / "suite-results.json", result)
     atomic_json(out_dir / "run-metadata.json", {

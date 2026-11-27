@@ -1,0 +1,134 @@
+name: ZAP passive CI comparison
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: ${{ matrix.implementation }} / ${{ matrix.scenario }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        implementation: [suite, af]
+        scenario: [C01, C02, C03, C04, C05, C06, C07]
+    env:
+      SCENARIO: ${{ matrix.scenario }}
+      IMPLEMENTATION: ${{ matrix.implementation }}
+      RUNNER: tests/security/experiments/passive-ci-comparison/run_comparison.py
+      OUTPUT: artifacts/passive-ci-comparison
+      REGRESSION_TESTED_COMMIT_SHA: ${{ github.sha }}
+      REGRESSION_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.13'
+
+      - name: Verify checkout and image pin
+        id: pins
+        run: |
+          test "$(git rev-parse HEAD)" = "$REGRESSION_TESTED_COMMIT_SHA"
+          image=$(cat tests/security/zap-image.txt)
+          [[ "$image" =~ ^zaproxy/zap-stable@sha256:[0-9a-f]{64}$ ]]
+          printf 'image=%s\n' "$image" >> "$GITHUB_OUTPUT"
+
+      - name: Run suite trials
+        if: matrix.implementation == 'suite'
+        run: python "$RUNNER" --implementation "$IMPLEMENTATION" --scenario "$SCENARIO" --out "$OUTPUT"
+        continue-on-error: true
+
+      - name: Exercise the AF engine timeout
+        if: matrix.implementation == 'af' && matrix.scenario == 'C07'
+        run: python "$RUNNER" --implementation af --scenario "$SCENARIO" --out "$OUTPUT" --phase local-trial
+        continue-on-error: true
+
+      - name: Start runner-loopback fixture
+        if: matrix.implementation == 'af'
+        id: fixture
+        run: |
+          trial=primary
+          [[ "$SCENARIO" != C07 ]] || trial=recovery
+          printf 'trial=%s\n' "$trial" >> "$GITHUB_OUTPUT"
+          bash tests/security/experiments/passive-ci-comparison/start-action-fixture.sh "$trial"
+
+      - name: Run pinned AF action
+        if: matrix.implementation == 'af' && steps.fixture.outcome == 'success'
+        id: action
+        uses: zaproxy/action-af@c41784dfded31e10c69d78896700f48e5fd5fa3a
+        continue-on-error: true
+        with:
+          docker_name: ${{ steps.pins.outputs.image }}
+          plan: ${{ steps.fixture.outputs.plan }}
+          cmd_options: ${{ steps.fixture.outputs.zap_options }}
+
+      - name: Read raw outcome and stop fixture
+        if: always() && matrix.implementation == 'af' && steps.fixture.outcome == 'success'
+        env:
+          TRIAL: ${{ steps.fixture.outputs.trial }}
+          ACTION_OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          python "$RUNNER" --implementation af --scenario "$SCENARIO" --out "$OUTPUT" \
+            --phase collect-action --trial "$TRIAL" --action-outcome "$ACTION_OUTCOME"
+
+      - name: Start a fresh C01 fixture
+        if: matrix.implementation == 'af' && matrix.scenario == 'C01'
+        id: repeat-fixture
+        run: bash tests/security/experiments/passive-ci-comparison/start-action-fixture.sh repeat
+
+      - name: Repeat C01 with the pinned action
+        if: matrix.implementation == 'af' && matrix.scenario == 'C01' && steps.repeat-fixture.outcome == 'success'
+        id: repeat-action
+        uses: zaproxy/action-af@c41784dfded31e10c69d78896700f48e5fd5fa3a
+        continue-on-error: true
+        with:
+          docker_name: ${{ steps.pins.outputs.image }}
+          plan: ${{ steps.repeat-fixture.outputs.plan }}
+          cmd_options: ${{ steps.repeat-fixture.outputs.zap_options }}
+
+      - name: Read repeat outcome and stop fixture
+        if: always() && matrix.implementation == 'af' && steps.repeat-fixture.outcome == 'success'
+        env:
+          ACTION_OUTCOME: ${{ steps.repeat-action.outcome }}
+        run: |
+          python "$RUNNER" --implementation af --scenario "$SCENARIO" --out "$OUTPUT" \
+            --phase collect-action --trial repeat --action-outcome "$ACTION_OUTCOME"
+
+      - name: Compare results with expected outcomes
+        id: comparison
+        if: always()
+        continue-on-error: true
+        run: |
+          python "$RUNNER" --implementation "$IMPLEMENTATION" --scenario "$SCENARIO" \
+            --out "$OUTPUT" --phase assert
+
+      - name: Upload comparison evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: zap-passive-${{ matrix.implementation }}-${{ matrix.scenario }}-${{ github.run_attempt }}
+          path: |
+            artifacts/passive-ci-comparison/comparison-results.json
+            artifacts/passive-ci-comparison/**/*.json
+            artifacts/passive-ci-comparison/**/plan.yaml
+            artifacts/passive-ci-comparison/**/af-plan.yaml
+            artifacts/passive-ci-comparison/**/zap.log
+            artifacts/passive-ci-comparison/**/launcher.log
+            !artifacts/passive-ci-comparison/**/ready.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Enforce qualification after artifact upload
+        if: always()
+        env:
+          OUTCOME: ${{ steps.comparison.outcome }}
+        run: test "$OUTCOME" = success

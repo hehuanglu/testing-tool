@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  echo "usage: $0 --cases DIRECTORY --out NEW_DIRECTORY [--fixture-mode MODE] [--omit-request-id ID] [--deadline SECONDS]" >&2
+  echo "usage: $0 --cases DIRECTORY --out NEW_DIRECTORY [--fixture-mode MODE] [--omit-request-id ID] [--deadline SECONDS] [--repeat-request-id ID]" >&2
   exit 2
 }
 
@@ -13,7 +13,7 @@ while (($#)); do
   case "$1" in
     --cases) [[ $# -ge 2 ]] || usage; CASES="$2"; shift 2 ;;
     --out) [[ $# -ge 2 ]] || usage; OUT="$2"; shift 2 ;;
-    --fixture-mode|--omit-request-id|--deadline)
+    --fixture-mode|--omit-request-id|--deadline|--repeat-request-id)
       [[ $# -ge 2 ]] || usage; EXTRA+=("$1" "$2"); shift 2 ;;
     *) usage ;;
   esac

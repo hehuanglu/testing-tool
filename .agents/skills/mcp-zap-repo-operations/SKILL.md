@@ -39,6 +39,8 @@ When the user asks to preserve a reviewed case as a fixed repository regression,
 [CI regression suite](references/ci-regression-suite.md). Export is an offline artifact task:
 it validates reviewed evidence and creates a deterministic candidate, but does not send
 product traffic, change approval/verdict logic, or make the CI result an assessment verdict.
+Use the [passive CI capability reference](references/passive-ci-capabilities.md) to match
+the case obligations to the response, alert and CI evidence available for the pinned runtime.
 
 ## Work from approved criteria
 

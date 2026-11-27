@@ -82,6 +82,30 @@ class SuiteTests(unittest.TestCase):
         self.assertEqual(classify(case, origin, responses(case, csp=False), parsed(["/control"])),
                          ("MISSING_EVIDENCE", "INCONSISTENT_OBSERVATION"))
 
+    def test_marker_does_not_bind_an_alert_from_an_unidentified_duplicate(self):
+        from dataclasses import replace
+
+        case = stable_case()
+        origin = "http://127.0.0.1:8080"
+        docs, control = responses(case, csp=False)
+        docs.update(responseId="fixture-1", bodyMarkers=["docs-marker"])
+        wrong_page = dict(docs, responseId="fixture-2", bodyMarkers=["login"], cspNonEmpty=True)
+        control["responseId"] = "fixture-3"
+        report = parsed(["/control", "/docs"])
+        control_hit, docs_hit = report.instances
+        witnesses = [docs, wrong_page, control]
+        self.assertEqual(
+            classify(case, origin, witnesses, report, response_marker="docs-marker"),
+            ("MISSING_EVIDENCE", "PROTECTED_ALERT_RESPONSE_UNBOUND"),
+        )
+        bound = replace(report, instances=(replace(control_hit, response_id="fixture-3"),
+                                          replace(docs_hit, response_id="fixture-1")))
+        self.assertEqual(
+            classify(case, origin, witnesses, bound, response_marker="docs-marker",
+                     require_alert_response_id=True),
+            ("REGRESSION", "PROTECTED_ALERT_PRESENT"),
+        )
+
     def test_add_delete_empty_duplicate_and_symlink_fail_closed(self):
         case = stable_case()
         with tempfile.TemporaryDirectory() as temporary:

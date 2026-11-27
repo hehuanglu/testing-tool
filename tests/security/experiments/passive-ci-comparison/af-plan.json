@@ -1,0 +1,47 @@
+{
+  "jobs": [
+    {
+      "type": "passiveScan-config",
+      "parameters": {
+        "maxAlertsPerRule": 0
+      }
+    },
+    {
+      "type": "requestor",
+      "requests": []
+    },
+    {
+      "type": "passiveScan-wait",
+      "parameters": {
+        "maxDuration": 0
+      },
+      "tests": [
+        {
+          "name": "docs-content",
+          "type": "url",
+          "operator": "and",
+          "onFail": "info",
+          "requestHeaderRegex": "^GET ",
+          "requestBodyRegex": "^$",
+          "responseHeaderRegex": "(?is)^HTTP/[\\d.]+ 200\\b.*(?m:^Content-Type:[ \\t]*text/html\\b)"
+        },
+        {
+          "name": "docs-csp",
+          "type": "url",
+          "operator": "and",
+          "responseHeaderRegex": "(?is)^(?=.*(?m:^Content-Security-Policy:[ \\t]*[^\\r\\n \\t]))HTTP/[\\d.]+ 200\\b.*(?m:^Content-Type:[ \\t]*text/html\\b)",
+          "onFail": "info",
+          "requestHeaderRegex": "^GET ",
+          "requestBodyRegex": "^$"
+        }
+      ]
+    },
+    {
+      "type": "report",
+      "parameters": {
+        "template": "traditional-json",
+        "reportFile": "zap-report"
+      }
+    }
+  ]
+}

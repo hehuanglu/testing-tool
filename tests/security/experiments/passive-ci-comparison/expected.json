@@ -1,0 +1,9 @@
+{
+  "C01": {"suite": ["PASS", "PASS"], "af": ["PASS", "PASS"]},
+  "C02": {"suite": ["REGRESSION"], "af": ["REGRESSION"]},
+  "C03": {"suite": ["MISSING_EVIDENCE"], "af": ["MISSING_EVIDENCE"]},
+  "C04": {"suite": ["MISSING_EVIDENCE"], "af": ["MISSING_EVIDENCE"]},
+  "C05": {"suite": ["REGRESSION"], "af": ["MISSING_EVIDENCE"]},
+  "C06": {"suite": ["MISSING_EVIDENCE"], "af": ["MISSING_EVIDENCE"]},
+  "C07": {"suite": ["EXECUTION_ERROR", "PASS"], "af": ["EXECUTION_ERROR", "PASS"]}
+}

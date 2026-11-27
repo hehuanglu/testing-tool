@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -20,6 +21,7 @@ class AlertInstance:
     alert_ref: str
     pointer: str
     native_id: str | None
+    response_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -73,6 +75,10 @@ def parse_report(value) -> ParsedReport:
                 native_id = instance.get("id")
                 if native_id is not None and not isinstance(native_id, str):
                     raise ReportError("native instance id must be a string when present")
+                response_headers = instance.get("response-header")
+                response_ids = (re.findall(r"^X-Fixture-Response-Id:[ \t]*([a-z0-9-]+)[ \t]*\r?$",
+                                           response_headers, re.IGNORECASE | re.MULTILINE)
+                                if isinstance(response_headers, str) else [])
                 instances.append(AlertInstance(
                     origin=origin,
                     method=method.upper(),
@@ -80,6 +86,7 @@ def parse_report(value) -> ParsedReport:
                     alert_ref=alert["alertRef"],
                     pointer=f"/site/{site_index}/alerts/{alert_index}/instances/{instance_index}",
                     native_id=native_id,
+                    response_id=response_ids[0] if len(response_ids) == 1 else None,
                 ))
     return ParsedReport(tuple(instances), capped, value.get("@version"))
 
